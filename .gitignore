@@ -1,0 +1,8 @@
+*.log
+.DS_Store
+.npm
+coverage
+dist
+node_modules
+npm-debug.log*
+yarn.lock
