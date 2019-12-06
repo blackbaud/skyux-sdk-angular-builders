@@ -1,16 +1,36 @@
-import { BuilderContext, createBuilder, targetFromTargetString } from '@angular-devkit/architect';
+import {
+  BuilderContext,
+  createBuilder,
+  targetFromTargetString
+} from '@angular-devkit/architect';
 
-import { executeDevServerBuilder, DevServerBuilderOutput, DevServerBuilderOptions } from '@angular-devkit/build-angular';
+import {
+  DevServerBuilderOptions,
+  DevServerBuilderOutput,
+  executeDevServerBuilder
+} from '@angular-devkit/build-angular';
 
-import { getSystemPath, normalize } from '@angular-devkit/core';
+import {
+  from as observableFrom,
+  Observable
+} from 'rxjs';
 
-import { Observable, from } from 'rxjs';
+import {
+  switchMap
+} from 'rxjs/operators';
 
-import { switchMap } from 'rxjs/operators';
+import {
+  SkyBuilderOptions
+} from '../builder-options';
 
-import { SkyBuilderOptions } from '../builder-options';
+import {
+  getTransforms
+} from '../utils/common';
 
-import { getTransforms } from '../common';
+import {
+  getSSLCertificatePath,
+  getSSLKeyPath
+} from '../utils/ssl';
 
 export function devServerBuilder(
   options: DevServerBuilderOptions,
@@ -22,26 +42,21 @@ export function devServerBuilder(
     return (context.getTargetOptions(browserTarget) as unknown) as SkyBuilderOptions;
   }
 
-  return from(setup()).pipe(
+  return observableFrom(setup()).pipe(
     switchMap(targetOptions => {
-      context.logger.info(`Running from workspace root: ${getSystemPath(normalize(context.workspaceRoot))}`);
+      const baseHref = targetOptions.skyux.name;
 
-      const baseHref = `/${targetOptions.skyux.name}/`;
-
+      // Overrides to provide to Angular's serve command.
+      options.baseHref = baseHref;
       options.host = 'localhost';
       options.publicHost = 'localhost';
-      options.baseHref = baseHref;
       options.ssl = true;
-      options.sslCert = '/Users/stevebr/.skyux/certs/skyux-server.crt';
-      options.sslKey = '/Users/stevebr/.skyux/certs/skyux-server.key';
+      options.sslCert = getSSLCertificatePath();
+      options.sslKey = getSSLKeyPath();
 
+      // Overrides to provide to our Webpack plugin.
       targetOptions.baseHref = baseHref;
       targetOptions.port = 8080;
-
-      targetOptions.skyux.host = targetOptions.skyux.host || {};
-      targetOptions.skyux.host.url = 'https://host.nxt.blackbaud.com/';
-
-      console.log('Options in dev-server:', options, targetOptions);
 
       return executeDevServerBuilder(options, context, getTransforms(targetOptions, context));
     })

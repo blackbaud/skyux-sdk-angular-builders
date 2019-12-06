@@ -1,66 +1,57 @@
-const util = require('util');
-
 import {
   SkyBuilderOptions
 } from '../builder-options';
 
 import {
-  hostUtils
-} from './host-utils';
+  SkyHost,
+  SkyHostGetUrlArgs
+} from './host';
 
-// function getQueryStringFromArgv(argv: any, options: SkyBuilderOptions) {
+const sorter = require('html-webpack-plugin/lib/chunksorter');
 
-//   const configParams = options.skyux.params;
+function parseWebpackScripts(chunks: any): any[] {
+  const scripts: any[] = [];
 
-//   let params;
+  // Used when skipping the build, short-circuit to return metadata
+  if (chunks.metadata) {
+    return chunks.metadata;
+  }
 
-//   if (Array.isArray(configParams)) {
-//     params = configParams;
-//   } else {
-//     // Get the params that have truthy values, since false/undefined indicates
-//     // the parameter should not be added.
-//     params = Object.keys(configParams).filter(configParam => configParams[configParam]);
-//   }
+  sorter.dependency(chunks, undefined, {}).forEach((chunk: any) => {
+    scripts.push({
+      name: chunk.files[0]
+    });
+  });
 
-//   const found: any[] = [];
-//   params.forEach(param => {
-//     if (argv[param]) {
-//       found.push(`${param}=${encodeURIComponent(argv[param])}`);
-//     }
-//   });
+  // Webpack reversed the order of these scripts
+  scripts.reverse();
 
-//   if (found.length) {
-//     return `?${found.join('&')}`;
-//   }
-
-//   return '';
-// }
+  return scripts;
+}
 
 export class SkyBrowser {
 
   public static getLaunchUrl(options: SkyBuilderOptions, stats: any): string {
-    // const queryStringBase = getQueryStringFromArgv(argv, options);
 
-    const queryStringBase = '';
+    const spaName = options.baseHref as string;
+    const localUrl = `https://localhost:${options.port}/`;
+    const args: SkyHostGetUrlArgs = {
+      spaName,
+      localAssets: {
+        scripts: parseWebpackScripts(stats.toJson().chunks)
+      },
+      localUrl
+    };
 
-    console.log('Browser config:', options.port, options.baseHref);
+    if (options.skyux.host.url) {
+      args.baseUrl = options.skyux.host.url;
+    }
 
-    const localUrl = util.format(
-      'https://localhost:%s%s',
-      options.port,
-      options.baseHref
-    );
+    if (options.skyux.app && options.skyux.app.externals) {
+      args.externalAssets = options.skyux.app.externals;
+    }
 
-    console.log('Local url:', localUrl);
-
-    const hostUrl = hostUtils.resolve(
-      queryStringBase,
-      localUrl,
-      stats.toJson().chunks,
-      options
-    );
-
-    return hostUrl;
+    return SkyHost.getUrl(args);
   }
 
 }

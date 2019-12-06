@@ -3,44 +3,18 @@ import {
   JsonValue
 } from '@angular-devkit/core';
 
+import {
+  SkyAppExternalAssets
+} from './external-assets';
+
 export interface SkyBuilderOptions extends JsonObject {
   skyux: {
     app: {
-      externals: {
-        css: {
-          before: {
-            url: string;
-            integrity: string;
-          }[];
-          after: {
-            url: string;
-            integrity: string;
-          }[];
-        },
-        js: {
-          before: {
-            url: string;
-            integrity: string;
-            head: boolean;
-          }[];
-          after: {
-            url: string;
-            integrity: string;
-            head: boolean;
-          }[];
-        }
-      };
+      externals: SkyAppExternalAssets & JsonValue;
     },
     host: {
-      url: string;
-    };
+      url?: string;
+    } & JsonValue;
     name: string;
-    params: {
-      [key: string]: JsonValue & {
-        excludeFromRequests: boolean;
-        required: boolean;
-        value: any;
-      }
-    };
   }
 }

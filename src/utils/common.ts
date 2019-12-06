@@ -7,15 +7,6 @@ import {
 } from '@angular-devkit/build-angular';
 
 import {
-  IndexHtmlTransform
-} from '@angular-devkit/build-angular/src/angular-cli-files/utilities/index-file/write-index-html';
-
-import {
-  getSystemPath,
-  normalize
-} from '@angular-devkit/core';
-
-import {
   Configuration as WebpackConfiguration
 } from 'webpack';
 
@@ -25,15 +16,15 @@ import {
 
 import {
   SkyBuilderOptions
-} from './builder-options';
+} from '../builder-options';
 
 import {
   SkyBuilderTransforms
-} from './builder-transforms';
+} from '../builder-transforms';
 
 import {
   SkyWebpackPluginDone
-} from './utils/webpack-plugin-done';
+} from '../webpack-plugin-done';
 
 type SkyWebpackConfigTransformFactory = (options: SkyBuilderOptions, context: BuilderContext) => ExecutionTransformer<WebpackConfiguration>;
 
@@ -53,18 +44,8 @@ export const webpackConfigTransformFactory: SkyWebpackConfigTransformFactory = (
   };
 };
 
-export function indexHtmlTransformFactory(options: SkyBuilderOptions, context: BuilderContext): IndexHtmlTransform | undefined {
-  if (!options.indexTransform) {
-    return;
-  }
-
-  const transform = require(`${getSystemPath(normalize(context.workspaceRoot))}/${options.indexTransform}`);
-  return async (indexHtml: string) => transform(context.target, indexHtml);
-}
-
 export function getTransforms(options: SkyBuilderOptions, context: BuilderContext): SkyBuilderTransforms {
   return {
-    webpackConfiguration: webpackConfigTransformFactory(options, context),
-    indexHtml: indexHtmlTransformFactory(options, context)
+    webpackConfiguration: webpackConfigTransformFactory(options, context)
   };
 }
