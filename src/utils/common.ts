@@ -7,6 +7,15 @@ import {
 } from '@angular-devkit/build-angular';
 
 import {
+  IndexHtmlTransform
+} from '@angular-devkit/build-angular/src/angular-cli-files/utilities/index-file/write-index-html';
+
+import {
+  getSystemPath,
+  normalize
+} from '@angular-devkit/core';
+
+import {
   Configuration as WebpackConfiguration
 } from 'webpack';
 
@@ -44,8 +53,18 @@ export const webpackConfigTransformFactory: SkyWebpackConfigTransformFactory = (
   };
 };
 
+export const indexHtmlTransformFactory: (
+  context: BuilderContext
+) => IndexHtmlTransform | undefined = ({ workspaceRoot, target }) => {
+  const indexTransform = '../../blackbaud/skyux-sdk-angular-builders/dist/src/transform-index-html.js';
+  const { transform } = require(`${getSystemPath(normalize(workspaceRoot))}/${indexTransform}`);
+
+  return async (indexHtml: string) => transform(target, indexHtml);
+};
+
 export function getTransforms(options: SkyBuilderOptions, context: BuilderContext): SkyBuilderTransforms {
   return {
-    webpackConfiguration: webpackConfigTransformFactory(options, context)
+    webpackConfiguration: webpackConfigTransformFactory(options, context),
+    indexHtml: indexHtmlTransformFactory(context)
   };
 }
