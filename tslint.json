@@ -1,0 +1,32 @@
+{
+  "extends": [
+    "tslint:recommended"
+  ],
+  "rules": {
+    "array-type": [
+      true,
+      "array"
+    ],
+    "interface-name": [
+      false
+    ],
+    "no-console": [
+      false
+    ],
+    "no-var-requires": [
+      false
+    ],
+    "quotemark": [
+      true,
+      "single",
+      "avoid-escape"
+    ],
+    "trailing-comma": [
+      true,
+      {
+        "multiline": "never",
+        "singleline": "never"
+      }
+    ]
+  }
+}

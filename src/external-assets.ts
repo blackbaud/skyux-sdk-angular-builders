@@ -8,7 +8,7 @@ export interface SkyAppExternalAssets {
       url: string;
       integrity: string;
     }[];
-  },
+  };
   js: {
     before: {
       url: string;
@@ -20,5 +20,5 @@ export interface SkyAppExternalAssets {
       integrity: string;
       head: boolean;
     }[];
-  }
+  };
 }

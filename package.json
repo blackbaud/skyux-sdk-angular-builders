@@ -3,7 +3,9 @@
   "builders": "builders.json",
   "scripts": {
     "build": "rimraf dist && node ./node_modules/.bin/tsc -p tsconfig.json && node ./scripts/prepare-package.js",
-    "build:watch": "npm run build && node ./node_modules/.bin/tsc -p tsconfig.json --watch"
+    "build:watch": "npm run build && node ./node_modules/.bin/tsc -p tsconfig.json --watch",
+    "ci": "npm run lint && npm run build",
+    "lint": "tslint 'src/**/*.ts'"
   },
   "dependencies": {
     "html-webpack-plugin": "3.2.0",

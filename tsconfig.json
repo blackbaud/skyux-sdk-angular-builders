@@ -21,7 +21,9 @@
   "files": [
     "index.ts"
   ],
-  "exports": [
+  "exclude": [
     "node_modules"
-  ]
+  ],
+  "compileOnSave": false,
+  "buildOnSave": false
 }

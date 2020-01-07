@@ -35,9 +35,15 @@ import {
   SkyWebpackPluginDone
 } from '../webpack-plugin-done';
 
-type SkyWebpackConfigTransformFactory = (options: SkyBuilderOptions, context: BuilderContext) => ExecutionTransformer<WebpackConfiguration>;
+type SkyWebpackConfigTransformFactory = (
+  options: SkyBuilderOptions,
+  context: BuilderContext
+) => ExecutionTransformer<WebpackConfiguration>;
 
-export const webpackConfigTransformFactory: SkyWebpackConfigTransformFactory = (options: SkyBuilderOptions, context: BuilderContext) => {
+export const webpackConfigTransformFactory: SkyWebpackConfigTransformFactory = (
+  options: SkyBuilderOptions,
+  context: BuilderContext
+) => {
   return (defaultWebpackConfig) => {
     let customConfig: WebpackConfiguration = {};
     if (context.target && context.target.target === 'serve') {
@@ -64,7 +70,7 @@ export const indexHtmlTransformFactory: (
 
 export function getTransforms(options: SkyBuilderOptions, context: BuilderContext): SkyBuilderTransforms {
   return {
-    webpackConfiguration: webpackConfigTransformFactory(options, context),
-    indexHtml: indexHtmlTransformFactory(context)
+    indexHtml: indexHtmlTransformFactory(context),
+    webpackConfiguration: webpackConfigTransformFactory(options, context)
   };
 }

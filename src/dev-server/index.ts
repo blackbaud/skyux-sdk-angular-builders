@@ -43,7 +43,7 @@ export function devServerBuilder(
   }
 
   return observableFrom(setup()).pipe(
-    switchMap(targetOptions => {
+    switchMap((targetOptions) => {
       const baseHref = targetOptions.skyux.name;
 
       // Overrides to provide to Angular's serve command.

@@ -16,5 +16,5 @@ export interface SkyBuilderOptions extends JsonObject {
       url?: string;
     } & JsonValue;
     name: string;
-  }
+  };
 }

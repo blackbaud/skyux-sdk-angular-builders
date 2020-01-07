@@ -35,12 +35,13 @@ export class SkyBrowser {
 
     const spaName = options.baseHref as string;
     const localUrl = `https://localhost:${options.port}/`;
+
     const args: SkyHostGetUrlArgs = {
-      spaName,
       localAssets: {
         scripts: parseWebpackScripts(stats.toJson().chunks)
       },
-      localUrl
+      localUrl,
+      spaName
     };
 
     if (options.skyux.host.url) {

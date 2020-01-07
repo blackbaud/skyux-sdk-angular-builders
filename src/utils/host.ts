@@ -28,14 +28,12 @@ function encodeConfig(config: SkyHostConfig): string {
 
 export class SkyHost {
 
-  private static readonly baseUrl: string = 'https://host.nxt.blackbaud.com/';
-
   public static getUrl(args: SkyHostGetUrlArgs): string {
     if (
       args.baseUrl &&
       args.baseUrl.charAt(args.baseUrl.length - 1) !== '/'
     ) {
-      throw 'The host `baseUrl` must end with a forward slash.';
+      throw new Error('The host `baseUrl` must end with a forward slash.');
     }
 
     const config: SkyHostConfig = {
@@ -52,5 +50,7 @@ export class SkyHost {
 
     return `${urlBase}${args.spaName}/?local=true&_cfg=${encodedConfig}`;
   }
+
+  private static readonly baseUrl: string = 'https://host.nxt.blackbaud.com/';
 
 }
