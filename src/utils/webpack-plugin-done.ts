@@ -4,18 +4,17 @@ import * as webpack from 'webpack';
 
 import {
   SkyBuilderOptions
-} from './builder-options';
+} from '../builder-options';
 
 import {
   SkyBrowser
-} from './utils/browser';
+} from './browser';
 
 export class SkyWebpackPluginDone {
 
   constructor(
     private options: SkyBuilderOptions
   ) {
-    this.options.skyux = this.options.skyux || {};
     this.options.skyux.host = this.options.skyux.host || {};
   }
 

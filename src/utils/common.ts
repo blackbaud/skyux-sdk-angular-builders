@@ -11,11 +11,6 @@ import {
 } from '@angular-devkit/build-angular/src/angular-cli-files/utilities/index-file/write-index-html';
 
 import {
-  getSystemPath,
-  normalize
-} from '@angular-devkit/core';
-
-import {
   Configuration as WebpackConfiguration
 } from 'webpack';
 
@@ -33,7 +28,7 @@ import {
 
 import {
   SkyWebpackPluginDone
-} from '../webpack-plugin-done';
+} from './webpack-plugin-done';
 
 type SkyWebpackConfigTransformFactory = (
   options: SkyBuilderOptions,
@@ -61,10 +56,8 @@ export const webpackConfigTransformFactory: SkyWebpackConfigTransformFactory = (
 
 export const indexHtmlTransformFactory: (
   context: BuilderContext
-) => IndexHtmlTransform | undefined = ({ workspaceRoot, target }) => {
-  const indexTransform = '../../blackbaud/skyux-sdk-angular-builders/dist/src/transform-index-html.js';
-  const { transform } = require(`${getSystemPath(normalize(workspaceRoot))}/${indexTransform}`);
-
+) => IndexHtmlTransform = ({ target }) => {
+  const { transform } = require('@skyux-sdk/angular-builders/src/transform-index-html.js');
   return async (indexHtml: string) => transform(target, indexHtml);
 };
 

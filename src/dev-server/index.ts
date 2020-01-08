@@ -44,19 +44,21 @@ export function devServerBuilder(
 
   return observableFrom(setup()).pipe(
     switchMap((targetOptions) => {
+      if (!targetOptions.skyux || !targetOptions.skyux.name) {
+        throw new Error('Please provide a value for the `skyux` option in angular.json!');
+      }
+
       const baseHref = targetOptions.skyux.name;
 
       // Overrides to provide to Angular's serve command.
       options.baseHref = baseHref;
-      options.host = 'localhost';
-      options.publicHost = 'localhost';
       options.ssl = true;
       options.sslCert = getSSLCertificatePath();
       options.sslKey = getSSLKeyPath();
 
       // Overrides to provide to our Webpack plugin.
       targetOptions.baseHref = baseHref;
-      targetOptions.port = 8080;
+      targetOptions.port = options.port || null;
 
       return executeDevServerBuilder(options, context, getTransforms(targetOptions, context));
     })
