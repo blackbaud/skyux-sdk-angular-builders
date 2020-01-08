@@ -10,7 +10,7 @@ import {
   SkyBrowser
 } from './browser';
 
-export class SkyWebpackPluginDone {
+export class SkyHostWebpackPlugin {
 
   constructor(
     private options: SkyBuilderOptions
@@ -20,7 +20,7 @@ export class SkyWebpackPluginDone {
 
   public apply(compiler: webpack.Compiler): void {
     let launched = false;
-    compiler.hooks.done.tap('SkyWebpackPluginDone', (stats) => {
+    compiler.hooks.done.tap('SkyHostWebpackPlugin', (stats) => {
       if (launched) {
         return;
       }

@@ -27,8 +27,8 @@ import {
 } from '../builder-transforms';
 
 import {
-  SkyWebpackPluginDone
-} from './webpack-plugin-done';
+  SkyHostWebpackPlugin
+} from './host-webpack-plugin';
 
 type SkyWebpackConfigTransformFactory = (
   options: SkyBuilderOptions,
@@ -44,7 +44,7 @@ export const webpackConfigTransformFactory: SkyWebpackConfigTransformFactory = (
     if (context.target && context.target.target === 'serve') {
       customConfig = {
         plugins: [
-          new SkyWebpackPluginDone(options)
+          new SkyHostWebpackPlugin(options)
         ]
       };
     }
