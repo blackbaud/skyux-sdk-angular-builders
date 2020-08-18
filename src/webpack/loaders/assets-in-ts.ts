@@ -6,7 +6,7 @@ import {
   replaceAndEmitAssets
 } from './asset-utis';
 
-const TEMPLATE_REGEX = /template\s*:\s*(["'`])([\s\S]*?)\1/gm;
+const TEMPLATE_REGEX = /template\s*:(\s*['"`]([\s\S]*?)['"`]\s*([,}]))/gm;
 
 export default function AssetsLoaderTS(
   this: loader.LoaderContext,
