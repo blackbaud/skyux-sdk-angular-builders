@@ -7,8 +7,8 @@ function copyFilesToDist() {
     ['CHANGELOG.md'],
     ['package.json'],
     ['builders.json'],
-    ['src', 'browser', 'schema.json'],
-    ['src', 'dev-server', 'schema.json']
+    ['src', 'builders', 'browser', 'schema.json'],
+    ['src', 'builders', 'dev-server', 'schema.json']
   ];
 
   pathsToCopy.forEach(pathArr => {
@@ -27,11 +27,11 @@ function mergeBuilderSchemas() {
   const schemaConfigs = [
     {
       baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/browser/schema.json',
-      schemaPath: './src/browser/schema.json'
+      schemaPath: './src/builders/browser/schema.json'
     },
     {
       baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/dev-server/schema.json',
-      schemaPath: './src/dev-server/schema.json'
+      schemaPath: './src/builders/dev-server/schema.json'
     }
   ];
 

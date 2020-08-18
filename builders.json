@@ -2,13 +2,13 @@
   "$schema": "@angular-devkit/architect/src/builders-schema.json",
   "builders": {
     "browser": {
-      "implementation": "./src/browser/index.js",
-      "schema": "./src/browser/schema.json",
+      "implementation": "./src/builders/browser/index.js",
+      "schema": "./src/builders/browser/schema.json",
       "description": "SKY UX builder for `ng build`"
     },
     "dev-server": {
-      "implementation": "./src/dev-server/index.js",
-      "schema": "./src/dev-server/schema.json",
+      "implementation": "./src/builders/dev-server/index.js",
+      "schema": "./src/builders/dev-server/schema.json",
       "description": "SKY UX builder for `ng serve`"
     }
   }

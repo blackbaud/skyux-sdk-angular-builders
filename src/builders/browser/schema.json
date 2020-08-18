@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "properties": {
+    "assetsBaseUrl": {
+      "type": "string",
+      "description": "Base URL to set"
+    }
+  }
+}
