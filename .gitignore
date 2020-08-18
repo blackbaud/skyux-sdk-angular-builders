@@ -6,3 +6,6 @@ dist
 node_modules
 npm-debug.log*
 yarn.lock
+src/*.js
+src/*.map
+src/*.d.ts
