@@ -7,6 +7,7 @@ function copyFilesToDist() {
     ['CHANGELOG.md'],
     ['package.json'],
     ['builders.json'],
+    ['collection.json'],
     ['src', 'builders', 'browser', 'schema.json'],
     ['src', 'builders', 'dev-server', 'schema.json']
   ];

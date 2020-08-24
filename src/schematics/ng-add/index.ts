@@ -1,21 +1,26 @@
-import { 
-  Rule, 
+import {
+  Rule,
   SchematicContext,
-  Tree 
-} from '@angular-devkit/schematics';
+  Tree
+} from "@angular-devkit/schematics";
+
+import {
+  NodePackageInstallTask
+} from "@angular-devkit/schematics/tasks";
 
 import {
   getWorkspace,
   updateWorkspace
 } from '@schematics/angular/utility/config';
 
-export function addAngularBuilders(_options: any): Rule {
+// Just return the tree
+export function ngAdd(options: any): Rule {
   const builder = '@skyux-sdk/angular-builders';
 
-  return (tree: Tree, _context: SchematicContext) => {
-    
-    const project = _options.project;
+  return (tree: Tree, context: SchematicContext) => {
+
     const workspace = getWorkspace(tree);
+    const project = options.project || workspace.defaultProject;
 
     const architect = workspace.projects[project].architect;
     if (!architect) {
@@ -37,9 +42,7 @@ export function addAngularBuilders(_options: any): Rule {
 
     serve.builder = <any>`${builder}:dev-server`;
 
-    // const test = architect.test;
-    // if (!test) throw new Error(`expected node projects/${project}/architect/test in angular.json`);
-    // test.builder = <any>`${builder}:karma`;
+    context.addTask(new NodePackageInstallTask());
 
     return updateWorkspace(workspace);
   };
