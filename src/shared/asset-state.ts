@@ -7,7 +7,7 @@ export namespace AssetState {
   const assets: Asset[] = [];
   let baseUrl = '';
   
-  export function setBaseUrl(url: string) {
+  export function setBaseUrl(url?: string) {
     if (url) {
       baseUrl = url;
     }

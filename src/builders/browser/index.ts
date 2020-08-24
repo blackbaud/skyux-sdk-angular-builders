@@ -1,6 +1,4 @@
-import {
-  resolve
-} from 'path';
+
 
 import {
   BuilderOutput,
@@ -9,7 +7,6 @@ import {
 } from '@angular-devkit/architect';
 
 import {
-  BrowserBuilderOptions,
   executeBrowserBuilder
 } from '@angular-devkit/build-angular';
 
@@ -18,75 +15,41 @@ import {
 } from '@angular-devkit/core';
 
 import {
-  Configuration
-} from 'webpack';
-
-import {
-  AngularCompilerPlugin
-} from '@ngtools/webpack';
-
-import {
   Observable
 } from 'rxjs';
 
 import {
-  SaveMetadataPlugin
-} from '../../webpack/plugins/save-metadata';
-
-import {
-  AssetStateRunnerPlugin
-} from '../../webpack/plugins/asset-state-runner';
+  applyDefaultOptions
+} from '../../shared/default-options';
 
 import {
   AssetState
 } from '../../shared/asset-state';
 
 import {
+  SkyuxBrowserBuilderOptions
+} from '../../shared/skyux-builder-options'
+
+import {
+  skyuxWebpackConfigFactory
+} from '../../shared/webpack-config-utils';
+
+import {
   Transforms
 } from '../../shared/transforms.model';
-
-type SkyuxBrowserBuilderOptions = BrowserBuilderOptions & {
-  assetsBaseUrl: string;
-};
-
-function skyuxWebpackConfig(config: Configuration) {
-  if (config.module?.rules) {
-    config.module.rules.push({
-      // https://github.com/angular/angular-cli/issues/16544#issuecomment-571245469
-      enforce: 'pre',
-      test: /.ts$/,
-      use: resolve(__dirname, '../../webpack/loaders/assets-in-ts'),
-    });
-
-    config.module.rules.push({
-      test: /.html$/,
-      use: [
-        'raw-loader',
-        resolve(__dirname, '../../webpack/loaders/assets-in-html')
-      ]
-    });
-  }
-
-  if (config.plugins) {
-    config.plugins.push(SaveMetadataPlugin, AssetStateRunnerPlugin);
-    config.plugins.some(plugin => {
-      if (plugin instanceof AngularCompilerPlugin) {
-        (plugin as any)._options.directTemplateLoading = false;
-        return true;
-      }
-    });
-  }
-
-  return config;
-}
 
 function skyuxBrowser(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext,
   transforms: Transforms = {}
-): Observable<BuilderOutput> {
-  AssetState.setBaseUrl(options.assetsBaseUrl);
-  transforms.webpackConfiguration = skyuxWebpackConfig;
+): Observable<BuilderOutput> {  
+
+  applyDefaultOptions(options);
+
+  AssetState.setBaseUrl(options.skyuxAssetsBaseUrl);
+
+  skyuxWebpackConfigFactory(options, context, transforms);
+
   return executeBrowserBuilder(options, context, transforms);
 }
 

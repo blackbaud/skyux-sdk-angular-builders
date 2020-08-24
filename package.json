@@ -1,6 +1,6 @@
 {
-  "name": "@skyux-sdk/angular-builders",
-  "version": "0.0.1-alpha.0",
+  "name": "blackbaud-bobbyearl-angular-builders",
+  "version": "0.0.1-alpha.4",
   "builders": "builders.json",
   "scripts": {
     "build": "npm run clean && tsc -p tsconfig.json && node ./scripts/prepare-package.js",
@@ -10,8 +10,9 @@
     "lint": "tslint 'src/**/*.ts'"
   },
   "dependencies": {
-    "@types/hash-file": "^3.0.0",
-    "hash-file": "^3.0.0"
+    "@types/hash-file": "3.0.0",
+    "hash-file": "3.0.0",
+    "open": "7.1.0"
   },
   "devDependencies": {
     "@angular/compiler": "10.0.9",
@@ -24,7 +25,7 @@
     "@types/webpack": "4.1.4",
     "fs-extra": "9.0.1",
     "rimraf": "3.0.0",
-    "typescript": "^3.9.7",
+    "typescript": "3.9.7",
     "webpack": "4.44.1"
   }
 }

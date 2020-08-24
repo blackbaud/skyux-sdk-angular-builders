@@ -4,7 +4,6 @@ import {
 
 import {
   join,
-  parse
 } from 'path';
 
 import {
@@ -15,47 +14,36 @@ import {
   Logger
 } from '../../shared/logger';
 
+import {
+  getFallbackName,
+  getSortedAssets,
+  addAssetSourceTap
+} from './webpack-stats-utils';
+
 const PLUGIN_NAME = 'save-metadata-plugin';
 
-function getFallbackName(name: string) {
-  return `SKY_PAGES_READY_${name.toUpperCase().replace(/\./g, '_')}`;
-}
+export class SaveMetadataPlugin {
 
-interface assetChunks {
-  name: string;
-  fallback: string;
-}
+  apply(compiler: Compiler) {
 
-export function SaveMetadataPlugin(compiler: Compiler): void {
-  compiler.hooks.emit.tap(PLUGIN_NAME, (compilation) => {
-    Object.keys(compilation.assets)
-      .filter(file => parse(file).ext === '.js')
-      .forEach(key => {
-        const asset = compilation.assets[key];
-        const content = asset.source();
-        asset.source = () => `${content}
-var ${getFallbackName(key)} = true;`;
-      });
-
-    return true;
-  });
-
-  compiler.hooks.done.tap(PLUGIN_NAME, stats => {
-    const files = stats.toJson().assetsByChunkName;
-    const metadata: assetChunks[] = [];
-
-    Object.keys(files).forEach(key => {
-      metadata.push({
-        name: files[key][0],
-        fallback: getFallbackName(files[key][0])
-      });
-    });
-
-    writeFileSync(
-      join(process.cwd(), 'dist', 'metadata.json'),
-      JSON.stringify(metadata, null, '\t')
+    addAssetSourceTap(
+      PLUGIN_NAME,
+      compiler,
+      (content, file) => `${content}\nvar ${getFallbackName(file)} = true;`
     );
-    
-    Logger.flush();
-  });
+  
+    compiler.hooks.done.tap(PLUGIN_NAME, webpackStats => {
+  
+      const stats = webpackStats.toJson();
+      const assets = getSortedAssets(stats, true);
+  
+      writeFileSync(
+        join(stats.outputPath, 'metadata.json'),
+        JSON.stringify(assets, null, '\t')
+      );
+      
+      // TODO Probably move this to a dedicated plugin, or rename it
+      Logger.flush();
+    });
+  }
 }

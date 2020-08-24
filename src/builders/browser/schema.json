@@ -1,9 +1,13 @@
 {
   "$schema": "http://json-schema.org/schema",
   "properties": {
-    "assetsBaseUrl": {
+    "skyuxAssetsBaseUrl": {
       "type": "string",
       "description": "Base URL to set"
+    },
+    "skyuxHost": {
+      "type": "string",
+      "description": "Host URL"
     }
   }
 }
