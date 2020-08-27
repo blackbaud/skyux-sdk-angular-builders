@@ -1,11 +1,20 @@
 import {
+  readFileSync
+} from 'fs';
+
+import {
+  join
+} from 'path';
+
+import {
   Rule,
   SchematicContext,
   Tree
 } from "@angular-devkit/schematics";
 
 import {
-  NodePackageInstallTask
+  NodePackageInstallTask,
+
 } from "@angular-devkit/schematics/tasks";
 
 import {
@@ -13,9 +22,19 @@ import {
   updateWorkspace
 } from '@schematics/angular/utility/config';
 
-// Just return the tree
+import {
+  addModuleImportToModule
+} from 'schematics-utilities';
+
+// import {
+//   SkyuxDevServerBuilderOptions
+// } from '../../shared/skyux-builder-options';
+
 export function ngAdd(options: any): Rule {
-  const builder = '@skyux-sdk/angular-builders';
+  
+  // Assumes the builder name is this same library
+  const pkg = readFileSync(join(__dirname, '../../../package.json'));
+  const builder = JSON.parse(pkg.toString()).name;
 
   return (tree: Tree, context: SchematicContext) => {
 
@@ -41,6 +60,20 @@ export function ngAdd(options: any): Rule {
     }
 
     serve.builder = <any>`${builder}:dev-server`;
+    addModuleImportToModule(tree, 'src/app/app.module.ts', 'SkyuxBootstrapperModule', './skyux-bootstrapper');
+    // addImportToModule(tree.get('src/app/app.module.ts'), 'src/app/app.module.ts', 'SkyuxBoostrapModule', '@skyux/boostrap');
+
+    // TODO: REMOVE THESE AS THEY ARE TEMPORARY
+    // const serveOptions = serve.options as SkyuxDevServerBuilderOptions;
+    // serveOptions.skyuxHostUrl = 'https://localhost:5234';
+
+    // TODO: REMOVE ONCE HOST IS UPDATED
+    // const appComponentPath = 'src/app/app.component.ts';
+    // const appComponentContent = tree.read(appComponentPath)?.toString();
+    // if (appComponentContent && appComponentContent.indexOf('app-root') > -1) {
+    //   context.logger.info(`Setting selector in ${appComponentPath} to sky-app-pages`);
+    //   tree.overwrite(appComponentPath, appComponentContent.replace('app-root', 'sky-pages-app'));
+    // }
 
     context.addTask(new NodePackageInstallTask());
 

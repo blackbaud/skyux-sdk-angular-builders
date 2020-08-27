@@ -16,7 +16,8 @@
   "dependencies": {
     "@types/hash-file": "3.0.0",
     "hash-file": "3.0.0",
-    "open": "7.1.0"
+    "open": "7.1.0",
+    "schematics-utilities": "2.0.2"
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.1000.6",

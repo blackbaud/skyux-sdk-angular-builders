@@ -45,7 +45,7 @@ export class OpenSKYUXHostPlugin {
       const local = this.options.skyuxLocalUrl;
 
       const config = {
-        sdkBuilderVersion: 3,
+        sdkBuilderVersion: '5',
         scripts: assets,
         localUrl: local,
         host: {},
@@ -58,8 +58,10 @@ export class OpenSKYUXHostPlugin {
       this.context.logger.info(`SKY UX Host URL:\n\n${url}`);
       opened = true;
 
-      // TODO: consider exposing open library's options (browser, etc)
-      open(url);
+      open(url, {
+        app: this.options.skyuxOpenBrowser,
+        url: true
+      });
     });
   }
 }

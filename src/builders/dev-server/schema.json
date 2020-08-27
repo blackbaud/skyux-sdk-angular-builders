@@ -20,6 +20,15 @@
         "local",
         "host"
       ]
+    },
+    "skyuxOpenBrowser": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "string",
+        "array"
+      ]
     }
   }
 }

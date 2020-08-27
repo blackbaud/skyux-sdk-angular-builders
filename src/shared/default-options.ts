@@ -25,6 +25,4 @@ export function applyDefaultOptions(options: any) {
   // Must contain trailing slash
   options.skyuxHostUrl = enforceTrailingSlash(options.skyuxHostUrl);
   options.skyuxLocalUrl = enforceTrailingSlash(options.skyuxLocalUrl);
-
-  console.log(options);
 }
