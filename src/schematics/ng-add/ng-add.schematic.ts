@@ -13,16 +13,14 @@ import {
   updateWorkspace
 } from '@schematics/angular/utility/config';
 
-import {
-  readJsonSync
-} from 'fs-extra';
+import fs from 'fs-extra';
 
 import path from 'path';
 
 export function ngAdd(options: any): Rule {
 
-  // Assumes the builder name is this same library.
-  const packageJson = readJsonSync(path.join(__dirname, '../../../package.json'));
+  // Assumes the builder name is in the package.json (found from the dist folder).
+  const packageJson = fs.readJsonSync(path.join(__dirname, '../../../../package.json'));
   const builder = packageJson.name;
 
   return (tree: Tree, context: SchematicContext) => {

@@ -1,10 +1,6 @@
-import {
-  writeFileSync
-} from 'fs-extra';
+import fs from 'fs-extra';
 
-import {
-  join
-} from 'path';
+import path from 'path';
 
 import {
   Compiler
@@ -37,8 +33,8 @@ export class SaveMetadataPlugin {
       const stats = webpackStats.toJson();
       const assets = getSortedAssets(stats, true);
 
-      writeFileSync(
-        join(stats?.outputPath as string, 'metadata.json'),
+      fs.writeFileSync(
+        path.join(stats?.outputPath as string, 'metadata.json'),
         JSON.stringify(assets, null, '\t')
       );
 
