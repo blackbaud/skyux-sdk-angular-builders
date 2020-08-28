@@ -7,8 +7,18 @@
       true,
       "array"
     ],
+    "forin": [
+      false
+    ],
     "interface-name": [
       false
+    ],
+    "max-line-length": [
+      true,
+      {
+        "limit": 120,
+        "check-strings": false
+      }
     ],
     "no-console": [
       false
