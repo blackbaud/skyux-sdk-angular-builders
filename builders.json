@@ -1,6 +1,16 @@
 {
   "$schema": "./node_modules/@angular-devkit/architect/src/builders-schema.json",
   "builders": {
+    "browser": {
+      "implementation": "./dist/src/builders/browser/browser.js",
+      "schema": "./dist/src/builders/browser/schema.json",
+      "description": "SKY UX builder for `ng build`"
+    },
+    "dev-server": {
+      "implementation": "./dist/src/builders/dev-server/dev-server.js",
+      "schema": "./dist/src/builders/dev-server/schema.json",
+      "description": "SKY UX builder for `ng serve`"
+    },
     "upgrade-dependencies": {
       "implementation": "./dist/src/builders/upgrade-dependencies/upgrade-dependencies.js",
       "schema": "./dist/src/builders/upgrade-dependencies/schema.json",

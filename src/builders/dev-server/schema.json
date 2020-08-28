@@ -1,0 +1,34 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "properties": {
+    "skyuxAssetsBaseUrl": {
+      "type": "string",
+      "description": "Base URL to set"
+    },
+    "skyuxHostUrl": {
+      "type": "string",
+      "description": "Host URL"
+    },
+    "skyuxLocalUrl": {
+      "type": "string",
+      "description": "Local URL"
+    },
+    "skyuxOpen": {
+      "type": "string",
+      "description": "Opens local local or host",
+      "enum": [
+        "local",
+        "host"
+      ]
+    },
+    "skyuxOpenBrowser": {
+      "items": {
+        "type": "string"
+      },
+      "type": [
+        "string",
+        "array"
+      ]
+    }
+  }
+}
