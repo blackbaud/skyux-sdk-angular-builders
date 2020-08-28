@@ -65,7 +65,10 @@ function filterUpdatableDependencies(dependencies: PackageDependencies): Package
   return filtered;
 }
 
-async function getUpdatedDependencyVersions(dependencies: PackageDependencies): Promise<{
+async function getUpdatedDependencyVersions(
+  dependenciesToCheck: PackageDependencies,
+  originalDependencies: PackageDependencies
+): Promise<{
   ignore: PackageDependencies;
   notFound: PackageDependencies;
   update: PackageDependencies;
@@ -74,12 +77,12 @@ async function getUpdatedDependencyVersions(dependencies: PackageDependencies): 
   const dependenciesToIgnore: PackageDependencies = {};
   const dependenciesNotFound: PackageDependencies = {};
 
-  for (const packageName in dependencies) {
-    const versionRange = dependencies[packageName];
+  for (const packageName in dependenciesToCheck) {
+    const versionRange = dependenciesToCheck[packageName];
     let version: string;
     try {
       version = await latestVersion(packageName, { version: `${versionRange}`});
-      if (dependencies[packageName] !== version) {
+      if (originalDependencies[packageName] !== version) {
         dependenciesToUpdate[packageName] = version;
       } else {
         dependenciesToIgnore[packageName] = version;
@@ -150,7 +153,7 @@ async function skyuxUpgradeDependencies(
   };
 
   const dependenciesToCheck = filterUpdatableDependencies(dependencies);
-  const updatedDependencies = await getUpdatedDependencyVersions(dependenciesToCheck);
+  const updatedDependencies = await getUpdatedDependencyVersions(dependenciesToCheck, dependencies);
 
   for (const packageName in updatedDependencies.ignore) {
     context.logger.warn(
