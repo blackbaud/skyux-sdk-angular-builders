@@ -3,6 +3,7 @@
     "baseUrl": "tsconfig",
     "target": "es6",
     "declaration": true,
+    "esModuleInterop": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -11,6 +12,7 @@
     "noImplicitThis": false,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
+    "resolveJsonModule": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "sourceMap": true,
@@ -18,8 +20,9 @@
     "types": ["node", "jasmine"],
     "outDir": "./dist"
   },
-  "files": [
-    "index.ts"
+  "include": [
+    "index.ts",
+    "src/**/*.json"
   ],
   "exclude": [
     "node_modules"

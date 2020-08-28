@@ -1,21 +1,23 @@
 # @skyux-sdk/angular-builders
 
+## Installation
+
+Within the directory of an Angular CLI application, run:
+
+```
+ng add @skyux-sdk/angular-builders
+```
+
+## Usage
+
+### Upgrading SKY UX package dependencies
+
+This builder automatically upgrades all Angular and SKY UX packages to their latest supported versions.
+
+- `ng run my-project:skyux-upgrade-dependencies`
+- Add `--dry-run` to see the updates but leave your `package.json` file unaffected.
+
 ## Local setup
 
-- Build with `npm run build`
-- Create a new Angular SPA with `ng new`.
-- Open `angular.json` and:
-  - Replace the "build" architect builder with `../skyux-sdk-angular-builders/dist:browser`.
-  - Replace the "serve" architect builder with `../skyux-sdk-angular-builders/dist:dev-server`.
-  - Add a new section named `"skyux"` to the "build" architect builder's `"options"` object:
-```
-"options": {
-  // Other Angular options...
-  "skyux": {
-    "name": "name-of-your-spa"
-  }
-}
-
-```
-- Open `app.component.ts` and rename the `selector` to `'sky-pages-app'`.
-- Run `ng serve`.
+- Run `npm start` for local development; changes are transpiled automatically after each file is saved.
+- Run `npm run build` to create the distribution package.
