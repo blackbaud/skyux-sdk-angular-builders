@@ -9,7 +9,7 @@ export const DEPENDENCIES_MAP: { version: string; test: RegExp; }[] = [
   },
   {
     test: /^@skyux(-sdk)?\//,
-    version: '^4.0.0'
+    version: '^4.0.0-alpha.0'
   },
   {
     test: /^rxjs(-compat)?$/,
