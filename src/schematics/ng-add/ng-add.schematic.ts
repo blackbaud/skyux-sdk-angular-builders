@@ -25,6 +25,12 @@ export function ngAdd(options: any): Rule {
       );
     }
 
+    // Create a new architect for upgrading dependencies.
+    architect['skyux-upgrade-dependencies'] = {
+      builder: '@skyux-sdk/angular-builders:upgrade-dependencies',
+      options: {}
+    };
+
     // Install as a development dependency.
     context.addTask(new NodePackageInstallTask());
 
