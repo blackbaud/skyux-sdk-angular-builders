@@ -6,7 +6,7 @@
   ],
   "exclude": [
     "src/**/*.spec.ts",
-    "**/fixtures/**"
+    "**/testing/**"
   ],
   "reporter": [
     "text",

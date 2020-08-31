@@ -2,7 +2,7 @@ import {
   MockNodePackageInstallTask,
   setupTest,
   teardownTest
-} from './fixtures/setup-test';
+} from './testing/setup-test';
 
 // Setup mocks before importing the file that will be tested.
 setupTest();
