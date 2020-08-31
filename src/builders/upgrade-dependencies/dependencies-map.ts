@@ -12,44 +12,16 @@ export const DEPENDENCIES_MAP: { version: string; test: RegExp; }[] = [
     version: '^4.0.0-alpha.0'
   },
   {
-    test: /^rxjs(-compat)?$/,
-    version: '^6.5.5'
-  },
-  {
-    test: /^zone.js$/,
-    version: '~0.10.3'
-  },
-  {
-    test: /^tslib$/,
-    version: '^2.0.0'
-  },
-  {
-    test: /^ts-node$/,
-    version: '~8.3.0'
-  },
-  {
-    test: /^tslint$/,
-    version: '~6.1.0'
-  },
-  {
-    test: /^typescript$/,
-    version: '~3.9.5'
-  },
-  {
-    test: /^protractor$/,
-    version: '~7.0.0'
-  },
-  {
-    test: /^@types\/node$/,
-    version: '^12.11.1'
-  },
-  {
     test: /^@types\/jasmine$/,
     version: '~3.5.0'
   },
   {
     test: /^@types\/jasminewd2$/,
     version: '~2.0.3'
+  },
+  {
+    test: /^@types\/node$/,
+    version: '^12.11.1'
   },
   {
     test: /^codelyzer$/,
@@ -82,5 +54,33 @@ export const DEPENDENCIES_MAP: { version: string; test: RegExp; }[] = [
   {
     test: /^karma-jasmine-html-reporter$/,
     version: '^1.5.0'
+  },
+  {
+    test: /^protractor$/,
+    version: '~7.0.0'
+  },
+  {
+    test: /^rxjs(-compat)?$/,
+    version: '^6.5.5'
+  },
+  {
+    test: /^ts-node$/,
+    version: '~8.3.0'
+  },
+  {
+    test: /^tslib$/,
+    version: '^2.0.0'
+  },
+  {
+    test: /^tslint$/,
+    version: '~6.1.0'
+  },
+  {
+    test: /^typescript$/,
+    version: '~3.9.5'
+  },
+  {
+    test: /^zone.js$/,
+    version: '~0.10.3'
   }
 ];

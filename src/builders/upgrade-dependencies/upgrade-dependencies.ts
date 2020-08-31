@@ -8,7 +8,7 @@ import {
   JsonObject
 } from '@angular-devkit/core';
 
-import * as fs from 'fs-extra';
+import fs from 'fs-extra';
 import latestVersion from 'latest-version';
 import path from 'path';
 import semver from 'semver';
