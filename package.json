@@ -29,9 +29,7 @@
   "dependencies": {
     "fs-extra": "9.0.1",
     "hash-file": "3.0.0",
-    "latest-version": "5.1.0",
-    "os": "0.1.1",
-    "semver": "7.3.2"
+    "os": "0.1.1"
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.1000.8",
@@ -44,7 +42,6 @@
     "@types/fs-extra": "9.0.1",
     "@types/jasmine": "3.5.14",
     "@types/node": "14.6.1",
-    "@types/semver": "7.3.3",
     "@types/webpack": "4.41.21",
     "rimraf": "3.0.2",
     "tslint": "6.1.3",
