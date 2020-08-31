@@ -13,7 +13,7 @@ import {
   updateWorkspace
 } from '@schematics/angular/utility/config';
 
-export function ngAdd(options: any): Rule {
+export function ngAdd(options: any = {}): Rule {
   return (tree: Tree, context: SchematicContext) => {
     const workspace = getWorkspace(tree);
     const project = options.project || workspace.defaultProject;
