@@ -20,7 +20,7 @@ function mergeBuilderSchemas() {
   //   const newJson = Object.assign({}, baseSchemaJson, schemaJson);
   //   newJson.properties = Object.assign({}, baseSchemaJson.properties, schemaJson.properties || {});
 
-  //   fs.writeJsonSync(path.join('dist', config.schemaPath), newJson, {
+  //   fs.writeJsonSync(config.schemaPath, newJson, {
   //     encoding: 'utf8',
   //     spaces: 2
   //   });
