@@ -16,11 +16,11 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run clean && npm run lint && tsc -p tsconfig.json",
+    "build": "npm run clean && npm run lint && tsc --project tsconfig.json",
     "ci": "npm run coverage && npm run build",
     "clean": "rimraf dist",
     "coverage": "nyc npm run test",
-    "lint": "tslint 'src/**/*.ts'",
+    "lint": "tslint --project tsconfig.json",
     "start": "npm run build -- --watch",
     "test": "npm run clean && npm run lint && ts-node --project tsconfig.test.json node_modules/jasmine/bin/jasmine --config=jasmine.json"
   },

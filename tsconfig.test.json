@@ -1,15 +1,5 @@
 {
-  "compilerOptions": {
-    "declaration": true,
-    "lib": [
-      "dom",
-      "es6"
-    ],
-    "module": "commonjs",
-    "noImplicitAny": true,
-    "sourceMap": true,
-    "target": "es5"
-  },
+  "extends": "./tsconfig.json",
   "include": [
     "src/**/*.ts"
   ],
