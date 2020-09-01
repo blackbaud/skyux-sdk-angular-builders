@@ -23,13 +23,13 @@
     "fs-extra": "9.0.1"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "0.1000.6",
+    "@angular-devkit/architect": "0.1000.8",
     "@angular-devkit/core": "10.0.8",
     "@angular-devkit/schematics": "10.0.8",
     "@schematics/angular": "10.0.8",
     "@types/fs-extra": "9.0.1",
     "@types/jasmine": "3.5.14",
-    "@types/node": "14.6.1",
+    "@types/node": "14.6.2",
     "jasmine": "3.6.1",
     "nyc": "15.1.0",
     "rewiremock": "3.14.3",
