@@ -17,6 +17,10 @@ import fs from 'fs-extra';
 
 import path from 'path';
 
+// import {
+//   addModuleImportToModule
+// } from 'schematics-utilities';
+
 export function ngAdd(options: any): Rule {
 
   // Assumes the builder name is in the package.json (found from the dist folder).
@@ -47,6 +51,25 @@ export function ngAdd(options: any): Rule {
       throw new Error(`Expected node projects/${project}/architect/serve in angular.json!`);
     }
     serve.builder = `${builder}:dev-server` as any;
+
+    // addImportToModule(
+    //   tree.get('src/app/app.module.ts'),
+    //   'src/app/app.module.ts',
+    //   'SkyuxBoostrapModule',
+    //   '@skyux/boostrap'
+    // );
+
+    // TODO: REMOVE THESE AS THEY ARE TEMPORARY
+    // const serveOptions = serve.options as SkyuxDevServerBuilderOptions;
+    // serveOptions.skyuxHostUrl = 'https://localhost:5234';
+
+    // TODO: REMOVE ONCE HOST IS UPDATED
+    // const appComponentPath = 'src/app/app.component.ts';
+    // const appComponentContent = tree.read(appComponentPath)?.toString();
+    // if (appComponentContent && appComponentContent.indexOf('app-root') > -1) {
+    //   context.logger.info(`Setting selector in ${appComponentPath} to sky-app-pages`);
+    //   tree.overwrite(appComponentPath, appComponentContent.replace('app-root', 'sky-pages-app'));
+    // }
 
     // Install as a development dependency.
     context.addTask(new NodePackageInstallTask());
