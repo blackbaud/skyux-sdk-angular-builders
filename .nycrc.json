@@ -1,0 +1,15 @@
+{
+  "all": true,
+  "extension": ".ts",
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "**/testing/**"
+  ],
+  "reporter": [
+    "text",
+    "html"
+  ]
+}
