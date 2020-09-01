@@ -10,11 +10,6 @@
   "ng-add": {
     "save": "devDependencies"
   },
-  "files": [
-    "builders.json",
-    "collection.json",
-    "dist"
-  ],
   "scripts": {
     "build": "npm run clean && npm run lint && tsc -p tsconfig.json",
     "postbuild": "node ./scripts/after-build-success.js",
