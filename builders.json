@@ -2,8 +2,8 @@
   "$schema": "./node_modules/@angular-devkit/architect/src/builders-schema.json",
   "builders": {
     "upgrade-dependencies": {
-      "implementation": "./dist/src/builders/upgrade-dependencies/upgrade-dependencies.js",
-      "schema": "./dist/src/builders/upgrade-dependencies/schema.json",
+      "implementation": "./src/builders/upgrade-dependencies/upgrade-dependencies.js",
+      "schema": "./src/builders/upgrade-dependencies/schema.json",
       "description": "Sets appropriate versions for package dependencies."
     }
   }
