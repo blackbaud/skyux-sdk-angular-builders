@@ -26,11 +26,11 @@ function mergeBuilderSchemas() {
   // const schemaConfigs = [
   //   {
   //     baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/browser/schema.json',
-  //     schemaPath: './src/browser/schema.ext.json'
+  //     schemaPath: './dist/src/browser/schema.ext.json'
   //   },
   //   {
   //     baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/dev-server/schema.json',
-  //     schemaPath: './src/dev-server/schema.ext.json'
+  //     schemaPath: './dist/src/dev-server/schema.ext.json'
   //   }
   // ];
 
@@ -41,7 +41,7 @@ function mergeBuilderSchemas() {
   //   const newJson = Object.assign({}, baseSchemaJson, schemaJson);
   //   newJson.properties = Object.assign({}, baseSchemaJson.properties, schemaJson.properties || {});
 
-  //   fs.writeJsonSync(path.join('dist', config.schemaPath), newJson, {
+  //   fs.writeJsonSync(config.schemaPath, newJson, {
   //     encoding: 'utf8',
   //     spaces: 2
   //   });
