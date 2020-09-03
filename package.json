@@ -24,8 +24,7 @@
   },
   "dependencies": {
     "fs-extra": "9.0.1",
-    "hash-file": "3.0.0",
-    "os": "0.1.1"
+    "hash-file": "3.0.0"
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.1000.8",
