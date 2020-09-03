@@ -13,11 +13,12 @@
   "scripts": {
     "build": "npm run clean && npm run lint && tsc -p tsconfig.json",
     "postbuild": "node ./scripts/after-build-success.js",
-    "ci": "npm run test && npm run build",
+    "ci": "npm run coverage && npm run build",
     "clean": "rimraf dist",
-    "lint": "tslint 'src/**/*.ts'",
+    "coverage": "nyc npm run test",
+    "lint": "tslint --project tsconfig.json",
     "start": "npm run clean && tsc-watch -p tsconfig.json --onSuccess \"npm run postbuild\"",
-    "test": "npm run lint"
+    "test": "npm run clean && npm run lint && ts-node --project tsconfig.test.json node_modules/jasmine/bin/jasmine --config=jasmine.json"
   },
   "dependencies": {
     "fs-extra": "9.0.1",
@@ -25,13 +26,13 @@
     "semver": "7.3.2"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "0.1000.8",
-    "@angular-devkit/core": "10.0.8",
-    "@angular-devkit/schematics": "10.0.8",
-    "@schematics/angular": "10.0.8",
+    "@angular-devkit/architect": "0.1001.0",
+    "@angular-devkit/core": "10.1.0",
+    "@angular-devkit/schematics": "10.1.0",
+    "@schematics/angular": "10.1.0",
     "@types/fs-extra": "9.0.1",
     "@types/jasmine": "3.5.14",
-    "@types/node": "14.6.2",
+    "@types/node": "14.6.3",
     "@types/semver": "7.3.3",
     "jasmine": "3.6.1",
     "nyc": "15.1.0",
