@@ -24,6 +24,8 @@ export function setupTest(): void {
     updateWorkspace() {}
   }).dynamic();
 
+  rewiremock('fs-extra').with({}).dynamic();
+
   rewiremock.enable();
 }
 

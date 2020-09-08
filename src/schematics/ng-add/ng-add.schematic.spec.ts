@@ -26,7 +26,10 @@ describe('ngAdd schematic', () => {
       projects: {
         'default-project': {},
         'my-project': {
-          architect: {}
+          architect: {
+            build: {},
+            serve: {}
+          }
         },
         'invalid-project': {}
       }
@@ -35,6 +38,14 @@ describe('ngAdd schematic', () => {
     resetMock('@schematics/angular/utility/config', {
       getWorkspace: () => mockWorkspace,
       updateWorkspace() {}
+    });
+
+    resetMock('fs-extra', {
+      readJsonSync() {
+        return {
+          name: 'my-builder'
+        };
+      }
     });
   });
 
