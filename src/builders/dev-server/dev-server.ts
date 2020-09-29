@@ -5,8 +5,7 @@ import {
 
 import {
   DevServerBuilderOutput,
-  executeDevServerBuilder,
-  ExecutionTransformer
+  executeDevServerBuilder
 } from '@angular-devkit/build-angular';
 
 import {
@@ -18,33 +17,12 @@ import {
 } from 'rxjs';
 
 import {
-  Configuration as WebpackConfig
-} from 'webpack';
+  getWepbackConfigTransformer
+} from '../../webpack/config-transformer';
 
 import {
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
-
-import {
-  SkyuxOpenHostURLPlugin
-} from './open-host-url-plugin';
-
-function getWepbackConfigTransformer(
-  options: SkyuxDevServerBuilderOptions,
-  context: BuilderContext
-): ExecutionTransformer<WebpackConfig> {
-
-  return (webpackConfig) => {
-    if (context.builder.builderName === 'dev-server') {
-      webpackConfig.plugins?.push(
-        new SkyuxOpenHostURLPlugin(options, context)
-      );
-    }
-
-    return webpackConfig;
-  };
-
-}
 
 function ensureTrailingSlash(url: string): string {
   return (url.endsWith('/')) ? url: `${url}/`;
@@ -102,4 +80,6 @@ function skyuxDevServer(
   });
 }
 
-export default createBuilder<SkyuxDevServerBuilderOptions, DevServerBuilderOutput>(skyuxDevServer);
+export default createBuilder<SkyuxDevServerBuilderOptions, DevServerBuilderOutput>(
+  skyuxDevServer
+);

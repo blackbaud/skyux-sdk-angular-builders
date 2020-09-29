@@ -1,18 +1,11 @@
-import {
-  BuilderContext
-} from '@angular-devkit/architect';
-
 import open from 'open';
 
 import path from 'path';
 
 import {
-  Compiler
+  Compiler,
+  Stats
 } from 'webpack';
-
-import {
-  SkyuxDevServerBuilderOptions
-} from './dev-server-options';
 
 interface Asset {
   fallback?: string;
@@ -24,9 +17,13 @@ function getFallbackName(name: string): string {
 }
 
 function getSortedAssets(
-  stats: any,
+  stats: Stats.ToJsonOutput,
   includeFallback: boolean
 ): Asset[] {
+
+  if (!stats) {
+    return [];
+  }
 
   // TODO: figure out if this doesn't have to be manually sorted!
   const order = [
@@ -40,11 +37,9 @@ function getSortedAssets(
   const assets: Asset[] = [];
 
   order.forEach(id => {
-    if (stats.assetsByChunkName[id]) {
+    if (stats.assetsByChunkName && stats.assetsByChunkName[id]) {
       const chunk = stats.assetsByChunkName[id];
       const name = Array.isArray(chunk) ? chunk[0] : chunk;
-
-      // TODO: change this to JS | CSS when Host is ready
       if (path.parse(name).ext === '.js') {
         const asset: Asset = { name };
         if (includeFallback) {
@@ -60,18 +55,20 @@ function getSortedAssets(
 
 const PLUGIN_NAME = 'open-skyux-host-plugin';
 
+interface SkyuxOpenHostURLPluginConfig {
+  browser?: string | string[];
+  hostUrl: string;
+  localUrl: string;
+}
+
 export class SkyuxOpenHostURLPlugin {
 
   constructor(
-    public options: SkyuxDevServerBuilderOptions,
-    public context: BuilderContext
+    private pathName: string,
+    private config: SkyuxOpenHostURLPluginConfig
   ) { }
 
   public apply(compiler: Compiler): void {
-    if (this.options.skyuxOpen !== 'host') {
-      return;
-    }
-
     let opened = false;
 
     compiler.hooks.done.tap(PLUGIN_NAME, (webpackStats) => {
@@ -80,8 +77,8 @@ export class SkyuxOpenHostURLPlugin {
       }
 
       const assets = getSortedAssets(webpackStats.toJson(), false);
-      const host = this.options.skyuxHostUrl;
-      const local = this.options.skyuxLocalUrl;
+      const host = this.config.hostUrl;
+      const local = this.config.localUrl;
 
       const config = {
         sdkBuilderVersion: '5',
@@ -92,13 +89,15 @@ export class SkyuxOpenHostURLPlugin {
       };
 
       const configEncoded = Buffer.from(JSON.stringify(config)).toString('base64');
-      const url = `${host}${this.context.target?.project}/?local=true&_cfg=${configEncoded}`;
 
-      this.context.logger.info(`SKY UX Host URL:\n\n${url}`);
+      const url = `${host}${this.pathName}/?local=true&_cfg=${configEncoded}`;
+
+      console.log(`SKY UX Host URL:\n\n${url}`);
+
       opened = true;
 
       open(url, {
-        app: this.options.skyuxOpenBrowser,
+        app: this.config.browser,
         url: true
       });
     });
