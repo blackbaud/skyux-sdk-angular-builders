@@ -31,6 +31,15 @@ export function ngAdd(options: any): Rule {
       );
     }
 
+    // Overwrite the default serve architect.
+    const serve = architect.serve;
+    if (!serve) {
+      throw new Error(
+        `Expected node projects/${options.project}/architect/serve in angular.json!`
+      );
+    }
+    serve.builder = '@skyux-sdk/angular-builders:dev-server' as any;
+
     // Install as a development dependency.
     context.addTask(new NodePackageInstallTask());
 
