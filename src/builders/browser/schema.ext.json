@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "properties": {
+    "skyuxHostUrl": {
+      "type": "string",
+      "description": "Host URL"
+    }
+  }
+}

@@ -1,57 +1,13 @@
 import open from 'open';
 
-import path from 'path';
-
 import {
-  Compiler,
-  Stats
+  Compiler
 } from 'webpack';
 
-interface Asset {
-  fallback?: string;
-  name: string;
-}
 
-function getFallbackName(name: string): string {
-  return `SKY_PAGES_READY_${name.toUpperCase().replace(/\./g, '_')}`;
-}
-
-function getSortedAssets(
-  stats: Stats.ToJsonOutput,
-  includeFallback: boolean
-): Asset[] {
-
-  if (!stats) {
-    return [];
-  }
-
-  // TODO: figure out if this doesn't have to be manually sorted!
-  const order = [
-    'runtime',
-    'polyfills',
-    'styles',
-    'vendor',
-    'main'
-  ];
-
-  const assets: Asset[] = [];
-
-  order.forEach(id => {
-    if (stats.assetsByChunkName && stats.assetsByChunkName[id]) {
-      const chunk = stats.assetsByChunkName[id];
-      const name = Array.isArray(chunk) ? chunk[0] : chunk;
-      if (path.parse(name).ext === '.js') {
-        const asset: Asset = { name };
-        if (includeFallback) {
-          asset.fallback = getFallbackName(name);
-        }
-        assets.push(asset);
-      }
-    }
-  });
-
-  return assets;
-}
+import {
+  getSortedAssets
+} from '../stats-utils';
 
 const PLUGIN_NAME = 'open-skyux-host-plugin';
 

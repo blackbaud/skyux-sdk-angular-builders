@@ -14,6 +14,9 @@ import {
   SkyuxOpenHostURLPlugin
 } from './plugins/open-host-url';
 
+import {
+  SkyuxSaveMetadataPlugin
+} from './plugins/save-metadata';
 
 /**
  * Allows adjustments to the default Angular webpack config.
@@ -27,19 +30,27 @@ export function getWepbackConfigTransformer(
 
   return (webpackConfig) => {
 
-    if (context.builder.builderName === 'dev-server') {
-      if (options.skyuxOpen === 'host') {
+    switch (context.builder.builderName) {
+      case 'browser':
         webpackConfig.plugins?.push(
-          new SkyuxOpenHostURLPlugin(
-            context.target?.project as string,
-            {
-              browser: options.skyuxOpenBrowser,
-              hostUrl: options.skyuxHostUrl as string,
-              localUrl: options.skyuxLocalUrl as string
-            }
-          )
+          new SkyuxSaveMetadataPlugin()
         );
-      }
+        break;
+
+      case 'dev-server':
+        if (options.skyuxOpen === 'host') {
+          webpackConfig.plugins?.push(
+            new SkyuxOpenHostURLPlugin(
+              context.target?.project as string,
+              {
+                browser: options.skyuxOpenBrowser,
+                hostUrl: options.skyuxHostUrl as string,
+                localUrl: options.skyuxLocalUrl as string
+              }
+            )
+          );
+        }
+        break;
     }
 
     return webpackConfig;
