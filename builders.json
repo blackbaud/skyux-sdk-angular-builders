@@ -1,4 +1,10 @@
 {
   "$schema": "./node_modules/@angular-devkit/architect/src/builders-schema.json",
-  "builders": {}
+  "builders": {
+    "karma": {
+      "implementation": "./src/builders/karma/karma.js",
+      "schema": "./src/builders/karma/schema.ext.json",
+      "description": "SKY UX Angular builder for `ng test`."
+    }
+  }
 }
