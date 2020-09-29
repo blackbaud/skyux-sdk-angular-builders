@@ -16,12 +16,18 @@ import {
 export function ngAdd(options: any): Rule {
   return (tree: Tree, context: SchematicContext) => {
     const workspace = getWorkspace(tree);
-    const project = options.project || workspace.defaultProject;
-    const architect = workspace.projects[project].architect;
 
+    const projectConfig = workspace.projects[options.project];
+    if (!projectConfig) {
+      throw new Error(
+        `The "${options.project}" project is not defined in angular.json. Provide a valid project name.`
+      );
+    }
+
+    const architect = workspace.projects[options.project].architect;
     if (!architect) {
       throw new Error(
-        `Expected node projects/${project}/architect in angular.json!`
+        `Expected node projects/${options.project}/architect in angular.json!`
       );
     }
 
