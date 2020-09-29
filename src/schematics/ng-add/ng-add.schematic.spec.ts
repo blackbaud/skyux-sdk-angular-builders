@@ -32,11 +32,6 @@ describe('ng-add.schematic', () => {
   it('should throw an error if specified project doesn\'t exist', async () => {
     const app = await createTestApp(runner);
 
-    // Create an incorrectly formatted project config.
-    // const angularJson = JSON.parse(app.readContent('angular.json'));
-    // angularJson.projects['invalid-project'] = {};
-    // app.overwrite('angular.json', JSON.stringify(angularJson));
-
     await expectAsync(
       runner
         .runSchematicAsync('ng-add', { project: 'invalid-project' }, app)
