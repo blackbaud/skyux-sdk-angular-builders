@@ -3,7 +3,8 @@
   "schematics": {
     "ng-add": {
       "description": "Add @skyux-sdk/angular-builders to your project.",
-      "factory": "./src/schematics/ng-add/ng-add.schematic#ngAdd"
+      "factory": "./src/schematics/ng-add/ng-add.schematic#ngAdd",
+      "schema": "./src/schematics/ng-add/schema.json"
     }
   }
 }
