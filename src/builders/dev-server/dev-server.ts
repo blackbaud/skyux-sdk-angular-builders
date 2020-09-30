@@ -25,7 +25,7 @@ import {
 } from './dev-server-options';
 
 function ensureTrailingSlash(url: string): string {
-  return (url.endsWith('/')) ? url: `${url}/`;
+  return url.endsWith('/') ? url: `${url}/`;
 }
 
 function applyDefaultOptions(options: SkyuxDevServerBuilderOptions): void {
@@ -68,6 +68,9 @@ function skyuxDevServer(
   // Point live-reloading back to localhost.
   options.publicHost = options.skyuxLocalUrl;
   options.allowedHosts = ['.blackbaud.com'];
+
+  // Point lazy-loaded modules to the localhost URL.
+  options.deployUrl = options.skyuxLocalUrl;
 
   // If set to 'local' use Angular's first-class open option.
   // (This is to keep the experience consistent with SKY UX CLI.)

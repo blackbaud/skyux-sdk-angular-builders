@@ -44,7 +44,10 @@ export class SkyuxOpenHostURLPlugin {
         frameOptions: {}
       };
 
-      const configEncoded = Buffer.from(JSON.stringify(config)).toString('base64');
+      // We need to URL encode the value so that characters such as '+' are properly represented.
+      const configEncoded = encodeURIComponent(
+        Buffer.from(JSON.stringify(config)).toString('base64')
+      );
 
       const url = `${host}${this.pathName}/?local=true&_cfg=${configEncoded}`;
 
