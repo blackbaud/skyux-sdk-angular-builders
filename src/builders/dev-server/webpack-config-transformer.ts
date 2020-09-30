@@ -31,6 +31,7 @@ export function getDevServerWepbackConfigTransformer(
   return (webpackConfig) => {
 
     if (options.skyuxOpen === 'host') {
+
       webpackConfig.plugins?.push(
         new SkyuxOpenHostURLPlugin(
           context.target?.project as string,
@@ -41,6 +42,7 @@ export function getDevServerWepbackConfigTransformer(
           }
         )
       );
+
     }
 
     return webpackConfig;

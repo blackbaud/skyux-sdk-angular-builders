@@ -15,7 +15,11 @@ import {
  */
 export function getBrowserWepbackConfigTransformer(): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
-    webpackConfig.plugins?.push(new SkyuxSaveMetadataPlugin());
+
+    webpackConfig.plugins?.push(
+      new SkyuxSaveMetadataPlugin()
+    );
+
     return webpackConfig;
   };
 

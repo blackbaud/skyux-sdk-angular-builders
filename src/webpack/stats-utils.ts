@@ -12,7 +12,7 @@ interface Asset {
 
 type AssetEntry = [string, any];
 
-export type AssetSourceCallback = (content: string, file: string) => void;
+type AssetSourceCallback = (content: string, file: string) => void;
 
 export function getFallbackName(name: string): string {
   return `SKY_PAGES_READY_${name.toUpperCase().replace(/\./g, '_')}`;
@@ -30,10 +30,14 @@ export function getSortedAssets(
   const assets: Asset[] = [];
   stats.chunks?.forEach(chunk => {
     if (chunk.initial) {
-      const asset: Asset = { name: chunk.files[0] };
+      const asset: Asset = {
+        name: chunk.files[0]
+      };
+
       if (includeFallback) {
         asset.fallback = getFallbackName(asset.name);
       }
+
       assets.push(asset);
     }
   });
