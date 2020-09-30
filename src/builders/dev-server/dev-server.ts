@@ -17,12 +17,12 @@ import {
 } from 'rxjs';
 
 import {
-  getWepbackConfigTransformer
-} from '../../webpack/config-transformer';
-
-import {
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
+
+import {
+  getDevServerWepbackConfigTransformer
+} from './webpack-config-transformer';
 
 function ensureTrailingSlash(url: string): string {
   return url.endsWith('/') ? url: `${url}/`;
@@ -50,7 +50,7 @@ function getCertPath(fileName: string): string {
   return `${homedir()}/.skyux/certs/${fileName}`;
 }
 
-function skyuxDevServer(
+function executeSkyuxDevServerBuilder(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
 ): Observable<DevServerBuilderOutput> {
@@ -79,10 +79,10 @@ function skyuxDevServer(
   }
 
   return executeDevServerBuilder(options, context, {
-    webpackConfiguration: getWepbackConfigTransformer(options, context)
+    webpackConfiguration: getDevServerWepbackConfigTransformer(options, context)
   });
 }
 
 export default createBuilder<SkyuxDevServerBuilderOptions, DevServerBuilderOutput>(
-  skyuxDevServer
+  executeSkyuxDevServerBuilder
 );

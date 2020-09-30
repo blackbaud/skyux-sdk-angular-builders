@@ -24,7 +24,7 @@ export class SkyuxSaveMetadataPlugin {
       (content, file) => `${content}\nvar ${getFallbackName(file)} = true;`
     );
 
-    compiler.hooks.done.tap(PLUGIN_NAME, webpackStats => {
+    compiler.hooks.done.tap(PLUGIN_NAME, (webpackStats) => {
 
       const stats = webpackStats.toJson();
       const assets = getSortedAssets(stats, true);

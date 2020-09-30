@@ -4,7 +4,6 @@ import {
   Compiler
 } from 'webpack';
 
-
 import {
   getSortedAssets
 } from '../stats-utils';
