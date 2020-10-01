@@ -53,8 +53,7 @@ export function addAssetSourceTap(
 
   compiler.hooks.emit.tap(pluginName, compilation => {
 
-    const assets: AssetEntry[] = Object.entries(compilation.assets)
-
+    const assets: AssetEntry[] = Object.entries(compilation.assets);
     for (const [file, asset] of assets) {
       if (path.parse(file).ext === '.js') {
         const content = asset.source();
