@@ -41,11 +41,8 @@ export function getDevServerWepbackConfigTransformer(
           }
         )
       );
-
     }
 
     return webpackConfig;
-
   };
-
 }

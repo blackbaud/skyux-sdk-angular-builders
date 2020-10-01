@@ -54,9 +54,7 @@ export class SkyuxOpenHostURLPlugin {
 
       opened = true;
 
-      open(url, {
-        url: true
-      });
+      open(url);
     });
   }
 }

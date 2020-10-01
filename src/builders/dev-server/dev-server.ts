@@ -25,7 +25,7 @@ import {
 } from './webpack-config-transformer';
 
 function ensureTrailingSlash(url: string): string {
-  return url.endsWith('/') ? url: `${url}/`;
+  return url.endsWith('/') ? url : `${url}/`;
 }
 
 function getCertPath(fileName: string): string {
