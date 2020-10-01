@@ -25,7 +25,6 @@ export class SkyuxSaveMetadataPlugin {
     );
 
     compiler.hooks.done.tap(PLUGIN_NAME, (webpackStats) => {
-
       const stats = webpackStats.toJson();
       const assets = getSortedAssets(stats, true);
 
@@ -34,7 +33,5 @@ export class SkyuxSaveMetadataPlugin {
         JSON.stringify(assets, null, '\t')
       );
     });
-
   }
-
 }

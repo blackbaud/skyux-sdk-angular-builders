@@ -6,10 +6,6 @@ export type SkyuxDevServerBuilderOptions = DevServerBuilderOptions & {
 
   skyuxHostUrl?: string;
 
-  skyuxLocalUrl?: string;
-
-  skyuxOpen?: 'host' | 'local';
-
-  skyuxOpenBrowser?: string | string[];
+  skyuxLaunch?: 'host' | 'local';
 
 };

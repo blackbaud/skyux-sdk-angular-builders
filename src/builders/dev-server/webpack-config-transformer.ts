@@ -30,15 +30,14 @@ export function getDevServerWepbackConfigTransformer(
 
   return (webpackConfig) => {
 
-    if (options.skyuxOpen === 'host') {
+    if (options.skyuxLaunch === 'host') {
 
       webpackConfig.plugins?.push(
         new SkyuxOpenHostURLPlugin(
-          context.target?.project as string,
+          context.target?.project!,
           {
-            browser: options.skyuxOpenBrowser,
-            hostUrl: options.skyuxHostUrl as string,
-            localUrl: options.skyuxLocalUrl as string
+            hostUrl: options.skyuxHostUrl!,
+            localUrl: options.deployUrl!
           }
         )
       );

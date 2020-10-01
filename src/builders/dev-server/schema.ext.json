@@ -5,11 +5,7 @@
       "type": "string",
       "description": "Host URL"
     },
-    "skyuxLocalUrl": {
-      "type": "string",
-      "description": "Local URL"
-    },
-    "skyuxOpen": {
+    "skyuxLaunch": {
       "type": "string",
       "description": "Opens URL in localhost or with the SKY UX host URL.",
       "enum": [
@@ -17,15 +13,6 @@
         "host"
       ],
       "default": "host"
-    },
-    "skyuxOpenBrowser": {
-      "items": {
-        "type": "string"
-      },
-      "type": [
-        "string",
-        "array"
-      ]
     }
   }
 }

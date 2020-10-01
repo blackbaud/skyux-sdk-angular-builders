@@ -11,7 +11,6 @@ import {
 const PLUGIN_NAME = 'open-skyux-host-plugin';
 
 interface SkyuxOpenHostURLPluginConfig {
-  browser?: string | string[];
   hostUrl: string;
   localUrl: string;
 }
@@ -43,7 +42,8 @@ export class SkyuxOpenHostURLPlugin {
         frameOptions: {}
       };
 
-      // We need to URL encode the value so that characters such as '+' are properly represented.
+      // We need to URL encode the value so that characters such as '+'
+      // are properly represented.
       const configEncoded = encodeURIComponent(
         Buffer.from(JSON.stringify(config)).toString('base64')
       );
@@ -55,7 +55,6 @@ export class SkyuxOpenHostURLPlugin {
       opened = true;
 
       open(url, {
-        app: this.config.browser,
         url: true
       });
     });
