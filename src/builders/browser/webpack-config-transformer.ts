@@ -11,7 +11,9 @@ import {
 } from '../../webpack/plugins/save-metadata';
 
 /**
- * Allows adjustments to the default Angular webpack config.
+ * Allows adjustments to the default Angular "browser" webpack config.
+ * @param options The input options passed to the builder.
+ * @param context The context of the builder execution.
  */
 export function getBrowserWepbackConfigTransformer(): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {

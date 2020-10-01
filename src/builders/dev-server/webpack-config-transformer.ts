@@ -19,7 +19,7 @@ import {
 } from './dev-server-options';
 
 /**
- * Allows adjustments to the default Angular webpack config.
+ * Allows adjustments to the default Angular "dev-server" webpack config.
  * @param options The input options passed to the builder.
  * @param context The context of the builder execution.
  */
