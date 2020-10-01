@@ -15,6 +15,13 @@ interface SkyuxOpenHostURLPluginConfig {
   localUrl: string;
 }
 
+interface SkyuxHostConfig {
+  scripts: {
+    name: string;
+  }[];
+  localUrl: string;
+}
+
 export class SkyuxOpenHostURLPlugin {
 
   constructor(
@@ -31,15 +38,9 @@ export class SkyuxOpenHostURLPlugin {
       }
 
       const assets = getSortedAssets(webpackStats.toJson(), false);
-      const host = this.config.hostUrl;
-      const local = this.config.localUrl;
-
-      const config = {
-        sdkBuilderVersion: '5',
-        scripts: assets,
-        localUrl: local,
-        host: {},
-        frameOptions: {}
+      const config: SkyuxHostConfig = {
+        localUrl: this.config.localUrl,
+        scripts: assets
       };
 
       // We need to URL encode the value so that characters such as '+'
@@ -48,7 +49,7 @@ export class SkyuxOpenHostURLPlugin {
         Buffer.from(JSON.stringify(config)).toString('base64')
       );
 
-      const url = `${host}${this.pathName}/?local=true&_cfg=${configEncoded}`;
+      const url = `${this.config.hostUrl}${this.pathName}/?local=true&_cfg=${configEncoded}`;
 
       console.log(`SKY UX Host URL:\n\n${url}`);
 
