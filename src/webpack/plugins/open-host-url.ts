@@ -5,13 +5,21 @@ import {
 } from 'webpack';
 
 import {
-  getSortedAssets
+  getAssets
 } from '../stats-utils';
 
 const PLUGIN_NAME = 'open-skyux-host-plugin';
 
 interface SkyuxOpenHostURLPluginConfig {
+
+  /**
+   * The URL of the SKY UX Host server.
+   */
   hostUrl: string;
+
+  /**
+   * The URL of the localhost server, serving the asset files.
+   */
   localUrl: string;
 }
 
@@ -24,6 +32,10 @@ interface SkyuxHostConfig {
 
 export class SkyuxOpenHostURLPlugin {
 
+  /**
+   * @param pathName The unique pathname of the SPA, e.g. 'my-spa'.
+   * @param config Additional configuration.
+   */
   constructor(
     private pathName: string,
     private config: SkyuxOpenHostURLPluginConfig
@@ -37,7 +49,7 @@ export class SkyuxOpenHostURLPlugin {
         return;
       }
 
-      const assets = getSortedAssets(webpackStats.toJson(), false);
+      const assets = getAssets(webpackStats.toJson(), false);
       const config: SkyuxHostConfig = {
         localUrl: this.config.localUrl,
         scripts: assets

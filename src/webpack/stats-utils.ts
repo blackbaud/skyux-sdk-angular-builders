@@ -18,7 +18,7 @@ export function getFallbackName(name: string): string {
   return `SKY_PAGES_READY_${name.toUpperCase().replace(/\./g, '_')}`;
 }
 
-export function getSortedAssets(
+export function getAssets(
   stats: Stats.ToJsonOutput,
   includeFallback: boolean
 ): Asset[] {

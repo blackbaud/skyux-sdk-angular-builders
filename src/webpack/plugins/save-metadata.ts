@@ -8,8 +8,8 @@ import {
 
 import {
   addAssetSourceTap,
-  getFallbackName,
-  getSortedAssets
+  getAssets,
+  getFallbackName
 } from '../stats-utils';
 
 const PLUGIN_NAME = 'save-metadata-plugin';
@@ -26,7 +26,7 @@ export class SkyuxSaveMetadataPlugin {
 
     compiler.hooks.done.tap(PLUGIN_NAME, (webpackStats) => {
       const stats = webpackStats.toJson();
-      const assets = getSortedAssets(stats, true);
+      const assets = getAssets(stats, true);
 
       fs.writeFileSync(
         path.join(stats?.outputPath!, 'metadata.json'),
