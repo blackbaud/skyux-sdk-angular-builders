@@ -29,7 +29,7 @@ export class SkyuxSaveMetadataPlugin {
       const assets = getSortedAssets(stats, true);
 
       fs.writeFileSync(
-        path.join(stats?.outputPath as string, 'metadata.json'),
+        path.join(stats?.outputPath!, 'metadata.json'),
         JSON.stringify(assets, null, '\t')
       );
     });
