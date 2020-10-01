@@ -32,31 +32,35 @@ function getCertPath(fileName: string): string {
   return `${homedir()}/.skyux/certs/${fileName}`;
 }
 
+function applySkyuxHostOptions(options: SkyuxDevServerBuilderOptions): void {
+
+  const hostUrl = ensureTrailingSlash(options.skyuxHostUrl || 'https://app.blackbaud.com/');
+  const localUrl = `https://${options.host}:${options.port}/`;
+
+  options.skyuxHostUrl = hostUrl;
+
+  // Enforce HTTPS.
+  options.ssl = true;
+
+  // Point image URLs back to localhost.
+  options.baseHref = localUrl;
+  options.servePathDefaultWarning = false;
+
+  // Point live-reloading back to localhost.
+  options.publicHost = localUrl;
+  options.allowedHosts = ['.blackbaud.com'];
+
+  // Point lazy-loaded modules to the localhost URL.
+  options.deployUrl = localUrl;
+}
+
 function executeSkyuxDevServerBuilder(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
 ): Observable<DevServerBuilderOutput> {
 
   if (options.skyuxLaunch === 'host') {
-
-    const hostUrl = ensureTrailingSlash(options.skyuxHostUrl || 'https://app.blackbaud.com/');
-    const localUrl = `https://${options.host}:${options.port}/`;
-
-    options.skyuxHostUrl = hostUrl;
-
-    // Enforce HTTPS.
-    options.ssl = true;
-
-    // Point image URLs back to localhost.
-    options.baseHref = localUrl;
-    options.servePathDefaultWarning = false;
-
-    // Point live-reloading back to localhost.
-    options.publicHost = localUrl;
-    options.allowedHosts = ['.blackbaud.com'];
-
-    // Point lazy-loaded modules to the localhost URL.
-    options.deployUrl = localUrl;
+    applySkyuxHostOptions(options);
   }
 
   if (options.ssl) {
