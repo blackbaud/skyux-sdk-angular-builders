@@ -17,7 +17,9 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    "types": ["node", "jasmine"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "outDir": "./dist"
   },
   "include": [
