@@ -3,6 +3,10 @@ import * as angularArchitect from '@angular-devkit/architect';
 import * as buildAngular from '@angular-devkit/build-angular';
 
 import {
+  homedir
+} from 'os';
+
+import {
   of
 } from 'rxjs';
 
@@ -109,8 +113,8 @@ describe('dev-server builder', () => {
         skyuxHostUrl: 'https://app.blackbaud.com/',
         skyuxLaunch: 'host',
         ssl: true,
-        sslCert: '/Users/stevebr/.skyux/certs/skyux-server.crt',
-        sslKey: '/Users/stevebr/.skyux/certs/skyux-server.key'
+        sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
+        sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
       });
     });
 
