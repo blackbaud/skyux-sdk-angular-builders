@@ -15,14 +15,24 @@ import {
  * @param options The input options passed to the builder.
  * @param context The context of the builder execution.
  */
-export function getBrowserWepbackConfigTransformer(): ExecutionTransformer<WebpackConfig> {
+function getBrowserWepbackConfigTransformer(): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
 
-    webpackConfig.plugins?.push(
+    if (!webpackConfig.plugins) {
+      webpackConfig.plugins = [];
+    }
+
+    webpackConfig.plugins.push(
       new SkyuxSaveMetadataPlugin()
     );
 
     return webpackConfig;
   };
 
+}
+
+export function getBrowserTransforms() {
+  return {
+    webpackConfiguration: getBrowserWepbackConfigTransformer()
+  };
 }

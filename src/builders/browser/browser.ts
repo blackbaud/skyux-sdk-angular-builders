@@ -21,16 +21,14 @@ import {
 } from './browser-options';
 
 import {
-  getBrowserWepbackConfigTransformer
-} from './webpack-config-transformer';
+  getBrowserTransforms
+} from './browser-transforms';
 
 function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext
 ): Observable<BuilderOutput> {
-  return executeBrowserBuilder(options, context, {
-    webpackConfiguration: getBrowserWepbackConfigTransformer()
-  });
+  return executeBrowserBuilder(options, context, getBrowserTransforms());
 }
 
 export default createBuilder<JsonObject & SkyuxBrowserBuilderOptions>(

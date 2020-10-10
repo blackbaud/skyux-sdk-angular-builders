@@ -23,7 +23,7 @@ import {
  * @param options The input options passed to the builder.
  * @param context The context of the builder execution.
  */
-export function getDevServerWepbackConfigTransformer(
+function getDevServerWepbackConfigTransformer(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
 ): ExecutionTransformer<WebpackConfig> {
@@ -31,8 +31,11 @@ export function getDevServerWepbackConfigTransformer(
   return (webpackConfig) => {
 
     if (options.skyuxLaunch === 'host') {
+      if (!webpackConfig.plugins) {
+        webpackConfig.plugins = [];
+      }
 
-      webpackConfig.plugins?.push(
+      webpackConfig.plugins.push(
         new SkyuxOpenHostURLPlugin(
           context.target?.project!,
           {
@@ -44,5 +47,14 @@ export function getDevServerWepbackConfigTransformer(
     }
 
     return webpackConfig;
+  };
+}
+
+export function getDevServerTransforms(
+  options: SkyuxDevServerBuilderOptions,
+  context: BuilderContext
+) {
+  return {
+    webpackConfiguration: getDevServerWepbackConfigTransformer(options, context)
   };
 }
