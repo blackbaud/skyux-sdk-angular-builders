@@ -76,7 +76,11 @@ describe('dev-server builder', () => {
 
   describe('configuration', () => {
 
-    it('should not affect Angular options by default', async () => {
+    it('should not affect Angular options if `skyuxLaunch` is set to "local"', async () => {
+      defaultOptions = overrideOptions({
+        skyuxLaunch: 'local'
+      });
+
       await (mock.reRequire('./dev-server'));
 
       const actualOptions = getActualOptions();
@@ -84,7 +88,7 @@ describe('dev-server builder', () => {
       expect(actualOptions).toEqual(defaultOptions);
     });
 
-    it('should overwrite options if `skyuxLaunch` is set to "host"', async () => {
+    it('should overwrite Angular options if `skyuxLaunch` is set to "host"', async () => {
       defaultOptions = overrideOptions({
         skyuxLaunch: 'host'
       });
@@ -110,7 +114,7 @@ describe('dev-server builder', () => {
       });
     });
 
-    it('should allow setting a custom `skyuxHostUrl` and append trailing slash', async () => {
+    it('should allow setting a custom `skyuxHostUrl` and append a trailing slash', async () => {
       defaultOptions = overrideOptions({
         skyuxLaunch: 'host',
         skyuxHostUrl: 'https://my-host-url.com'

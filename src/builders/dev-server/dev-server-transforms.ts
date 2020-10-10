@@ -31,13 +31,16 @@ function getDevServerWepbackConfigTransformer(
   return (webpackConfig) => {
 
     if (options.skyuxLaunch === 'host') {
+      /*istanbul ignore next line*/
+      const pathName = context.target?.project!;
+
       if (!webpackConfig.plugins) {
         webpackConfig.plugins = [];
       }
 
       webpackConfig.plugins.push(
         new SkyuxOpenHostURLPlugin(
-          context.target?.project!,
+          pathName,
           {
             hostUrl: options.skyuxHostUrl!,
             localUrl: options.deployUrl!
