@@ -11,6 +11,11 @@ Within the directory of an Angular CLI application, run:
 ng add @skyux-sdk/angular-builders
 ```
 
+## Local setup
+
+- Run `npm run start` to build the package and watch the for file changes.
+- Change directory to `/builders-test-app` and run `npm install` and `ng serve`.
+
 ## Build
 
 - Run `npm run build` to create the distribution package.
