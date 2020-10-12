@@ -25,8 +25,13 @@ function executeSkyuxDevServerBuilder(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
 ): Observable<DevServerBuilderOutput> {
-  const settings = applySkyuxDevServerOptions(options);
-  return executeDevServerBuilder(settings, context, getDevServerTransforms(settings, context));
+  applySkyuxDevServerOptions(options);
+
+  return executeDevServerBuilder(
+    options,
+    context,
+    getDevServerTransforms(options, context)
+  );
 }
 
 export default createBuilder<SkyuxDevServerBuilderOptions, DevServerBuilderOutput>(

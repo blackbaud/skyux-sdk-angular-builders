@@ -28,35 +28,29 @@ function getCertPath(fileName: string): string {
   return `${homedir()}/.skyux/certs/${fileName}`;
 }
 
-export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): SkyuxDevServerBuilderOptions {
-  const clone: SkyuxDevServerBuilderOptions = {...options};
+export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): void {
+
+  // Enforce HTTPS.
+  options.ssl = true;
+  options.sslCert = getCertPath('skyux-server.crt');
+  options.sslKey = getCertPath('skyux-server.key');
 
   // Set options specific to SKY UX Host.
-  if (clone.skyuxLaunch === 'host') {
-    const hostUrl = ensureTrailingSlash(clone.skyuxHostUrl || 'https://app.blackbaud.com/');
-    const localUrl = `https://${clone.host}:${clone.port}/`;
+  if (options.skyuxLaunch === 'host') {
+    const hostUrl = ensureTrailingSlash(options.skyuxHostUrl || 'https://app.blackbaud.com/');
+    const localUrl = `https://${options.host}:${options.port}/`;
 
-    clone.skyuxHostUrl = hostUrl;
-
-    // Enforce HTTPS.
-    clone.ssl = true;
+    options.skyuxHostUrl = hostUrl;
 
     // Point image URLs back to localhost.
-    clone.baseHref = localUrl;
-    clone.servePathDefaultWarning = false;
+    options.baseHref = localUrl;
+    options.servePathDefaultWarning = false;
 
     // Point live-reloading back to localhost.
-    clone.publicHost = localUrl;
-    clone.allowedHosts = ['.blackbaud.com'];
+    options.publicHost = localUrl;
+    options.allowedHosts = ['.blackbaud.com'];
 
     // Point lazy-loaded modules to the localhost URL.
-    clone.deployUrl = localUrl;
+    options.deployUrl = localUrl;
   }
-
-  if (clone.ssl) {
-    clone.sslCert = getCertPath('skyux-server.crt');
-    clone.sslKey = getCertPath('skyux-server.key');
-  }
-
-  return clone;
 }

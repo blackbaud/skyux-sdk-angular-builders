@@ -80,18 +80,6 @@ describe('dev-server builder', () => {
 
   describe('configuration', () => {
 
-    it('should not affect Angular options if `skyuxLaunch` is set to "local"', async () => {
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'local'
-      });
-
-      await (mock.reRequire('./dev-server'));
-
-      const actualOptions = getActualOptions();
-
-      expect(actualOptions).toEqual(defaultOptions);
-    });
-
     it('should overwrite Angular options if `skyuxLaunch` is set to "host"', async () => {
       defaultOptions = overrideOptions({
         skyuxLaunch: 'host'
@@ -116,6 +104,25 @@ describe('dev-server builder', () => {
         sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
         sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
       });
+    });
+
+    it('should enforce HTTPS if `skyuxLaunch` is set to "local"', async () => {
+      defaultOptions = overrideOptions({
+        skyuxLaunch: 'local'
+      });
+
+      await (mock.reRequire('./dev-server'));
+
+      const actualOptions = getActualOptions();
+
+      expect(actualOptions).toEqual({
+        ...defaultOptions,
+        ...{
+          ssl: true,
+          sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
+          sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
+        }
+      } as SkyuxDevServerBuilderOptions);
     });
 
     it('should allow setting a custom `skyuxHostUrl` and append a trailing slash', async () => {
