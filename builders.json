@@ -1,4 +1,10 @@
 {
   "$schema": "./node_modules/@angular-devkit/architect/src/builders-schema.json",
-  "builders": {}
+  "builders": {
+    "dev-server": {
+      "implementation": "./src/builders/dev-server/dev-server",
+      "schema": "./src/builders/dev-server/schema.ext.json",
+      "description": "SKY UX builder for `ng serve`"
+    }
+  }
 }

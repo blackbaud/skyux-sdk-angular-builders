@@ -14,11 +14,7 @@ ng add @skyux-sdk/angular-builders
 ## Local setup
 
 - Run `npm start` for local development; changes are transpiled automatically after each file is saved.
-- If you clone this repo in the same root directory as an Angular CLI project, you can install it via:
-
-```
-ng add ../skyux-sdk-angular-builders/dist
-```
+- Change directory to `/builders-test-app` and run `npm install` and `ng serve`.
 
 ## Build
 
