@@ -14,7 +14,7 @@ ng add @skyux-sdk/angular-builders
 ## Local setup
 
 - Run `npm start` for local development; changes are transpiled automatically after each file is saved.
-- Change directory to `/builders-test-app` and run `npm install` and `ng serve`.
+- Change directory to `/builders-test-app` and run `npm install`, `ng add ../dist`, and `ng serve`.
 
 ## Build
 

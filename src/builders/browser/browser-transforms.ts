@@ -8,7 +8,7 @@ import {
 
 import {
   SkyuxSaveMetadataPlugin
-} from '../../webpack/plugins/save-metadata';
+} from '../../webpack/plugins/save-metadata/save-metadata';
 
 /**
  * Allows adjustments to the default Angular "browser" webpack config.

@@ -21,13 +21,15 @@ export function getFallbackName(name: string): string {
 export function getAssets(
   stats: Stats.ToJsonOutput,
   config?: {
-    includeFallback: boolean;
+    includeFallback?: boolean;
+    includeLazyloadedChunks?: boolean;
   }
 ): Asset[] {
   const assets: Asset[] = [];
 
   stats?.chunks?.forEach(chunk => {
-    if (chunk.initial) {
+    console.log('CHUNK:', chunk.files);
+    if (chunk.initial && !config?.includeLazyloadedChunks) {
       const asset: Asset = {
         name: chunk.files[0]
       };
@@ -43,6 +45,9 @@ export function getAssets(
   return assets;
 }
 
+/**
+ * Allows a Webpack plugin to modify the contents of processed JavaScript files.
+ */
 export function addAssetSourceTap(
   pluginName: string,
   compiler: Compiler,
