@@ -7,12 +7,9 @@ interface Asset {
 }
 
 export function getAssets(stats: Stats.ToJsonOutput): Asset[] {
-  if (!stats) {
-    return [];
-  }
-
   const assets: Asset[] = [];
-  stats.chunks?.forEach(chunk => {
+
+  stats?.chunks?.forEach(chunk => {
     if (chunk.initial) {
       const asset: Asset = {
         name: chunk.files[0]

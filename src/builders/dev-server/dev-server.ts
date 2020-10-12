@@ -13,11 +13,14 @@ import {
 } from 'rxjs';
 
 import {
+  applySkyuxDevServerOptions
+} from './utils';
+
+import {
   getDevServerTransforms
 } from './dev-server-transforms';
 
 import {
-  applySkyuxDevServerOptions,
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
 

@@ -6,40 +6,17 @@ import {
 
 import {
   getAssets
-} from '../stats-utils';
+} from '../../stats-utils';
+
+import {
+  SkyuxHostConfig
+} from './host-config';
+
+import {
+  SkyuxOpenHostURLPluginConfig
+} from './open-host-url-config';
 
 const PLUGIN_NAME = 'open-skyux-host-plugin';
-
-interface SkyuxOpenHostURLPluginConfig {
-
-  /**
-   * The URL of the SKY UX Host server.
-   */
-  hostUrl: string;
-
-  /**
-   * The URL of the localhost server, serving the asset files.
-   */
-  localUrl: string;
-}
-
-/**
- * Configuration that is passed to the SKY UX Host server.
- */
-interface SkyuxHostConfig {
-
-  /**
-   * An array of JavaScript file names to inject into Host's index.html file.
-   */
-  scripts: {
-    name: string;
-  }[];
-
-  /**
-   * The URL of the localhost server, serving the asset files.
-   */
-  localUrl: string;
-}
 
 export class SkyuxOpenHostURLPlugin {
 
