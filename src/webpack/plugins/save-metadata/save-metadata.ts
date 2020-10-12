@@ -18,10 +18,14 @@ export class SkyuxSaveMetadataPlugin {
 
   public apply(compiler: Compiler): void {
 
-    // Add our fallback variable to the bottom of the JS source files.
-    // The "fallback" variable references something with asp-fallback in SKY UX Host.
-    // See: https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/built-in/link-tag-helper?view=aspnetcore-3.1
-    // TODO: Ask Bobby/Terry where the fallback source is kept.
+    // tslint:disable:max-line-length
+    /**
+     * Add our fallback variable to the bottom of the JS source files.
+     * The "fallback" variable references something with asp-fallback in SKY UX Host.
+     * @see https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/built-in/link-tag-helper?view=aspnetcore-3.1
+     * TODO: Ask Bobby/Terry where the fallback source is kept.
+     */
+    // tslint:enable:max-line-length
     addAssetSourceTap(
       PLUGIN_NAME,
       compiler,

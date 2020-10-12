@@ -54,7 +54,7 @@ describe('ng-add.schematic', () => {
     ).toBeRejectedWithError('Expected node projects/invalid-project/architect in angular.json!');
   });
 
-  it('should overwrite the default serve architect', async () => {
+  it('should overwrite the default build and serve architects', async () => {
     const app = await createTestApp(runner);
     await runner
       .runSchematicAsync('ng-add', { project: 'foobar' }, app)
@@ -62,6 +62,7 @@ describe('ng-add.schematic', () => {
 
     const angularJson = JSON.parse(app.readContent('angular.json'));
 
+    expect(angularJson.projects.foobar.architect.build.builder).toEqual('@skyux-sdk/angular-builders:browser');
     expect(angularJson.projects.foobar.architect.serve.builder).toEqual('@skyux-sdk/angular-builders:dev-server');
   });
 

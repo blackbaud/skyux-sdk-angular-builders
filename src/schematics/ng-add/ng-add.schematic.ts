@@ -31,6 +31,14 @@ export function ngAdd(options: any): Rule {
       );
     }
 
+    // Overwrite the default build architect.
+    const build = architect.build;
+    if (!build) {
+      throw new Error(`Expected node projects/${options.project}/architect/build in angular.json!`);
+    }
+    build.builder = '@skyux-sdk/angular-builders:browser' as any;
+
+
     // Overwrite the default serve architect.
     const serve = architect.serve;
     if (!serve) {
