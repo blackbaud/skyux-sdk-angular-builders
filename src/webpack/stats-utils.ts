@@ -20,7 +20,9 @@ export function getFallbackName(name: string): string {
 
 export function getAssets(
   stats: Stats.ToJsonOutput,
-  includeFallback: boolean
+  config?: {
+    includeFallback: boolean;
+  }
 ): Asset[] {
   const assets: Asset[] = [];
 
@@ -30,7 +32,7 @@ export function getAssets(
         name: chunk.files[0]
       };
 
-      if (includeFallback) {
+      if (config?.includeFallback) {
         asset.fallback = getFallbackName(asset.name);
       }
 

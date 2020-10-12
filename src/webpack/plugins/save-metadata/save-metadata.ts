@@ -26,7 +26,9 @@ export class SkyuxSaveMetadataPlugin {
 
     compiler.hooks.done.tap(PLUGIN_NAME, (webpackStats) => {
       const stats = webpackStats.toJson();
-      const assets = getAssets(stats, true);
+      const assets = getAssets(stats, {
+        includeFallback: true
+      });
 
       fs.writeFileSync(
         path.join(stats?.outputPath!, 'metadata.json'),
