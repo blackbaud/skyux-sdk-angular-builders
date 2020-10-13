@@ -16,6 +16,10 @@ function getCertPath(fileName: string): string {
 
 export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): void {
 
+  if (options.skyuxLaunch === undefined) {
+    return;
+  }
+
   // Enforce HTTPS.
   options.ssl = true;
   options.sslCert = getCertPath('skyux-server.crt');
@@ -38,5 +42,10 @@ export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions
 
     // Point lazy-loaded modules to the localhost URL.
     options.deployUrl = localUrl;
+  }
+
+  // Open the user's default browser automatically.
+  if (options.skyuxLaunch === 'local') {
+    options.open = true;
   }
 }
