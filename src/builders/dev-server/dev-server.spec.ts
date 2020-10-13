@@ -135,6 +135,19 @@ describe('dev-server builder', () => {
       } as SkyuxDevServerBuilderOptions);
     });
 
+    it('should open the default browser if `skyuxLaunch` is set to "local"', async () => {
+      defaultOptions = overrideOptions({
+        skyuxLaunch: 'local'
+      });
+
+      await (mock.reRequire('./dev-server'));
+
+      const actualOptions = getActualOptions();
+
+      expect(actualOptions.open).toEqual(true);
+    });
+
+
     it('should allow setting a custom `skyuxHostUrl` and append a trailing slash', async () => {
       defaultOptions = overrideOptions({
         skyuxLaunch: 'host',
