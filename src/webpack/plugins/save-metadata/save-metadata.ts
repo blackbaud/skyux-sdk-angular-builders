@@ -18,14 +18,7 @@ export class SkyuxSaveMetadataPlugin {
 
   public apply(compiler: Compiler): void {
 
-    // tslint:disable:max-line-length
-    /**
-     * Add our fallback variable to the bottom of the JS source files.
-     * The "fallback" variable references something with asp-fallback in SKY UX Host.
-     * @see https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/built-in/link-tag-helper?view=aspnetcore-3.1
-     * TODO: Ask Bobby/Terry where the fallback source is kept.
-     */
-    // tslint:enable:max-line-length
+    // Add our fallback variable to the bottom of the JS source files.
     addAssetSourceTap(
       PLUGIN_NAME,
       compiler,
@@ -38,7 +31,7 @@ export class SkyuxSaveMetadataPlugin {
       const stats = webpackStats.toJson();
       const assets = getAssets(stats, {
         includeFallback: true,
-        includeLazyloadedChunks: true // TODO: Do we need to deliniate between entry/lazy-loaded?
+        includeLazyloadedChunks: true
       });
 
       fs.writeJsonSync(
