@@ -16,6 +16,10 @@ function getCertPath(fileName: string): string {
 
 export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): void {
 
+  if (options.skyuxLaunch === undefined) {
+    return;
+  }
+
   // Enforce HTTPS.
   options.ssl = true;
   options.sslCert = getCertPath('skyux-server.crt');
