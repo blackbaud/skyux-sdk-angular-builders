@@ -54,7 +54,7 @@ describe('ng-add.schematic', () => {
     ).toBeRejectedWithError('Expected node projects/invalid-project/architect in angular.json!');
   });
 
-  it('should overwrite the default serve architect', async () => {
+  it('should overwrite the default build and serve architects', async () => {
     const app = await createTestApp(runner);
     await runner
       .runSchematicAsync('ng-add', { project: 'foobar' }, app)
@@ -62,6 +62,7 @@ describe('ng-add.schematic', () => {
 
     const angularJson = JSON.parse(app.readContent('angular.json'));
 
+    expect(angularJson.projects.foobar.architect.build.builder).toEqual('@skyux-sdk/angular-builders:browser');
     expect(angularJson.projects.foobar.architect.serve.builder).toEqual('@skyux-sdk/angular-builders:dev-server');
   });
 
@@ -78,6 +79,21 @@ describe('ng-add.schematic', () => {
         .runSchematicAsync('ng-add', { project: 'foobar' }, app)
         .toPromise()
     ).toBeRejectedWithError('Expected node projects/foobar/architect/serve in angular.json!');
+  });
+
+  it('should throw an error if specified project doesn\'t include an `architect.build` property', async () => {
+    const app = await createTestApp(runner);
+
+    // Create an incorrectly formatted project config.
+    const angularJson = JSON.parse(app.readContent('angular.json'));
+    delete angularJson.projects.foobar.architect.build;
+    app.overwrite('angular.json', JSON.stringify(angularJson));
+
+    await expectAsync(
+      runner
+        .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+        .toPromise()
+    ).toBeRejectedWithError('Expected node projects/foobar/architect/build in angular.json!');
   });
 
 });

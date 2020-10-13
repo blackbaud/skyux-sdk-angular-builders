@@ -15,7 +15,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@skyux-sdk/angular-builders:browser",
           "options": {
             "outputPath": "dist/builders-test",
             "index": "src/index.html",
