@@ -5,12 +5,9 @@ import {
   Stats
 } from 'webpack';
 
-interface Asset {
-  fallback?: string;
-  name: string;
-}
-
-type AssetEntry = [string, any];
+import {
+  Asset
+} from './asset';
 
 type AssetSourceCallback = (content: string, file: string) => void;
 
@@ -28,14 +25,17 @@ export function getAssets(
   const assets: Asset[] = [];
 
   stats?.chunks?.forEach(chunk => {
-    console.log('CHUNK:', chunk.files);
-    if (chunk.initial && !config?.includeLazyloadedChunks) {
+    if (chunk.initial || config?.includeLazyloadedChunks) {
       const asset: Asset = {
         name: chunk.files[0]
       };
 
       if (config?.includeFallback) {
         asset.fallback = getFallbackName(asset.name);
+      }
+
+      if (config?.includeLazyloadedChunks) {
+        asset.initial = !!chunk.initial;
       }
 
       assets.push(asset);
@@ -54,9 +54,8 @@ export function addAssetSourceTap(
   assetSourceCallback: AssetSourceCallback
 ): void {
 
-  compiler.hooks.emit.tap(pluginName, compilation => {
-
-    const assets: AssetEntry[] = Object.entries(compilation.assets);
+  compiler.hooks.emit.tap(pluginName, (compilation) => {
+    const assets: [string, any][] = Object.entries(compilation.assets);
     for (const [file, asset] of assets) {
       if (path.parse(file).ext === '.js') {
         const content = asset.source();

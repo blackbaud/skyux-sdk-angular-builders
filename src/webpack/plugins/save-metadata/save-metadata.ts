@@ -12,7 +12,7 @@ import {
   getFallbackName
 } from '../../stats-utils';
 
-const PLUGIN_NAME = 'save-metadata-plugin';
+const PLUGIN_NAME = 'skyux-save-metadata-plugin';
 
 export class SkyuxSaveMetadataPlugin {
 
@@ -41,9 +41,12 @@ export class SkyuxSaveMetadataPlugin {
         includeLazyloadedChunks: true // TODO: Do we need to deliniate between entry/lazy-loaded?
       });
 
-      fs.writeFileSync(
-        path.join(stats?.outputPath!, 'metadata.json'),
-        JSON.stringify(assets, null, '\t')
+      fs.writeJsonSync(
+        path.join(stats.outputPath!, 'metadata.json'),
+        assets,
+        {
+          spaces: 2
+        }
       );
     });
   }
