@@ -16,7 +16,12 @@ export interface SkyuxHostConfig {
   localUrl: string;
 
   /**
-   * The name of the root element for the application to bootstrap.
+   * Config specific to the SKY UX Host platform.
    */
-  rootElementTagName: string;
+  host: {
+    /**
+     * The name of the root element for the application to bootstrap.
+     */
+    rootElementTagName: string;
+  };
 }
