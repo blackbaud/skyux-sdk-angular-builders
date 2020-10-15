@@ -14,4 +14,9 @@ export interface SkyuxHostConfig {
    * The URL of the localhost server, serving the asset files.
    */
   localUrl: string;
+
+  /**
+   * The name of the root element for the application to bootstrap.
+   */
+  rootElementTagName: string;
 }
