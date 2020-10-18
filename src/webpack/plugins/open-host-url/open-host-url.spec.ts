@@ -58,10 +58,8 @@ describe('open host url webpack plugin', () => {
     expect(actualUrl.startsWith('https://app.blackbaud.com/my-project/?local=true&_cfg=')).toEqual(true);
 
     expect(decode(actualUrl)).toEqual({
-      host: {
-        rootElementTagName: 'app-root'
-      },
       localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
       scripts: []
     });
   });
@@ -86,10 +84,8 @@ describe('open host url webpack plugin', () => {
 
     const actualUrl = getActualUrl();
     expect(decode(actualUrl)).toEqual({
-      host: {
-        rootElementTagName: 'app-root'
-      },
       localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
       scripts: [
         { name: 'main.ts' }
       ]
@@ -107,10 +103,8 @@ describe('open host url webpack plugin', () => {
 
     const actualUrl = getActualUrl();
     expect(decode(actualUrl)).toEqual({
-      host: {
-        rootElementTagName: 'app-root'
-      },
       localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
       scripts: []
     });
   });
