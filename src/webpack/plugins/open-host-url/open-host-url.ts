@@ -5,6 +5,10 @@ import {
 } from 'webpack';
 
 import {
+  getRootElementTagName
+} from '../../root-element-utils';
+
+import {
   getAssets
 } from '../../stats-utils';
 
@@ -40,7 +44,7 @@ export class SkyuxOpenHostURLPlugin {
       const assets = getAssets(webpackStats.toJson());
       const config: SkyuxHostConfig = {
         localUrl: this.config.localUrl,
-        rootElementTagName: 'app-root',
+        rootElementTagName: getRootElementTagName(),
         scripts: assets
       };
 

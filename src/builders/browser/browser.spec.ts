@@ -11,6 +11,10 @@ import {
 } from '../../webpack/plugins/save-metadata/save-metadata';
 
 import {
+  SkyuxWriteSkyuxConfigPlugin
+} from '../../webpack/plugins/write-skyux-config/write-skyux-config';
+
+import {
   SkyuxBrowserBuilderOptions
 } from './browser-options';
 
@@ -75,6 +79,14 @@ describe('browser builder', () => {
     expect(plugin).toBeDefined();
   });
 
+  it('should add `SkyuxWriteSkyuxConfigPlugin` to webpack plugins', async () => {
+    await (mock.reRequire('./browser'));
+
+    const plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxWriteSkyuxConfigPlugin);
+
+    expect(plugin).toBeDefined();
+  });
+
   it('should not affect other plugins', async () => {
     defaultWebpackConfig = {
       plugins: [
@@ -84,7 +96,7 @@ describe('browser builder', () => {
 
     await (mock.reRequire('./browser'));
 
-    expect(actualWebpackConfig.plugins?.length).toEqual(2);
+    expect(actualWebpackConfig.plugins?.length).toEqual(3);
   });
 
 });

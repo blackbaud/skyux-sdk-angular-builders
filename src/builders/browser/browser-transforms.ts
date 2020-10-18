@@ -10,6 +10,10 @@ import {
   SkyuxSaveMetadataPlugin
 } from '../../webpack/plugins/save-metadata/save-metadata';
 
+import {
+  SkyuxWriteSkyuxConfigPlugin
+} from '../../webpack/plugins/write-skyux-config/write-skyux-config';
+
 /**
  * Allows adjustments to the default Angular "browser" webpack config.
  * @param options The input options passed to the builder.
@@ -23,6 +27,7 @@ function getBrowserWepbackConfigTransformer(): ExecutionTransformer<WebpackConfi
     }
 
     webpackConfig.plugins.push(
+      new SkyuxWriteSkyuxConfigPlugin(),
       new SkyuxSaveMetadataPlugin()
     );
 
