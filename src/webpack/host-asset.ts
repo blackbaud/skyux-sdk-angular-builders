@@ -1,4 +1,4 @@
-export interface Asset {
+export interface SkyuxHostAsset {
 
   /**
    * The name of the global "fallback" variable to test if the asset file has loaded.

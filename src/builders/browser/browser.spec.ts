@@ -7,8 +7,8 @@ import {
 } from 'rxjs';
 
 import {
-  SkyuxSaveMetadataPlugin
-} from '../../webpack/plugins/save-metadata/save-metadata';
+  SkyuxSaveHostMetadataPlugin
+} from '../../webpack/plugins/save-host-metadata/save-host-metadata';
 
 import {
   SkyuxBrowserBuilderOptions
@@ -70,7 +70,7 @@ describe('browser builder', () => {
   it('should add `SkyuxSaveMetadataPlugin` to webpack plugins', async () => {
     await (mock.reRequire('./browser'));
 
-    const plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxSaveMetadataPlugin);
+    const plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxSaveHostMetadataPlugin);
 
     expect(plugin).toBeDefined();
   });

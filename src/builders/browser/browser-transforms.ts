@@ -7,8 +7,8 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxSaveMetadataPlugin
-} from '../../webpack/plugins/save-metadata/save-metadata';
+  SkyuxSaveHostMetadataPlugin
+} from '../../webpack/plugins/save-host-metadata/save-host-metadata';
 
 /**
  * Allows adjustments to the default Angular "browser" webpack config.
@@ -23,7 +23,7 @@ function getBrowserWepbackConfigTransformer(): ExecutionTransformer<WebpackConfi
     }
 
     webpackConfig.plugins.push(
-      new SkyuxSaveMetadataPlugin()
+      new SkyuxSaveHostMetadataPlugin()
     );
 
     return webpackConfig;
