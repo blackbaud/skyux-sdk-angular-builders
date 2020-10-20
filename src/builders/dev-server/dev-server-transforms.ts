@@ -7,6 +7,12 @@ import {
 } from '@angular-devkit/build-angular';
 
 import {
+  AngularCompilerPlugin
+} from '@ngtools/webpack';
+
+import path from 'path';
+
+import {
   Configuration as WebpackConfig
 } from 'webpack';
 
@@ -31,6 +37,26 @@ function getDevServerWepbackConfigTransformer(
   return (webpackConfig) => {
 
     if (options.skyuxLaunch === 'host') {
+
+      // webpackConfig.module?.rules?.push({
+      //   enforce: 'pre',
+      //   test: /\.ts$/,
+      //   use: path.resolve(__dirname, '../../webpack/loaders/asset-deploy-url/assets-in-ts')
+      // });
+
+      webpackConfig.module?.rules?.push({
+        test: /\.html$/,
+        use: [
+          'raw-loader',
+          {
+            loader: path.resolve(__dirname, '../../webpack/loaders/asset-deploy-url/assets-in-html'),
+            options: {
+              baseUrl: options.deployUrl
+            }
+          }
+        ]
+      });
+
       /*istanbul ignore next line*/
       const pathName = context.target?.project!;
 
@@ -47,6 +73,10 @@ function getDevServerWepbackConfigTransformer(
           }
         )
       );
+
+      // Allows our HTML loader to process the HTML templates.
+      const compilerPlugin = webpackConfig.plugins?.find(plugin => plugin instanceof AngularCompilerPlugin);
+      (compilerPlugin as AngularCompilerPlugin).options.directTemplateLoading = false;
     }
 
     return webpackConfig;

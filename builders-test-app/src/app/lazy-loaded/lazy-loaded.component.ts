@@ -4,6 +4,9 @@ import {
 
 @Component({
   selector: 'app-lazy-loaded',
-  template: `Lazy loaded!`
+  template: `
+<p>Lazy loaded!</p>
+<img src="assets/bb-image.jpg">
+`
 })
 export class LazyLoadedComponent { }

@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "baseUrl": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false
+}
