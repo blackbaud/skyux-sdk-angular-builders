@@ -25,15 +25,16 @@ export abstract class AssetState {
 
   public static queue(asset: Asset): void {
     this.assets.push(asset);
-    console.log('Queue:', asset);
   }
 
   public static replaceAssetPaths(content: string): string {
+    console.log('ReplaceAssetPaths:', this.assets);
     this.assets.forEach(asset => {
-      content = content.replace(
-        new RegExp(asset.filePath, 'gi'),
-        asset.url
-      );
+      content = content.split(asset.filePath).join(asset.url);
+      // content = content.replace(
+      //   new RegExp(asset.filePath, 'gi'),
+      //   asset.url
+      // );
     });
 
     return content;

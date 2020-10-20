@@ -1,6 +1,10 @@
+// import hashFile from 'hash-file';
+
 import {
   getOptions
 } from 'loader-utils';
+
+// import path from 'path';
 
 import validateOptions from 'schema-utils';
 
@@ -46,12 +50,23 @@ export default function AssetsLoaderTS(
 
       processedFiles.push(filePath);
 
+      // const filePathResolved = path.resolve(process.cwd(), 'src/', filePath);
+      // const hash = hashFile.sync(filePathResolved);
+
       const url = `${options.baseUrl}${filePath.replace(/\\/g, '/')}`;
 
       AssetState.queue({
         filePath,
         url
       });
+
+      // const template = match[2].replace(
+      //   new RegExp(filePath, 'gi'),
+      //   url
+      // );
+
+      // content = content.replace(match[0], `template: \`${template}\``);
+      return content;
     });
   }
 

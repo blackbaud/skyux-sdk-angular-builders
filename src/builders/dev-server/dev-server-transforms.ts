@@ -6,15 +6,19 @@ import {
   ExecutionTransformer
 } from '@angular-devkit/build-angular';
 
-import {
-  AngularCompilerPlugin
-} from '@ngtools/webpack';
+// import {
+//   AngularCompilerPlugin
+// } from '@ngtools/webpack';
 
 import path from 'path';
 
 import {
   Configuration as WebpackConfig
 } from 'webpack';
+
+import {
+  SkyuxAssetUrlsPlugin
+} from '../../webpack/plugins/asset-urls/asset-urls';
 
 import {
   SkyuxOpenHostURLPlugin
@@ -41,21 +45,26 @@ function getDevServerWepbackConfigTransformer(
       webpackConfig.module?.rules?.push({
         enforce: 'pre',
         test: /\.ts$/,
-        use: path.resolve(__dirname, '../../webpack/loaders/asset-deploy-url/assets-in-ts')
+        use: {
+          loader: path.resolve(__dirname, '../../webpack/loaders/asset-urls/assets-in-ts'),
+          options: {
+            baseUrl: options.deployUrl
+          }
+        }
       });
 
-      webpackConfig.module?.rules?.push({
-        test: /\.html$/,
-        use: [
-          'raw-loader',
-          {
-            loader: path.resolve(__dirname, '../../webpack/loaders/asset-deploy-url/assets-in-html'),
-            options: {
-              baseUrl: options.deployUrl
-            }
-          }
-        ]
-      });
+      // webpackConfig.module?.rules?.push({
+      //   test: /\.html$/,
+      //   use: [
+      //     'raw-loader',
+      //     {
+      //       loader: path.resolve(__dirname, '../../webpack/loaders/asset-urls/assets-in-html'),
+      //       options: {
+      //         baseUrl: options.deployUrl
+      //       }
+      //     }
+      //   ]
+      // });
 
       /*istanbul ignore next line*/
       const pathName = context.target?.project!;
@@ -65,6 +74,7 @@ function getDevServerWepbackConfigTransformer(
       }
 
       webpackConfig.plugins.push(
+        new SkyuxAssetUrlsPlugin(),
         new SkyuxOpenHostURLPlugin(
           pathName,
           {
@@ -75,8 +85,8 @@ function getDevServerWepbackConfigTransformer(
       );
 
       // Allows our HTML loader to process the HTML templates.
-      const compilerPlugin = webpackConfig.plugins?.find(plugin => plugin instanceof AngularCompilerPlugin);
-      (compilerPlugin as AngularCompilerPlugin).options.directTemplateLoading = false;
+      // const compilerPlugin = webpackConfig.plugins?.find(plugin => plugin instanceof AngularCompilerPlugin);
+      // (compilerPlugin as AngularCompilerPlugin).options.directTemplateLoading = false;
     }
 
     return webpackConfig;
