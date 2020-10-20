@@ -21,20 +21,21 @@
     "test": "npm run lint && ts-node --project tsconfig.test.json ./node_modules/.bin/jasmine --config=jasmine.json"
   },
   "peerDependencies": {
-    "@angular-devkit/build-angular": "~0.1001.5"
+    "@angular-devkit/build-angular": "~0.1001.7"
   },
   "dependencies": {
-    "@schematics/angular": "10.1.5"
+    "@schematics/angular": "10.1.7",
+    "hash-file": "3.0.0"
   },
   "devDependencies": {
-    "@angular-devkit/architect": "0.1001.5",
-    "@angular-devkit/build-angular": "0.1001.5",
-    "@angular-devkit/core": "10.1.5",
-    "@angular-devkit/schematics": "10.1.5",
-    "@angular/compiler": "10.1.5",
-    "@angular/compiler-cli": "10.1.5",
+    "@angular-devkit/architect": "0.1001.7",
+    "@angular-devkit/build-angular": "0.1001.7",
+    "@angular-devkit/core": "10.1.7",
+    "@angular-devkit/schematics": "10.1.7",
+    "@angular/compiler": "10.1.6",
+    "@angular/compiler-cli": "10.1.6",
     "@istanbuljs/nyc-config-typescript": "1.0.1",
-    "@types/fs-extra": "9.0.1",
+    "@types/fs-extra": "9.0.2",
     "@types/jasmine": "3.5.14",
     "@types/mock-require": "2.0.0",
     "@types/node": "14.6.4",

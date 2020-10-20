@@ -7,14 +7,17 @@ import {
 } from 'webpack';
 
 import {
-  addAssetSourceTap,
-  getAssets,
-  getFallbackName
+  getFallbackName,
+  getHostAssets
+} from '../../host-utils';
+
+import {
+  addAssetSourceTap
 } from '../../stats-utils';
 
-const PLUGIN_NAME = 'skyux-save-metadata-plugin';
+const PLUGIN_NAME = 'skyux-save-host-metadata-plugin';
 
-export class SkyuxSaveMetadataPlugin {
+export class SkyuxSaveHostMetadataPlugin {
 
   public apply(compiler: Compiler): void {
 
@@ -29,7 +32,7 @@ export class SkyuxSaveMetadataPlugin {
     // See: https://github.com/blackbaud/skyux-deploy/blob/master/lib/assets.js#L74
     compiler.hooks.done.tap(PLUGIN_NAME, (webpackStats) => {
       const stats = webpackStats.toJson();
-      const assets = getAssets(stats, {
+      const assets = getHostAssets(stats, {
         includeFallback: true,
         includeLazyloadedChunks: true
       });
