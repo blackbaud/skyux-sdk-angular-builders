@@ -7,7 +7,7 @@ import {
 } from './host-asset';
 
 export function getFallbackName(name: string): string {
-  return `SKY_PAGES_READY_${name.toUpperCase().replace(/\./g, '_')}`;
+  return `SKY_PAGES_READY_${name.toUpperCase().replace(/(\.|-|~)/g, '_')}`;
 }
 
 export function getHostAssets(
