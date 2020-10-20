@@ -1,8 +1,14 @@
-import path from 'path';
+import {
+  getOptions
+} from 'loader-utils';
+
+import validateOptions from 'schema-utils';
 
 import {
   loader
 } from 'webpack';
+
+const schema = require('./assets-in-html-schema.json');
 
 import {
   AssetState
@@ -22,6 +28,11 @@ export default function AssetsLoaderTS(
   const match = TEMPLATE_REGEX.exec(content);
   if (match) {
 
+    const options = getOptions(this);
+    validateOptions(schema, options, {
+      name: 'SKY UX HTML Assets Loader'
+    });
+
     console.log('\nFound component file:', this.resourcePath);
 
     // Prevent the same file from being processed more than once.
@@ -35,9 +46,11 @@ export default function AssetsLoaderTS(
 
       processedFiles.push(filePath);
 
+      const url = `${options.baseUrl}${filePath.replace(/\\/g, '/')}`;
+
       AssetState.queue({
         filePath,
-        url: path.join('https://app.blackbaud.com/', filePath)
+        url
       });
     });
   }

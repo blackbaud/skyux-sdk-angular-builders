@@ -38,11 +38,11 @@ function getDevServerWepbackConfigTransformer(
 
     if (options.skyuxLaunch === 'host') {
 
-      // webpackConfig.module?.rules?.push({
-      //   enforce: 'pre',
-      //   test: /\.ts$/,
-      //   use: path.resolve(__dirname, '../../webpack/loaders/asset-deploy-url/assets-in-ts')
-      // });
+      webpackConfig.module?.rules?.push({
+        enforce: 'pre',
+        test: /\.ts$/,
+        use: path.resolve(__dirname, '../../webpack/loaders/asset-deploy-url/assets-in-ts')
+      });
 
       webpackConfig.module?.rules?.push({
         test: /\.html$/,

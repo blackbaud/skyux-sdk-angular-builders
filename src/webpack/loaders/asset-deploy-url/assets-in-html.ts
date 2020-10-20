@@ -17,6 +17,11 @@ export default function AssetsLoaderHTML(
   content: string
 ) {
 
+  const options = getOptions(this);
+  validateOptions(schema, options, {
+    name: 'SKY UX HTML Assets Loader'
+  });
+
   // Prevent the same file from being processed more than once.
   const processedFiles: string[] = [];
 
@@ -24,11 +29,6 @@ export default function AssetsLoaderHTML(
     if (processedFiles.includes(filePath)) {
       return;
     }
-
-    const options = getOptions(this);
-    validateOptions(schema, options, {
-      name: 'SKY UX HTML Assets Loader'
-    });
 
     const url = `${options.baseUrl}${filePath.replace(/\\/g, '/')}`;
 
