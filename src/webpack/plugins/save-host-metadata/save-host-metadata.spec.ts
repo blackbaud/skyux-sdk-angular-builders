@@ -37,10 +37,10 @@ describe('save metadata webpack plugin', () => {
     mock.stopAll();
   });
 
-  function getPlugin(): typeof SkyuxSaveMetadataPlugin {
-    const SkyuxSaveMetadataPlugin = mock.reRequire('./save-metadata').SkyuxSaveMetadataPlugin;
+  function getPlugin(): typeof SkyuxSaveHostMetadataPlugin {
+    const SkyuxSaveHostMetadataPlugin = mock.reRequire('./save-host-metadata').SkyuxSaveHostMetadataPlugin;
 
-    const plugin = new SkyuxSaveMetadataPlugin('my-project', {
+    const plugin = new SkyuxSaveHostMetadataPlugin('my-project', {
       hostUrl: 'https://app.blackbaud.com/',
       localUrl: 'https://localhost:4200/'
     });

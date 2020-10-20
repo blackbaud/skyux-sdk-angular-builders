@@ -9,8 +9,8 @@ import {
 } from '../../root-element-utils';
 
 import {
-  getAssets
-} from '../../stats-utils';
+  getHostAssets
+} from '../../host-utils';
 
 import {
   SkyuxHostConfig
@@ -41,7 +41,7 @@ export class SkyuxOpenHostURLPlugin {
         return;
       }
 
-      const assets = getAssets(webpackStats.toJson());
+      const assets = getHostAssets(webpackStats.toJson());
       const config: SkyuxHostConfig = {
         localUrl: this.config.localUrl,
         rootElementTagName: getRootElementTagName(),
