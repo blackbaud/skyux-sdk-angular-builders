@@ -1,7 +1,9 @@
 import cors from 'cors';
-// import events from 'events';
+
 import express from 'express';
+
 import fs from 'fs-extra';
+
 import https from 'https';
 
 import {
@@ -39,19 +41,7 @@ export function createServer(config: SkyuxServerConfig): Promise<number> {
 
     await server.listen(port);
 
-    const localUrl = `https://localhost:${port}/`;
-    // const metadata = fs.readJsonSync(path.resolve(config.rootDirectory, 'metadata.json'));
-
-    console.log(`Serving local files on ${localUrl}.`);
-
-    // openHostUrl(
-    //   config.hostUrl,
-    //   config.pathName,
-    //   {
-    //     localUrl,
-    //     scripts: metadata
-    //   }
-    // );
+    console.log(`Serving local files on https://localhost:${port}/.`);
 
     process.on('exit', () => {
       server.close();

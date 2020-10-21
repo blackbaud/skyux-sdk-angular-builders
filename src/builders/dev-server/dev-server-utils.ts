@@ -5,7 +5,10 @@ import {
 import {
   getHostUrlFromOptions
 } from '../../shared/host-utils';
-import { getAvailablePort } from '../../shared/url-utils';
+
+import {
+  getAvailablePort
+} from '../../shared/url-utils';
 
 import {
   SkyuxDevServerBuilderOptions
@@ -14,7 +17,7 @@ import {
 export async function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): Promise<void> {
 
   if (options.skyuxLaunch === undefined) {
-    return Promise.resolve();
+    return;
   }
 
   options.port = await getAvailablePort({
