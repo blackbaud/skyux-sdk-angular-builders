@@ -87,7 +87,7 @@ describe('save metadata webpack plugin', () => {
         {
           name: 'default~app-module~app-module~mo~0d131e23.js',
           initial: false,
-          fallback: 'SKY_PAGES_READY_DEFAULT~APP-MODULE~APP-MODULE~MO~0D131E23_JS'
+          fallback: 'SKY_PAGES_READY_DEFAULT_APP_MODULE_APP_MODULE_MO_0D131E23_JS'
         }
       ],
       {

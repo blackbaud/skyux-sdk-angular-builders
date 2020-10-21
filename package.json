@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "@schematics/angular": "10.1.7",
-    "hash-file": "3.0.0",
     "loader-utils": "2.0.0"
   },
   "devDependencies": {
