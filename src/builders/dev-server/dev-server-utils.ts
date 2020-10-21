@@ -5,16 +5,21 @@ import {
 import {
   getHostUrlFromOptions
 } from '../../shared/host-utils';
+import { getAvailablePort } from '../../shared/url-utils';
 
 import {
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
 
-export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): void {
+export async function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): Promise<void> {
 
   if (options.skyuxLaunch === undefined) {
-    return;
+    return Promise.resolve();
   }
+
+  options.port = await getAvailablePort({
+    defaultPort: options.port
+  });
 
   // Enforce HTTPS.
   options.ssl = true;

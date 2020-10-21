@@ -13,20 +13,16 @@ import {
 } from '@angular-devkit/core';
 
 import {
-  getHostUrlFromOptions
-} from '../../shared/host-utils';
-
-import {
-  createServer
-} from '../../shared/server';
-
-import {
   SkyuxBrowserBuilderOptions
 } from './browser-options';
 
 import {
   getBrowserTransforms
 } from './browser-transforms';
+
+import {
+  serveBuildResults
+} from './browser-utils';
 
 async function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
@@ -36,11 +32,7 @@ async function executeSkyuxBrowserBuilder(
   await executeBrowserBuilder(options, context, getBrowserTransforms()).toPromise();
 
   if (options.skyuxServe) {
-    await createServer({
-      hostUrl: getHostUrlFromOptions(options),
-      pathName: context.target?.project!,
-      port: 4200
-    });
+    await serveBuildResults(options, context);
   }
 
   return Promise.resolve({

@@ -1,55 +1,62 @@
 import cors from 'cors';
+// import events from 'events';
 import express from 'express';
 import fs from 'fs-extra';
 import https from 'https';
-import path from 'path';
 
-import { getCertPath } from './cert-utils';
+import {
+  getCertPath
+} from './cert-utils';
 
-import { openHostUrl } from './host-utils';
+import {
+  getAvailablePort
+} from './url-utils';
 
 interface SkyuxServerConfig {
-  hostUrl: string;
-  pathName: string;
-  port: number;
+  rootDir: string;
 }
 
-export function createServer(config: SkyuxServerConfig): Promise<void> {
-  const dist = path.resolve(process.cwd(), 'dist/builders-test');
-
+function createApp(rootDirectory: string) {
   const app = express();
   app.use(cors());
-  app.use(express.static(dist));
+  app.use(express.static(rootDirectory));
+  return app;
+}
 
-  const server = https.createServer(
-    {
-      cert: fs.readFileSync(getCertPath('skyux-server.crt')),
-      key: fs.readFileSync(getCertPath('skyux-server.key'))
-    },
-    app
-  );
+export function createServer(config: SkyuxServerConfig): Promise<number> {
+
+  const app = createApp(config.rootDir);
+
+  const server = https.createServer({
+    cert: fs.readFileSync(getCertPath('skyux-server.crt')),
+    key: fs.readFileSync(getCertPath('skyux-server.key'))
+  }, app);
 
   return new Promise(async (resolve, reject) => {
     server.on('error', reject);
 
-    await server.listen(config.port);
+    const port = await getAvailablePort();
 
-    const localUrl = `https://localhost:${config.port}/`;
-    console.log(`Serving local files at ${localUrl}.`);
+    await server.listen(port);
 
-    openHostUrl(
-      config.hostUrl,
-      config.pathName,
-      {
-        localUrl,
-        scripts: fs.readJsonSync(path.resolve(dist, 'metadata.json'))
-      }
-    );
+    const localUrl = `https://localhost:${port}/`;
+    // const metadata = fs.readJsonSync(path.resolve(config.rootDirectory, 'metadata.json'));
 
-    process.on('SIGINT', () => {
+    console.log(`Serving local files on ${localUrl}.`);
+
+    // openHostUrl(
+    //   config.hostUrl,
+    //   config.pathName,
+    //   {
+    //     localUrl,
+    //     scripts: metadata
+    //   }
+    // );
+
+    process.on('exit', () => {
       server.close();
-      resolve();
-      process.exit();
     });
+
+    resolve(port);
   });
 }

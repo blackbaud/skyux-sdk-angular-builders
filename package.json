@@ -27,7 +27,7 @@
     "@schematics/angular": "10.1.7",
     "cors": "2.8.5",
     "express": "4.17.1",
-    "hash-file": "3.0.0"
+    "portfinder": "1.0.28"
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.1001.7",

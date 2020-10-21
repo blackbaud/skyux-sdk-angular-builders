@@ -9,32 +9,28 @@ import {
 } from '@angular-devkit/build-angular';
 
 import {
-  Observable
-} from 'rxjs';
-
-import {
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
 
 import {
   applySkyuxDevServerOptions
-} from './dev-server-options-utils';
+} from './dev-server-utils';
 
 import {
   getDevServerTransforms
 } from './dev-server-transforms';
 
-function executeSkyuxDevServerBuilder(
+async function executeSkyuxDevServerBuilder(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
-): Observable<DevServerBuilderOutput> {
-  applySkyuxDevServerOptions(options);
+): Promise<DevServerBuilderOutput> {
+  await applySkyuxDevServerOptions(options);
 
   return executeDevServerBuilder(
     options,
     context,
     getDevServerTransforms(options, context)
-  );
+  ).toPromise();
 }
 
 export default createBuilder<SkyuxDevServerBuilderOptions, DevServerBuilderOutput>(
