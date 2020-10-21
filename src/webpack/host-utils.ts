@@ -11,7 +11,11 @@ import {
 import { SkyuxHostConfig } from './plugins/open-host-url/host-config';
 
 export function getFallbackName(name: string): string {
+<<<<<<< HEAD
   return `SKY_PAGES_READY_${name.toUpperCase().replace(/(\.|-)/g, '_')}`;
+=======
+  return `SKY_PAGES_READY_${name.toUpperCase().replace(/(\.|-|~)/g, '_')}`;
+>>>>>>> origin/master
 }
 
 export function getHostAssets(
