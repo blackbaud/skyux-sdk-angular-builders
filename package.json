@@ -24,10 +24,7 @@
     "@angular-devkit/build-angular": "~0.1001.7"
   },
   "dependencies": {
-    "@schematics/angular": "10.1.7",
-    "cors": "2.8.5",
-    "express": "4.17.1",
-    "portfinder": "1.0.28"
+    "@schematics/angular": "10.1.7"
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.1001.7",
@@ -37,8 +34,6 @@
     "@angular/compiler": "10.1.6",
     "@angular/compiler-cli": "10.1.6",
     "@istanbuljs/nyc-config-typescript": "1.0.1",
-    "@types/cors": "2.8.8",
-    "@types/express": "4.17.8",
     "@types/fs-extra": "9.0.2",
     "@types/jasmine": "3.5.14",
     "@types/mock-require": "2.0.0",

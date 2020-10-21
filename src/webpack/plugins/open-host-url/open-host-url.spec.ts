@@ -5,9 +5,11 @@ describe('open host url webpack plugin', () => {
   let openSpy: jasmine.Spy;
   let mockCompiler: any;
   let mockStats: any;
+  let hostUrl: string;
+  let localUrl: string;
 
   beforeEach(() => {
-    openSpy = jasmine.createSpy('open');
+    openSpy = jasmine.createSpy('openHostUrl');
 
     mockStats = undefined;
 
@@ -23,7 +25,12 @@ describe('open host url webpack plugin', () => {
       }
     };
 
-    mock('open', openSpy);
+    hostUrl = 'https://app.blackbaud.com/';
+    localUrl = 'https://localhost:4200/';
+
+    mock('../../../shared/host-utils', {
+      openHostUrl: openSpy
+    });
   });
 
   afterEach(() => {
@@ -34,19 +41,11 @@ describe('open host url webpack plugin', () => {
     const SkyuxOpenHostURLPlugin = mock.reRequire('./open-host-url').SkyuxOpenHostURLPlugin;
 
     const plugin = new SkyuxOpenHostURLPlugin('my-project', {
-      hostUrl: 'https://app.blackbaud.com/',
-      localUrl: 'https://localhost:4200/'
+      hostUrl,
+      localUrl
     });
 
     return plugin;
-  }
-
-  function decode(url: string): object {
-    return JSON.parse(Buffer.from(decodeURIComponent(url.split('_cfg=')[1]), 'base64').toString());
-  }
-
-  function getActualUrl(): string {
-    return openSpy.calls.mostRecent().args[0];
   }
 
   it('should open the SKY UX Host URL with Host config', () => {
@@ -54,12 +53,7 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    const actualUrl = getActualUrl();
-    expect(actualUrl).toEqual(
-      'https://app.blackbaud.com/my-project/?local=true&_cfg=eyJsb2NhbFVybCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAvIiwic2NyaXB0cyI6W119'
-    );
-
-    expect(decode(actualUrl)).toEqual({
+    expect(openSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
       scripts: []
     });
@@ -83,8 +77,7 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    const actualUrl = getActualUrl();
-    expect(decode(actualUrl)).toEqual({
+    expect(openSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
       scripts: [
         { name: 'main.ts' }
@@ -101,8 +94,7 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    const actualUrl = getActualUrl();
-    expect(decode(actualUrl)).toEqual({
+    expect(openSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
       scripts: []
     });

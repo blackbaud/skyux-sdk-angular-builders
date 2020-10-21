@@ -1,13 +1,4 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "properties": {
-    "skyuxHostUrl": {
-      "description": "The SKY UX Host URL.",
-      "type": "string"
-    },
-    "skyuxServe": {
-      "description": "Specifies if the build results should be served locally.",
-      "type": "boolean"
-    }
-  }
+  "properties": {}
 }

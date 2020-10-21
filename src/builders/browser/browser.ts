@@ -13,6 +13,10 @@ import {
 } from '@angular-devkit/core';
 
 import {
+  Observable
+} from 'rxjs';
+
+import {
   SkyuxBrowserBuilderOptions
 } from './browser-options';
 
@@ -20,28 +24,11 @@ import {
   getBrowserTransforms
 } from './browser-transforms';
 
-import {
-  serveBuildResults
-} from './browser-utils';
-
-async function executeSkyuxBrowserBuilder(
+function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext
-): Promise<BuilderOutput> {
-
-  await executeBrowserBuilder(
-    options,
-    context,
-    getBrowserTransforms()
-  ).toPromise();
-
-  if (options.skyuxServe) {
-    await serveBuildResults(options, context);
-  }
-
-  return Promise.resolve({
-    success: true
-  });
+): Observable<BuilderOutput> {
+  return executeBrowserBuilder(options, context, getBrowserTransforms());
 }
 
 export default createBuilder<JsonObject & SkyuxBrowserBuilderOptions>(
