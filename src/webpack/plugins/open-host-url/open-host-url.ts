@@ -1,20 +1,19 @@
-import open from 'open';
-
 import {
   Compiler
 } from 'webpack';
+import { SkyuxHostUrlConfig } from '../../../shared/host-url-config';
+
+import {
+  openHostUrl
+} from '../../../shared/host-utils';
+
+import {
+  getHostAssets
+} from '../../host-asset-utils';
 
 import {
   getRootElementTagName
 } from '../../root-element-utils';
-
-import {
-  getHostAssets
-} from '../../host-utils';
-
-import {
-  SkyuxHostConfig
-} from './host-config';
 
 import {
   SkyuxOpenHostURLPluginConfig
@@ -24,12 +23,7 @@ const PLUGIN_NAME = 'open-skyux-host-plugin';
 
 export class SkyuxOpenHostURLPlugin {
 
-  /**
-   * @param pathName The unique pathname of the SPA, e.g. 'my-spa'.
-   * @param config Additional configuration.
-   */
   constructor(
-    private pathName: string,
     private config: SkyuxOpenHostURLPluginConfig
   ) { }
 
@@ -37,30 +31,23 @@ export class SkyuxOpenHostURLPlugin {
     let opened = false;
 
     compiler.hooks.done.tap(PLUGIN_NAME, (webpackStats) => {
-      if (opened) {
-        return;
-      }
+      if (!opened) {
 
       const assets = getHostAssets(webpackStats.toJson());
-      const config: SkyuxHostConfig = {
+      const config: SkyuxHostUrlConfig = {
         localUrl: this.config.localUrl,
         rootElementTagName: getRootElementTagName(),
         scripts: assets
       };
 
-      // We need to URL encode the value so that characters such as '+'
-      // are properly represented.
-      const configEncoded = encodeURIComponent(
-        Buffer.from(JSON.stringify(config)).toString('base64')
-      );
+        openHostUrl(
+          this.config.hostUrl,
+          this.config.pathName,
+          config
+        );
 
-      const url = `${this.config.hostUrl}${this.pathName}/?local=true&_cfg=${configEncoded}`;
-
-      console.log(`SKY UX Host URL:\n\n${url}`);
-
-      opened = true;
-
-      open(url);
+        opened = true;
+      }
     });
   }
 }
