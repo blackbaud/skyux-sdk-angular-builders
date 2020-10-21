@@ -25,7 +25,8 @@ export function openHostUrl(
   pathName: string,
   config: SkyuxHostUrlConfig
 ): void {
-  // We need to URL encode the value so that characters such as '+'
+
+  // We need to URL-encode the value so that characters such as '+'
   // are properly represented.
   const configEncoded = encodeURIComponent(
     Buffer.from(JSON.stringify(config)).toString('base64')
@@ -36,5 +37,4 @@ export function openHostUrl(
   console.log(`\nSKY UX Host URL:\n\n${url}`);
 
   open(url);
-
 }

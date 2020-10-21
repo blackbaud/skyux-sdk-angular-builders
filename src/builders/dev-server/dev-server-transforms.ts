@@ -27,7 +27,6 @@ function getDevServerWepbackConfigTransformer(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
 ): ExecutionTransformer<WebpackConfig> {
-
   return (webpackConfig) => {
 
     if (options.skyuxLaunch === 'host') {
@@ -39,13 +38,11 @@ function getDevServerWepbackConfigTransformer(
       }
 
       webpackConfig.plugins.push(
-        new SkyuxOpenHostURLPlugin(
-          pathName,
-          {
-            hostUrl: options.skyuxHostUrl!,
-            localUrl: options.deployUrl!
-          }
-        )
+        new SkyuxOpenHostURLPlugin({
+          hostUrl: options.skyuxHostUrl!,
+          localUrl: options.deployUrl!,
+          pathName
+        })
       );
     }
 

@@ -18,12 +18,7 @@ const PLUGIN_NAME = 'open-skyux-host-plugin';
 
 export class SkyuxOpenHostURLPlugin {
 
-  /**
-   * @param pathName The unique pathname of the SPA, e.g. 'my-spa'.
-   * @param config Additional configuration.
-   */
   constructor(
-    private pathName: string,
     private config: SkyuxOpenHostURLPluginConfig
   ) { }
 
@@ -37,7 +32,7 @@ export class SkyuxOpenHostURLPlugin {
 
         openHostUrl(
           this.config.hostUrl,
-          this.pathName,
+          this.config.pathName,
           {
             localUrl: this.config.localUrl,
             scripts: assets
