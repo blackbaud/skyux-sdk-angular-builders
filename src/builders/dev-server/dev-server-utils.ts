@@ -1,18 +1,14 @@
 import {
-  homedir
-} from 'os';
+  getCertPath
+} from '../../shared/cert-utils';
+
+import {
+  getHostUrlFromOptions
+} from '../../shared/host-utils';
 
 import {
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
-
-function ensureTrailingSlash(url: string): string {
-  return url.endsWith('/') ? url : `${url}/`;
-}
-
-function getCertPath(fileName: string): string {
-  return `${homedir()}/.skyux/certs/${fileName}`;
-}
 
 export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): void {
 
@@ -27,7 +23,7 @@ export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions
 
   // Set options specific to SKY UX Host.
   if (options.skyuxLaunch === 'host') {
-    const hostUrl = ensureTrailingSlash(options.skyuxHostUrl || 'https://app.blackbaud.com/');
+    const hostUrl = getHostUrlFromOptions(options);
     const localUrl = `https://${options.host}:${options.port}/`;
 
     options.skyuxHostUrl = hostUrl;
