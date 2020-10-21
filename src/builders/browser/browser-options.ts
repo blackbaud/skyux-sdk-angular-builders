@@ -4,6 +4,8 @@ import {
 
 export type SkyuxBrowserBuilderOptions = BrowserBuilderOptions & {
 
-  serve: boolean;
+  skyuxHostUrl: string;
+
+  skyuxServe: boolean;
 
 };

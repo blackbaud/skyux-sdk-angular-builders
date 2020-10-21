@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
   "properties": {
-    "serve": {
+    "skyuxServe": {
       "type": "boolean"
     }
   }

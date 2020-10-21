@@ -1,5 +1,3 @@
-import open from 'open';
-
 import {
   Stats
 } from 'webpack';
@@ -8,14 +6,8 @@ import {
   SkyuxHostAsset
 } from './host-asset';
 
-import { SkyuxHostConfig } from './plugins/open-host-url/host-config';
-
 export function getFallbackName(name: string): string {
-<<<<<<< HEAD
-  return `SKY_PAGES_READY_${name.toUpperCase().replace(/(\.|-)/g, '_')}`;
-=======
   return `SKY_PAGES_READY_${name.toUpperCase().replace(/(\.|-|~)/g, '_')}`;
->>>>>>> origin/master
 }
 
 export function getHostAssets(
@@ -46,22 +38,4 @@ export function getHostAssets(
   });
 
   return assets;
-}
-
-export function openHostUrl(
-  hostUrl: string,
-  pathName: string,
-  config: SkyuxHostConfig
-): void {
-  // We need to URL encode the value so that characters such as '+'
-  // are properly represented.
-  const configEncoded = encodeURIComponent(
-    Buffer.from(JSON.stringify(config)).toString('base64')
-  );
-
-  const url = `${hostUrl}${pathName}/?local=true&_cfg=${configEncoded}`;
-
-  console.log(`SKY UX Host URL:\n\n${url}`);
-
-  open(url);
 }

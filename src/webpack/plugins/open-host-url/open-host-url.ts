@@ -5,12 +5,12 @@ import {
 } from 'webpack';
 
 import {
-  getHostAssets
-} from '../../host-utils';
+  SkyuxHostConfig
+} from '../../../shared/host-config';
 
 import {
-  SkyuxHostConfig
-} from './host-config';
+  getHostAssets
+} from '../../host-asset-utils';
 
 import {
   SkyuxOpenHostURLPluginConfig

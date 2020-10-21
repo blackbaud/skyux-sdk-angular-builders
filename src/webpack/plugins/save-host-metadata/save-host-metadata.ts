@@ -9,11 +9,11 @@ import {
 import {
   getFallbackName,
   getHostAssets
-} from '../../host-utils';
+} from '../../host-asset-utils';
 
 import {
   addAssetSourceTap
-} from '../../stats-utils';
+} from '../../webpack-stats-utils';
 
 const PLUGIN_NAME = 'skyux-save-host-metadata-plugin';
 

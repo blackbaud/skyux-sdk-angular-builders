@@ -12,21 +12,13 @@ import {
   JsonObject
 } from '@angular-devkit/core';
 
-import cors from 'cors';
-import express from 'express';
-import fs from 'fs-extra';
-import https from 'https';
-import path from 'path';
-import { openHostUrl } from '../../webpack/host-utils';
-
-// import {
-//   Observable,
-//   of
-// } from 'rxjs';
+import {
+  getHostUrlFromOptions
+} from '../../shared/host-utils';
 
 import {
-  getCertPath
-} from '../dev-server/utils';
+  createServer
+} from '../../shared/server';
 
 import {
   SkyuxBrowserBuilderOptions
@@ -43,37 +35,16 @@ async function executeSkyuxBrowserBuilder(
 
   await executeBrowserBuilder(options, context, getBrowserTransforms()).toPromise();
 
-  return new Promise(resolve => {
-    const dist = path.resolve(process.cwd(), 'dist/builders-test');
-
-    const app = express();
-    app.use(cors());
-    app.use(express.static(dist));
-
-    const server = https.createServer({
-      cert: fs.readFileSync(getCertPath('skyux-server.crt')),
-      key: fs.readFileSync(getCertPath('skyux-server.key'))
-    }, app);
-
-    const port = 4200;
-    server.listen(port, 'localhost', () => {
-      console.log(`Serving local files at https://localhost:${port}/.`);
-
-      openHostUrl(
-        'https://app.blackbaud.com/',
-        'builders-test-app',
-        {
-        localUrl: `https://localhost:${port}/`,
-        scripts: fs.readJsonSync(path.resolve(dist, 'metadata.json'))
-      });
+  if (options.skyuxServe) {
+    await createServer({
+      hostUrl: getHostUrlFromOptions(options),
+      pathName: context.target?.project!,
+      port: 4200
     });
+  }
 
-    server.on('exit', () => {
-      console.log('EXIT!');
-      resolve({
-        success: true
-      });
-    });
+  return Promise.resolve({
+    success: true
   });
 }
 
