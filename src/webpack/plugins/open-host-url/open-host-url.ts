@@ -1,7 +1,10 @@
 import {
   Compiler
 } from 'webpack';
-import { SkyuxHostUrlConfig } from '../../../shared/host-url-config';
+
+import {
+  SkyuxHostUrlConfig
+} from '../../../shared/host-url-config';
 
 import {
   openHostUrl
