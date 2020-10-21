@@ -3,20 +3,12 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxHostUrlConfig
-} from '../../../shared/host-url-config';
-
-import {
   openHostUrl
 } from '../../../shared/host-utils';
 
 import {
   getHostAssets
 } from '../../host-asset-utils';
-
-import {
-  getRootElementTagName
-} from '../../root-element-utils';
 
 import {
   SkyuxOpenHostURLPluginConfig
@@ -36,17 +28,16 @@ export class SkyuxOpenHostURLPlugin {
     compiler.hooks.done.tap(PLUGIN_NAME, (webpackStats) => {
       if (!opened) {
 
-      const assets = getHostAssets(webpackStats.toJson());
-      const config: SkyuxHostUrlConfig = {
-        localUrl: this.config.localUrl,
-        rootElementTagName: getRootElementTagName(),
-        scripts: assets
-      };
+        const assets = getHostAssets(webpackStats.toJson());
 
         openHostUrl(
           this.config.hostUrl,
           this.config.pathName,
-          config
+          {
+            localUrl: this.config.localUrl,
+            rootElementTagName: 'app-root',
+            scripts: assets
+          }
         );
 
         opened = true;
