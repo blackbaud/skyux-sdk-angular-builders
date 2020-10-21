@@ -29,7 +29,11 @@ async function executeSkyuxBrowserBuilder(
   context: BuilderContext
 ): Promise<BuilderOutput> {
 
-  await executeBrowserBuilder(options, context, getBrowserTransforms()).toPromise();
+  await executeBrowserBuilder(
+    options,
+    context,
+    getBrowserTransforms()
+  ).toPromise();
 
   if (options.skyuxServe) {
     await serveBuildResults(options, context);
