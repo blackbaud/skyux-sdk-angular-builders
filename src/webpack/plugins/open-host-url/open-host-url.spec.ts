@@ -56,6 +56,7 @@ describe('open host url webpack plugin', () => {
 
     expect(openSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
       scripts: []
     });
   });
@@ -80,6 +81,7 @@ describe('open host url webpack plugin', () => {
 
     expect(openSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
       scripts: [
         { name: 'main.ts' }
       ]
@@ -97,6 +99,7 @@ describe('open host url webpack plugin', () => {
 
     expect(openSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
       scripts: []
     });
   });

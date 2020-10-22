@@ -35,6 +35,7 @@ export class SkyuxOpenHostURLPlugin {
           this.config.pathName,
           {
             localUrl: this.config.localUrl,
+            rootElementTagName: 'app-root',
             scripts: assets
           }
         );

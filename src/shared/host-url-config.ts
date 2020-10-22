@@ -13,6 +13,11 @@ export interface SkyuxHostUrlConfig {
   localUrl: string;
 
   /**
+   * The name of the root element for the application to bootstrap.
+   */
+  rootElementTagName?: string;
+
+  /**
    * An array of JavaScript file names to inject into Host's index.html file.
    * These files should only reference initial chunks. (Lazyloaded chunks are handled locally.)
    */
