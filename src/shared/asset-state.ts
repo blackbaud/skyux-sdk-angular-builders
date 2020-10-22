@@ -1,4 +1,6 @@
-// TODO: This is the same as the ./asset file?
+/**
+ * Represents an asset found in an Angular component's HTML template.
+ */
 interface Asset {
 
   filePath: string;
@@ -7,6 +9,9 @@ interface Asset {
 
 }
 
+/**
+ * Tracks all assets found in an Angular application's HTML templates.
+ */
 export abstract class AssetState {
 
   private static assets: Asset[] = [];
@@ -28,13 +33,11 @@ export abstract class AssetState {
   }
 
   public static replaceAssetPaths(content: string): string {
-    console.log('ReplaceAssetPaths:', this.assets);
     this.assets.forEach(asset => {
-      content = content.split(asset.filePath).join(asset.url);
-      // content = content.replace(
-      //   new RegExp(asset.filePath, 'gi'),
-      //   asset.url
-      // );
+      content = content.replace(
+        new RegExp(asset.filePath, 'gi'),
+        asset.url
+      );
     });
 
     return content;

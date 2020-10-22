@@ -56,19 +56,6 @@ function getDevServerWepbackConfigTransformer(
         }
       });
 
-      // webpackConfig.module?.rules?.push({
-      //   test: /\.html$/,
-      //   use: [
-      //     'raw-loader',
-      //     {
-      //       loader: path.resolve(__dirname, '../../webpack/loaders/asset-urls/assets-in-html'),
-      //       options: {
-      //         baseUrl: options.deployUrl
-      //       }
-      //     }
-      //   ]
-      // });
-
       /*istanbul ignore next line*/
       const pathName = context.target?.project!;
 

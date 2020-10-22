@@ -1,7 +1,3 @@
-// This plugin is a compromise from not having access to manipulate TS files in the webpack loader chain
-// versus having to copy the src directory, manipulate the files on disk, and point the build to it instead.
-// If the Angular team does decide to expose that functionality first-class, this plugin would be obsolete.
-
 import {
   Compiler
 } from 'webpack';
@@ -16,14 +12,19 @@ import {
 
 const PLUGIN_NAME = 'skyux-asset-urls-plugin';
 
+/**
+ * Angular's `@ngtools/webpack` plugin overrides all Webpack TypeScript loaders.
+ * This plugin replaces any asset paths located in the compiled JavaScript bundle with
+ * absolute URLs pointing to SKY UX Host.
+ */
 export class SkyuxAssetUrlsPlugin {
-  apply(compiler: Compiler) {
+
+  public apply(compiler: Compiler): void {
     addAssetSourceTap(
       PLUGIN_NAME,
       compiler,
-      (content: string) => {
-        return AssetState.replaceAssetPaths(content)
-      }
+      (content: string) => AssetState.replaceAssetPaths(content)
     );
   }
+
 }
