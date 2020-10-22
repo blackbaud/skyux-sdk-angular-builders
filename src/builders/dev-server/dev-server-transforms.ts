@@ -18,6 +18,10 @@ import {
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
 
+import {
+  getLocalUrlFromOptions
+} from './dev-server-utils';
+
 /**
  * Allows adjustments to the default Angular "dev-server" webpack config.
  * @param options The input options passed to the builder.
@@ -40,7 +44,7 @@ function getDevServerWepbackConfigTransformer(
       webpackConfig.plugins.push(
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
-          localUrl: options.deployUrl!,
+          localUrl: getLocalUrlFromOptions(options),
           pathName
         })
       );

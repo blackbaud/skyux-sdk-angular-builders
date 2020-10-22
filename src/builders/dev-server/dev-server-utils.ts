@@ -10,6 +10,10 @@ import {
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
 
+export function getLocalUrlFromOptions(options: SkyuxDevServerBuilderOptions): string {
+  return `https://${options.host}:${options.port}/`;
+}
+
 export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): void {
 
   if (options.skyuxLaunch === undefined) {
@@ -24,13 +28,9 @@ export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions
   // Set options specific to SKY UX Host.
   if (options.skyuxLaunch === 'host') {
     const hostUrl = getHostUrlFromOptions(options);
-    const localUrl = `https://${options.host}:${options.port}/`;
+    const localUrl = getLocalUrlFromOptions(options);
 
     options.skyuxHostUrl = hostUrl;
-
-    // Point image URLs back to localhost.
-    options.baseHref = localUrl;
-    options.servePathDefaultWarning = false;
 
     // Point live-reloading back to localhost.
     options.publicHost = localUrl;
@@ -38,6 +38,7 @@ export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions
 
     // Point lazy-loaded modules to the localhost URL.
     options.deployUrl = localUrl;
+    options.servePathDefaultWarning = false;
   }
 
   // Open the user's default browser automatically.

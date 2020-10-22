@@ -101,7 +101,6 @@ describe('dev-server builder', () => {
 
       expect(actualOptions).toEqual({
         allowedHosts: [ '.blackbaud.com' ],
-        baseHref: 'https://localhost:4200/',
         browserTarget: 'foo:build',
         deployUrl: 'https://localhost:4200/',
         host: 'localhost',
