@@ -12,7 +12,7 @@ import {
 
 import {
   addAssetSourceTap
-} from '../../stats-utils';
+} from '../../webpack-stats-utils';
 
 const PLUGIN_NAME = 'skyux-asset-urls-plugin';
 

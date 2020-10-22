@@ -9,4 +9,9 @@ export interface SkyuxOpenHostURLPluginConfig {
    * The URL of the localhost server, serving the asset files.
    */
   localUrl: string;
+
+  /**
+   * The unique pathname of the SPA, e.g. 'my-spa'.
+   */
+  pathName: string;
 }
