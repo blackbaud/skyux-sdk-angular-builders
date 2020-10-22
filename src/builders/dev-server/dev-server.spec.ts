@@ -197,7 +197,7 @@ describe('dev-server builder', () => {
 
       await (mock.reRequire('./dev-server'));
 
-      expect(actualWebpackConfig.plugins?.length).toEqual(2);
+      expect(actualWebpackConfig.plugins?.length).toEqual(3);
     });
   });
 
