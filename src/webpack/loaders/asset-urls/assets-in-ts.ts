@@ -14,6 +14,10 @@ import {
   AssetState
 } from '../../../shared/asset-state';
 
+import {
+  ensureTrailingSlash
+} from '../../../shared/url-utils';
+
 const ASSETS_REGEX = /assets\/.*?\.[\.\w]+/gi;
 const TEMPLATE_REGEX = /template\s*:(\s*['"`]([\s\S]*?)['"`]\s*([,}]))/gm;
 
@@ -43,7 +47,8 @@ export default function AssetsLoaderTS(
 
       processedFiles.push(filePath);
 
-      const url = `${options.baseUrl}${filePath.replace(/\\/g, '/')}`;
+      const baseUrl = ensureTrailingSlash(options.baseUrl as string);
+      const url = `${baseUrl}${filePath.replace(/\\/g, '/')}`;
 
       AssetState.queue({
         filePath,

@@ -7,22 +7,42 @@ import {
 } from 'webpack';
 
 import {
+  SkyuxAssetUrlsPlugin
+} from '../../webpack/plugins/asset-urls/asset-urls';
+
+import {
   SkyuxSaveHostMetadataPlugin
 } from '../../webpack/plugins/save-host-metadata/save-host-metadata';
+
+import {
+  getAssetUrlsLoaderConfig
+} from '../../webpack/get-asset-urls-loader-config';
+
+import {
+  SkyuxBrowserBuilderOptions
+} from './browser-options';
 
 /**
  * Allows adjustments to the default Angular "browser" webpack config.
  * @param options The input options passed to the builder.
- * @param context The context of the builder execution.
  */
-function getBrowserWepbackConfigTransformer(): ExecutionTransformer<WebpackConfig> {
+function getBrowserWepbackConfigTransformer(
+  options: SkyuxBrowserBuilderOptions
+): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
 
     if (!webpackConfig.plugins) {
       webpackConfig.plugins = [];
     }
 
+    if (options.deployUrl) {
+      webpackConfig.module?.rules?.push(
+        getAssetUrlsLoaderConfig(options.deployUrl)
+      );
+    }
+
     webpackConfig.plugins.push(
+      new SkyuxAssetUrlsPlugin(),
       new SkyuxSaveHostMetadataPlugin()
     );
 
@@ -31,8 +51,10 @@ function getBrowserWepbackConfigTransformer(): ExecutionTransformer<WebpackConfi
 
 }
 
-export function getBrowserTransforms() {
+export function getBrowserTransforms(
+  options: SkyuxBrowserBuilderOptions
+) {
   return {
-    webpackConfiguration: getBrowserWepbackConfigTransformer()
+    webpackConfiguration: getBrowserWepbackConfigTransformer(options)
   };
 }
