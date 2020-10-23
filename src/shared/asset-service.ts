@@ -2,25 +2,19 @@
  * Represents an asset found in an Angular component's HTML template.
  */
 interface Asset {
-
   filePath: string;
-
   url: string
-
 }
 
-/**
- * Tracks all assets found in an Angular application's HTML templates.
- */
-export abstract class AssetState {
+export class SkyuxAssetService {
 
-  private static assets: Asset[] = [];
+  private assets: Asset[] = [];
 
-  public static queue(asset: Asset): void {
+  public queue(asset: Asset): void {
     this.assets.push(asset);
   }
 
-  public static replaceAssetPaths(content: string): string {
+  public replaceAssetPaths(content: string): string {
     this.assets.forEach(asset => {
       content = content.replace(
         new RegExp(asset.filePath, 'gi'),
@@ -30,5 +24,4 @@ export abstract class AssetState {
 
     return content;
   }
-
 }

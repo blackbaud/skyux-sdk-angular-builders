@@ -19,8 +19,8 @@ import {
 } from '../../webpack/plugins/open-host-url/open-host-url';
 
 import {
-  getAssetUrlsLoaderConfig
-} from '../../webpack/get-asset-urls-loader-config';
+  getAssetUrlsLoaderRule
+} from '../../webpack/loaders/asset-urls/asset-urls-loader-rule';
 
 import {
   SkyuxDevServerBuilderOptions
@@ -29,6 +29,7 @@ import {
 import {
   getLocalUrlFromOptions
 } from './dev-server-utils';
+import { SkyuxAssetService } from '../../shared/asset-service';
 
 /**
  * Allows adjustments to the default Angular "dev-server" webpack config.
@@ -43,29 +44,24 @@ function getDevServerWepbackConfigTransformer(
 
     if (options.skyuxLaunch === 'host') {
 
-      webpackConfig.module?.rules?.push(
-        getAssetUrlsLoaderConfig(options.deployUrl!)
-      );
+      const assetService = new SkyuxAssetService();
+      const assetBaseUrl = options.deployUrl!;
 
       /*istanbul ignore next line*/
       const pathName = context.target?.project!;
 
-      if (!webpackConfig.plugins) {
-        webpackConfig.plugins = [];
-      }
+      webpackConfig.module?.rules?.push(
+        getAssetUrlsLoaderRule(assetBaseUrl, assetService)
+      );
 
-      webpackConfig.plugins.push(
-        new SkyuxAssetUrlsPlugin(),
+      webpackConfig.plugins?.push(
+        new SkyuxAssetUrlsPlugin(assetService),
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
           localUrl: getLocalUrlFromOptions(options),
           pathName
         })
       );
-
-      // Allows our HTML loader to process the HTML templates.
-      // const compilerPlugin = webpackConfig.plugins?.find(plugin => plugin instanceof AngularCompilerPlugin);
-      // (compilerPlugin as AngularCompilerPlugin).options.directTemplateLoading = false;
     }
 
     return webpackConfig;

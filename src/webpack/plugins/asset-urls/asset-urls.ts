@@ -3,8 +3,8 @@ import {
 } from 'webpack';
 
 import {
-  AssetState
-} from '../../../shared/asset-state';
+  SkyuxAssetService
+} from '../../../shared/asset-service';
 
 import {
   addAssetSourceTap
@@ -19,11 +19,15 @@ const PLUGIN_NAME = 'skyux-asset-urls-plugin';
  */
 export class SkyuxAssetUrlsPlugin {
 
+  constructor(
+    private assetService: SkyuxAssetService
+  ) { }
+
   public apply(compiler: Compiler): void {
     addAssetSourceTap(
       PLUGIN_NAME,
       compiler,
-      (content: string) => AssetState.replaceAssetPaths(content)
+      (content: string) => this.assetService.replaceAssetPaths(content)
     );
   }
 

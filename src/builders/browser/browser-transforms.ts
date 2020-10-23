@@ -15,12 +15,13 @@ import {
 } from '../../webpack/plugins/save-host-metadata/save-host-metadata';
 
 import {
-  getAssetUrlsLoaderConfig
-} from '../../webpack/get-asset-urls-loader-config';
+  getAssetUrlsLoaderRule
+} from '../../webpack/loaders/asset-urls/asset-urls-loader-rule';
 
 import {
   SkyuxBrowserBuilderOptions
 } from './browser-options';
+import { SkyuxAssetService } from '../../shared/asset-service';
 
 /**
  * Allows adjustments to the default Angular "browser" webpack config.
@@ -31,18 +32,20 @@ function getBrowserWepbackConfigTransformer(
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
 
-    if (!webpackConfig.plugins) {
-      webpackConfig.plugins = [];
-    }
-
     if (options.deployUrl) {
+      const assetService = new SkyuxAssetService();
+      const assetBaseUrl = options.deployUrl!;
+
       webpackConfig.module?.rules?.push(
-        getAssetUrlsLoaderConfig(options.deployUrl)
+        getAssetUrlsLoaderRule(assetBaseUrl, assetService)
+      );
+
+      webpackConfig.plugins?.push(
+        new SkyuxAssetUrlsPlugin(assetService)
       );
     }
 
-    webpackConfig.plugins.push(
-      new SkyuxAssetUrlsPlugin(),
+    webpackConfig.plugins?.push(
       new SkyuxSaveHostMetadataPlugin()
     );
 

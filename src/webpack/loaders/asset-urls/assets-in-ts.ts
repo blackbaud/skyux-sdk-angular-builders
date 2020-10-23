@@ -7,12 +7,9 @@ import validateOptions from 'schema-utils';
 import {
   loader
 } from 'webpack';
+import { SkyuxAssetService } from '../../../shared/asset-service';
 
 const schema = require('./assets-in-ts-schema.json');
-
-import {
-  AssetState
-} from '../../../shared/asset-state';
 
 import {
   ensureTrailingSlash
@@ -23,8 +20,10 @@ const TEMPLATE_REGEX = /template\s*:(\s*['"`]([\s\S]*?)['"`]\s*([,}]))/gm;
 
 export default function AssetsLoaderTS(
   this: loader.LoaderContext,
-  content: string
+  content: string,
+  assetService: SkyuxAssetService
 ) {
+
   if (content.indexOf('@Component(') === -1) {
     return content;
   }
@@ -47,10 +46,10 @@ export default function AssetsLoaderTS(
 
       processedFiles.push(filePath);
 
-      const baseUrl = ensureTrailingSlash(options.baseUrl as string);
+      const baseUrl = ensureTrailingSlash(options.assetBaseUrl as string);
       const url = `${baseUrl}${filePath.replace(/\\/g, '/')}`;
 
-      AssetState.queue({
+      assetService.queue({
         filePath,
         url
       });
