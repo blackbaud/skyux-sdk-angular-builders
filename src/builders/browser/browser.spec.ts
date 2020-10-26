@@ -92,18 +92,13 @@ describe('browser builder', () => {
     expect(actualWebpackConfig.plugins?.length).toEqual(2);
   });
 
-  it('should add asset URLs loader and plugin when `deployUrl` set', async () => {
+  it('should add asset URLs plugin when `deployUrl` set', async () => {
     defaultOptions.deployUrl = 'https://foobar.com/';
 
     await (mock.reRequire('./browser'));
 
-    const loader = actualWebpackConfig.module?.rules?.find((rule: any) => {
-      return rule.use.loader.indexOf('asset-urls-loader') > -1;
-    });
-
     const plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxAssetUrlsPlugin);
 
-    expect(loader).toBeDefined('Expected config to include loader.');
     expect(plugin).toBeDefined('Expected config to include plugin.');
   });
 

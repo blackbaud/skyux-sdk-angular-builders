@@ -6,10 +6,6 @@ import {
   ExecutionTransformer
 } from '@angular-devkit/build-angular';
 
-// import {
-//   AngularCompilerPlugin
-// } from '@ngtools/webpack';
-
 import {
   Configuration as WebpackConfig
 } from 'webpack';
@@ -21,10 +17,6 @@ import {
 import {
   SkyuxOpenHostURLPlugin
 } from '../../webpack/plugins/open-host-url/open-host-url-plugin';
-
-// import {
-//   getAssetUrlsLoaderRules
-// } from '../../webpack/loaders/asset-urls/asset-urls-loader-rules';
 
 import {
   SkyuxDevServerBuilderOptions
@@ -50,15 +42,13 @@ function getDevServerWepbackConfigTransformer(
 
     if (options.skyuxLaunch === 'host') {
 
-      // const assetBaseUrl = options.deployUrl!;
+      const assetBaseUrl = options.deployUrl!;
       const pathName = context.target!.project!;
 
-      // config.module.rules.push(
-      //   ...getAssetUrlsLoaderRules(assetBaseUrl)
-      // );
-
       config.plugins.push(
-        new SkyuxAssetUrlsPlugin(options.deployUrl!),
+        new SkyuxAssetUrlsPlugin({
+          assetBaseUrl
+        }),
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
           localUrl: getLocalUrlFromOptions(options),

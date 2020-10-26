@@ -1,9 +1,5 @@
 import mock from 'mock-require';
 
-import {
-  SkyuxApplicationAssetHelper
-} from '../../app-asset-helper';
-
 describe('Asset URLs plugin', () => {
 
   let actualContent: string;
@@ -33,6 +29,7 @@ describe('Asset URLs plugin', () => {
             // Simulate Webpack emitting all assets.
             for (const [_file, asset] of Object.entries(mockCompilation.assets)) {
               actualContent = asset.source();
+              console.log('Actual content:', actualContent);
             }
           }
         }
@@ -42,7 +39,6 @@ describe('Asset URLs plugin', () => {
 
   afterEach(() => {
     mock.stopAll();
-    SkyuxApplicationAssetHelper.flush();
   });
 
   it('should replace asset paths with hard URLs', () => {
@@ -52,17 +48,52 @@ describe('Asset URLs plugin', () => {
       }
     };
 
-    SkyuxApplicationAssetHelper.queue({
-      filePath: 'assets/foo.gif',
-      url: 'https://foobar.com/'
-    });
-
     const { SkyuxAssetUrlsPlugin } = mock.reRequire('./asset-urls-plugin');
-    const plugin = new SkyuxAssetUrlsPlugin();
+    const plugin = new SkyuxAssetUrlsPlugin({
+      assetBaseUrl: 'https://foobar.com/'
+    });
 
     plugin.apply(mockCompiler);
 
-    expect(actualContent).toBe('["https://foobar.com/"]');
+    expect(actualContent).toBe('["https://foobar.com/assets/foo.gif"]');
+  });
+
+  it('should handle duplicate assets for the same file', () => {
+    mockAssets = {
+      'foo.js': {
+        source: () => '["assets/duplicate.gif"],["assets/duplicate.gif"]'
+      }
+    };
+
+    const { SkyuxAssetUrlsPlugin } = mock.reRequire('./asset-urls-plugin');
+    const plugin = new SkyuxAssetUrlsPlugin({
+      assetBaseUrl: 'https://foobar.com/'
+    });
+
+    plugin.apply(mockCompiler);
+
+    expect(actualContent).toBe(
+      '["https://foobar.com/assets/duplicate.gif"],["https://foobar.com/assets/duplicate.gif"]'
+    );
+  });
+
+  it('should ignore files without assets', () => {
+    mockAssets = {
+      'foo.js': {
+        source: () => 'Default content here.'
+      }
+    };
+
+    const { SkyuxAssetUrlsPlugin } = mock.reRequire('./asset-urls-plugin');
+    const plugin = new SkyuxAssetUrlsPlugin({
+      assetBaseUrl: 'https://foobar.com/'
+    });
+
+    plugin.apply(mockCompiler);
+
+    expect(actualContent).toBe(
+      'Default content here.'
+    );
   });
 
 });

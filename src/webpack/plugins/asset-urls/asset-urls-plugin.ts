@@ -21,7 +21,9 @@ const PLUGIN_NAME = 'skyux-asset-urls-plugin';
 export class SkyuxAssetUrlsPlugin {
 
   constructor(
-    private assetBaseUrl: string
+    private options: {
+      assetBaseUrl: string;
+    }
   ) { }
 
   public apply(compiler: Compiler): void {
@@ -30,22 +32,20 @@ export class SkyuxAssetUrlsPlugin {
       compiler,
       (content: string) => {
 
-        const ASSETS_REGEX = /assets\/.*?\.[\.\w]+/gi;
+        const ASSETS_REGEX = /("|')assets\/.*?\.[\.\w]+("|')/gi;
         const processedFiles: string[] = [];
 
         content.match(ASSETS_REGEX)?.forEach(filePath => {
           if (!processedFiles.includes(filePath)) {
             processedFiles.push(filePath);
 
-            const baseUrl = ensureTrailingSlash(this.assetBaseUrl);
-            const url = `${baseUrl}${filePath.replace(/\\/g, '/')}`;
+            const baseUrl = ensureTrailingSlash(this.options.assetBaseUrl);
+            const url = `${baseUrl}${filePath.replace(/\\/g, '/').replace(/("|')/g, '')}`;
 
             content = content.replace(
               new RegExp(filePath, 'gi'),
-              url
+              `"${url}"`
             );
-
-            return content;
           }
         });
 
