@@ -25,26 +25,25 @@ import {
 function getBrowserWepbackConfigTransformer(
   options: SkyuxBrowserBuilderOptions
 ): ExecutionTransformer<WebpackConfig> {
-  return (config) => {
+  return (webpackConfig) => {
 
-    config.plugins = config.plugins || [];
-    config.module = config.module || { rules: [] };
+    webpackConfig.plugins = webpackConfig.plugins || [];
 
     if (options.deployUrl) {
       const assetBaseUrl = options.deployUrl;
 
-      config.plugins.push(
+      webpackConfig.plugins.push(
         new SkyuxAssetUrlsPlugin({
           assetBaseUrl
         })
       );
     }
 
-    config.plugins.push(
+    webpackConfig.plugins.push(
       new SkyuxSaveHostMetadataPlugin()
     );
 
-    return config;
+    return webpackConfig;
   };
 
 }

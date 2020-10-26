@@ -35,17 +35,16 @@ function getDevServerWepbackConfigTransformer(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
 ): ExecutionTransformer<WebpackConfig> {
-  return (config) => {
+  return (webpackConfig) => {
 
-    config.plugins = config.plugins || [];
-    config.module = config.module || { rules: [] };
+    webpackConfig.plugins = webpackConfig.plugins || [];
 
     if (options.skyuxLaunch === 'host') {
 
       const assetBaseUrl = options.deployUrl!;
       const pathName = context.target!.project!;
 
-      config.plugins.push(
+      webpackConfig.plugins.push(
         new SkyuxAssetUrlsPlugin({
           assetBaseUrl
         }),
@@ -55,13 +54,9 @@ function getDevServerWepbackConfigTransformer(
           pathName
         })
       );
-
-      // Allows our HTML loader to process the HTML templates.
-      // const compilerPlugin = config.plugins?.find(plugin => plugin instanceof AngularCompilerPlugin);
-      // (compilerPlugin as AngularCompilerPlugin).options.directTemplateLoading = false;
     }
 
-    return config;
+    return webpackConfig;
   };
 }
 
