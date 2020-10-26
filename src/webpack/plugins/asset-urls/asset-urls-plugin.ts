@@ -10,6 +10,8 @@ import {
   addAssetSourceTap
 } from '../../webpack-stats-utils';
 
+const ASSETS_REGEX = /("|')assets\/.*?\.[\.\w]+("|')/gi;
+
 const PLUGIN_NAME = 'skyux-asset-urls-plugin';
 
 /**
@@ -27,19 +29,18 @@ export class SkyuxAssetUrlsPlugin {
   ) { }
 
   public apply(compiler: Compiler): void {
+    const baseUrl = ensureTrailingSlash(this.options.assetBaseUrl);
+
     addAssetSourceTap(
       PLUGIN_NAME,
       compiler,
       (content: string) => {
-
-        const ASSETS_REGEX = /("|')assets\/.*?\.[\.\w]+("|')/gi;
         const processedFiles: string[] = [];
 
         content.match(ASSETS_REGEX)?.forEach(filePath => {
           if (!processedFiles.includes(filePath)) {
             processedFiles.push(filePath);
 
-            const baseUrl = ensureTrailingSlash(this.options.assetBaseUrl);
             const url = `${baseUrl}${filePath.replace(/\\/g, '/').replace(/("|')/g, '')}`;
 
             content = content.replace(
