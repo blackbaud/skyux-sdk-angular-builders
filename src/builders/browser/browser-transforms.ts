@@ -7,10 +7,6 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxAssetService
-} from '../../shared/asset-service';
-
-import {
   SkyuxAssetUrlsPlugin
 } from '../../webpack/plugins/asset-urls/asset-urls';
 
@@ -36,15 +32,14 @@ function getBrowserWepbackConfigTransformer(
   return (webpackConfig) => {
 
     if (options.deployUrl) {
-      const assetService = new SkyuxAssetService();
       const assetBaseUrl = options.deployUrl!;
 
       webpackConfig.module?.rules?.push(
-        getAssetUrlsLoaderRule(assetBaseUrl, assetService)
+        getAssetUrlsLoaderRule(assetBaseUrl)
       );
 
       webpackConfig.plugins?.push(
-        new SkyuxAssetUrlsPlugin(assetService)
+        new SkyuxAssetUrlsPlugin()
       );
     }
 

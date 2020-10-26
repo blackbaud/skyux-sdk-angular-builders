@@ -3,8 +3,8 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxAssetService
-} from '../../../shared/asset-service';
+  SkyuxAssetHelper
+} from '../../../shared/asset-helper';
 
 import {
   addAssetSourceTap
@@ -18,16 +18,11 @@ const PLUGIN_NAME = 'skyux-asset-urls-plugin';
  * absolute URLs pointing to SKY UX Host.
  */
 export class SkyuxAssetUrlsPlugin {
-
-  constructor(
-    private assetService: SkyuxAssetService
-  ) { }
-
   public apply(compiler: Compiler): void {
     addAssetSourceTap(
       PLUGIN_NAME,
       compiler,
-      (content: string) => this.assetService.replaceAssetPaths(content)
+      (content: string) => SkyuxAssetHelper.replaceAssetPaths(content)
     );
   }
 

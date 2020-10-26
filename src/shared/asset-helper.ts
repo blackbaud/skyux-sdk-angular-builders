@@ -2,17 +2,14 @@
  * Represents an asset found in an Angular component's HTML template.
  */
 interface Asset {
-
   filePath: string;
-
   url: string
-
 }
 
 /**
  * Tracks all assets found in an Angular application's HTML templates.
  */
-export abstract class AssetState {
+export abstract class SkyuxAssetHelper {
 
   private static assets: Asset[] = [];
 

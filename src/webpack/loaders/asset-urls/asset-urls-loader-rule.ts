@@ -1,16 +1,11 @@
 import path from 'path';
 
 import {
-  SkyuxAssetService
-} from '../../../shared/asset-service';
-
-import {
   RuleSetRule
 } from 'webpack';
 
 export function getAssetUrlsLoaderRule(
-  assetBaseUrl: string,
-  assetService: SkyuxAssetService
+  assetBaseUrl: string
 ): RuleSetRule {
 
   const rule: RuleSetRule = {
@@ -19,8 +14,7 @@ export function getAssetUrlsLoaderRule(
     use: {
       loader: path.resolve(__dirname, './assets-in-ts'),
       options: {
-        assetBaseUrl,
-        assetService
+        assetBaseUrl
       }
     }
   };

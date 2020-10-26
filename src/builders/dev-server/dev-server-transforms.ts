@@ -11,10 +11,6 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxAssetService
-} from '../../shared/asset-service';
-
-import {
   SkyuxAssetUrlsPlugin
 } from '../../webpack/plugins/asset-urls/asset-urls';
 
@@ -47,18 +43,17 @@ function getDevServerWepbackConfigTransformer(
 
     if (options.skyuxLaunch === 'host') {
 
-      const assetService = new SkyuxAssetService();
       const assetBaseUrl = options.deployUrl!;
 
       /*istanbul ignore next line*/
       const pathName = context.target?.project!;
 
       webpackConfig.module?.rules?.push(
-        getAssetUrlsLoaderRule(assetBaseUrl, assetService)
+        getAssetUrlsLoaderRule(assetBaseUrl)
       );
 
       webpackConfig.plugins?.push(
-        new SkyuxAssetUrlsPlugin(assetService),
+        new SkyuxAssetUrlsPlugin(),
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
           localUrl: getLocalUrlFromOptions(options),

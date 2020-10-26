@@ -9,8 +9,8 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxAssetService
-} from '../../../shared/asset-service';
+  SkyuxAssetHelper
+} from '../../../shared/asset-helper';
 
 import {
   ensureTrailingSlash
@@ -23,8 +23,7 @@ const TEMPLATE_REGEX = /template\s*:(\s*['"`]([\s\S]*?)['"`]\s*([,}]))/gm;
 
 export default function AssetsLoaderTS(
   this: loader.LoaderContext,
-  content: string,
-  assetService: SkyuxAssetService
+  content: string
 ) {
 
   if (content.indexOf('@Component(') === -1) {
@@ -52,10 +51,7 @@ export default function AssetsLoaderTS(
       const baseUrl = ensureTrailingSlash(options.assetBaseUrl as string);
       const url = `${baseUrl}${filePath.replace(/\\/g, '/')}`;
 
-      assetService.queue({
-        filePath,
-        url
-      });
+      SkyuxAssetHelper.queue({ filePath, url });
 
       return content;
     });
