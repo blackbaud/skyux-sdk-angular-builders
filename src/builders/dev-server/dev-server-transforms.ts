@@ -11,6 +11,10 @@ import {
 } from 'webpack';
 
 import {
+  SkyuxAssetService
+} from '../../shared/asset-service';
+
+import {
   SkyuxAssetUrlsPlugin
 } from '../../webpack/plugins/asset-urls/asset-urls';
 
@@ -29,7 +33,6 @@ import {
 import {
   getLocalUrlFromOptions
 } from './dev-server-utils';
-import { SkyuxAssetService } from '../../shared/asset-service';
 
 /**
  * Allows adjustments to the default Angular "dev-server" webpack config.

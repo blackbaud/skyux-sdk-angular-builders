@@ -7,6 +7,10 @@ import {
 } from 'webpack';
 
 import {
+  SkyuxAssetService
+} from '../../shared/asset-service';
+
+import {
   SkyuxAssetUrlsPlugin
 } from '../../webpack/plugins/asset-urls/asset-urls';
 
@@ -21,7 +25,6 @@ import {
 import {
   SkyuxBrowserBuilderOptions
 } from './browser-options';
-import { SkyuxAssetService } from '../../shared/asset-service';
 
 /**
  * Allows adjustments to the default Angular "browser" webpack config.
