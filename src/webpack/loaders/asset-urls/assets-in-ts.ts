@@ -7,13 +7,16 @@ import validateOptions from 'schema-utils';
 import {
   loader
 } from 'webpack';
-import { SkyuxAssetService } from '../../../shared/asset-service';
 
-const schema = require('./assets-in-ts-schema.json');
+import {
+  SkyuxAssetService
+} from '../../../shared/asset-service';
 
 import {
   ensureTrailingSlash
 } from '../../../shared/url-utils';
+
+const schema = require('./assets-in-ts-schema.json');
 
 const ASSETS_REGEX = /assets\/.*?\.[\.\w]+/gi;
 const TEMPLATE_REGEX = /template\s*:(\s*['"`]([\s\S]*?)['"`]\s*([,}]))/gm;

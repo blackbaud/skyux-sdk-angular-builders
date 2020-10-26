@@ -1,9 +1,12 @@
 import path from 'path';
 
 import {
+  SkyuxAssetService
+} from '../../../shared/asset-service';
+
+import {
   RuleSetRule
 } from 'webpack';
-import { SkyuxAssetService } from '../../../shared/asset-service';
 
 export function getAssetUrlsLoaderRule(
   assetBaseUrl: string,
