@@ -6,6 +6,10 @@ import {
   ExecutionTransformer
 } from '@angular-devkit/build-angular';
 
+// import {
+//   AngularCompilerPlugin
+// } from '@ngtools/webpack';
+
 import {
   Configuration as WebpackConfig
 } from 'webpack';
@@ -18,9 +22,9 @@ import {
   SkyuxOpenHostURLPlugin
 } from '../../webpack/plugins/open-host-url/open-host-url-plugin';
 
-import {
-  getAssetUrlsLoaderRule
-} from '../../webpack/loaders/asset-urls/asset-urls-loader-rule';
+// import {
+//   getAssetUrlsLoaderRules
+// } from '../../webpack/loaders/asset-urls/asset-urls-loader-rules';
 
 import {
   SkyuxDevServerBuilderOptions
@@ -46,21 +50,25 @@ function getDevServerWepbackConfigTransformer(
 
     if (options.skyuxLaunch === 'host') {
 
-      const assetBaseUrl = options.deployUrl!;
+      // const assetBaseUrl = options.deployUrl!;
       const pathName = context.target!.project!;
 
-      config.module.rules.push(
-        getAssetUrlsLoaderRule(assetBaseUrl)
-      );
+      // config.module.rules.push(
+      //   ...getAssetUrlsLoaderRules(assetBaseUrl)
+      // );
 
       config.plugins.push(
-        new SkyuxAssetUrlsPlugin(),
+        new SkyuxAssetUrlsPlugin(options.deployUrl!),
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
           localUrl: getLocalUrlFromOptions(options),
           pathName
         })
       );
+
+      // Allows our HTML loader to process the HTML templates.
+      // const compilerPlugin = config.plugins?.find(plugin => plugin instanceof AngularCompilerPlugin);
+      // (compilerPlugin as AngularCompilerPlugin).options.directTemplateLoading = false;
     }
 
     return config;

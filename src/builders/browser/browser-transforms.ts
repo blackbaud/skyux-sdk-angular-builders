@@ -14,9 +14,9 @@ import {
   SkyuxSaveHostMetadataPlugin
 } from '../../webpack/plugins/save-host-metadata/save-host-metadata-plugin';
 
-import {
-  getAssetUrlsLoaderRule
-} from '../../webpack/loaders/asset-urls/asset-urls-loader-rule';
+// import {
+//   getAssetUrlsLoaderRules
+// } from '../../webpack/loaders/asset-urls/asset-urls-loader-rules';
 
 import {
   SkyuxBrowserBuilderOptions
@@ -35,14 +35,14 @@ function getBrowserWepbackConfigTransformer(
     config.module = config.module || { rules: [] };
 
     if (options.deployUrl) {
-      const assetBaseUrl = options.deployUrl!;
+      // const assetBaseUrl = options.deployUrl!;
 
-      config.module.rules.push(
-        getAssetUrlsLoaderRule(assetBaseUrl)
-      );
+      // config.module.rules.push(
+      //   ...getAssetUrlsLoaderRules(assetBaseUrl)
+      // );
 
       config.plugins.push(
-        new SkyuxAssetUrlsPlugin()
+        new SkyuxAssetUrlsPlugin(options.deployUrl)
       );
     }
 

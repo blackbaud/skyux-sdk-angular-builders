@@ -3,8 +3,8 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxApplicationAssetHelper
-} from '../../app-asset-helper';
+  ensureTrailingSlash
+} from '../../../shared/url-utils';
 
 import {
   addAssetSourceTap
@@ -13,16 +13,44 @@ import {
 const PLUGIN_NAME = 'skyux-asset-urls-plugin';
 
 /**
- * Angular's `@ngtools/webpack` plugin overrides all Webpack TypeScript loaders.
- * This plugin replaces any asset paths located in the compiled JavaScript bundle with
- * absolute URLs pointing to SKY UX Host.
+ * This plugin replaces any asset paths located in the bundle with absolute URLs.
+ * Background: Angular's `@ngtools/webpack` plugin overrides all Webpack TypeScript loaders,
+ * so we can only alter the contents of the JavaScript bundle after the compilation is done.
+ * @see https://github.com/angular/angular-cli/issues/16544#issuecomment-571245469
  */
 export class SkyuxAssetUrlsPlugin {
+
+  constructor(
+    private assetBaseUrl: string
+  ) { }
+
   public apply(compiler: Compiler): void {
     addAssetSourceTap(
       PLUGIN_NAME,
       compiler,
-      (content: string) => SkyuxApplicationAssetHelper.replaceAssetPaths(content)
+      (content: string) => {
+
+        const ASSETS_REGEX = /assets\/.*?\.[\.\w]+/gi;
+        const processedFiles: string[] = [];
+
+        content.match(ASSETS_REGEX)?.forEach(filePath => {
+          if (!processedFiles.includes(filePath)) {
+            processedFiles.push(filePath);
+
+            const baseUrl = ensureTrailingSlash(this.assetBaseUrl);
+            const url = `${baseUrl}${filePath.replace(/\\/g, '/')}`;
+
+            content = content.replace(
+              new RegExp(filePath, 'gi'),
+              url
+            );
+
+            return content;
+          }
+        });
+
+        return content;
+      }
     );
   }
 

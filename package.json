@@ -24,8 +24,7 @@
     "@angular-devkit/build-angular": "~0.1002.0"
   },
   "dependencies": {
-    "@schematics/angular": "10.2.0",
-    "loader-utils": "2.0.0"
+    "@schematics/angular": "10.2.0"
   },
   "devDependencies": {
     "@angular-devkit/architect": "0.1002.0",
@@ -43,6 +42,7 @@
     "@types/webpack": "4.41.23",
     "fs-extra": "9.0.1",
     "jasmine": "3.6.2",
+    "loader-utils": "2.0.0",
     "mock-require": "3.0.3",
     "nyc": "15.1.0",
     "rimraf": "3.0.2",
