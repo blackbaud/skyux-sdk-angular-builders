@@ -18,11 +18,7 @@ import {
 function getBrowserWepbackConfigTransformer(): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
 
-    if (!webpackConfig.plugins) {
-      webpackConfig.plugins = [];
-    }
-
-    webpackConfig.plugins.push(
+    webpackConfig.plugins?.push(
       new SkyuxSaveHostMetadataPlugin()
     );
 
