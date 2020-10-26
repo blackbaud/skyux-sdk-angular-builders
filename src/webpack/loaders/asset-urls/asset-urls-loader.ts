@@ -16,12 +16,12 @@ import {
   ensureTrailingSlash
 } from '../../../shared/url-utils';
 
-const schema = require('./assets-in-ts-schema.json');
+const schema = require('./asset-urls-loader-schema.json');
 
 const ASSETS_REGEX = /assets\/.*?\.[\.\w]+/gi;
 const TEMPLATE_REGEX = /template\s*:(\s*['"`]([\s\S]*?)['"`]\s*([,}]))/gm;
 
-export default function AssetsLoaderTS(
+export default function skyuxAssetUrlsLoader(
   this: loader.LoaderContext,
   content: string
 ) {
@@ -38,10 +38,11 @@ export default function AssetsLoaderTS(
       name: 'SKY UX HTML Assets Loader'
     });
 
-    // Prevent the same file from being processed more than once.
     const processedFiles: string[] = [];
 
     content.match(ASSETS_REGEX)?.forEach(filePath => {
+
+      // Prevent the same file from being processed more than once.
       if (processedFiles.includes(filePath)) {
         return;
       }

@@ -7,6 +7,10 @@ import {
 } from 'rxjs';
 
 import {
+  SkyuxAssetUrlsPlugin
+} from '../../webpack/plugins/asset-urls/asset-urls-plugin';
+
+import {
   SkyuxSaveHostMetadataPlugin
 } from '../../webpack/plugins/save-host-metadata/save-host-metadata';
 
@@ -38,9 +42,7 @@ describe('browser builder', () => {
       tsConfig: ''
     };
 
-    defaultWebpackConfig = {
-      plugins: []
-    };
+    defaultWebpackConfig = {};
 
     actualWebpackConfig = {};
 
@@ -90,12 +92,19 @@ describe('browser builder', () => {
     expect(actualWebpackConfig.plugins?.length).toEqual(2);
   });
 
-  it('should not add plugin if plugins array is undefined', async () => {
-    delete defaultWebpackConfig.plugins;
+  it('should add asset URLs loader and plugin when `deployUrl` set', async () => {
+    defaultOptions.deployUrl = 'https://foobar.com/';
 
     await (mock.reRequire('./browser'));
 
-    expect(actualWebpackConfig.plugins).toBeUndefined();
+    const loader = actualWebpackConfig.module?.rules?.find((rule: any) => {
+      return rule.use.loader.indexOf('asset-urls-loader') > -1;
+    });
+
+    const plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxAssetUrlsPlugin);
+
+    expect(loader).toBeDefined('Expected config to include loader.');
+    expect(plugin).toBeDefined('Expected config to include plugin.');
   });
 
 });

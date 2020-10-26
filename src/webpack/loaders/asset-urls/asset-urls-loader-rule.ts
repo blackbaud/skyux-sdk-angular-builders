@@ -12,7 +12,7 @@ export function getAssetUrlsLoaderRule(
     enforce: 'pre',
     test: /\.ts$/,
     use: {
-      loader: path.resolve(__dirname, './assets-in-ts'),
+      loader: path.resolve(__dirname, './asset-urls-loader'),
       options: {
         assetBaseUrl
       }

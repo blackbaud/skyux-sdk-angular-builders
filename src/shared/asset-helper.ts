@@ -28,4 +28,8 @@ export abstract class SkyuxAssetHelper {
     return content;
   }
 
+  public static flush(): void {
+    this.assets = [];
+  }
+
 }

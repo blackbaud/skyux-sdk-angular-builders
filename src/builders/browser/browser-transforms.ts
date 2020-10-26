@@ -8,7 +8,7 @@ import {
 
 import {
   SkyuxAssetUrlsPlugin
-} from '../../webpack/plugins/asset-urls/asset-urls';
+} from '../../webpack/plugins/asset-urls/asset-urls-plugin';
 
 import {
   SkyuxSaveHostMetadataPlugin
@@ -29,25 +29,28 @@ import {
 function getBrowserWepbackConfigTransformer(
   options: SkyuxBrowserBuilderOptions
 ): ExecutionTransformer<WebpackConfig> {
-  return (webpackConfig) => {
+  return (config) => {
+
+    config.plugins = config.plugins || [];
+    config.module = config.module || { rules: [] };
 
     if (options.deployUrl) {
       const assetBaseUrl = options.deployUrl!;
 
-      webpackConfig.module?.rules?.push(
+      config.module.rules.push(
         getAssetUrlsLoaderRule(assetBaseUrl)
       );
 
-      webpackConfig.plugins?.push(
+      config.plugins.push(
         new SkyuxAssetUrlsPlugin()
       );
     }
 
-    webpackConfig.plugins?.push(
+    config.plugins.push(
       new SkyuxSaveHostMetadataPlugin()
     );
 
-    return webpackConfig;
+    return config;
   };
 
 }

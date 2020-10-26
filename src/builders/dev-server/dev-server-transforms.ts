@@ -12,7 +12,7 @@ import {
 
 import {
   SkyuxAssetUrlsPlugin
-} from '../../webpack/plugins/asset-urls/asset-urls';
+} from '../../webpack/plugins/asset-urls/asset-urls-plugin';
 
 import {
   SkyuxOpenHostURLPlugin
@@ -39,20 +39,21 @@ function getDevServerWepbackConfigTransformer(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
 ): ExecutionTransformer<WebpackConfig> {
-  return (webpackConfig) => {
+  return (config) => {
+
+    config.plugins = config.plugins || [];
+    config.module = config.module || { rules: [] };
 
     if (options.skyuxLaunch === 'host') {
 
       const assetBaseUrl = options.deployUrl!;
+      const pathName = context.target!.project!;
 
-      /*istanbul ignore next line*/
-      const pathName = context.target?.project!;
-
-      webpackConfig.module?.rules?.push(
+      config.module.rules.push(
         getAssetUrlsLoaderRule(assetBaseUrl)
       );
 
-      webpackConfig.plugins?.push(
+      config.plugins.push(
         new SkyuxAssetUrlsPlugin(),
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
@@ -62,7 +63,7 @@ function getDevServerWepbackConfigTransformer(
       );
     }
 
-    return webpackConfig;
+    return config;
   };
 }
 
