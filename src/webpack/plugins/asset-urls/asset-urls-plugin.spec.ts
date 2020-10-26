@@ -1,8 +1,8 @@
 import mock from 'mock-require';
 
 import {
-  SkyuxAssetHelper
-} from '../../../shared/asset-helper';
+  SkyuxApplicationAssetHelper
+} from '../../app-asset-helper';
 
 describe('Asset URLs plugin', () => {
 
@@ -42,6 +42,7 @@ describe('Asset URLs plugin', () => {
 
   afterEach(() => {
     mock.stopAll();
+    SkyuxApplicationAssetHelper.flush();
   });
 
   it('should replace asset paths with hard URLs', () => {
@@ -51,7 +52,7 @@ describe('Asset URLs plugin', () => {
       }
     };
 
-    SkyuxAssetHelper.queue({
+    SkyuxApplicationAssetHelper.queue({
       filePath: 'assets/foo.gif',
       url: 'https://foobar.com/'
     });

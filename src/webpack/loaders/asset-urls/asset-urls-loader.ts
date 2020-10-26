@@ -9,8 +9,8 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxAssetHelper
-} from '../../../shared/asset-helper';
+  SkyuxApplicationAssetHelper
+} from '../../app-asset-helper';
 
 import {
   ensureTrailingSlash
@@ -52,7 +52,7 @@ export default function skyuxAssetUrlsLoader(
       const baseUrl = ensureTrailingSlash(options.assetBaseUrl as string);
       const url = `${baseUrl}${filePath.replace(/\\/g, '/')}`;
 
-      SkyuxAssetHelper.queue({ filePath, url });
+      SkyuxApplicationAssetHelper.queue({ filePath, url });
 
       return content;
     });

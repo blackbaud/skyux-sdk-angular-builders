@@ -1,8 +1,8 @@
 import mock from 'mock-require';
 
 import {
-  SkyuxAssetHelper
-} from '../../../shared/asset-helper';
+  SkyuxApplicationAssetHelper
+} from '../../app-asset-helper';
 
 describe('Asset URLs loader', () => {
 
@@ -10,7 +10,7 @@ describe('Asset URLs loader', () => {
   let mockContext: any;
 
   beforeEach(() => {
-    queueSpy = spyOn(SkyuxAssetHelper, 'queue').and.callThrough();
+    queueSpy = spyOn(SkyuxApplicationAssetHelper, 'queue').and.callThrough();
     mockContext = {
       query: {
         assetBaseUrl: 'https://foobar.com/'
@@ -20,7 +20,7 @@ describe('Asset URLs loader', () => {
 
   afterEach(() => {
     mock.stopAll();
-    SkyuxAssetHelper.flush();
+    SkyuxApplicationAssetHelper.flush();
   });
 
   it('should add asset paths from HTML to the asset helper queue', () => {

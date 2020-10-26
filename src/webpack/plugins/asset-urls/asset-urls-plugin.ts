@@ -3,8 +3,8 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxAssetHelper
-} from '../../../shared/asset-helper';
+  SkyuxApplicationAssetHelper
+} from '../../app-asset-helper';
 
 import {
   addAssetSourceTap
@@ -22,7 +22,7 @@ export class SkyuxAssetUrlsPlugin {
     addAssetSourceTap(
       PLUGIN_NAME,
       compiler,
-      (content: string) => SkyuxAssetHelper.replaceAssetPaths(content)
+      (content: string) => SkyuxApplicationAssetHelper.replaceAssetPaths(content)
     );
   }
 

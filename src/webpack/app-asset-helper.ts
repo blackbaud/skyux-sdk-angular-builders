@@ -9,7 +9,7 @@ interface Asset {
 /**
  * Tracks all assets found in an Angular application's HTML templates.
  */
-export abstract class SkyuxAssetHelper {
+export abstract class SkyuxApplicationAssetHelper {
 
   private static assets: Asset[] = [];
 
