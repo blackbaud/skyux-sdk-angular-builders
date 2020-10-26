@@ -12,7 +12,7 @@ import {
 
 import {
   SkyuxOpenHostURLPlugin
-} from '../../webpack/plugins/open-host-url/open-host-url';
+} from '../../webpack/plugins/open-host-url/open-host-url-plugin';
 
 import {
   SkyuxDevServerBuilderOptions
