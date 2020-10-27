@@ -16,6 +16,9 @@ import {
 
 const ASSETS_REGEX = /assets\/.*?\.[\.\w]+/gi;
 
+// Prevent the same asset from being processed more than once.
+const processedAssets: string[] = [];
+
 export function saveAndEmitAssets(
   this: loader.LoaderContext,
   content: string,
@@ -23,13 +26,9 @@ export function saveAndEmitAssets(
     assetBaseUrl: string;
   }
 ): void {
-
-  // Prevent the same file from being processed more than once.
-  const processedFiles: string[] = [];
-
   content.match(ASSETS_REGEX)?.forEach(filePath => {
-    if (!processedFiles.includes(filePath)) {
-      processedFiles.push(filePath);
+    if (!processedAssets.includes(filePath)) {
+      processedAssets.push(filePath);
 
       const parsed = path.parse(filePath);
       const filePathResolved = path.resolve(process.cwd(), 'src', filePath);
