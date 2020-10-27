@@ -41,9 +41,7 @@ describe('dev-server builder', () => {
       port: 4200
     };
 
-    defaultWebpackConfig = {
-      plugins: []
-    };
+    defaultWebpackConfig = {};
 
     actualWebpackConfig = {};
 
@@ -202,18 +200,7 @@ describe('dev-server builder', () => {
 
       expect(actualWebpackConfig.plugins?.length).toEqual(2);
     });
-
-    it('should not add plugin if plugins array is undefined', async () => {
-      delete defaultWebpackConfig.plugins;
-
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'host'
-      });
-
-      await (mock.reRequire('./dev-server'));
-
-      expect(actualWebpackConfig.plugins).toBeUndefined();
-    });
+    
   });
 
 });

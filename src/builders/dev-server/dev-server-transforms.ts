@@ -33,11 +33,13 @@ function getDevServerWepbackConfigTransformer(
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
 
+    webpackConfig.plugins = webpackConfig.plugins || [];
+
     if (options.skyuxLaunch === 'host') {
       /*istanbul ignore next line*/
       const pathName = context.target?.project!;
 
-      webpackConfig.plugins?.push(
+      webpackConfig.plugins.push(
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
           localUrl: getLocalUrlFromOptions(options),

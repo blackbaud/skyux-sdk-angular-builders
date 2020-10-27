@@ -38,9 +38,7 @@ describe('browser builder', () => {
       tsConfig: ''
     };
 
-    defaultWebpackConfig = {
-      plugins: []
-    };
+    defaultWebpackConfig = {};
 
     actualWebpackConfig = {};
 
@@ -88,14 +86,6 @@ describe('browser builder', () => {
     await (mock.reRequire('./browser'));
 
     expect(actualWebpackConfig.plugins?.length).toEqual(2);
-  });
-
-  it('should not add plugin if plugins array is undefined', async () => {
-    delete defaultWebpackConfig.plugins;
-
-    await (mock.reRequire('./browser'));
-
-    expect(actualWebpackConfig.plugins).toBeUndefined();
   });
 
 });
