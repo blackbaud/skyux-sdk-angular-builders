@@ -7,8 +7,16 @@ import {
 } from '@angular-devkit/build-angular';
 
 import {
+  AngularCompilerPlugin
+} from '@ngtools/webpack';
+
+import {
   Configuration as WebpackConfig
 } from 'webpack';
+
+import {
+  getAssetUrlsLoaderRules
+} from '../../webpack/loaders/asset-urls/asset-urls-loader-rules';
 
 import {
   SkyuxOpenHostURLPlugin
@@ -23,6 +31,15 @@ import {
 } from './dev-server-utils';
 
 /**
+ * Allows other Webpack loaders to process component HTML templates.
+ * @see https://github.com/angular/angular-cli/issues/15861
+ */
+function unlockComponentTemplates(webpackConfig: WebpackConfig): void {
+  const compilerPlugin = webpackConfig.plugins?.find(plugin => plugin instanceof AngularCompilerPlugin);
+  (compilerPlugin as AngularCompilerPlugin).options.directTemplateLoading = false;
+}
+
+/**
  * Allows adjustments to the default Angular "dev-server" webpack config.
  * @param options The input options passed to the builder.
  * @param context The context of the builder execution.
@@ -34,10 +51,12 @@ function getDevServerWepbackConfigTransformer(
   return (webpackConfig) => {
 
     webpackConfig.plugins = webpackConfig.plugins || [];
+    webpackConfig.module = webpackConfig.module || { rules: [] };
 
     if (options.skyuxLaunch === 'host') {
       /*istanbul ignore next line*/
       const pathName = context.target?.project!;
+      const assetBaseUrl = options.deployUrl!;
 
       webpackConfig.plugins.push(
         new SkyuxOpenHostURLPlugin({
@@ -46,6 +65,12 @@ function getDevServerWepbackConfigTransformer(
           pathName
         })
       );
+
+      webpackConfig.module.rules.push(
+        ...getAssetUrlsLoaderRules(assetBaseUrl)
+      );
+
+      unlockComponentTemplates(webpackConfig);
     }
 
     return webpackConfig;
