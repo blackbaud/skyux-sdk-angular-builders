@@ -34,7 +34,7 @@ export function saveAndEmitAssets(
       const parsed = path.parse(filePath);
       const filePathResolved = path.resolve(process.cwd(), 'src', filePath);
       const hash = hasha.fromFileSync(filePathResolved);
-      const filePathHashed = `${parsed.dir}.${hash}${parsed.ext}`;
+      const filePathHashed = `${parsed.dir}/${parsed.name}.${hash}${parsed.ext}`;
 
       const baseUrl = ensureTrailingSlash(config.assetBaseUrl);
       const url = `${baseUrl}${filePathHashed.replace(/\\/g, '/')}`;
