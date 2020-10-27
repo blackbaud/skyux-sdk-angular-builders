@@ -12,17 +12,16 @@ import {
 } from '../../host-asset-utils';
 
 import {
-  addAssetSourceTap
-} from '../../webpack-stats-utils';
+  addWebpackAssetsEmitTap
+} from '../../webpack-utils';
 
 const PLUGIN_NAME = 'skyux-save-host-metadata-plugin';
 
 export class SkyuxSaveHostMetadataPlugin {
-
   public apply(compiler: Compiler): void {
 
     // Add our fallback variable to the bottom of the JS source files.
-    addAssetSourceTap(
+    addWebpackAssetsEmitTap(
       PLUGIN_NAME,
       compiler,
       (content, file) => `${content}\nvar ${getFallbackName(file)} = true;`

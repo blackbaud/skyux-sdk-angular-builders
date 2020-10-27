@@ -8,17 +8,12 @@ import {
   loader
 } from 'webpack';
 
-// import {
-//   SkyuxApplicationAssetHelper
-// } from '../../app-asset-helper';
-
-// import {
-//   ensureTrailingSlash
-// } from '../../../shared/url-utils';
+import {
+  saveAndEmitAssets
+} from '../../app-asset-utils';
 
 const schema = require('./schema.json');
 
-const ASSETS_REGEX = /assets\/.*?\.[\.\w]+/gi;
 const COMPONENT_REGEX = /@Component/;
 const TEMPLATE_REGEX = /template\s*:(\s*['"`]([\s\S]*?)['"`]\s*([,}]))/gm;
 
@@ -38,26 +33,11 @@ export default function assetsInTypeScriptLoader(
 
     const options = getOptions(this);
     validateOptions(schema, options, {
-      name: 'SKY UX HTML Assets Loader'
+      name: 'SKY UX Assets in TypeScript Loader'
     });
 
-    // Prevent the same file from being processed more than once.
-    const processedFiles: string[] = [];
-
-    content.match(ASSETS_REGEX)?.forEach(filePath => {
-      if (!processedFiles.includes(filePath)) {
-        processedFiles.push(filePath);
-
-        // const baseUrl = ensureTrailingSlash(options.assetBaseUrl as string);
-        // const url = `${baseUrl}${filePath.replace(/\\/g, '/')}`;
-
-        // SkyuxApplicationAssetHelper.queue({
-        //   filePath,
-        //   url
-        // });
-
-        return content;
-      }
+    saveAndEmitAssets(content, {
+      assetBaseUrl: options.assetBaseUrl as string
     });
   }
 

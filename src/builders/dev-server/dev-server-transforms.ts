@@ -19,6 +19,10 @@ import {
 } from '../../webpack/loaders/asset-urls/asset-urls-loader-rules';
 
 import {
+  SkyuxAssetUrlsPlugin
+} from '../../webpack/plugins/asset-urls/asset-urls.plugin';
+
+import {
   SkyuxOpenHostURLPlugin
 } from '../../webpack/plugins/open-host-url/open-host-url-plugin';
 
@@ -64,6 +68,10 @@ function getDevServerWepbackConfigTransformer(
           localUrl: getLocalUrlFromOptions(options),
           pathName
         })
+      );
+
+      webpackConfig.plugins.push(
+        new SkyuxAssetUrlsPlugin()
       );
 
       webpackConfig.module.rules.push(

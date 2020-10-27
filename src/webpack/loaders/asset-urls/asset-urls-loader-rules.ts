@@ -9,16 +9,17 @@ export function getAssetUrlsLoaderRules(
 ): RuleSetRule[] {
 
   const rules: RuleSetRule[] = [
-    // {
-    //   enforce: 'pre',
-    //   test: /\.ts$/,
-    //   use: {
-    //     loader: path.resolve(__dirname, './assets-in-typescript.loader'),
-    //     options: {
-    //       assetBaseUrl
-    //     }
-    //   }
-    // },
+    {
+      // Read each TypeScript file before `@ngtools/webpack` gets ahold of them.
+      enforce: 'pre',
+      test: /\.ts$/,
+      use: {
+        loader: path.resolve(__dirname, './assets-in-typescript.loader'),
+        options: {
+          assetBaseUrl
+        }
+      }
+    },
     {
       test: /\.html$/,
       use: [
@@ -32,8 +33,6 @@ export function getAssetUrlsLoaderRules(
       ]
     }
   ];
-
-  console.log('Return this:', rules);
 
   return rules;
 }
