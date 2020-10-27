@@ -14,7 +14,7 @@ import * as applyAppAssetsConfigUtil from '../../webpack/app-assets-utils';
 
 import {
   SkyuxOpenHostURLPlugin
-} from '../../webpack/plugins/open-host-url/open-host-url-plugin';
+} from '../../webpack/plugins/open-host-url/open-host-url.plugin';
 
 import {
   SkyuxDevServerBuilderOptions

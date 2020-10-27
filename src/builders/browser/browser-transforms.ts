@@ -12,7 +12,7 @@ import {
 
 import {
   SkyuxSaveHostMetadataPlugin
-} from '../../webpack/plugins/save-host-metadata/save-host-metadata-plugin';
+} from '../../webpack/plugins/save-host-metadata/save-host-metadata.plugin';
 
 import {
   SkyuxBrowserBuilderOptions
