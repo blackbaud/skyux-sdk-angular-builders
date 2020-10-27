@@ -4,7 +4,7 @@ import {
   Compiler
 } from 'webpack';
 
-type AssetSourceCallback = (content: string, filePath: string) => void;
+type AssetSourceCallback = (content: string, filePath: string) => string;
 
 /**
  * Allows a Webpack plugin to modify the contents of all emitted JavaScript assets.
@@ -24,7 +24,5 @@ export function addWebpackAssetsEmitTap(
         asset.source = () => callback(content, filePath);
       }
     }
-
-    return true;
   });
 }
