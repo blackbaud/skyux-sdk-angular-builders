@@ -41,17 +41,20 @@ function getDevServerWepbackConfigTransformer(
 
     if (options.skyuxLaunch === 'host') {
 
-      const assetBaseUrl = options.deployUrl!;
+      /* istanbul ignore next line */
       const pathName = context.target!.project!;
 
       webpackConfig.plugins.push(
-        new SkyuxAssetUrlsPlugin({
-          assetBaseUrl
-        }),
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
           localUrl: getLocalUrlFromOptions(options),
           pathName
+        })
+      );
+
+      webpackConfig.plugins.push(
+        new SkyuxAssetUrlsPlugin({
+          assetBaseUrl: options.deployUrl!
         })
       );
     }

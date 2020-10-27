@@ -30,11 +30,9 @@ function getBrowserWepbackConfigTransformer(
     webpackConfig.plugins = webpackConfig.plugins || [];
 
     if (options.deployUrl) {
-      const assetBaseUrl = options.deployUrl;
-
       webpackConfig.plugins.push(
         new SkyuxAssetUrlsPlugin({
-          assetBaseUrl
+          assetBaseUrl: options.deployUrl
         })
       );
     }
