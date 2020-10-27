@@ -10,7 +10,7 @@ import {
 
 import {
   saveAndEmitAssets
-} from '../../app-asset-utils';
+} from './app-assets-utils';
 
 const schema = require('./schema.json');
 
@@ -36,9 +36,9 @@ export default function assetsInTypeScriptLoader(
       name: 'SKY UX Assets in TypeScript Loader'
     });
 
-    saveAndEmitAssets(content, {
+    saveAndEmitAssets.apply(this, [content, {
       assetBaseUrl: options.assetBaseUrl as string
-    });
+    }]);
   }
 
   return content;

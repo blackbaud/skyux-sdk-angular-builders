@@ -3,8 +3,8 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxApplicationAssetState
-} from '../../app-asset-state';
+  SkyuxAppAssetsState
+} from '../../app-assets-state';
 
 import {
   addWebpackAssetsEmitTap
@@ -18,12 +18,12 @@ const PLUGIN_NAME = 'skyux-asset-urls-plugin';
  * so we can only alter the contents of the JavaScript bundle after the compilation is done.
  * @see https://github.com/angular/angular-cli/issues/16544#issuecomment-571245469
  */
-export class SkyuxAssetUrlsPlugin {
+export class SkyuxAppAssetsPlugin {
   public apply(compiler: Compiler): void {
     addWebpackAssetsEmitTap(
       PLUGIN_NAME,
       compiler,
-      (content) => SkyuxApplicationAssetState.replaceFilePaths(content)
+      (content) => SkyuxAppAssetsState.replaceFilePaths(content)
     );
   }
 }

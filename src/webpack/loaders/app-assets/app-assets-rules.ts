@@ -4,7 +4,7 @@ import {
   RuleSetRule
 } from 'webpack';
 
-export function getAssetUrlsLoaderRules(
+export function getAppAssetsRules(
   assetBaseUrl: string
 ): RuleSetRule[] {
 

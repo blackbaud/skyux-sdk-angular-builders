@@ -15,12 +15,12 @@ import {
 } from 'webpack';
 
 import {
-  getAssetUrlsLoaderRules
-} from '../../webpack/loaders/asset-urls/asset-urls-loader-rules';
+  getAppAssetsRules
+} from '../../webpack/loaders/app-assets/app-assets-rules';
 
 import {
-  SkyuxAssetUrlsPlugin
-} from '../../webpack/plugins/asset-urls/asset-urls.plugin';
+  SkyuxAppAssetsPlugin
+} from '../../webpack/plugins/app-assets/app-assets.plugin';
 
 import {
   SkyuxOpenHostURLPlugin
@@ -71,11 +71,11 @@ function getDevServerWepbackConfigTransformer(
       );
 
       webpackConfig.plugins.push(
-        new SkyuxAssetUrlsPlugin()
+        new SkyuxAppAssetsPlugin()
       );
 
       webpackConfig.module.rules.push(
-        ...getAssetUrlsLoaderRules(assetBaseUrl)
+        ...getAppAssetsRules(assetBaseUrl)
       );
 
       unlockComponentTemplates(webpackConfig);

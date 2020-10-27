@@ -3,7 +3,7 @@ interface Asset {
   url: string;
 }
 
-export abstract class SkyuxApplicationAssetState {
+export abstract class SkyuxAppAssetsState {
 
   private static assets: {
     [filePath: string]: {
@@ -18,7 +18,7 @@ export abstract class SkyuxApplicationAssetState {
   }
 
   public static replaceFilePaths(content: string): string {
-    for (const [filePath, replacement] of Object.entries(SkyuxApplicationAssetState.assets)) {
+    for (const [filePath, replacement] of Object.entries(SkyuxAppAssetsState.assets)) {
       content = content.replace(
         new RegExp(filePath, 'gi'),
         replacement.url

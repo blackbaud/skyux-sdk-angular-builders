@@ -3,18 +3,26 @@ import hasha from 'hasha';
 import path from 'path';
 
 import {
-  ensureTrailingSlash
-} from '../shared/url-utils';
+  loader
+} from 'webpack';
 
 import {
-  SkyuxApplicationAssetState
-} from './app-asset-state';
+  ensureTrailingSlash
+} from '../../../shared/url-utils';
+
+import {
+  SkyuxAppAssetsState
+} from '../../app-assets-state';
 
 const ASSETS_REGEX = /assets\/.*?\.[\.\w]+/gi;
 
-export function saveAndEmitAssets(content: string, config: {
-  assetBaseUrl: string;
-}): void {
+export function saveAndEmitAssets(
+  this: loader.LoaderContext,
+  content: string,
+  config: {
+    assetBaseUrl: string;
+  }
+): void {
 
   // Prevent the same file from being processed more than once.
   const processedFiles: string[] = [];
@@ -32,10 +40,14 @@ export function saveAndEmitAssets(content: string, config: {
       const url = `${baseUrl}${filePathHashed.replace(/\\/g, '/')}`;
 
       // Emit the new file path to Webpack.
-      this.emitFile(filePathHashed, this.fs.readFileSync(filePathResolved), undefined);
+      this.emitFile(
+        filePathHashed,
+        this.fs.readFileSync(filePathResolved),
+        undefined
+      );
 
       // Save the new file URL to replace the original file path in the compiled bundle.
-      SkyuxApplicationAssetState.queue({
+      SkyuxAppAssetsState.queue({
         filePath,
         url
       });
