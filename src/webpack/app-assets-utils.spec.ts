@@ -1,9 +1,14 @@
 import {
   AngularCompilerPlugin
 } from '@ngtools/webpack';
+
 import mock from 'mock-require';
+
 import webpack from 'webpack';
-import { SkyuxAppAssetsPlugin } from './plugins/app-assets/app-assets.plugin';
+
+import {
+  SkyuxAppAssetsPlugin
+} from './plugins/app-assets/app-assets.plugin';
 
 describe('App assets utils', () => {
 

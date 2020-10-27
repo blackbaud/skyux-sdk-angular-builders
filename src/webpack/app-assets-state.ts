@@ -39,7 +39,7 @@ export abstract class SkyuxAppAssetsState {
   }
 
   public static flush(): void {
-    this.assets = {};
+    SkyuxAppAssetsState.assets = {};
   }
 
 }

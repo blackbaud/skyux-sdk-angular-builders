@@ -22,7 +22,7 @@ export function applyAppAssetsConfig(
   webpackConfig.plugins = webpackConfig.plugins || [];
   webpackConfig.module = webpackConfig.module || { rules: [] };
 
-  const assetBaseUrl = options.deployUrl!;
+  const assetBaseUrl = options.deployUrl || '';
 
   webpackConfig.module.rules.push(
     {

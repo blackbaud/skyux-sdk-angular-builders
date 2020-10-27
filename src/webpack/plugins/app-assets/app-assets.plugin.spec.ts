@@ -14,7 +14,6 @@ describe('Asset URLs plugin', () => {
   };
   let mockCompiler: any;
 
-
   beforeEach(() => {
     mockAssets = {};
 

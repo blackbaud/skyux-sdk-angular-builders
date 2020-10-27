@@ -50,9 +50,9 @@ function getDevServerWepbackConfigTransformer(
           pathName
         })
       );
-
-      applyAppAssetsConfig(webpackConfig, options);
     }
+
+    applyAppAssetsConfig(webpackConfig, options);
 
     return webpackConfig;
   };

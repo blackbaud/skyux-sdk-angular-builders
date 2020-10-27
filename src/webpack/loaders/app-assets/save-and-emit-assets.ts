@@ -39,7 +39,7 @@ export function saveAndEmitAssets(
       const baseUrl = ensureTrailingSlash(config.assetBaseUrl);
       const url = `${baseUrl}${filePathHashed.replace(/\\/g, '/')}`;
 
-      // Emit the new file path to Webpack.
+      // Emit the new file to Webpack.
       this.emitFile(
         filePathHashed,
         this.fs.readFileSync(filePathResolved),

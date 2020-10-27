@@ -193,14 +193,6 @@ describe('dev-server builder', () => {
     it('should add app assets loaders and plugins', async () => {
       await (mock.reRequire('./dev-server'));
 
-      expect(applyAppAssetsConfigSpy).not.toHaveBeenCalled();
-
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'host'
-      });
-
-      await (mock.reRequire('./dev-server'));
-
       expect(applyAppAssetsConfigSpy).toHaveBeenCalled();
     });
 
