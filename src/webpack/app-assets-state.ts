@@ -1,15 +1,25 @@
 interface Asset {
+  /**
+   * The asset's original file path.
+   */
   filePath: string;
+
+  /**
+   * The asset's URL, which will replace the original file path.
+   */
   url: string;
 }
 
+/**
+ * A singleton that tracks all assets found in an Angular application's HTML templates.
+ */
 export abstract class SkyuxAppAssetsState {
 
   private static assets: {
     [filePath: string]: {
       url: string;
     }
-  } = {};
+  } = { };
 
   public static queue(asset: Asset): void {
     this.assets[asset.filePath] = {
@@ -26,6 +36,10 @@ export abstract class SkyuxAppAssetsState {
     }
 
     return content;
+  }
+
+  public static flush(): void {
+    this.assets = {};
   }
 
 }

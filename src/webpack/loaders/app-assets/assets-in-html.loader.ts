@@ -10,10 +10,15 @@ import {
 
 import {
   saveAndEmitAssets
-} from './app-assets-utils';
+} from './save-and-emit-assets';
 
 const schema = require('./schema.json');
 
+/**
+ * This loader registers all asset paths that are found in Angular components'
+ * HTML templates (e.g., `@Component({ templateUrl: './foo.component.html' })`).
+ * The relative paths are replaced with absolute URLs in the `SkyuxAssetUrlsPlugin`.
+ */
 export default function assetsInHtmlLoader(
   this: loader.LoaderContext,
   content: string
@@ -24,9 +29,9 @@ export default function assetsInHtmlLoader(
     name: 'SKY UX Assets in HTML Loader'
   });
 
-  saveAndEmitAssets.apply(this, [content, {
+  saveAndEmitAssets.call(this, content, {
     assetBaseUrl: options.assetBaseUrl as string
-  }]);
+  });
 
   return content;
 }
