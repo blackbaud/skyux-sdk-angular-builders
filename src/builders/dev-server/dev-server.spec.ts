@@ -10,9 +10,11 @@ import {
   of
 } from 'rxjs';
 
+import * as applyAppAssetsConfigUtil from '../../webpack/app-assets-utils';
+
 import {
   SkyuxOpenHostURLPlugin
-} from '../../webpack/plugins/open-host-url/open-host-url';
+} from '../../webpack/plugins/open-host-url/open-host-url.plugin';
 
 import {
   SkyuxDevServerBuilderOptions
@@ -28,6 +30,7 @@ class MockWebpackPlugin {
 
 describe('dev-server builder', () => {
 
+  let applyAppAssetsConfigSpy: jasmine.Spy;
   let createBuilderSpy: jasmine.Spy;
   let executDevServerBuilderSpy: jasmine.Spy;
   let defaultOptions: SkyuxDevServerBuilderOptions;
@@ -42,6 +45,7 @@ describe('dev-server builder', () => {
     };
 
     defaultWebpackConfig = {};
+
     actualWebpackConfig = {};
 
     createBuilderSpy = jasmine.createSpy('createBuilder').and
@@ -64,6 +68,8 @@ describe('dev-server builder', () => {
 
     spyOnProperty(buildAngular, 'executeDevServerBuilder', 'get').and
       .returnValue(executDevServerBuilderSpy);
+
+    applyAppAssetsConfigSpy = spyOn(applyAppAssetsConfigUtil, 'applyAppAssetsConfig');
   });
 
   afterEach(() => {
@@ -184,6 +190,12 @@ describe('dev-server builder', () => {
       expect(plugin).toBeDefined();
     });
 
+    it('should add app assets loaders and plugins', async () => {
+      await (mock.reRequire('./dev-server'));
+
+      expect(applyAppAssetsConfigSpy).toHaveBeenCalled();
+    });
+
     it('should not affect other plugins', async () => {
       defaultWebpackConfig = {
         plugins: [
@@ -199,6 +211,7 @@ describe('dev-server builder', () => {
 
       expect(actualWebpackConfig.plugins?.length).toEqual(2);
     });
+
   });
 
 });

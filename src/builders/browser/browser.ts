@@ -32,7 +32,7 @@ async function executeSkyuxBrowserBuilder(
   await executeBrowserBuilder(
     options,
     context,
-    getBrowserTransforms()
+    getBrowserTransforms(options)
   ).toPromise();
 
   if (options.skyuxServe) {

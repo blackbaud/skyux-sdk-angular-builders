@@ -6,9 +6,11 @@ import {
   of
 } from 'rxjs';
 
+import * as applyAppAssetsConfigUtil from '../../webpack/app-assets-utils';
+
 import {
   SkyuxSaveHostMetadataPlugin
-} from '../../webpack/plugins/save-host-metadata/save-host-metadata';
+} from '../../webpack/plugins/save-host-metadata/save-host-metadata.plugin';
 
 import {
   SkyuxBrowserBuilderOptions
@@ -24,6 +26,7 @@ class MockWebpackPlugin {
 
 describe('browser builder', () => {
 
+  let applyAppAssetsConfigSpy: jasmine.Spy;
   let createBuilderSpy: jasmine.Spy;
   let executeBrowserBuilderSpy: jasmine.Spy;
   let defaultOptions: SkyuxBrowserBuilderOptions;
@@ -39,6 +42,7 @@ describe('browser builder', () => {
     };
 
     defaultWebpackConfig = {};
+
     actualWebpackConfig = {};
 
     createBuilderSpy = jasmine.createSpy('createBuilder').and
@@ -61,6 +65,8 @@ describe('browser builder', () => {
 
     spyOnProperty(buildAngular, 'executeBrowserBuilder', 'get').and
       .returnValue(executeBrowserBuilderSpy);
+
+    applyAppAssetsConfigSpy = spyOn(applyAppAssetsConfigUtil, 'applyAppAssetsConfig');
   });
 
   afterEach(() => {
@@ -73,6 +79,12 @@ describe('browser builder', () => {
     const plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxSaveHostMetadataPlugin);
 
     expect(plugin).toBeDefined();
+  });
+
+  it('should add app assets loaders and plugins', async () => {
+    await (mock.reRequire('./browser'));
+
+    expect(applyAppAssetsConfigSpy).toHaveBeenCalled();
   });
 
   it('should not affect other plugins', async () => {
