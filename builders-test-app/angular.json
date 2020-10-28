@@ -122,6 +122,10 @@
               "devServerTarget": "builders-test:serve:production"
             }
           }
+        },
+        "skyux-upgrade-dependencies": {
+          "builder": "@skyux-sdk/angular-builders:upgrade-dependencies",
+          "options": {}
         }
       }
     }
