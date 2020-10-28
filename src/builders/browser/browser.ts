@@ -31,7 +31,7 @@ function executeSkyuxBrowserBuilder(
   return executeBrowserBuilder(
     options,
     context,
-    getBrowserTransforms()
+    getBrowserTransforms(options)
   );
 }
 

@@ -11,6 +11,10 @@ import {
 } from 'webpack';
 
 import {
+  applyAppAssetsConfig
+} from '../../webpack/app-assets-utils';
+
+import {
   SkyuxOpenHostURLPlugin
 } from '../../webpack/plugins/open-host-url/open-host-url.plugin';
 
@@ -47,6 +51,8 @@ function getDevServerWepbackConfigTransformer(
         })
       );
     }
+
+    applyAppAssetsConfig(webpackConfig, options);
 
     return webpackConfig;
   };
