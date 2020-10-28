@@ -6,7 +6,7 @@ import {
   selector: 'app-lazy-loaded',
   template: `
   Lazy loaded!
-  <img src="assets/bb-image-2.png">
+  <img src="assets/image-2.png">
   `
 })
 export class LazyLoadedComponent { }
