@@ -1,4 +1,8 @@
-# 4.0.0-alpha.3 (2020-10-28)
+# 4.0.0-alpha.4 (2020-10-28)
+
+- Fixed the release.
+
+~~# 4.0.0-alpha.3 (2020-10-28)~~
 
 - Updated the `dev-server` builder to launch an Angular CLI application with the SKY UX Host server. [#16](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/16)
 - Updated the `dev-server` builder to send the `app-root` tag name to the SKY UX Host server to bootstrap the application. [#19](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/19)
