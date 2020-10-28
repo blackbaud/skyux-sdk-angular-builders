@@ -1,8 +1,4 @@
-# 4.0.0-alpha.5 (2020-10-28)
-
-- Fixed the release.
-
-~~# 4.0.0-alpha.4 (2020-10-28)~~
+# 4.0.0-alpha.4 (2020-10-28)
 
 - Fixed the release.
 
