@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "properties": {
+    "skyuxHostUrl": {
+      "type": "string",
+      "description": "Host URL"
+    },
+    "skyuxLaunch": {
+      "type": "string",
+      "description": "Opens URL in localhost or with the SKY UX host URL.",
+      "enum": [
+        "local",
+        "host"
+      ]
+    }
+  }
+}

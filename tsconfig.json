@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "tsconfig",
     "target": "es6",
     "declaration": true,
     "esModuleInterop": true,
@@ -17,7 +16,9 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    "types": ["node", "jasmine"],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "outDir": "./dist"
   },
   "include": [
