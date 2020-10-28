@@ -1,9 +1,12 @@
 {
   "name": "@skyux-sdk/angular-builders",
-  "version": "4.0.0-alpha.4",
+  "version": "4.0.0-alpha.5",
   "repository": {
     "url": "https://github.com/blackbaud/skyux-sdk-angular-builders"
   },
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
   "builders": "builders.json",
   "schematics": "./collection.json",
