@@ -1,8 +1,10 @@
-name: "Publish"
+name: Publish
+
 on:
   push:
     tags:
       - '*.*.*'
+      - '*.*.*-alpha.*'
 
 jobs:
   publish:
@@ -14,10 +16,12 @@ jobs:
       with:
         node-version: '12.x'
         registry-url: 'https://registry.npmjs.org'
-    - run: |
-      npm ci
-      npm run build
-      cd dist
-    - run: npm publish
+    - name: Build
+      run: |
+        npm install
+        npm run build
+    - name: Publish
+      run: npm publish
+      working-directory: dist
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
