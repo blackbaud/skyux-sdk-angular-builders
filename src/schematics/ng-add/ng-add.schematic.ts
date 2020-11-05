@@ -13,6 +13,10 @@ import {
   updateWorkspace
 } from '@schematics/angular/utility/config';
 
+import {
+  SkyuxDevServerBuilderOptions
+  } from '../../builders/dev-server/dev-server-options';
+
 export function ngAdd(options: any): Rule {
   return (tree: Tree, context: SchematicContext) => {
     const workspace = getWorkspace(tree);
@@ -47,6 +51,7 @@ export function ngAdd(options: any): Rule {
       );
     }
     serve.builder = '@skyux-sdk/angular-builders:dev-server' as any;
+    (serve.options as SkyuxDevServerBuilderOptions).skyuxLaunch = 'host';
 
     // Install as a development dependency.
     context.addTask(new NodePackageInstallTask());
