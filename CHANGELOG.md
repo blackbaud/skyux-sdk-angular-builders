@@ -1,3 +1,7 @@
+# 4.0.0-alpha.5 (2020-11-06)
+
+- Updated the `dev-server` builder to set `skyuxLaunch` to `"host"` in the project's `angular.json` file. [#33](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/33)
+
 # 4.0.0-alpha.4 (2020-10-28)
 
 - Fixed the release.
