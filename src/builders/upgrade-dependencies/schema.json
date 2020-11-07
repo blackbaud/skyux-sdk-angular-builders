@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "dryRun": {
+      "type": "boolean",
+      "default": false,
+      "description": "Checks for packages that need updates, but does not modify the package.json file."
+    }
+  }
+}

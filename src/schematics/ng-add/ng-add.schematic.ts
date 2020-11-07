@@ -53,6 +53,18 @@ export function ngAdd(options: any): Rule {
     serve.builder = '@skyux-sdk/angular-builders:dev-server' as any;
     (serve.options as SkyuxDevServerBuilderOptions).skyuxLaunch = 'host';
 
+    // Create a new architect for upgrading dependencies.
+    architect['skyux-upgrade-dependencies'] = {
+      builder: '@skyux-sdk/angular-builders:upgrade-dependencies',
+      options: {}
+    };
+
+    // Create a new architect for upgrading dependencies.
+    architect['skyux-upgrade-dependencies'] = {
+      builder: '@skyux-sdk/angular-builders:upgrade-dependencies',
+      options: {}
+    };
+
     // Install as a development dependency.
     context.addTask(new NodePackageInstallTask());
 

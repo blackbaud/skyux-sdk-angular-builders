@@ -10,6 +10,11 @@
       "implementation": "./src/builders/dev-server/dev-server",
       "schema": "./src/builders/dev-server/schema.ext.json",
       "description": "SKY UX builder for `ng serve`"
+    },
+    "upgrade-dependencies": {
+      "implementation": "./src/builders/upgrade-dependencies/upgrade-dependencies",
+      "schema": "./src/builders/upgrade-dependencies/schema.json",
+      "description": "Sets appropriate versions for package dependencies."
     }
   }
 }

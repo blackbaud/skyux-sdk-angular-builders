@@ -7,6 +7,8 @@
   "functions": 100,
   "statements": 100,
   "extension": ".ts",
+  "sourceMap": true,
+  "instrument": true,
   "include": [
     "src/**/*.ts"
   ],
