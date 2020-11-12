@@ -25,6 +25,14 @@ function copyFilesToDist() {
 function mergeBuilderSchemas() {
   const schemaConfigs = [
     {
+      baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/browser/schema.json',
+      schemaPath: './dist/src/builders/browser/schema.ext.json'
+    },
+    {
+      baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/dev-server/schema.json',
+      schemaPath: './dist/src/builders/dev-server/schema.ext.json'
+    },
+    {
       baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/karma/schema.json',
       schemaPath: './dist/src/builders/karma/schema.ext.json'
     }
@@ -41,6 +49,8 @@ function mergeBuilderSchemas() {
       encoding: 'utf8',
       spaces: 2
     });
+
+    console.log(`Successfully merged ${config.schemaPath}`);
   });
 }
 

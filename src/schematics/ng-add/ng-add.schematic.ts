@@ -13,33 +13,53 @@ import {
   updateWorkspace
 } from '@schematics/angular/utility/config';
 
-import fs from 'fs-extra';
-
-import path from 'path';
+import {
+  SkyuxDevServerBuilderOptions
+  } from '../../builders/dev-server/dev-server-options';
 
 export function ngAdd(options: any): Rule {
   return (tree: Tree, context: SchematicContext) => {
     const workspace = getWorkspace(tree);
-    const projectName = options.project || workspace.defaultProject;
-    const architect = workspace.projects[projectName].architect;
 
-    // Assumes the builder name is in the package.json (found from the dist folder).
-    const packageJson = fs.readJsonSync(path.join(__dirname, '../../../../package.json'));
-    const packageName = packageJson.name;
-
-    if (!architect) {
+    const projectConfig = workspace.projects[options.project];
+    if (!projectConfig) {
       throw new Error(
-        `Expected node projects/${projectName}/architect in angular.json!`
+        `The "${options.project}" project is not defined in angular.json. Provide a valid project name.`
       );
     }
 
+    const architect = workspace.projects[options.project].architect;
+    if (!architect) {
+      throw new Error(
+        `Expected node projects/${options.project}/architect in angular.json!`
+      );
+    }
+
+    // Overwrite the default build architect.
+    const build = architect.build;
+    if (!build) {
+      throw new Error(`Expected node projects/${options.project}/architect/build in angular.json!`);
+    }
+    build.builder = '@skyux-sdk/angular-builders:browser' as any;
+
+    // Overwrite the default serve architect.
+    const serve = architect.serve;
+    if (!serve) {
+      throw new Error(
+        `Expected node projects/${options.project}/architect/serve in angular.json!`
+      );
+    }
+    serve.builder = '@skyux-sdk/angular-builders:dev-server' as any;
+    (serve.options as SkyuxDevServerBuilderOptions).skyuxLaunch = 'host';
+
+    // Overwrite the default test architect.
     const test = architect.test;
     if (!test) {
       throw new Error(
-        `Expected node projects/${projectName}/architect/test in angular.json!`
+        `Expected node projects/${options.project}/architect/test in angular.json!`
       );
     }
-    test.builder = `${packageName}:karma` as any;
+    test.builder = `@skyux-sdk/angular-builders:karma` as any;
 
     // Install as a development dependency.
     context.addTask(new NodePackageInstallTask());

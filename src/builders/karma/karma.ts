@@ -1,49 +1,35 @@
 import { BuilderContext, BuilderOutput, createBuilder } from '@angular-devkit/architect';
-import { executeKarmaBuilder, ExecutionTransformer, KarmaBuilderOptions } from '@angular-devkit/build-angular';
-import { json } from '@angular-devkit/core';
-
-import path from 'path';
+import { executeKarmaBuilder } from '@angular-devkit/build-angular';
 
 import {
   Observable
 } from 'rxjs';
 
 import {
-  Configuration as WebpackConfig,
-  DefinePlugin
-} from 'webpack';
+  SkyuxKarmaBuilderOptions
+} from './karma-options';
 
-export type SkyuxKarmaBuilderConfig = KarmaBuilderOptions;
+import {
+  getKarmaTransforms
+} from './karma-transforms';
 
-function getWepbackConfigTransformer(
-  context: BuilderContext
-): ExecutionTransformer<WebpackConfig> {
-  return (defaultWebpackConfig) => {
-
-    console.log('Context:', context.builder);
-    if (context.builder.builderName === 'karma') {
-      const rootPath = JSON.stringify(path.resolve(process.cwd(), `projects/${context.target?.project}/src`));
-      console.log('Root path:', rootPath);
-      defaultWebpackConfig.plugins?.push(
-        new DefinePlugin({
-          SKYUX_KARMA_ROOT_PATH: rootPath
-        })
-      );
-    }
-
-    return defaultWebpackConfig;
-  };
-}
-
-function skyuxKarma(
-  options: SkyuxKarmaBuilderConfig,
+function executeSkyuxKarmaBuilder(
+  options: SkyuxKarmaBuilderOptions,
   context: BuilderContext
 ): Observable<BuilderOutput> {
-  console.log('In skyuxKarma...');
-  const webpackConfiguration = getWepbackConfigTransformer(context);
-  return executeKarmaBuilder(options, context, {
-    webpackConfiguration
-  });
+  console.log('Running karma with options...', options);
+
+  // Based on platform, set:
+  // options.karmaConfig = '/path/to/config';
+  // options.codeCoverage = true;
+
+  /**
+   * Create a karma config within builders.
+   * This file will import from the local karma file, and defaults will be added after (such as thresholds).
+   * If a `platform` is provided, that file will be merged with the default.
+   */
+
+  return executeKarmaBuilder(options, context, getKarmaTransforms(options, context));
 }
 
-export default createBuilder<json.JsonObject & SkyuxKarmaBuilderConfig>(skyuxKarma);
+export default createBuilder<SkyuxKarmaBuilderOptions>(executeSkyuxKarmaBuilder);
