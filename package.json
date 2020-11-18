@@ -43,6 +43,7 @@
     "@types/webpack": "4.41.23",
     "fs-extra": "9.0.1",
     "jasmine": "3.6.3",
+    "karma": "5.2.3",
     "loader-utils": "2.0.0",
     "mock-require": "3.0.3",
     "nyc": "15.1.0",
