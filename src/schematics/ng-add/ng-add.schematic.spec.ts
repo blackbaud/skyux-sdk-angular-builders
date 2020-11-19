@@ -29,6 +29,18 @@ describe('ng-add.schematic', () => {
     );
   });
 
+  it('should throw an error if angular.json doesn\'t exist', async () => {
+    const app = await createTestApp(runner);
+
+    app.delete('angular.json');
+
+    await expectAsync(
+      runner
+        .runSchematicAsync('ng-add', { project: 'invalid-project' }, app)
+        .toPromise()
+    ).toBeRejectedWithError('Not an Angular CLI workspace.');
+  });
+
   it('should throw an error if specified project doesn\'t exist', async () => {
     const app = await createTestApp(runner);
 
