@@ -6,6 +6,10 @@ import {
 
 type AssetSourceCallback = (content: string, filePath: string) => string;
 
+interface CompilationAsset {
+  source: () => string;
+};
+
 /**
  * Allows a Webpack plugin to modify the contents of all emitted JavaScript assets.
  */
@@ -16,7 +20,7 @@ export function addWebpackAssetsEmitTap(
 ): void {
 
   compiler.hooks.emit.tap(pluginName, (compilation) => {
-    const assets: [string, any][] = Object.entries(compilation.assets);
+    const assets: [string, CompilationAsset][] = Object.entries(compilation.assets);
 
     for (const [filePath, asset] of assets) {
       if (path.parse(filePath).ext === '.js') {

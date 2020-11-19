@@ -24,7 +24,6 @@
     "@angular-devkit/build-angular": "~0.1100.2"
   },
   "dependencies": {
-    "@schematics/angular": "11.0.2",
     "hasha": "5.2.2"
   },
   "devDependencies": {
@@ -35,6 +34,7 @@
     "@angular/compiler": "11.0.1",
     "@angular/compiler-cli": "11.0.1",
     "@istanbuljs/nyc-config-typescript": "1.0.1",
+    "@schematics/angular": "11.0.2",
     "@types/fs-extra": "9.0.4",
     "@types/jasmine": "3.6.1",
     "@types/loader-utils": "2.0.1",
