@@ -19,23 +19,24 @@ import {
 
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
   return (tree: Tree, context: SchematicContext) => {
+
+    // Get the workspace config.
     const workspaceConfigBuffer = tree.read('angular.json');
     if (!workspaceConfigBuffer) {
       throw new SchematicsException('Not an Angular CLI workspace.');
     }
-
     const workspace = JSON.parse(workspaceConfigBuffer.toString());
 
     const projectConfig = workspace.projects[options.project];
     if (!projectConfig) {
-      throw new Error(
+      throw new SchematicsException(
         `The "${options.project}" project is not defined in angular.json. Provide a valid project name.`
       );
     }
 
     const architect = workspace.projects[options.project].architect;
     if (!architect) {
-      throw new Error(
+      throw new SchematicsException(
         `Expected node projects/${options.project}/architect in angular.json!`
       );
     }
@@ -43,7 +44,7 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     // Overwrite the default build architect.
     const build = architect.build;
     if (!build) {
-      throw new Error(`Expected node projects/${options.project}/architect/build in angular.json!`);
+      throw new SchematicsException(`Expected node projects/${options.project}/architect/build in angular.json!`);
     }
     build.builder = '@skyux-sdk/angular-builders:browser';
 
@@ -51,7 +52,7 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     // Overwrite the default serve architect.
     const serve = architect.serve;
     if (!serve) {
-      throw new Error(
+      throw new SchematicsException(
         `Expected node projects/${options.project}/architect/serve in angular.json!`
       );
     }
