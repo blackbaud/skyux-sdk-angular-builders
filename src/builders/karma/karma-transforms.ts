@@ -3,7 +3,7 @@ import {
 } from '@angular-devkit/architect';
 
 import {
-  ExecutionTransformer, KarmaConfigOptions
+  ExecutionTransformer
 } from '@angular-devkit/build-angular';
 
 import {
@@ -43,10 +43,6 @@ export function getKarmaTransforms(
   context: BuilderContext
 ) {
   return {
-    webpackConfiguration: getKarmaWepbackConfigTransformer(options, context),
-    karmaOptions: (karmaConfig: KarmaConfigOptions) => {
-      console.log('Karma config:', karmaConfig);
-      return karmaConfig;
-    }
+    webpackConfiguration: getKarmaWepbackConfigTransformer(options, context)
   };
 }

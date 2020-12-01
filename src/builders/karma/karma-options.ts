@@ -7,5 +7,6 @@ import {
 } from '@angular-devkit/core';
 
 export type SkyuxKarmaBuilderOptions = KarmaBuilderOptions & json.JsonObject & {
-  skyuxCIPlatform?: 'ado' | 'gh-actions';
+  skyuxCiPlatform?: 'ado' | 'gh-actions';
+  skyuxCodeCoverageThreshold: 'none' | 'standard' | 'strict'
 };

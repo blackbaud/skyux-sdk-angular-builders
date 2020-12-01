@@ -65,7 +65,8 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
         `Expected node projects/${options.project}/architect/test in angular.json!`
       );
     }
-    test.builder = `@skyux-sdk/angular-builders:karma` as any;
+    test.builder = `@skyux-sdk/angular-builders:karma`;
+    test.options.codeCoverage = true;
 
     // Install as a development dependency.
     context.addTask(new NodePackageInstallTask());
