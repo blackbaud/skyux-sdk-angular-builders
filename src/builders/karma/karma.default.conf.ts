@@ -1,4 +1,5 @@
 import karma from 'karma';
+
 import glob from 'glob';
 
 import path from 'path';
@@ -25,17 +26,6 @@ module.exports = (config: karma.Config): void => {
 
   console.log('Adapter config?', SkyuxKarmaConfigAdapter.builderOptions);
 
-  try {
-    if (SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform) {
-      require(getKarmaConfig(SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform));
-    } else {
-      // require(path.resolve(process.cwd(), 'karma.conf.js'))(config);
-    }
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
-  }
-
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
@@ -43,21 +33,29 @@ module.exports = (config: karma.Config): void => {
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
-      require('karma-coverage-istanbul-reporter'),
+      require('karma-coverage'),
       require('@angular-devkit/build-angular/plugins/karma')
     ],
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    coverageIstanbulReporter: {
-      dir: path.resolve(process.cwd(), 'coverage'),
-      reports: ['html', 'lcovonly', 'text-summary'],
-      fixWebpackSourcePaths: true,
-      thresholds: {
-        statements: 100,
-        lines: 100,
-        branches: 100,
-        functions: 100
+    jasmineHtmlReporter: {
+      suppressAll: true // removes the duplicated traces
+    },
+    coverageReporter: {
+      dir: require('path').join(__dirname, './coverage/builders-test-app'),
+      subdir: '.',
+      reporters: [
+        { type: 'html' },
+        { type: 'text-summary' }
+      ],
+      check: {
+        global: {
+          statements: 100,
+          branches: 100,
+          functions: 100,
+          lines: 100
+        }
       }
     },
     reporters: ['progress', 'kjhtml'],
@@ -69,4 +67,14 @@ module.exports = (config: karma.Config): void => {
     singleRun: false,
     restartOnFileChange: true
   } as karma.ConfigOptions);
+
+  try {
+    if (SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform) {
+      const platformConfig = require(getKarmaConfig(SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform));
+      platformConfig(config);
+    }
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
 }

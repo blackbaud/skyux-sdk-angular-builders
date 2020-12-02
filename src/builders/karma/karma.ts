@@ -10,7 +10,7 @@ import {
 
 // import glob from 'glob';
 
-// import path from 'path';
+import path from 'path';
 
 import {
   Observable
@@ -50,6 +50,7 @@ function executeSkyuxKarmaBuilder(
 
   options.skyuxCodeCoverageThreshold = options.skyuxCodeCoverageThreshold || 'none';
   SkyuxKarmaConfigAdapter.builderOptions = options;
+  options.karmaConfig = path.join(__dirname, 'karma.default.conf.js');
 
   // Based on platform, set:
   // if (options.skyuxCiPlatform) {

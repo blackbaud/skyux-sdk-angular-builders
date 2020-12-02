@@ -27,7 +27,7 @@
   "include": [
     "index.ts",
     "src/**/*.json",
-    "src/builders/karma/karma.default.conf.js"
+    "src/builders/karma/karma.default.conf.ts"
   ],
   "exclude": [
     "node_modules"

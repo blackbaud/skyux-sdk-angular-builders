@@ -8,7 +8,6 @@ function copyFilesToDist() {
     ['package.json'],
     ['builders.json'],
     ['collection.json']
-    // ['src', 'builders', 'karma', 'karma.default.conf.js']
   ];
 
   pathsToCopy.forEach(pathArr => {
@@ -56,7 +55,10 @@ function mergeBuilderSchemas() {
 }
 
 function copyDistToNodeModules() {
-  fs.copySync('dist', path.join('builders-test-app', 'node_modules', '@skyux-sdk/angular-builders'));
+  fs.copySync(
+    path.resolve(process.cwd(), 'dist'),
+    path.resolve(__dirname, '../', 'builders-test-app', 'node_modules', '@skyux-sdk/angular-builders')
+  );
 }
 
 copyFilesToDist();
