@@ -112,7 +112,7 @@ describe('dev-server builder', () => {
         host: 'localhost',
         port: 4200,
         publicHost: 'https://localhost:4200/',
-        servePathDefaultWarning: false,
+        servePath: '/',
         skyuxHostUrl: 'https://app.blackbaud.com/',
         skyuxLaunch: 'host',
         ssl: true,
