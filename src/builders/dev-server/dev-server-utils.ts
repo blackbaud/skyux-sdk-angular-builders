@@ -38,7 +38,7 @@ export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions
 
     // Point lazy-loaded modules to the localhost URL.
     options.deployUrl = localUrl;
-    options.servePathDefaultWarning = false;
+    options.servePath = '/';
   }
 
   // Open the user's default browser automatically.
