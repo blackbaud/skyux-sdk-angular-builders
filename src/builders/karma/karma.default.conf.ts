@@ -47,7 +47,8 @@ module.exports = (config: karma.Config): void => {
       subdir: '.',
       reporters: [
         { type: 'html' },
-        { type: 'text-summary' }
+        { type: 'text-summary' },
+        { type: 'cobertura' }
       ],
       check: {
         global: {
