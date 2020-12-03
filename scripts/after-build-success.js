@@ -50,5 +50,13 @@ function mergeBuilderSchemas() {
   });
 }
 
+function copyDistToNodeModules() {
+  fs.copySync(
+    path.resolve(process.cwd(), 'dist'),
+    path.resolve(__dirname, '../', 'builders-test-app', 'node_modules', '@skyux-sdk/angular-builders')
+  );
+}
+
 copyFilesToDist();
 mergeBuilderSchemas();
+copyDistToNodeModules();
