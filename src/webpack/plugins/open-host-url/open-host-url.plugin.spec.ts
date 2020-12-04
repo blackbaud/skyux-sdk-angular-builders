@@ -88,6 +88,34 @@ describe('open host url webpack plugin', () => {
     });
   });
 
+  it('should load the polyfills script first', () => {
+    const plugin = getPlugin();
+
+    mockStats = {
+      chunks: [
+        {
+          initial: true,
+          files: ['main.ts']
+        },
+        {
+          initial: true,
+          files: ['polyfills.ts']
+        }
+      ]
+    };
+
+    plugin.apply(mockCompiler);
+
+    expect(openSpy.calls.mostRecent().args[2].scripts).toEqual([
+      {
+        name: 'polyfills.ts'
+      },
+      {
+        name: 'main.ts'
+      }
+    ]);
+  });
+
   it('should handle empty chunks', () => {
     const plugin = getPlugin();
 
