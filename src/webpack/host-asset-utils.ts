@@ -33,7 +33,12 @@ export function getHostAssets(
         asset.initial = !!chunk.initial;
       }
 
-      assets.push(asset);
+      // Polyfills (and in consequence, `zone.js`) need to be loaded first during AoT builds.
+      if (asset.name.indexOf('polyfill') > -1) {
+        assets.unshift(asset);
+      } else {
+        assets.push(asset);
+      }
     }
   });
 
