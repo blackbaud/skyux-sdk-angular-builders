@@ -69,13 +69,10 @@
         "serve": {
           "builder": "@skyux-sdk/angular-builders:dev-server",
           "options": {
-            "browserTarget": "builders-test-app:build",
-            "skyuxLaunch": "host"
+            "launch": "host"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "builders-test-app:build:production"
-            }
+            "production": {}
           }
         },
         "extract-i18n": {

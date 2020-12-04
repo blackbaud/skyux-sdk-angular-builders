@@ -3,12 +3,12 @@
   "builders": {
     "browser": {
       "implementation": "./src/builders/browser/browser",
-      "schema": "./src/builders/browser/schema.ext.json",
+      "schema": "./src/builders/browser/schema.json",
       "description": "SKY UX builder for `ng build`"
     },
     "dev-server": {
       "implementation": "./src/builders/dev-server/dev-server",
-      "schema": "./src/builders/dev-server/schema.ext.json",
+      "schema": "./src/builders/dev-server/schema.json",
       "description": "SKY UX builder for `ng serve`"
     }
   }

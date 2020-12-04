@@ -57,7 +57,12 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
       );
     }
     serve.builder = '@skyux-sdk/angular-builders:dev-server';
-    (serve.options as SkyuxDevServerBuilderOptions).skyuxLaunch = 'host';
+    (serve.options as SkyuxDevServerBuilderOptions) = {
+      launch: 'host'
+    };
+    serve.configurations = {
+      production: {}
+    };
 
     // Install as a development dependency.
     context.addTask(new NodePackageInstallTask());

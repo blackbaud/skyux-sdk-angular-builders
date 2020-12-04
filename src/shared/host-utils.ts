@@ -9,9 +9,9 @@ import {
 } from './url-utils';
 
 export function getHostUrlFromOptions(options?: {
-  skyuxHostUrl?: string
+  hostUrl?: string
 }): string {
-  return ensureTrailingSlash(options?.skyuxHostUrl || 'https://app.blackbaud.com/');
+  return ensureTrailingSlash(options?.hostUrl || 'https://app.blackbaud.com/');
 }
 
 /**
@@ -25,6 +25,8 @@ export function openHostUrl(
   pathName: string,
   config: SkyuxHostUrlConfig
 ): void {
+
+  console.log(config);
 
   // We need to URL-encode the value so that characters such as '+'
   // are properly represented.
