@@ -1,7 +1,11 @@
+import {
+  JsonObject
+} from '@angular-devkit/core';
+
 /**
  * The input options passed to the builder.
  */
-export type SkyuxDevServerBuilderOptions = {
+export type SkyuxDevServerBuilderOptions = JsonObject & {
 
   /**
    * The URL of the SKY UX Host server.

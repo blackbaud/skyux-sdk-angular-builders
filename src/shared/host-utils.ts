@@ -26,8 +26,6 @@ export function openHostUrl(
   config: SkyuxHostUrlConfig
 ): void {
 
-  console.log(config);
-
   // We need to URL-encode the value so that characters such as '+'
   // are properly represented.
   const configEncoded = encodeURIComponent(

@@ -1,217 +1,184 @@
-// import * as angularArchitect from '@angular-devkit/architect';
+import * as angularArchitect from '@angular-devkit/architect';
 
-// import * as buildAngular from '@angular-devkit/build-angular';
+import * as buildAngular from '@angular-devkit/build-angular';
 
-// import {
-//   homedir
-// } from 'os';
+import mock from 'mock-require';
 
-// import {
-//   of
-// } from 'rxjs';
+import {
+  homedir
+} from 'os';
 
-// import * as applyAppAssetsConfigUtil from '../../webpack/app-assets-utils';
+import {
+  of
+} from 'rxjs';
 
-// import {
-//   SkyuxOpenHostURLPlugin
-// } from '../../webpack/plugins/open-host-url/open-host-url.plugin';
+import webpack from 'webpack';
 
-// import {
-//   SkyuxDevServerBuilderOptions
-// } from './dev-server-options';
+import * as applyAppAssetsConfigUtil from '../../webpack/app-assets-utils';
 
-// import mock from 'mock-require';
+import {
+  SkyuxOpenHostURLPlugin
+} from '../../webpack/plugins/open-host-url/open-host-url.plugin';
 
-// import webpack from 'webpack';
+import {
+  SkyuxDevServerBuilderOptions
+} from './dev-server-options';
 
-// class MockWebpackPlugin {
-//   public apply() { }
-// }
+class MockWebpackPlugin {
+  public apply() { }
+}
 
-// describe('dev-server builder', () => {
+describe('dev-server builder', () => {
 
-//   let applyAppAssetsConfigSpy: jasmine.Spy;
-//   let createBuilderSpy: jasmine.Spy;
-//   let executDevServerBuilderSpy: jasmine.Spy;
-//   let defaultOptions: SkyuxDevServerBuilderOptions;
-//   let defaultWebpackConfig: webpack.Configuration;
-//   let actualWebpackConfig: webpack.Configuration;
+  let applyAppAssetsConfigSpy: jasmine.Spy;
+  let createBuilderSpy: jasmine.Spy;
+  let executDevServerBuilderSpy: jasmine.Spy;
 
-//   beforeEach(() => {
-//     defaultOptions = {
-//       browserTarget: 'foo:build',
-//       host: 'localhost',
-//       port: 4200
-//     };
+  let defaultSkyuxOptions: SkyuxDevServerBuilderOptions;
 
-//     defaultWebpackConfig = {};
+  let defaultWebpackConfig: webpack.Configuration;
+  let actualWebpackConfig: webpack.Configuration;
 
-//     actualWebpackConfig = {};
+  beforeEach(() => {
+    defaultWebpackConfig = {};
 
-//     createBuilderSpy = jasmine.createSpy('createBuilder').and
-//       .callFake((cb: any) => cb(defaultOptions, {
-//         target: {
-//           project: 'foo'
-//         }
-//       }));
+    actualWebpackConfig = {};
 
-//     executDevServerBuilderSpy = jasmine.createSpy('executeDevServerBuilder').and
-//       .callFake((_options: buildAngular.DevServerBuilderOptions, _context: any, transforms: any) => {
-//         actualWebpackConfig = transforms.webpackConfiguration(defaultWebpackConfig);
-//         return of({
-//           success: true
-//         });
-//       });
+    createBuilderSpy = jasmine.createSpy('createBuilder').and
+      .callFake((cb: any) => cb(defaultSkyuxOptions, {
+        target: {
+          project: 'foo'
+        }
+      }));
 
-//     spyOnProperty(angularArchitect, 'createBuilder', 'get').and
-//       .returnValue(createBuilderSpy);
+    executDevServerBuilderSpy = jasmine.createSpy('executeDevServerBuilder').and
+      .callFake((_options: buildAngular.DevServerBuilderOptions, _context: any, transforms: any) => {
+        actualWebpackConfig = transforms.webpackConfiguration(defaultWebpackConfig);
+        return of({
+          success: true
+        });
+      });
 
-//     spyOnProperty(buildAngular, 'executeDevServerBuilder', 'get').and
-//       .returnValue(executDevServerBuilderSpy);
+    spyOnProperty(angularArchitect, 'createBuilder', 'get').and
+      .returnValue(createBuilderSpy);
 
-//     applyAppAssetsConfigSpy = spyOn(applyAppAssetsConfigUtil, 'applyAppAssetsConfig');
-//   });
+    spyOnProperty(buildAngular, 'executeDevServerBuilder', 'get').and
+      .returnValue(executDevServerBuilderSpy);
 
-//   afterEach(() => {
-//     mock.stopAll();
-//   });
+    applyAppAssetsConfigSpy = spyOn(applyAppAssetsConfigUtil, 'applyAppAssetsConfig');
+  });
 
-//   function getActualOptions(): buildAngular.DevServerBuilderOptions {
-//     return executDevServerBuilderSpy.calls.mostRecent().args[0];
-//   }
+  afterEach(() => {
+    mock.stopAll();
+  });
 
-//   function overrideOptions(config: any): SkyuxDevServerBuilderOptions {
-//     return {...defaultOptions, ...config} as SkyuxDevServerBuilderOptions;
-//   }
+  function getAngularBuilderOptions(): buildAngular.DevServerBuilderOptions {
+    return executDevServerBuilderSpy.calls.mostRecent().args[0];
+  }
 
-//   describe('configuration', () => {
+  function overrideSkyuxOptions(config: SkyuxDevServerBuilderOptions): SkyuxDevServerBuilderOptions {
+    return {...defaultSkyuxOptions, ...config} as SkyuxDevServerBuilderOptions;
+  }
 
-//     it('should not affect Angular options if `launch` is undefined', async () => {
-//       defaultOptions = overrideOptions({});
+  describe('configuration', () => {
 
-//       await (mock.reRequire('./dev-server'));
+    it('should overwrite Angular options if `launch` is set to "host"', async () => {
+      defaultSkyuxOptions = overrideSkyuxOptions({
+        launch: 'host'
+      });
 
-//       const actualOptions = getActualOptions();
+      await (mock.reRequire('./dev-server'));
 
-//       expect(actualOptions).toEqual(defaultOptions);
-//     });
+      const builderOptions = getAngularBuilderOptions();
 
-//     it('should overwrite Angular options if `launch` is set to "host"', async () => {
-//       defaultOptions = overrideOptions({
-//         launch: 'host'
-//       });
+      expect(builderOptions).toEqual({
+        allowedHosts: [ '.blackbaud.com' ],
+        browserTarget: 'foo:build',
+        deployUrl: 'https://localhost:4200/',
+        host: 'localhost',
+        port: 4200,
+        publicHost: 'https://localhost:4200/',
+        servePath: '/',
+        ssl: true,
+        sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
+        sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
+      });
+    });
 
-//       await (mock.reRequire('./dev-server'));
+    it('should open the default browser if `launch` is set to "local"', async () => {
+      defaultSkyuxOptions = overrideSkyuxOptions({
+        launch: 'local'
+      });
 
-//       const actualOptions = getActualOptions();
+      await (mock.reRequire('./dev-server'));
 
-//       expect(actualOptions).toEqual({
-//         allowedHosts: [ '.blackbaud.com' ],
-//         browserTarget: 'foo:build',
-//         deployUrl: 'https://localhost:4200/',
-//         host: 'localhost',
-//         port: 4200,
-//         publicHost: 'https://localhost:4200/',
-//         servePath: '/',
-//         hostUrl: 'https://app.blackbaud.com/',
-//         launch: 'host',
-//         ssl: true,
-//         sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
-//         sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
-//       });
-//     });
+      const builderOptions = getAngularBuilderOptions();
 
-//     it('should enforce HTTPS if `launch` is defined', async () => {
-//       defaultOptions = overrideOptions({
-//         launch: 'local'
-//       });
-
-//       await (mock.reRequire('./dev-server'));
-
-//       const actualOptions = getActualOptions();
-
-//       expect(actualOptions).toEqual({
-//         ...defaultOptions,
-//         ...{
-//           ssl: true,
-//           sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
-//           sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
-//         }
-//       } as SkyuxDevServerBuilderOptions);
-//     });
-
-//     it('should open the default browser if `launch` is set to "local"', async () => {
-//       defaultOptions = overrideOptions({
-//         launch: 'local'
-//       });
-
-//       await (mock.reRequire('./dev-server'));
-
-//       const actualOptions = getActualOptions();
-
-//       expect(actualOptions.open).toEqual(true);
-//     });
+      expect(builderOptions.open).toEqual(true);
+    });
 
 
-//     it('should allow setting a custom `hostUrl` and append a trailing slash', async () => {
-//       defaultOptions = overrideOptions({
-//         launch: 'host',
-//         hostUrl: 'https://my-host-url.com'
-//       });
+    it('should allow setting a custom `hostUrl` and append a trailing slash', async () => {
+      defaultSkyuxOptions = overrideSkyuxOptions({
+        launch: 'host',
+        hostUrl: 'https://my-host-url.com'
+      });
 
-//       await (mock.reRequire('./dev-server'));
+      await (mock.reRequire('./dev-server'));
 
-//       const actualOptions = getActualOptions();
+      expect(defaultSkyuxOptions).toEqual(jasmine.objectContaining({
+        hostUrl: 'https://my-host-url.com/'
+      }));
+    });
+  });
 
-//       expect(actualOptions).toEqual(jasmine.objectContaining({
-//         hostUrl: 'https://my-host-url.com/'
-//       }));
-//     });
-//   });
+  describe('webpack config', () => {
+    it('should add `SkyuxOpenHostURLPlugin` to webpack plugins', async () => {
+      defaultSkyuxOptions = overrideSkyuxOptions({
+        launch: 'local'
+      });
 
-//   describe('webpack config', () => {
-//     it('should add `SkyuxOpenHostURLPlugin` to webpack plugins', async () => {
-//       await (mock.reRequire('./dev-server'));
+      await (mock.reRequire('./dev-server'));
 
-//       let plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostURLPlugin);
+      let plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostURLPlugin);
 
-//       expect(plugin).toBeUndefined(
-//         'Expected the plugin not to be included by default.'
-//       );
+      expect(plugin).toBeUndefined(
+        'Expected the plugin not to be included by default.'
+      );
 
-//       defaultOptions = overrideOptions({
-//         launch: 'host'
-//       });
+      defaultSkyuxOptions = overrideSkyuxOptions({
+        launch: 'host'
+      });
 
-//       await (mock.reRequire('./dev-server'));
+      await (mock.reRequire('./dev-server'));
 
-//       plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostURLPlugin);
+      plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostURLPlugin);
 
-//       expect(plugin).toBeDefined();
-//     });
+      expect(plugin).toBeDefined();
+    });
 
-//     it('should add app assets loaders and plugins', async () => {
-//       await (mock.reRequire('./dev-server'));
+    it('should add app assets loaders and plugins', async () => {
+      await (mock.reRequire('./dev-server'));
 
-//       expect(applyAppAssetsConfigSpy).toHaveBeenCalled();
-//     });
+      expect(applyAppAssetsConfigSpy).toHaveBeenCalled();
+    });
 
-//     it('should not affect other plugins', async () => {
-//       defaultWebpackConfig = {
-//         plugins: [
-//           new MockWebpackPlugin()
-//         ]
-//       };
+    it('should not affect other plugins', async () => {
+      defaultWebpackConfig = {
+        plugins: [
+          new MockWebpackPlugin()
+        ]
+      };
 
-//       defaultOptions = overrideOptions({
-//         launch: 'host'
-//       });
+      defaultSkyuxOptions = overrideSkyuxOptions({
+        launch: 'host'
+      });
 
-//       await (mock.reRequire('./dev-server'));
+      await (mock.reRequire('./dev-server'));
 
-//       expect(actualWebpackConfig.plugins?.length).toEqual(2);
-//     });
+      expect(actualWebpackConfig.plugins?.length).toEqual(2);
+    });
 
-//   });
+  });
 
-// });
+});

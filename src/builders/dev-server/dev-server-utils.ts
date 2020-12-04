@@ -1,49 +1,60 @@
-import { DevServerBuilderOptions } from '@angular-devkit/build-angular';
-// import {
-//   getCertPath
-// } from '../../shared/cert-utils';
+import {
+  BuilderContext
+} from '@angular-devkit/architect';
 
-// import {
-//   getHostUrlFromOptions
-// } from '../../shared/host-utils';
+import {
+  DevServerBuilderOptions
+} from '@angular-devkit/build-angular';
 
-// import {
-//   SkyuxDevServerBuilderOptions
-// } from './dev-server-options';
+import {
+  getCertPath
+} from '../../shared/cert-utils';
+
+import {
+  SkyuxDevServerBuilderOptions
+} from './dev-server-options';
 
 export function getLocalUrlFromOptions(options: DevServerBuilderOptions): string {
   return `https://${options.host}:${options.port}/`;
 }
 
-// export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): void {
+export function getDevServerBuilderOptions(
+  skyuxOptions: SkyuxDevServerBuilderOptions,
+  context: BuilderContext
+): DevServerBuilderOptions {
 
-//   if (options.skyuxLaunch === undefined) {
-//     return;
-//   }
+  const target = context.target!;
+  let browserTarget = `${target.project}:build`;
+  if (target.configuration) {
+    browserTarget += target.configuration;
+  }
 
-//   // Enforce HTTPS.
-//   options.ssl = true;
-//   options.sslCert = getCertPath('skyux-server.crt');
-//   options.sslKey = getCertPath('skyux-server.key');
+  const options: DevServerBuilderOptions = {
+    browserTarget,
+    host: 'localhost',
+    port: 4200
+  };
 
-//   // Set options specific to SKY UX Host.
-//   if (options.skyuxLaunch === 'host') {
-//     const hostUrl = getHostUrlFromOptions(options);
-//     const localUrl = getLocalUrlFromOptions(options);
+  // Enforce HTTPS.
+  options.ssl = true;
+  options.sslCert = getCertPath('skyux-server.crt');
+  options.sslKey = getCertPath('skyux-server.key');
 
-//     options.skyuxHostUrl = hostUrl;
+  // Set options specific to SKY UX Host.
+  if (skyuxOptions.launch === 'host') {
+    const localUrl = getLocalUrlFromOptions(options);
 
-//     // Point live-reloading back to localhost.
-//     options.publicHost = localUrl;
-//     options.allowedHosts = ['.blackbaud.com'];
+    // Point live-reloading back to localhost.
+    options.publicHost = localUrl;
+    options.allowedHosts = ['.blackbaud.com'];
 
-//     // Point lazy-loaded modules to the localhost URL.
-//     options.deployUrl = localUrl;
-//     options.servePath = '/';
-//   }
+    // Point lazy-loaded modules to the localhost URL.
+    options.deployUrl = localUrl;
+    options.servePath = '/';
+  } else {
+    // Open the user's default browser automatically in 'local' mode.
+    options.open = true;
+  }
 
-//   // Open the user's default browser automatically.
-//   if (options.skyuxLaunch === 'local') {
-//     options.open = true;
-//   }
-// }
+  return options;
+}
