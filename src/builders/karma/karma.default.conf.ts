@@ -5,12 +5,18 @@ import glob from 'glob';
 import path from 'path';
 
 import {
+  SkyuxCIPlatform
+} from './ci-platform';
+
+import {
+  SkyuxCodeCoverageThreshold
+} from './code-coverage-threshold';
+
+import {
   SkyuxKarmaConfigAdapter
 } from './karma-config-adapter';
 
-function getCiPlatformKarmaConfig(): string {
-  const platform = SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform;
-
+function getCiPlatformKarmaConfig(platform: SkyuxCIPlatform): string {
   // Using glob so we can find skyux-sdk-builder-config regardless of npm install location
   const pattern = path.join(
     process.cwd(),
@@ -23,8 +29,8 @@ function getCiPlatformKarmaConfig(): string {
   return config;
 }
 
-function getCodeCoverageThresholdPercent(): number {
-  switch (SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold) {
+function getCodeCoverageThresholdPercent(threshold?: SkyuxCodeCoverageThreshold): number {
+  switch (threshold) {
     default:
     case 'none':
       return 0;
@@ -38,7 +44,10 @@ function getCodeCoverageThresholdPercent(): number {
 }
 
 module.exports = (config: karma.Config): void => {
-  const codeCoverageThresholdPercent = getCodeCoverageThresholdPercent();
+
+  const codeCoverageThresholdPercent = getCodeCoverageThresholdPercent(
+    SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold
+  );
 
   config.set({
     basePath: '',
@@ -86,7 +95,11 @@ module.exports = (config: karma.Config): void => {
   // Apply platform config overrides.
   if (SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform) {
     try {
-      require(getCiPlatformKarmaConfig())(config);
+      require(
+        getCiPlatformKarmaConfig(
+          SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform
+        )
+      )(config);
     } catch (err) {
       console.error(err);
       throw new Error(err);

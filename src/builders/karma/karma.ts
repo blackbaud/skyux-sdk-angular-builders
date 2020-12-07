@@ -22,10 +22,6 @@ import {
   SkyuxKarmaBuilderOptions
 } from './karma-options';
 
-import {
-  getKarmaTransforms
-} from './karma-transforms';
-
 function executeSkyuxKarmaBuilder(
   options: SkyuxKarmaBuilderOptions,
   context: BuilderContext
@@ -37,14 +33,14 @@ function executeSkyuxKarmaBuilder(
   // Enforce code coverage for CI platforms.
   if (options.skyuxCiPlatform) {
     options.codeCoverage = true;
+    options.watch = false;
   }
 
   SkyuxKarmaConfigAdapter.builderOptions = options;
 
   return executeKarmaBuilder(
     options,
-    context,
-    getKarmaTransforms(options, context)
+    context
   );
 }
 
