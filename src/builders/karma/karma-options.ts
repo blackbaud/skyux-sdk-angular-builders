@@ -8,8 +8,14 @@ import {
 
 export type SkyuxKarmaBuilderOptions = KarmaBuilderOptions & json.JsonObject & {
 
+  /**
+   * The name of the continuous integration platform that will run the tests.
+   */
   skyuxCiPlatform?: 'ado' | 'gh-actions';
 
+  /**
+   * Specifies the minimum required code coverage threshold.
+   */
   skyuxCodeCoverageThreshold: 'none' | 'standard' | 'strict'
 
 };

@@ -8,7 +8,8 @@ import {
   SkyuxKarmaConfigAdapter
 } from './karma-config-adapter';
 
-function getKarmaConfig(platform: string): string {
+function getCiPlatformKarmaConfig(): string {
+  const platform = SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform;
 
   // Using glob so we can find skyux-sdk-builder-config regardless of npm install location
   const pattern = path.join(
@@ -22,9 +23,22 @@ function getKarmaConfig(platform: string): string {
   return config;
 }
 
-module.exports = (config: karma.Config): void => {
+function getCodeCoverageThresholdPercent(): number {
+  switch (SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold) {
+    default:
+    case 'none':
+      return 0;
 
-  console.log('Adapter config?', SkyuxKarmaConfigAdapter.builderOptions);
+    case 'standard':
+      return 80;
+
+    case 'strict':
+      return 100;
+  }
+}
+
+module.exports = (config: karma.Config): void => {
+  const codeCoverageThresholdPercent = getCodeCoverageThresholdPercent();
 
   config.set({
     basePath: '',
@@ -43,7 +57,7 @@ module.exports = (config: karma.Config): void => {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/builders-test-app'),
+      dir: require('path').join(__dirname, './coverage'),
       subdir: '.',
       reporters: [
         { type: 'html' },
@@ -52,10 +66,10 @@ module.exports = (config: karma.Config): void => {
       ],
       check: {
         global: {
-          statements: 100,
-          branches: 100,
-          functions: 100,
-          lines: 100
+          branches: codeCoverageThresholdPercent,
+          functions: codeCoverageThresholdPercent,
+          lines: codeCoverageThresholdPercent,
+          statements: codeCoverageThresholdPercent
         }
       }
     },
@@ -69,13 +83,13 @@ module.exports = (config: karma.Config): void => {
     restartOnFileChange: true
   } as karma.ConfigOptions);
 
-  try {
-    if (SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform) {
-      const platformConfig = require(getKarmaConfig(SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform));
-      platformConfig(config);
+  // Apply platform config overrides.
+  if (SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform) {
+    try {
+      require(getCiPlatformKarmaConfig())(config);
+    } catch (err) {
+      console.error(err);
+      throw new Error(err);
     }
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
   }
 }
