@@ -25,11 +25,11 @@ function setupBrowserBuilder(
   architect: {
     builder: string;
   },
-  ngAddOptions: SkyuxNgAddOptions
+  projectName: string
 ): void {
   if (!architect) {
     throw new SchematicsException(
-      `Expected node projects/${ngAddOptions.project}/architect/build in angular.json!`
+      `Expected node projects/${projectName}/architect/build in angular.json!`
     );
   }
 
@@ -42,11 +42,11 @@ function setupDevServerBuilder(
     builder: string;
     options: SkyuxDevServerBuilderOptions;
   },
-  ngAddOptions: SkyuxNgAddOptions
+  projectName: string
 ): void {
   if (!architect) {
     throw new SchematicsException(
-      `Expected node projects/${ngAddOptions.project}/architect/serve in angular.json!`
+      `Expected node projects/${projectName}/architect/serve in angular.json!`
     );
   }
 
@@ -61,11 +61,11 @@ function setupKarmaBuilder(
     builder: string;
     options: SkyuxKarmaBuilderOptions;
   },
-  ngAddOptions: SkyuxNgAddOptions
+  projectName: string
 ): void {
   if (!architect) {
     throw new SchematicsException(
-      `Expected node projects/${ngAddOptions.project}/architect/test in angular.json!`
+      `Expected node projects/${projectName}/architect/test in angular.json!`
     );
   }
 
@@ -73,12 +73,19 @@ function setupKarmaBuilder(
   architect.builder = `@skyux-sdk/angular-builders:karma`;
   architect.options.codeCoverage = true;
 
-  tree.overwrite('karma.conf.js', `// DO NOT MODIFY
+  const contents = `// DO NOT MODIFY
 // This file is handled by the \`@skyux-sdk/angular-builders:karma\` builder.
 module.exports = function (config) {
   config.set({});
 };
-`);
+`;
+
+  const libraryKarmaConfig = `projects/${projectName}/karma.conf.js`;
+  if (tree.exists(libraryKarmaConfig)) {
+    tree.overwrite(libraryKarmaConfig, contents);
+  } else {
+    tree.overwrite('karma.conf.js', contents);
+  }
 }
 
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
@@ -105,9 +112,13 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
       );
     }
 
-    setupBrowserBuilder(architect.build, options);
-    setupDevServerBuilder(architect.serve, options);
-    setupKarmaBuilder(tree, architect.test, options);
+    setupBrowserBuilder(architect.build, options.project);
+    setupDevServerBuilder(architect.serve, options.project);
+
+    // Setup karma for all projects.
+    Object.keys(workspace.projects).forEach(project => {
+      setupKarmaBuilder(tree, workspace.projects[project].architect.test, project);
+    });
 
     // Install as a development dependency.
     context.addTask(new NodePackageInstallTask());
