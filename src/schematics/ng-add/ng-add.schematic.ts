@@ -14,8 +14,37 @@ import {
 } from '../../builders/dev-server/dev-server-options';
 
 import {
+  SkyuxKarmaBuilderOptions
+} from '../../builders/karma/karma-options';
+
+import {
   SkyuxNgAddOptions
 } from './schema';
+
+function setupKarmaBuilder(
+  tree: Tree,
+  architect: {
+    builder: string;
+    options: SkyuxKarmaBuilderOptions;
+  },
+  ngAddOptions: SkyuxNgAddOptions
+) {
+
+  // Overwrite the default test architect.
+  if (!architect) {
+    throw new Error(
+      `Expected node projects/${ngAddOptions.project}/architect/test in angular.json!`
+    );
+  }
+  architect.builder = `@skyux-sdk/angular-builders:karma`;
+  architect.options.codeCoverage = true;
+  tree.overwrite('karma.conf.js', `// DO NOT MODIFY
+// This file is handled by the \`@skyux-sdk/angular-builders:karma\` builder.
+module.exports = function (config) {
+  config.set({});
+};
+`);
+}
 
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
   return (tree: Tree, context: SchematicContext) => {
@@ -58,15 +87,7 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     serve.builder = '@skyux-sdk/angular-builders:dev-server';
     (serve.options as SkyuxDevServerBuilderOptions).skyuxLaunch = 'host';
 
-    // Overwrite the default test architect.
-    const test = architect.test;
-    if (!test) {
-      throw new Error(
-        `Expected node projects/${options.project}/architect/test in angular.json!`
-      );
-    }
-    test.builder = `@skyux-sdk/angular-builders:karma`;
-    test.options.codeCoverage = true;
+    setupKarmaBuilder(tree, architect.test, options);
 
     // Install as a development dependency.
     context.addTask(new NodePackageInstallTask());
