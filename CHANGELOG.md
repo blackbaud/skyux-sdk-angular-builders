@@ -1,3 +1,9 @@
+# 4.0.0-alpha.7 (2020-12-08)
+
+- Added a builder to run Karma unit tests. [#32](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/32)
+- Fixed ahead-of-time builds to load the `polyfills.js` script first. [#37](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/37)
+- Removed the deprecated `servePathDefaultWarning` option from the `dev-server` builder. [#35](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/35)
+
 # 4.0.0-alpha.6 (2020-11-19)
 
 - Added support for `@angular-devkit/build-angular@0.1100.0`. [#34](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/34)
