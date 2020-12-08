@@ -21,6 +21,40 @@ import {
   SkyuxNgAddOptions
 } from './schema';
 
+function setupBrowserBuilder(
+  architect: {
+    builder: string;
+  },
+  ngAddOptions: SkyuxNgAddOptions
+): void {
+  if (!architect) {
+    throw new SchematicsException(
+      `Expected node projects/${ngAddOptions.project}/architect/build in angular.json!`
+    );
+  }
+
+  // Overwrite the default build architect.
+  architect.builder = '@skyux-sdk/angular-builders:browser';
+}
+
+function setupDevServerBuilder(
+  architect: {
+    builder: string;
+    options: SkyuxDevServerBuilderOptions;
+  },
+  ngAddOptions: SkyuxNgAddOptions
+): void {
+  if (!architect) {
+    throw new SchematicsException(
+      `Expected node projects/${ngAddOptions.project}/architect/serve in angular.json!`
+    );
+  }
+
+  // Overwrite the default serve architect.
+  architect.builder = '@skyux-sdk/angular-builders:dev-server';
+  architect.options.skyuxLaunch = 'host';
+}
+
 function setupKarmaBuilder(
   tree: Tree,
   architect: {
@@ -28,16 +62,17 @@ function setupKarmaBuilder(
     options: SkyuxKarmaBuilderOptions;
   },
   ngAddOptions: SkyuxNgAddOptions
-) {
-
-  // Overwrite the default test architect.
+): void {
   if (!architect) {
-    throw new Error(
+    throw new SchematicsException(
       `Expected node projects/${ngAddOptions.project}/architect/test in angular.json!`
     );
   }
+
+  // Overwrite the default test architect.
   architect.builder = `@skyux-sdk/angular-builders:karma`;
   architect.options.codeCoverage = true;
+
   tree.overwrite('karma.conf.js', `// DO NOT MODIFY
 // This file is handled by the \`@skyux-sdk/angular-builders:karma\` builder.
 module.exports = function (config) {
@@ -70,23 +105,8 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
       );
     }
 
-    // Overwrite the default build architect.
-    const build = architect.build;
-    if (!build) {
-      throw new SchematicsException(`Expected node projects/${options.project}/architect/build in angular.json!`);
-    }
-    build.builder = '@skyux-sdk/angular-builders:browser';
-
-    // Overwrite the default serve architect.
-    const serve = architect.serve;
-    if (!serve) {
-      throw new SchematicsException(
-        `Expected node projects/${options.project}/architect/serve in angular.json!`
-      );
-    }
-    serve.builder = '@skyux-sdk/angular-builders:dev-server';
-    (serve.options as SkyuxDevServerBuilderOptions).skyuxLaunch = 'host';
-
+    setupBrowserBuilder(architect.build, options);
+    setupDevServerBuilder(architect.serve, options);
     setupKarmaBuilder(tree, architect.test, options);
 
     // Install as a development dependency.
