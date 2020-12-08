@@ -48,7 +48,6 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     }
     build.builder = '@skyux-sdk/angular-builders:browser';
 
-
     // Overwrite the default serve architect.
     const serve = architect.serve;
     if (!serve) {
@@ -58,6 +57,16 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     }
     serve.builder = '@skyux-sdk/angular-builders:dev-server';
     (serve.options as SkyuxDevServerBuilderOptions).skyuxLaunch = 'host';
+
+    // Overwrite the default test architect.
+    const test = architect.test;
+    if (!test) {
+      throw new Error(
+        `Expected node projects/${options.project}/architect/test in angular.json!`
+      );
+    }
+    test.builder = `@skyux-sdk/angular-builders:karma`;
+    test.options.codeCoverage = true;
 
     // Install as a development dependency.
     context.addTask(new NodePackageInstallTask());

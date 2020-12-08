@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "properties": {
+    "skyuxCiPlatform": {
+      "type": "string",
+      "description": "The name of the continuous integration platform that will run the tests.",
+      "enum": [
+        "ado",
+        "gh-actions"
+      ]
+    },
+    "skyuxCodeCoverageThreshold": {
+      "type": "string",
+      "description": "Specifies the minimum required code coverage threshold.",
+      "enum": [
+        "none",
+        "standard",
+        "strict"
+      ]
+    }
+  }
+}
