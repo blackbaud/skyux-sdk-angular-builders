@@ -1,5 +1,6 @@
 import {
-  SchematicTestRunner
+  SchematicTestRunner,
+  UnitTestTree
 } from '@angular-devkit/schematics/testing';
 
 import path from 'path';
@@ -11,14 +12,17 @@ import {
 const COLLECTION_PATH = path.resolve(__dirname, '../../../collection.json');
 
 describe('ng-add.schematic', () => {
+  let app: UnitTestTree;
   let runner: SchematicTestRunner;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     runner = new SchematicTestRunner('schematics', COLLECTION_PATH);
+    app = await createTestApp(runner);
+
+    app.create('karma.conf.js', `module.exports = () => {};`);
   });
 
   it('should update package.json', async () => {
-    const app = await createTestApp(runner);
     await runner
       .runSchematicAsync('ng-add', { project: 'foobar' }, app)
       .toPromise();
@@ -30,8 +34,6 @@ describe('ng-add.schematic', () => {
   });
 
   it('should throw an error if angular.json doesn\'t exist', async () => {
-    const app = await createTestApp(runner);
-
     app.delete('angular.json');
 
     await expectAsync(
@@ -42,8 +44,6 @@ describe('ng-add.schematic', () => {
   });
 
   it('should throw an error if specified project doesn\'t exist', async () => {
-    const app = await createTestApp(runner);
-
     await expectAsync(
       runner
         .runSchematicAsync('ng-add', { project: 'invalid-project' }, app)
@@ -52,8 +52,6 @@ describe('ng-add.schematic', () => {
   });
 
   it('should throw an error if specified project doesn\'t include an `architect` property', async () => {
-    const app = await createTestApp(runner);
-
     // Create an incorrectly formatted project config.
     const angularJson = JSON.parse(app.readContent('angular.json'));
     angularJson.projects['invalid-project'] = {};
@@ -67,7 +65,6 @@ describe('ng-add.schematic', () => {
   });
 
   it('should overwrite the default build, serve, and test architects', async () => {
-    const app = await createTestApp(runner);
     await runner
       .runSchematicAsync('ng-add', { project: 'foobar' }, app)
       .toPromise();
@@ -80,8 +77,6 @@ describe('ng-add.schematic', () => {
   });
 
   it('should throw an error if specified project doesn\'t include an `architect.serve` property', async () => {
-    const app = await createTestApp(runner);
-
     // Create an incorrectly formatted project config.
     const angularJson = JSON.parse(app.readContent('angular.json'));
     delete angularJson.projects.foobar.architect.serve;
@@ -95,8 +90,6 @@ describe('ng-add.schematic', () => {
   });
 
   it('should throw an error if specified project doesn\'t include an `architect.build` property', async () => {
-    const app = await createTestApp(runner);
-
     // Create an incorrectly formatted project config.
     const angularJson = JSON.parse(app.readContent('angular.json'));
     delete angularJson.projects.foobar.architect.build;
@@ -110,8 +103,6 @@ describe('ng-add.schematic', () => {
   });
 
   it('should throw an error if specified project doesn\'t include an `architect.test` property', async () => {
-    const app = await createTestApp(runner);
-
     // Create an incorrectly formatted project config.
     const angularJson = JSON.parse(app.readContent('angular.json'));
     delete angularJson.projects.foobar.architect.test;
@@ -122,6 +113,15 @@ describe('ng-add.schematic', () => {
         .runSchematicAsync('ng-add', { project: 'foobar' }, app)
         .toPromise()
     ).toBeRejectedWithError('Expected node projects/foobar/architect/test in angular.json!');
+  });
+
+  it('should modify the app\'s karma.conf.js file', async () => {
+    await runner
+      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+      .toPromise();
+
+    const contents = app.read('karma.conf.js')?.toString();
+    expect(contents).toContain('DO NOT MODIFY');
   });
 
 });
