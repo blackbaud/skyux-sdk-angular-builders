@@ -1,6 +1,6 @@
-import karma from 'karma';
-
 import glob from 'glob';
+
+import karma from 'karma';
 
 import path from 'path';
 

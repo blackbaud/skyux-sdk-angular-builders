@@ -1,6 +1,6 @@
-import karma from 'karma';
-
 import glob from 'glob';
+
+import karma from 'karma';
 
 import mock from 'mock-require';
 
@@ -15,7 +15,7 @@ describe('karma.default.conf.ts', () => {
 
   //#region helpers
 
-  function verifyCoverageThresholdPercent(threshold: number) {
+  function verifyCoverageThresholdPercent(threshold: number): void {
     expect(calledKarmaConfig.coverageReporter.check.global).toEqual({
       branches: threshold,
       functions: threshold,
@@ -47,11 +47,11 @@ describe('karma.default.conf.ts', () => {
       tsConfig: 'tsconfig.json'
     };
 
-    mock('karma-jasmine', {});
-    mock('karma-chrome-launcher', {});
-    mock('karma-jasmine-html-reporter', {});
-    mock('karma-coverage', {});
     mock('@angular-devkit/build-angular/plugins/karma', {});
+    mock('karma-chrome-launcher', {});
+    mock('karma-coverage', {});
+    mock('karma-jasmine', {});
+    mock('karma-jasmine-html-reporter', {});
   });
 
   afterEach(() => {
