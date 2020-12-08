@@ -1,3 +1,7 @@
+# 4.0.0-alpha.8 (2020-12-08)
+
+- Updated the `ng-add` schematic to modify an application's `karma.conf.js` file. [#40](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/40)
+
 # 4.0.0-alpha.7 (2020-12-08)
 
 - Added a builder to run Karma unit tests. [#32](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/32)
