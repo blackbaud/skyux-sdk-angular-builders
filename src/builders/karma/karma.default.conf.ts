@@ -26,6 +26,8 @@ function getCiPlatformKarmaConfig(platform: SkyuxCIPlatform): string {
   const configFiles = glob.sync(pattern);
   const config = configFiles[0];
 
+  console.log(`Using external Karma config:\n${config}\n`);
+
   return config;
 }
 
@@ -49,6 +51,8 @@ module.exports = (config: karma.Config): void => {
     SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold
   );
 
+  console.log(`Minimum required code coverage threshold set to ${codeCoverageThresholdPercent} percent.`);
+
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
@@ -66,7 +70,7 @@ module.exports = (config: karma.Config): void => {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage'),
+      dir: require('path').join(process.cwd(), './coverage'),
       subdir: '.',
       reporters: [
         { type: 'html' },
