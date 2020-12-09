@@ -1,3 +1,7 @@
+# 4.0.0-alpha.9 (2020-12-09)
+
+- Updated the `ng-add` schematic to modify a library's `karma.conf.js` file. [#41](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/41)
+
 # 4.0.0-alpha.8 (2020-12-08)
 
 - Updated the `ng-add` schematic to modify an application's `karma.conf.js` file. [#40](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/40)
