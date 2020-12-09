@@ -6,7 +6,8 @@ import {
 import path from 'path';
 
 import {
-  createTestApp
+  createTestApp,
+  generateTestLibrary
 } from '../testing/scaffold';
 
 const COLLECTION_PATH = path.resolve(__dirname, '../../../collection.json');
@@ -14,12 +15,16 @@ const COLLECTION_PATH = path.resolve(__dirname, '../../../collection.json');
 describe('ng-add.schematic', () => {
   let app: UnitTestTree;
   let runner: SchematicTestRunner;
+  let workspaceTree: UnitTestTree;
 
   beforeEach(async () => {
     runner = new SchematicTestRunner('schematics', COLLECTION_PATH);
-    app = await createTestApp(runner);
 
-    app.create('karma.conf.js', `module.exports = () => {};`);
+    const result = await createTestApp(runner, {
+      defaultProjectName: 'foobar'
+    });
+    app = result.appTree;
+    workspaceTree = result.workspaceTree;
   });
 
   it('should update package.json', async () => {
@@ -121,6 +126,17 @@ describe('ng-add.schematic', () => {
       .toPromise();
 
     const contents = app.read('karma.conf.js')?.toString();
+    expect(contents).toContain('DO NOT MODIFY');
+  });
+
+  it('should modify a library\'s karma.conf.js file', async () => {
+    const library = await generateTestLibrary(runner, workspaceTree, { name: 'foolib' });
+
+    await runner
+      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+      .toPromise();
+
+    const contents = library.read('projects/foolib/karma.conf.js')?.toString();
     expect(contents).toContain('DO NOT MODIFY');
   });
 
