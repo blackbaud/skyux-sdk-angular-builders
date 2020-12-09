@@ -1,3 +1,7 @@
+# 4.0.0-alpha.10 (2020-12-09)
+
+- Fixed the location of the code coverage directory. [#42](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/42)
+
 # 4.0.0-alpha.9 (2020-12-09)
 
 - Updated the `ng-add` schematic to modify a library's `karma.conf.js` file. [#41](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/41)
