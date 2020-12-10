@@ -1,3 +1,7 @@
+# 4.0.0-alpha.11 (2020-12-10)
+
+- Updated the test application and default `karma.conf.js` file to what `@angular/cli@11.0.4` provides when generating a new application. [#43](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/43)
+
 # 4.0.0-alpha.10 (2020-12-09)
 
 - Fixed the location of the code coverage directory. [#42](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/42)
