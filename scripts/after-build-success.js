@@ -59,6 +59,8 @@ function copyDistToNodeModules() {
     path.resolve(process.cwd(), 'dist'),
     path.resolve(__dirname, '../', 'builders-test-app', 'node_modules', '@skyux-sdk/angular-builders')
   );
+
+  console.log('Successfully copied `dist` to `builders-test-app/node_modules`');
 }
 
 copyFilesToDist();
