@@ -53,6 +53,8 @@ module.exports = (config: karma.Config): void => {
 
   console.log(`Minimum required code coverage threshold set to ${codeCoverageThresholdPercent} percent.`);
 
+  const browsers = (SkyuxKarmaConfigAdapter.builderOptions.skyuxHeadless === true) ? ['ChromeHeadless'] : ['Chrome'];
+
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
@@ -96,7 +98,7 @@ module.exports = (config: karma.Config): void => {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
+    browsers,
     singleRun: false,
     restartOnFileChange: true
   } as karma.ConfigOptions);

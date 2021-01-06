@@ -26,4 +26,9 @@ export type SkyuxKarmaBuilderOptions = KarmaBuilderOptions & json.JsonObject & {
    */
   skyuxCodeCoverageThreshold?: SkyuxCodeCoverageThreshold;
 
+  /**
+   * Specifies if the test browser should be run in "headless" mode.
+   */
+  skyuxHeadless?: boolean;
+
 };

@@ -17,6 +17,10 @@
         "standard",
         "strict"
       ]
+    },
+    "skyuxHeadless": {
+      "type": "boolean",
+      "description": "Specifies if the test browser should be run in 'headless' mode."
     }
   }
 }
