@@ -83,6 +83,19 @@ describe('karma.default.conf.ts', () => {
     verifyCoverageThresholdPercent(100);
   });
 
+  it('should run tests with Chrome browser by default', () => {
+    const config = mock.reRequire('./karma.default.conf');
+    config(mockKarmaConfigUtil);
+    expect(calledKarmaConfig.browsers).toEqual(['Chrome']);
+  });
+
+  it('should allow running tests with headless browser', () => {
+    SkyuxKarmaConfigAdapter.builderOptions.skyuxHeadless = true;
+    const config = mock.reRequire('./karma.default.conf');
+    config(mockKarmaConfigUtil);
+    expect(calledKarmaConfig.browsers).toEqual(['ChromeHeadless']);
+  });
+
   it('should apply platform config overrides', () => {
     SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform = 'ado';
 

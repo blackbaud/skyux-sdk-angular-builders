@@ -28,6 +28,7 @@ function executeSkyuxKarmaBuilder(
 ): Observable<BuilderOutput> {
 
   options.skyuxCodeCoverageThreshold = options.skyuxCodeCoverageThreshold || 'none';
+  options.skyuxHeadless = !!options.skyuxHeadless;
   options.karmaConfig = path.join(__dirname, 'karma.default.conf.js');
 
   // Enforce code coverage for CI platforms.

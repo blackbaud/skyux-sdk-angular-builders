@@ -59,6 +59,7 @@ describe('karma builder', () => {
       karmaConfig: path.resolve(__dirname, 'karma.default.conf.js'),
       main: 'main.ts',
       skyuxCodeCoverageThreshold: 'none',
+      skyuxHeadless: false,
       tsConfig: 'tsconfig.json'
     });
   });
@@ -74,6 +75,7 @@ describe('karma builder', () => {
       main: 'main.ts',
       skyuxCiPlatform: 'ado',
       skyuxCodeCoverageThreshold: 'none',
+      skyuxHeadless: false,
       tsConfig: 'tsconfig.json',
       watch: false
     });
