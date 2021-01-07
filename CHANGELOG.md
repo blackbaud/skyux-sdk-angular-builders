@@ -1,3 +1,7 @@
+# 4.0.0-alpha.12 (2021-01-06)
+
+- Added support for running unit tests in "headless" mode. [#45](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/45)
+
 # 4.0.0-alpha.11 (2020-12-10)
 
 - Updated the test application and default `karma.conf.js` file to what `@angular/cli@11.0.4` provides when generating a new application. [#43](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/43)
