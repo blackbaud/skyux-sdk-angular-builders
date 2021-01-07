@@ -30,8 +30,8 @@ export abstract class SkyuxAppAssetsState {
   public static replaceFilePaths(content: string): string {
     for (const [filePath, replacement] of Object.entries(SkyuxAppAssetsState.assets)) {
       content = content.replace(
-        new RegExp(filePath, 'gi'),
-        replacement.url
+        new RegExp(`"${filePath}"`, 'gi'),
+        `"${replacement.url}"`
       );
     }
 

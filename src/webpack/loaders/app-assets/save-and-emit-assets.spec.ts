@@ -10,6 +10,7 @@ describe('Save and emit assets', () => {
   let queueSpy: jasmine.Spy;
   let mockConfig: any;
   let mockContext: any;
+  let hashCounter = 0;
 
   beforeEach(() => {
     emitFileSpy = jasmine.createSpy('emitFile');
@@ -26,8 +27,10 @@ describe('Save and emit assets', () => {
       assetBaseUrl: 'https://foobar.com/'
     };
 
+    hashCounter = 0;
+
     mock('hasha', {
-      fromFileSync: () => 'MOCK_HASH'
+      fromFileSync: () => `MOCK_HASH_${hashCounter++}`
     });
   });
 
@@ -36,18 +39,30 @@ describe('Save and emit assets', () => {
     SkyuxAppAssetsState.flush();
   });
 
-  fit('should save the asset and emit the new file name', () => {
-    const content = `["assets/foo.png", "assets/foo.png2", "assets/foo.p"]`;
+  it('should save the asset and emit the new file name', () => {
+    const content = `["src", "assets/foo.doc"],["src", "assets/foo.png"],["src", "assets/foo.docx"]`;
+
     const { saveAndEmitAssets } = mock.reRequire('./save-and-emit-assets');
+
     saveAndEmitAssets.call(mockContext, content, mockConfig);
-    console.log(emitFileSpy.calls.allArgs());
-    expect(emitFileSpy.calls.mostRecent().args[0]).toBe(
-      'assets/foo.MOCK_HASH.png',
-      'Expected file name to include a hash.'
-    );
+
+    expect(emitFileSpy).toHaveBeenCalledWith('assets/foo.MOCK_HASH_0.doc', '', undefined);
+    expect(emitFileSpy).toHaveBeenCalledWith('assets/foo.MOCK_HASH_1.png', '', undefined);
+    expect(emitFileSpy).toHaveBeenCalledWith('assets/foo.MOCK_HASH_2.docx', '', undefined);
+
+    expect(queueSpy).toHaveBeenCalledWith({
+      filePath: 'assets/foo.doc',
+      url: 'https://foobar.com/assets/foo.MOCK_HASH_0.doc'
+    });
+
     expect(queueSpy).toHaveBeenCalledWith({
       filePath: 'assets/foo.png',
-      url: 'https://foobar.com/assets/foo.MOCK_HASH.png'
+      url: 'https://foobar.com/assets/foo.MOCK_HASH_1.png'
+    });
+
+    expect(queueSpy).toHaveBeenCalledWith({
+      filePath: 'assets/foo.docx',
+      url: 'https://foobar.com/assets/foo.MOCK_HASH_2.docx'
     });
   });
 
