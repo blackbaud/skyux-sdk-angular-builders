@@ -14,6 +14,7 @@ import {
   SkyuxAppAssetsState
 } from '../../app-assets-state';
 
+// "assets\/.*?\.[\.\w]+"
 const ASSETS_REGEX = /assets\/.*?\.[\.\w]+/gi;
 
 // Prevent the same asset from being processed more than once.

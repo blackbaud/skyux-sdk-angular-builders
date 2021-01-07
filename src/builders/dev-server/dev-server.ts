@@ -30,6 +30,8 @@ function executeSkyuxDevServerBuilder(
 ): Observable<DevServerBuilderOutput> {
   applySkyuxDevServerOptions(options);
 
+  console.log('OPTIONS:', options);
+
   return executeDevServerBuilder(
     options,
     context,

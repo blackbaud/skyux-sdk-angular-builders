@@ -36,10 +36,11 @@ describe('Save and emit assets', () => {
     SkyuxAppAssetsState.flush();
   });
 
-  it('should save the asset and emit the new file name', () => {
-    const content = `["assets/foo.png"]`;
+  fit('should save the asset and emit the new file name', () => {
+    const content = `["assets/foo.png", "assets/foo.png2", "assets/foo.p"]`;
     const { saveAndEmitAssets } = mock.reRequire('./save-and-emit-assets');
     saveAndEmitAssets.call(mockContext, content, mockConfig);
+    console.log(emitFileSpy.calls.allArgs());
     expect(emitFileSpy.calls.mostRecent().args[0]).toBe(
       'assets/foo.MOCK_HASH.png',
       'Expected file name to include a hash.'
