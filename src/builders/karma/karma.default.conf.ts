@@ -16,7 +16,7 @@ import {
   SkyuxKarmaConfigAdapter
 } from './karma-config-adapter';
 
-function getCiPlatformKarmaConfig(platform: SkyuxCIPlatform): string {
+function getCiPlatformKarmaConfig(platform: SkyuxCIPlatform): string | undefined {
   // Using glob so we can find skyux-sdk-builder-config regardless of npm install location
   const pattern = path.join(
     process.cwd(),
@@ -26,9 +26,16 @@ function getCiPlatformKarmaConfig(platform: SkyuxCIPlatform): string {
   const configFiles = glob.sync(pattern);
   const config = configFiles[0];
 
-  console.log(`Using external Karma config:\n${config}\n`);
+  if (config) {
+    console.log(`[SKY UX] Using external Karma configuration:\n${config}\n`);
+    return config;
+  }
 
-  return config;
+  console.warn(
+    `[SKY UX] Platform configuration not found for key, '${platform}'! ` +
+    'Using default Karma configuration.'
+  );
+  return;
 }
 
 function getCodeCoverageThresholdPercent(threshold?: SkyuxCodeCoverageThreshold): number {
@@ -51,9 +58,7 @@ module.exports = (config: karma.Config): void => {
     SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold
   );
 
-  console.log(`Minimum required code coverage threshold set to ${codeCoverageThresholdPercent} percent.`);
-
-  const browsers = (SkyuxKarmaConfigAdapter.builderOptions.skyuxHeadless === true) ? ['ChromeHeadless'] : ['Chrome'];
+  console.log(`[SKY UX] Minimum required code coverage threshold set to ${codeCoverageThresholdPercent} percent.`);
 
   config.set({
     basePath: '',
@@ -98,7 +103,7 @@ module.exports = (config: karma.Config): void => {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers,
+    browsers: ['Chrome'],
     singleRun: false,
     restartOnFileChange: true
   } as karma.ConfigOptions);
@@ -106,14 +111,22 @@ module.exports = (config: karma.Config): void => {
   // Apply platform config overrides.
   if (SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform) {
     try {
-      require(
-        getCiPlatformKarmaConfig(
-          SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform
-        )
-      )(config);
+      const platformConfigPath = getCiPlatformKarmaConfig(
+        SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform
+      );
+
+      /* istanbul ignore else */
+      if (platformConfigPath) {
+        require(platformConfigPath)(config);
+      }
     } catch (err) {
       console.error(err);
       throw new Error(err);
     }
+  } else {
+    console.log(
+      '[SKY UX] A specific CI platform configuration was not requested. ' +
+      'Using default Karma configuration.'
+    );
   }
 }

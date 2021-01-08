@@ -12,6 +12,7 @@ describe('karma.default.conf.ts', () => {
 
   let calledKarmaConfig: any;
   let mockKarmaConfigUtil: karma.Config;
+  let globSyncSpy: jasmine.Spy;
 
   //#region helpers
 
@@ -46,6 +47,8 @@ describe('karma.default.conf.ts', () => {
       main: 'main.ts',
       tsConfig: 'tsconfig.json'
     };
+
+    globSyncSpy = spyOn(glob, 'sync');
 
     mock('@angular-devkit/build-angular/plugins/karma', {});
     mock('karma-chrome-launcher', {});
@@ -89,17 +92,10 @@ describe('karma.default.conf.ts', () => {
     expect(calledKarmaConfig.browsers).toEqual(['Chrome']);
   });
 
-  it('should allow running tests with headless browser', () => {
-    SkyuxKarmaConfigAdapter.builderOptions.skyuxHeadless = true;
-    const config = mock.reRequire('./karma.default.conf');
-    config(mockKarmaConfigUtil);
-    expect(calledKarmaConfig.browsers).toEqual(['ChromeHeadless']);
-  });
-
   it('should apply platform config overrides', () => {
     SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform = 'ado';
 
-    spyOn(glob, 'sync').and.returnValue([
+    globSyncSpy.and.returnValue([
       'mock-karma.conf.js'
     ]);
 
@@ -112,13 +108,14 @@ describe('karma.default.conf.ts', () => {
     const config: (conf: karma.Config) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
+    expect(globSyncSpy.calls.mostRecent().args[0]).toContain('/@skyux-sdk/pipeline-settings/platforms/ado/karma/karma.angular-cli.conf.js');
     expect(calledKarmaConfig.singleRun).toEqual(true);
   });
 
-  it('should handle unfound platform config files', () => {
+  it('should handle nonexistent platform config files', () => {
     SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform = 'ado';
 
-    spyOn(glob, 'sync').and.returnValue([
+    globSyncSpy.and.returnValue([
       'mock-karma.conf.js'
     ]);
 
@@ -130,6 +127,18 @@ describe('karma.default.conf.ts', () => {
     } catch (err) {
       expect(err.message).toContain('Error: Cannot find module \'mock-karma.conf.js\'');
     }
+  });
+
+  it('should handle invalid platform config keys', () => {
+    (SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform as string) = 'invalid';
+
+    globSyncSpy.and.returnValue([]);
+
+    const warnSpy = spyOn(console, 'warn');
+    const config = mock.reRequire('./karma.default.conf');
+
+    config(mockKarmaConfigUtil);
+    expect(warnSpy.calls.mostRecent().args[0]).toContain('Platform configuration not found for key');
   });
 
 });
