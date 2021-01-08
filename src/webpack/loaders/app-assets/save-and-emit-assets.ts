@@ -14,7 +14,7 @@ import {
   SkyuxAppAssetsState
 } from '../../app-assets-state';
 
-const ASSETS_REGEX = /assets\/.*?\.[\.\w]+/gi;
+const ASSETS_REGEX = /"assets\/.*?\.[\.\w]+"/gi;
 
 // Prevent the same asset from being processed more than once.
 const processedAssets: string[] = [];
@@ -27,6 +27,7 @@ export function saveAndEmitAssets(
   }
 ): void {
   content.match(ASSETS_REGEX)?.forEach(filePath => {
+    filePath = filePath.replace(/"/g, '');
     if (!processedAssets.includes(filePath)) {
       processedAssets.push(filePath);
 
