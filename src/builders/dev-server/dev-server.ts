@@ -30,6 +30,14 @@ function executeSkyuxDevServerBuilder(
 ): Observable<DevServerBuilderOutput> {
   applySkyuxDevServerOptions(options);
 
+  // Override options when called via `ng e2e`.
+  // During `ng e2e`, Angular calls the dev-server builder via `context.scheduleTarget`,
+  // which sets the configuration property to `undefined`.
+  if (context.target?.configuration === undefined) {
+    options.open = false;
+    options.skyuxOpen = false;
+  }
+
   return executeDevServerBuilder(
     options,
     context,

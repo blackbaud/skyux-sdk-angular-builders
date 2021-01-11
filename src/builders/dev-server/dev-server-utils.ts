@@ -39,6 +39,14 @@ export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions
     // Point lazy-loaded modules to the localhost URL.
     options.deployUrl = localUrl;
     options.servePath = '/';
+
+    // The Host URL Webpack plugin handles the browser interactions.
+    options.open = false;
+
+    // Default to opening the SKY UX Host URL.
+    if (options.skyuxOpen === undefined) {
+      options.skyuxOpen = true;
+    }
   }
 
   // Open the user's default browser automatically.

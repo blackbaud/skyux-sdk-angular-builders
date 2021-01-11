@@ -47,7 +47,8 @@ function getDevServerWepbackConfigTransformer(
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
           localUrl: getLocalUrlFromOptions(options),
-          pathName
+          pathName,
+          open: options.skyuxOpen!
         })
       );
     }

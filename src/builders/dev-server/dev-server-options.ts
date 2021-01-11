@@ -14,4 +14,9 @@ export type SkyuxDevServerBuilderOptions = DevServerBuilderOptions & {
    */
   skyuxLaunch?: 'host' | 'local';
 
+  /**
+   * Specifies if the SKY UX Host URL should be automatically opened in the user's default browser.
+   */
+  skyuxOpen?: boolean;
+
 };
