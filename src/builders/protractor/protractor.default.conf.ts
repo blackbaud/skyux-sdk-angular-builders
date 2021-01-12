@@ -12,7 +12,7 @@ import {
 
 import {
   SkyuxProtractorBuilderOptions
-} from "./protractor-options";
+} from './protractor-options';
 
 function getConfig(): ProtractorConfig {
   const browserArgs: string[] = [];
@@ -43,7 +43,7 @@ function getConfig(): ProtractorConfig {
     jasmineNodeOpts: {
       showColors: true,
       defaultTimeoutInterval: 30000,
-      print: function() {}
+      print() {}
     },
     onPrepare() {
       require('ts-node').register({

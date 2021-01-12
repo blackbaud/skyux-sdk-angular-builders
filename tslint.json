@@ -17,7 +17,8 @@
       true,
       {
         "limit": 120,
-        "check-strings": false
+        "check-strings": false,
+        "ignore-pattern": "//"
       }
     ],
     "no-any": true,

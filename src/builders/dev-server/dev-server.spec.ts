@@ -51,7 +51,8 @@ describe('dev-server builder', () => {
     createBuilderSpy = jasmine.createSpy('createBuilder').and
       .callFake((cb: any) => cb(defaultOptions, {
         target: {
-          project: 'foo'
+          project: 'foo',
+          configuration: ''
         }
       }));
 
@@ -110,11 +111,13 @@ describe('dev-server builder', () => {
         browserTarget: 'foo:build',
         deployUrl: 'https://localhost:4200/',
         host: 'localhost',
+        open: false,
         port: 4200,
         publicHost: 'https://localhost:4200/',
         servePath: '/',
         skyuxHostUrl: 'https://app.blackbaud.com/',
         skyuxLaunch: 'host',
+        skyuxOpen: true,
         ssl: true,
         sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
         sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
