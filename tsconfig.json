@@ -27,7 +27,8 @@
   "include": [
     "index.ts",
     "src/**/*.json",
-    "src/builders/karma/karma.default.conf.ts"
+    "src/builders/karma/karma.default.conf.ts",
+    "src/builders/protractor/protractor.default.conf.ts"
   ],
   "exclude": [
     "node_modules"
