@@ -11,7 +11,7 @@ import {
 } from 'protractor';
 
 import {
-  getCiPlatformConfig
+  getCiPlatformProtractorConfig
 } from '../../shared/ci-platform-utils';
 
 import {
@@ -64,21 +64,8 @@ function getConfig(): ProtractorConfig {
 
   // Apply platform config overrides.
   if (builderOptions.skyuxCiPlatform) {
-    try {
-      const platformConfigPath = getCiPlatformConfig(
-        'protractor',
-        builderOptions.skyuxCiPlatform
-      );
-
-      /* istanbul ignore else */
-      if (platformConfigPath) {
-        const overrides = require(platformConfigPath);
-        Object.assign(config, overrides);
-      }
-    } catch (err) {
-      console.error(err);
-      throw new Error(err);
-    }
+    const overrides = getCiPlatformProtractorConfig(builderOptions.skyuxCiPlatform);
+    Object.assign(config, overrides);
   } else {
     console.log(
       '[SKY UX] A specific CI platform configuration was not requested. ' +

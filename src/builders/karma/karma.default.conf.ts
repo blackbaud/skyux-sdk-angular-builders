@@ -1,7 +1,7 @@
 import karma from 'karma';
 
 import {
-  getCiPlatformConfig
+  getCiPlatformKarmaConfig
 } from '../../shared/ci-platform-utils';
 
 import {
@@ -85,20 +85,10 @@ module.exports = (config: karma.Config): void => {
 
   // Apply platform config overrides.
   if (SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform) {
-    try {
-      const platformConfigPath = getCiPlatformConfig(
-        'karma',
-        SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform
-      );
-
-      /* istanbul ignore else */
-      if (platformConfigPath) {
-        require(platformConfigPath)(config);
-      }
-    } catch (err) {
-      console.error(err);
-      throw new Error(err);
-    }
+    const platformConfig = getCiPlatformKarmaConfig(
+      SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform
+    );
+    platformConfig(config);
   } else {
     console.log(
       '[SKY UX] A specific CI platform configuration was not requested. ' +
