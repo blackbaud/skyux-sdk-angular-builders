@@ -11,6 +11,10 @@ import {
 } from 'protractor';
 
 import {
+  getCiPlatformConfig
+} from '../../shared/ci-platform-utils';
+
+import {
   SkyuxProtractorBuilderOptions
 } from './protractor-options';
 
@@ -25,6 +29,7 @@ function getConfig(): ProtractorConfig {
     browserArgs.push('--headless');
   }
 
+  // The default Protractor configuration provided by Angular CLI.
   const config: ProtractorConfig = {
     allScriptsTimeout: 11000,
     specs: [
@@ -56,6 +61,30 @@ function getConfig(): ProtractorConfig {
       }));
     }
   };
+
+  // Apply platform config overrides.
+  if (builderOptions.skyuxCiPlatform) {
+    try {
+      const platformConfigPath = getCiPlatformConfig(
+        'protractor',
+        builderOptions.skyuxCiPlatform
+      );
+
+      /* istanbul ignore else */
+      if (platformConfigPath) {
+        const overrides = require(platformConfigPath);
+        Object.assign(config, overrides);
+      }
+    } catch (err) {
+      console.error(err);
+      throw new Error(err);
+    }
+  } else {
+    console.log(
+      '[SKY UX] A specific CI platform configuration was not requested. ' +
+      'Using default Protractor configuration.'
+    );
+  }
 
   return config;
 }

@@ -36,6 +36,7 @@ describe('dev-server builder', () => {
   let defaultOptions: SkyuxDevServerBuilderOptions;
   let defaultWebpackConfig: webpack.Configuration;
   let actualWebpackConfig: webpack.Configuration;
+  let mockContext: any;
 
   beforeEach(() => {
     defaultOptions = {
@@ -48,13 +49,15 @@ describe('dev-server builder', () => {
 
     actualWebpackConfig = {};
 
+    mockContext = {
+      target: {
+        project: 'foo',
+        configuration: ''
+      }
+    };
+
     createBuilderSpy = jasmine.createSpy('createBuilder').and
-      .callFake((cb: any) => cb(defaultOptions, {
-        target: {
-          project: 'foo',
-          configuration: ''
-        }
-      }));
+      .callFake((cb: any) => cb(defaultOptions, mockContext));
 
     executDevServerBuilderSpy = jasmine.createSpy('executeDevServerBuilder').and
       .callFake((_options: any, _context: any, transforms: any) => {
@@ -155,6 +158,22 @@ describe('dev-server builder', () => {
       expect(actualOptions.open).toEqual(true);
     });
 
+    it('should NOT open the default browser if builder run via a scheduler', async () => {
+      defaultOptions = overrideOptions({
+        open: true,
+        skyuxLaunch: 'local',
+        skyuxOpen: true
+      });
+
+      mockContext.target.configuration = undefined;
+
+      await (mock.reRequire('./dev-server'));
+
+      const actualOptions = getActualOptions();
+
+      expect(actualOptions.open).toBe(false);
+      expect(actualOptions.skyuxOpen).toBe(false);
+    });
 
     it('should allow setting a custom `skyuxHostUrl` and append a trailing slash', async () => {
       defaultOptions = overrideOptions({
@@ -170,6 +189,7 @@ describe('dev-server builder', () => {
         skyuxHostUrl: 'https://my-host-url.com/'
       }));
     });
+
   });
 
   describe('webpack config', () => {

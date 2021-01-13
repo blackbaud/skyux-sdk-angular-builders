@@ -8,7 +8,7 @@ import {
 
 import {
   SkyuxCIPlatform
-} from './ci-platform';
+} from '../../shared/ci-platform';
 
 import {
   SkyuxCodeCoverageThreshold

@@ -1,12 +1,8 @@
-import glob from 'glob';
-
 import karma from 'karma';
 
-import path from 'path';
-
 import {
-  SkyuxCIPlatform
-} from './ci-platform';
+  getCiPlatformConfig
+} from '../../shared/ci-platform-utils';
 
 import {
   SkyuxCodeCoverageThreshold
@@ -15,28 +11,6 @@ import {
 import {
   SkyuxKarmaConfigAdapter
 } from './karma-config-adapter';
-
-function getCiPlatformKarmaConfig(platform: SkyuxCIPlatform): string | undefined {
-  // Using glob so we can find skyux-sdk-builder-config regardless of npm install location
-  const pattern = path.join(
-    process.cwd(),
-    `node_modules/**/@skyux-sdk/pipeline-settings/platforms/${platform}/karma/karma.angular-cli.conf.js`
-  );
-
-  const configFiles = glob.sync(pattern);
-  const config = configFiles[0];
-
-  if (config) {
-    console.log(`[SKY UX] Using external Karma configuration:\n${config}\n`);
-    return config;
-  }
-
-  console.warn(
-    `[SKY UX] Platform configuration not found for key, '${platform}'! ` +
-    'Using default Karma configuration.'
-  );
-  return;
-}
 
 function getCodeCoverageThresholdPercent(threshold?: SkyuxCodeCoverageThreshold): number {
   switch (threshold) {
@@ -60,6 +34,7 @@ module.exports = (config: karma.Config): void => {
 
   console.log(`[SKY UX] Minimum required code coverage threshold set to ${codeCoverageThresholdPercent} percent.`);
 
+  // The default Karma configuration provided by Angular CLI.
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
@@ -111,7 +86,8 @@ module.exports = (config: karma.Config): void => {
   // Apply platform config overrides.
   if (SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform) {
     try {
-      const platformConfigPath = getCiPlatformKarmaConfig(
+      const platformConfigPath = getCiPlatformConfig(
+        'karma',
         SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform
       );
 

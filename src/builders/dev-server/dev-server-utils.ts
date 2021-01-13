@@ -44,6 +44,7 @@ export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions
     options.open = false;
 
     // Default to opening the SKY UX Host URL.
+    /* istanbul ignore else */
     if (options.skyuxOpen === undefined) {
       options.skyuxOpen = true;
     }
