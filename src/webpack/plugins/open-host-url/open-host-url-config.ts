@@ -11,12 +11,13 @@ export interface SkyuxOpenHostURLPluginConfig {
   localUrl: string;
 
   /**
+   * Specifies if the URL should be opened in a browser automatically.
+   */
+  open: boolean;
+
+  /**
    * The unique pathname of the SPA, e.g. 'my-spa'.
    */
   pathName: string;
 
-  /**
-   * Specifies if the URL should be opened in a browser automatically.
-   */
-  open: boolean;
 }

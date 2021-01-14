@@ -48,8 +48,10 @@ function getConfig(): ProtractorConfig {
     jasmineNodeOpts: {
       showColors: true,
       defaultTimeoutInterval: 30000,
+      /* istanbul ignore next */
       print() {}
     },
+    /* istanbul ignore next */
     onPrepare() {
       require('ts-node').register({
         project: require('path').join(process.cwd(), './e2e/tsconfig.json')

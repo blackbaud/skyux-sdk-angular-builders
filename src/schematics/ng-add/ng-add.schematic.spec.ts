@@ -69,7 +69,7 @@ describe('ng-add.schematic', () => {
     ).toBeRejectedWithError('Expected node projects/invalid-project/architect in angular.json!');
   });
 
-  it('should overwrite the default build, serve, and test architects', async () => {
+  it('should overwrite the default build, serve, test, and e2e architects', async () => {
     await runner
       .runSchematicAsync('ng-add', { project: 'foobar' }, app)
       .toPromise();
@@ -79,6 +79,7 @@ describe('ng-add.schematic', () => {
     expect(angularJson.projects.foobar.architect.build.builder).toEqual('@skyux-sdk/angular-builders:browser');
     expect(angularJson.projects.foobar.architect.serve.builder).toEqual('@skyux-sdk/angular-builders:dev-server');
     expect(angularJson.projects.foobar.architect.test.builder).toEqual('@skyux-sdk/angular-builders:karma');
+    expect(angularJson.projects.foobar.architect.e2e.builder).toEqual('@skyux-sdk/angular-builders:protractor');
   });
 
   it('should throw an error if specified project doesn\'t include an `architect.serve` property', async () => {
@@ -137,6 +138,28 @@ describe('ng-add.schematic', () => {
       .toPromise();
 
     const contents = library.read('projects/foolib/karma.conf.js')?.toString();
+    expect(contents).toContain('DO NOT MODIFY');
+  });
+
+  it('should throw an error if specified project doesn\'t include an `architect.e2e` property', async () => {
+    // Create an incorrectly formatted project config.
+    const angularJson = JSON.parse(app.readContent('angular.json'));
+    delete angularJson.projects.foobar.architect.e2e;
+    app.overwrite('angular.json', JSON.stringify(angularJson));
+
+    await expectAsync(
+      runner
+        .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+        .toPromise()
+    ).toBeRejectedWithError('Expected node projects/foobar/architect/e2e in angular.json!');
+  });
+
+  it('should modify the app\'s protractor.conf.js file', async () => {
+    await runner
+      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+      .toPromise();
+
+    const contents = app.read('e2e/protractor.conf.js')?.toString();
     expect(contents).toContain('DO NOT MODIFY');
   });
 

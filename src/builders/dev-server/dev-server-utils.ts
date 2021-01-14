@@ -40,7 +40,8 @@ export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions
     options.deployUrl = localUrl;
     options.servePath = '/';
 
-    // The Host URL Webpack plugin handles the browser interactions.
+    // Disable Angular CLI's opening behavior since the Host URL Webpack plugin
+    // handles launching the browser.
     options.open = false;
 
     // Default to opening the SKY UX Host URL.
