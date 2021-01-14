@@ -1,3 +1,9 @@
+# 4.0.0-alpha.13 (2021-01-14)
+
+- Added a builder to run Protractor e2e tests. [#47](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/47)
+- Removed the `ng test --skyux-headless` argument; the Angular CLI `--browsers=ChromeHeadless` argument should be used instead. [#46](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/46)
+- Fixed the regular expression used for asset hashing to handle similarly named file paths. [#46](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/46)
+
 # 4.0.0-alpha.12 (2021-01-06)
 
 - Added support for running unit tests in "headless" mode. [#45](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/45)
