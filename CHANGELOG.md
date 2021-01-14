@@ -1,3 +1,7 @@
+# 4.0.0-alpha.14 (2021-01-14)
+
+- Fixed the Protractor builder to run e2e tests on localhost, instead of SKY UX Host. [#48](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/48)
+
 # 4.0.0-alpha.13 (2021-01-14)
 
 - Added a builder to run Protractor e2e tests. [#47](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/47)
