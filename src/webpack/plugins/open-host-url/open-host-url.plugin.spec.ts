@@ -174,9 +174,7 @@ describe('open host url webpack plugin', () => {
     });
     plugin.apply(mockCompiler);
 
-    // The URL should not be opened by default.
     expect(openSpy).toHaveBeenCalled();
-
   });
 
 });

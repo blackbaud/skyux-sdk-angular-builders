@@ -22,7 +22,7 @@ function getCiPlatformConfig(
   platform: SkyuxCIPlatform
 ): unknown {
 
-  // Using glob so we can find skyux-sdk-builder-config regardless of npm install location
+  // Using glob so we can find `@skyux-sdk/pipeline-settings` regardless of npm install location.
   const pattern = path.join(
     process.cwd(),
     `node_modules/**/@skyux-sdk/pipeline-settings/platforms/${platform}/${framework}/${framework}.angular-cli.conf.js`

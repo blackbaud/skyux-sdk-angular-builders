@@ -11,7 +11,7 @@ export interface SkyuxOpenHostURLPluginConfig {
   localUrl: string;
 
   /**
-   * Specifies if the URL should be opened in a browser automatically.
+   * Specifies if the URL should be opened in the default browser automatically.
    */
   open: boolean;
 
