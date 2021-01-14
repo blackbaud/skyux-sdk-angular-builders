@@ -158,10 +158,10 @@ describe('dev-server builder', () => {
       expect(actualOptions.open).toEqual(true);
     });
 
-    it('should NOT open the default browser if builder run via a scheduler', async () => {
+    it('should set specific options when served using `ng e2e` command', async () => {
       defaultOptions = overrideOptions({
         open: true,
-        skyuxLaunch: 'local',
+        skyuxLaunch: 'host',
         skyuxOpen: true
       });
 
@@ -173,6 +173,7 @@ describe('dev-server builder', () => {
 
       expect(actualOptions.open).toBe(false);
       expect(actualOptions.skyuxOpen).toBe(false);
+      expect(actualOptions.skyuxLaunch).toBe('local');
     });
 
     it('should allow setting a custom `skyuxHostUrl` and append a trailing slash', async () => {
