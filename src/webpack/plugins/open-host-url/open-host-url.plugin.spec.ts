@@ -1,7 +1,12 @@
 import mock from 'mock-require';
 
+import {
+  SkyuxOpenHostURLPluginConfig
+} from './open-host-url-config';
+
 describe('open host url webpack plugin', () => {
 
+  let createSpy: jasmine.Spy;
   let openSpy: jasmine.Spy;
   let mockCompiler: any;
   let mockStats: any;
@@ -9,7 +14,8 @@ describe('open host url webpack plugin', () => {
   let localUrl: string;
 
   beforeEach(() => {
-    openSpy = jasmine.createSpy('openHostUrl');
+    createSpy = jasmine.createSpy('createHostUrl');
+    openSpy = jasmine.createSpy('open');
 
     mockStats = undefined;
 
@@ -28,23 +34,27 @@ describe('open host url webpack plugin', () => {
     hostUrl = 'https://app.blackbaud.com/';
     localUrl = 'https://localhost:4200/';
 
+    spyOn(console, 'log');
+
     mock('../../../shared/host-utils', {
-      openHostUrl: openSpy
+      createHostUrl: createSpy
     });
+
+    mock('open', openSpy);
   });
 
   afterEach(() => {
     mock.stopAll();
   });
 
-  function getPlugin(): typeof SkyuxOpenHostURLPlugin {
+  function getPlugin(options: Partial<SkyuxOpenHostURLPluginConfig> = {}): typeof SkyuxOpenHostURLPlugin {
     const SkyuxOpenHostURLPlugin = mock.reRequire('./open-host-url.plugin').SkyuxOpenHostURLPlugin;
 
-    const plugin = new SkyuxOpenHostURLPlugin({
+    const plugin = new SkyuxOpenHostURLPlugin({...{
       hostUrl,
       localUrl,
       pathName: 'my-project'
-    });
+    }, ...options});
 
     return plugin;
   }
@@ -54,7 +64,7 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(openSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+    expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: []
@@ -79,7 +89,7 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(openSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+    expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [
@@ -106,7 +116,7 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(openSpy.calls.mostRecent().args[2].scripts).toEqual([
+    expect(createSpy.calls.mostRecent().args[2].scripts).toEqual([
       {
         name: 'polyfills.ts'
       },
@@ -125,7 +135,7 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(openSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+    expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: []
@@ -148,7 +158,23 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(openSpy).toHaveBeenCalledTimes(1);
+    expect(createSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('should allow opening the Host URL in the default browser', () => {
+    let plugin = getPlugin();
+    plugin.apply(mockCompiler);
+
+    // The URL should not be opened by default.
+    expect(openSpy).not.toHaveBeenCalled();
+    openSpy.calls.reset();
+
+    plugin = getPlugin({
+      open: true
+    });
+    plugin.apply(mockCompiler);
+
+    expect(openSpy).toHaveBeenCalled();
   });
 
 });

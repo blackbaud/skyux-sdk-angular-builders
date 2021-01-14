@@ -35,6 +35,10 @@ function mergeBuilderSchemas() {
     {
       baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/karma/schema.json',
       schemaPath: './dist/src/builders/karma/schema.ext.json'
+    },
+    {
+      baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/protractor/schema.json',
+      schemaPath: './dist/src/builders/protractor/schema.ext.json'
     }
   ];
 

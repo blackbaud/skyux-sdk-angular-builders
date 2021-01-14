@@ -12,6 +12,10 @@
         "local",
         "host"
       ]
+    },
+    "skyuxOpen": {
+      "type": "boolean",
+      "description": "Specifies if the SKY UX Host URL should be automatically opened in the user's default browser."
     }
   }
 }

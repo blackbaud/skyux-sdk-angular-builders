@@ -34,7 +34,7 @@ describe('karma builder', () => {
         }
       }));
 
-    executeKarmaBuilderSpy = jasmine.createSpy('executeDevServerBuilder').and
+    executeKarmaBuilderSpy = jasmine.createSpy('executeKarmaBuilder').and
       .callFake((_options: any, _context: any, _transforms: any) => {
         return of({
           success: true

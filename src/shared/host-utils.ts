@@ -1,5 +1,3 @@
-import open from 'open';
-
 import {
   SkyuxHostUrlConfig
 } from './host-url-config';
@@ -15,18 +13,17 @@ export function getHostUrlFromOptions(options?: {
 }
 
 /**
- *
- * @param baseUrl The base Host URL, including the protocol.
+ * Creates the SKY UX Host URL.
+ * @param baseUrl The base SKY UX Host URL, including the protocol.
  * @param pathName The URL-friendly pathname where the project will be served.
  * @param config Configuration that will be sent to the host server.
  */
-export function openHostUrl(
+export function createHostUrl(
   baseUrl: string,
   pathName: string,
   config: SkyuxHostUrlConfig
-): void {
-
-  // We need to URL-encode the value so that characters such as '+'
+): string {
+  // We need to URL-encode the config so that characters such as '+'
   // are properly represented.
   const configEncoded = encodeURIComponent(
     Buffer.from(JSON.stringify(config)).toString('base64')
@@ -34,7 +31,5 @@ export function openHostUrl(
 
   const url = `${baseUrl}${pathName}/?local=true&_cfg=${configEncoded}`;
 
-  console.log(`\nSKY UX Host URL:\n\n${url}`);
-
-  open(url);
+  return url;
 }

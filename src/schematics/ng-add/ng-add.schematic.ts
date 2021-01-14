@@ -18,6 +18,10 @@ import {
 } from '../../builders/karma/karma-options';
 
 import {
+  SkyuxProtractorBuilderOptions
+} from '../../builders/protractor/protractor-options';
+
+import {
   SkyuxNgAddOptions
 } from './schema';
 
@@ -55,6 +59,32 @@ function setupDevServerBuilder(
   architect.options.skyuxLaunch = 'host';
 }
 
+function setupProtractorBuilder(
+  tree: Tree,
+  architect: {
+    builder: string;
+    options: SkyuxProtractorBuilderOptions;
+  },
+  projectName: string
+): void {
+  if (!architect) {
+    throw new SchematicsException(
+      `Expected node projects/${projectName}/architect/e2e in angular.json!`
+    );
+  }
+
+  // Overwrite the default e2e architect.
+  architect.builder = '@skyux-sdk/angular-builders:protractor';
+
+  const contents = `// DO NOT MODIFY
+// This file is handled by the \`@skyux-sdk/angular-builders:protractor\` builder.
+
+exports.config = {};
+`;
+
+  tree.overwrite('e2e/protractor.conf.js', contents);
+}
+
 function setupKarmaBuilder(
   tree: Tree,
   architect: {
@@ -75,6 +105,7 @@ function setupKarmaBuilder(
 
   const contents = `// DO NOT MODIFY
 // This file is handled by the \`@skyux-sdk/angular-builders:karma\` builder.
+
 module.exports = function (config) {
   config.set({});
 };
@@ -114,6 +145,7 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
 
     setupBrowserBuilder(architect.build, options.project);
     setupDevServerBuilder(architect.serve, options.project);
+    setupProtractorBuilder(tree, architect.e2e, options.project);
 
     // Setup karma for all projects.
     Object.keys(workspace.projects).forEach(project => {

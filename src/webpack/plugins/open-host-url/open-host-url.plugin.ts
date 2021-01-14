@@ -1,9 +1,11 @@
+import open from 'open';
+
 import {
   Compiler
 } from 'webpack';
 
 import {
-  openHostUrl
+  createHostUrl
 } from '../../../shared/host-utils';
 
 import {
@@ -30,7 +32,7 @@ export class SkyuxOpenHostURLPlugin {
 
         const assets = getHostAssets(webpackStats.toJson());
 
-        openHostUrl(
+        const url = createHostUrl(
           this.config.hostUrl,
           this.config.pathName,
           {
@@ -39,6 +41,12 @@ export class SkyuxOpenHostURLPlugin {
             scripts: assets
           }
         );
+
+        console.log(`\nSKY UX Host URL:\n\n${url}`);
+
+        if (this.config.open) {
+          open(url);
+        }
 
         opened = true;
       }
