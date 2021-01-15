@@ -27,11 +27,17 @@ describe('ci-platform.utils', () => {
       'valid-config-file.js'
     ]);
 
-    const contents = {};
+    const contents = {
+      config: {
+        foo: 'bar'
+      }
+    };
     mock('valid-config-file.js', contents);
 
     const result = getCiPlatformProtractorConfig('ado');
-    expect(result).toBe(contents);
+    expect(result).toEqual({
+      foo: 'bar'
+    });
 
     expect(globSyncSpy.calls.mostRecent().args[0]).toContain(
       'node_modules/**/@skyux-sdk/pipeline-settings/platforms/ado/protractor/protractor.angular-cli.conf.js'
