@@ -1,3 +1,7 @@
+# 4.0.0-alpha.15 (2021-01-15)
+
+- Fixed the Protractor builder to merge configs properly. [#49](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/49)
+
 # 4.0.0-alpha.14 (2021-01-14)
 
 - Fixed the Protractor builder to run e2e tests on localhost, instead of SKY UX Host. [#48](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/48)
