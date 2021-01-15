@@ -6,6 +6,8 @@ const {
   StacktraceOption
 } = require('jasmine-spec-reporter');
 
+import mergeWith from 'lodash.mergewith';
+
 import {
   Config as ProtractorConfig
 } from 'protractor';
@@ -17,6 +19,17 @@ import {
 import {
   SkyuxProtractorBuilderOptions
 } from './protractor-options';
+
+function mergeConfigs(
+  defaults: ProtractorConfig,
+  overrides: ProtractorConfig
+): ProtractorConfig {
+  return mergeWith(defaults, overrides, (defaultValue, overrideValue) => {
+    if (Array.isArray(defaultValue)) {
+      return overrideValue;
+    }
+  });
+}
 
 function getConfig(): ProtractorConfig {
   const browserArgs: string[] = [];
@@ -30,7 +43,7 @@ function getConfig(): ProtractorConfig {
   }
 
   // The default Protractor configuration provided by Angular CLI.
-  const config: ProtractorConfig = {
+  let config: ProtractorConfig = {
     allScriptsTimeout: 11000,
     specs: [
       require('path').join(process.cwd(), './e2e/src/**/*.e2e-spec.ts')
@@ -67,7 +80,7 @@ function getConfig(): ProtractorConfig {
   // Apply platform config overrides.
   if (builderOptions.skyuxCiPlatform) {
     const overrides = getCiPlatformProtractorConfig(builderOptions.skyuxCiPlatform);
-    Object.assign(config, overrides);
+    config = mergeConfigs(config, overrides || {});
   } else {
     console.log(
       '[SKY UX] A specific CI platform configuration was not requested. ' +

@@ -20,7 +20,7 @@ import {
 function getCiPlatformConfig(
   framework: 'karma' | 'protractor',
   platform: SkyuxCIPlatform
-): unknown {
+): unknown | undefined {
 
   // Using glob so we can find `@skyux-sdk/pipeline-settings` regardless of npm install location.
   const pattern = path.join(
@@ -44,10 +44,10 @@ function getCiPlatformConfig(
   return;
 }
 
-export function getCiPlatformKarmaConfig(platform: SkyuxCIPlatform): (conf: karma.Config) => void {
-  return getCiPlatformConfig('karma', platform) as (conf: karma.Config) => void;
+export function getCiPlatformKarmaConfig(platform: SkyuxCIPlatform): ((conf: karma.Config) => void) | undefined {
+  return getCiPlatformConfig('karma', platform) as ((conf: karma.Config) => void) | undefined;
 }
 
-export function getCiPlatformProtractorConfig(platform: SkyuxCIPlatform): ProtractorConfig {
-  return getCiPlatformConfig('protractor', platform) as ProtractorConfig;
+export function getCiPlatformProtractorConfig(platform: SkyuxCIPlatform): ProtractorConfig | undefined {
+  return (getCiPlatformConfig('protractor', platform) as { config?: ProtractorConfig; })?.config;
 }

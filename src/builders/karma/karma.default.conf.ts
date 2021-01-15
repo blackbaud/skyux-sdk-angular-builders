@@ -88,7 +88,10 @@ module.exports = (config: karma.Config): void => {
     const platformConfig = getCiPlatformKarmaConfig(
       SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform
     );
-    platformConfig(config);
+    /* istanbul ignore else */
+    if (platformConfig) {
+      platformConfig(config);
+    }
   } else {
     console.log(
       '[SKY UX] A specific CI platform configuration was not requested. ' +
