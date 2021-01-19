@@ -5,6 +5,10 @@ import {
 } from 'webpack';
 
 import {
+  applyProtractorEnvironmentConfig
+} from '../../../shared/protractor-environment-utils';
+
+import {
   createHostUrl
 } from '../../../shared/host-utils';
 
@@ -43,6 +47,10 @@ export class SkyuxOpenHostURLPlugin {
         );
 
         console.log(`\nSKY UX Host URL:\n\n${url}`);
+
+        applyProtractorEnvironmentConfig({
+          skyuxHostUrl: url
+        });
 
         if (this.config.open) {
           open(url);

@@ -17,6 +17,10 @@ import {
 } from '../../shared/ci-platform-utils';
 
 import {
+  getProtractorEnvironmentConfig
+} from '../../shared/protractor-environment-utils';
+
+import {
   SkyuxProtractorBuilderOptions
 } from './protractor-options';
 
@@ -32,11 +36,18 @@ function mergeConfigs(
 }
 
 function getConfig(): ProtractorConfig {
-  const browserArgs: string[] = [];
+  const browserArgs: string[] = [
+    '--disable-dev-shm-usage',
+    '--disable-extensions',
+    '--disable-gpu',
+    '--ignore-certificate-errors',
+    '--no-sandbox',
+    '--start-maximized'
+  ];
 
-  const builderOptions: SkyuxProtractorBuilderOptions = JSON.parse(
-    process.env.SKYUX_PROTRACTOR_BUILDER_OPTIONS!
-  );
+  const env = getProtractorEnvironmentConfig();
+
+  const builderOptions: SkyuxProtractorBuilderOptions = env.builderOptions!;
 
   if (builderOptions.skyuxHeadless) {
     browserArgs.push('--headless');
@@ -75,6 +86,10 @@ function getConfig(): ProtractorConfig {
         }
       }));
     }
+  };
+
+  config.params = {
+    skyuxHostUrl: env.skyuxHostUrl
   };
 
   // Apply platform config overrides.
