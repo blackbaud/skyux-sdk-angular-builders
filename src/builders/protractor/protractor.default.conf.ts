@@ -36,19 +36,11 @@ function mergeConfigs(
 }
 
 function getConfig(): ProtractorConfig {
-  const browserArgs: string[] = [
-    '--disable-dev-shm-usage',
-    '--disable-extensions',
-    '--disable-gpu',
-    '--ignore-certificate-errors',
-    '--no-sandbox',
-    '--start-maximized'
-  ];
+  const browserArgs: string[] = [];
 
   const env = getProtractorEnvironmentConfig();
 
   const builderOptions: SkyuxProtractorBuilderOptions = env.builderOptions!;
-
   if (builderOptions.skyuxHeadless) {
     browserArgs.push('--headless');
   }
@@ -88,6 +80,10 @@ function getConfig(): ProtractorConfig {
     }
   };
 
+  /**
+   * Save the full SKY UX Host URL so that `@skyux-sdk/e2e` has access to it.
+   * @see: https://github.com/blackbaud/skyux-sdk-e2e/blob/master/src/host-browser/host-browser.ts#L32
+   */
   config.params = {
     skyuxHostUrl: env.skyuxHostUrl
   };
