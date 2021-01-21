@@ -1,7 +1,15 @@
-import { AppPage } from './app.po';
-import { browser, logging } from 'protractor';
+import {
+  AppPage
+} from './app.po';
 
-import { SkyVisual } from '@skyux-sdk/e2e';
+import {
+  browser,
+  logging
+} from 'protractor';
+
+import {
+  SkyVisual
+} from '@skyux-sdk/e2e';
 
 describe('workspace-project App', () => {
   let page: AppPage;

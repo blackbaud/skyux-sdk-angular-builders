@@ -20,10 +20,6 @@ import {
   getProtractorEnvironmentConfig
 } from '../../shared/protractor-environment-utils';
 
-import {
-  SkyuxProtractorBuilderOptions
-} from './protractor-options';
-
 function mergeConfigs(
   defaults: ProtractorConfig,
   overrides: ProtractorConfig
@@ -40,7 +36,7 @@ function getConfig(): ProtractorConfig {
 
   const env = getProtractorEnvironmentConfig();
 
-  const builderOptions: SkyuxProtractorBuilderOptions = env.builderOptions!;
+  const builderOptions = env.builderOptions!;
   if (builderOptions.skyuxHeadless) {
     browserArgs.push('--headless');
   }
