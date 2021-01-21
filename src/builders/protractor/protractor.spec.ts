@@ -7,6 +7,10 @@ import mock from 'mock-require';
 import path from 'path';
 
 import {
+  getProtractorEnvironmentConfig
+} from '../../shared/protractor-environment-utils';
+
+import {
   SkyuxProtractorBuilderOptions
 } from './protractor-options';
 
@@ -60,7 +64,7 @@ describe('protractor builder', () => {
   it('should save builder options as an environment variable', async () => {
     options.skyuxHeadless = true;
     await (mock.reRequire('./protractor'));
-    expect(process.env.SKYUX_PROTRACTOR_BUILDER_OPTIONS).toBeDefined();
+    expect(getProtractorEnvironmentConfig()?.builderOptions?.skyuxHeadless).toBeTrue();
   });
 
 });

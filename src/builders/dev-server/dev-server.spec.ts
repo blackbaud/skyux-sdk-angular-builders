@@ -173,7 +173,7 @@ describe('dev-server builder', () => {
 
       expect(actualOptions.open).toBe(false);
       expect(actualOptions.skyuxOpen).toBe(false);
-      expect(actualOptions.skyuxLaunch).toBe('local');
+      expect(actualOptions.skyuxLaunch).toBe('host');
     });
 
     it('should allow setting a custom `skyuxHostUrl` and append a trailing slash', async () => {

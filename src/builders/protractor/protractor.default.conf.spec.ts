@@ -5,6 +5,10 @@ import {
 } from 'protractor';
 
 import {
+  applyProtractorEnvironmentConfig
+} from '../../shared/protractor-environment-utils';
+
+import {
   SkyuxProtractorBuilderOptions
 } from './protractor-options';
 
@@ -14,7 +18,7 @@ describe('protractor.default.conf', () => {
 
   beforeEach(() => {
 
-    process.env.SKYUX_PROTRACTOR_BUILDER_OPTIONS = JSON.stringify({});
+    setBuilderOptions({});
 
     mockPlatformConfig = {};
 
@@ -31,13 +35,15 @@ describe('protractor.default.conf', () => {
   });
 
   function setBuilderOptions(value: Partial<SkyuxProtractorBuilderOptions>): void {
-    process.env.SKYUX_PROTRACTOR_BUILDER_OPTIONS = JSON.stringify(value);
+    applyProtractorEnvironmentConfig({
+      builderOptions: value as SkyuxProtractorBuilderOptions
+    });
   }
 
   it('should allow setting the test browser to "headless" mode', () => {
     let config = mock.reRequire('./protractor.default.conf').config;
 
-    expect(config.capabilities.chromeOptions.args.indexOf('--headless') === -1).toBeTrue();
+    expect(config.capabilities.chromeOptions.args.indexOf('--headless') > -1).toBeFalse();
 
     setBuilderOptions({
       skyuxHeadless: true

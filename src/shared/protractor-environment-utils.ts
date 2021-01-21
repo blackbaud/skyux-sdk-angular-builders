@@ -18,11 +18,7 @@ export function getProtractorEnvironmentConfig(): SkyuxProtractorBuilderEnvironm
  */
 export function applyProtractorEnvironmentConfig(value: SkyuxProtractorBuilderEnvironmentConfig): void {
   const env = getProtractorEnvironmentConfig();
-  const merged = mergeWith(env, value, (defaultValue, overrideValue) => {
-    if (Array.isArray(defaultValue)) {
-      return overrideValue;
-    }
-  });
+  const merged = mergeWith(env, value);
 
   process.env[environmentVariableName] = JSON.stringify(merged);
 }
