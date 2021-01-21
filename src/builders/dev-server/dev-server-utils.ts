@@ -3,7 +3,7 @@ import {
 } from '../../shared/cert-utils';
 
 import {
-  getHostUrlFromOptions
+  getHostBaseUrlFromOptions
 } from '../../shared/host-utils';
 
 import {
@@ -27,7 +27,7 @@ export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions
 
   // Set options specific to SKY UX Host.
   if (options.skyuxLaunch === 'host') {
-    const hostUrl = getHostUrlFromOptions(options);
+    const hostUrl = getHostBaseUrlFromOptions(options);
     const localUrl = getLocalUrlFromOptions(options);
 
     options.skyuxHostUrl = hostUrl;
