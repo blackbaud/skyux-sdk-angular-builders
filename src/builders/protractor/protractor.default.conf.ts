@@ -17,8 +17,8 @@ import {
 } from '../../shared/ci-platform-utils';
 
 import {
-  SkyuxProtractorBuilderOptions
-} from './protractor-options';
+  getProtractorEnvironmentConfig
+} from '../../shared/protractor-environment-utils';
 
 function mergeConfigs(
   defaults: ProtractorConfig,
@@ -34,10 +34,9 @@ function mergeConfigs(
 function getConfig(): ProtractorConfig {
   const browserArgs: string[] = [];
 
-  const builderOptions: SkyuxProtractorBuilderOptions = JSON.parse(
-    process.env.SKYUX_PROTRACTOR_BUILDER_OPTIONS!
-  );
+  const env = getProtractorEnvironmentConfig();
 
+  const builderOptions = env.builderOptions!;
   if (builderOptions.skyuxHeadless) {
     browserArgs.push('--headless');
   }
@@ -75,6 +74,14 @@ function getConfig(): ProtractorConfig {
         }
       }));
     }
+  };
+
+  /**
+   * Save the full SKY UX Host URL so that `@skyux-sdk/e2e` has access to it.
+   * @see: https://github.com/blackbaud/skyux-sdk-e2e/blob/master/src/host-browser/host-browser.ts#L32
+   */
+  config.params = {
+    skyuxHostUrl: env.skyuxHostUrl
   };
 
   // Apply platform config overrides.

@@ -36,7 +36,7 @@ function executeSkyuxDevServerBuilder(
   if (context.target!.configuration === undefined) {
     options.open = false;
     options.skyuxOpen = false;
-    options.skyuxLaunch = 'local';
+    options.skyuxLaunch = 'host';
   }
 
   return executeDevServerBuilder(

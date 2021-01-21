@@ -28,6 +28,7 @@
     "@angular/cli": "~11.0.6",
     "@angular/compiler-cli": "~11.0.7",
     "@skyux-sdk/angular-builders": "4.0.0-alpha.12",
+    "@skyux-sdk/e2e": "4.0.1",
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",

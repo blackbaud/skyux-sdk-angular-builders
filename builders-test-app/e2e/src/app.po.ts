@@ -1,8 +1,15 @@
-import { browser, by, element } from 'protractor';
+import {
+  by,
+  element
+} from 'protractor';
+
+import {
+  SkyHostBrowser
+} from '@skyux-sdk/e2e';
 
 export class AppPage {
-  async navigateTo(): Promise<unknown> {
-    return browser.get(browser.baseUrl);
+  async navigateTo(path: string = ''): Promise<unknown> {
+    return SkyHostBrowser.get(path);
   }
 
   async getTitleText(): Promise<string> {

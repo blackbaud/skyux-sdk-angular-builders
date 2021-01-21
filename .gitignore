@@ -2,4 +2,6 @@
 /coverage
 /dist
 /node_modules
+screenshots-baseline-local
+screenshots-diff-local
 .DS_Store
