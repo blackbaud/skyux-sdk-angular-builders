@@ -73,8 +73,8 @@ describe('host utils', () => {
   });
 
   it('should return the default Host URL', () => {
-    const { getHostUrlFromOptions } = mock.reRequire('./host-utils');
-    const url = getHostUrlFromOptions();
+    const { getHostBaseUrlFromOptions } = mock.reRequire('./host-utils');
+    const url = getHostBaseUrlFromOptions();
     expect(url).toEqual('https://app.blackbaud.com/');
   });
 

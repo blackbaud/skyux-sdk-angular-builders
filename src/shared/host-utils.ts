@@ -6,7 +6,7 @@ import {
   ensureTrailingSlash
 } from './url-utils';
 
-export function getHostUrlFromOptions(options?: {
+export function getHostBaseUrlFromOptions(options?: {
   skyuxHostUrl?: string
 }): string {
   return ensureTrailingSlash(options?.skyuxHostUrl || 'https://app.blackbaud.com/');
