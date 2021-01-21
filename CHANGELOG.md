@@ -1,3 +1,7 @@
+# 4.0.0-alpha.16 (2021-01-21)
+
+- Updated the Protractor builder to work well with `@skyux-sdk/e2e@4.0.1`. [#50](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/50)
+
 # 4.0.0-alpha.15 (2021-01-15)
 
 - Fixed the Protractor builder to merge configs properly. [#49](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/49)
