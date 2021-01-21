@@ -43,7 +43,7 @@ describe('protractor.default.conf', () => {
   it('should allow setting the test browser to "headless" mode', () => {
     let config = mock.reRequire('./protractor.default.conf').config;
 
-    expect(config.capabilities.chromeOptions.args.indexOf('--headless') > -1).toBeFalse();
+    expect(config.capabilities.chromeOptions.args.indexOf('--headless') === -1).toBeTrue();
 
     setBuilderOptions({
       skyuxHeadless: true
