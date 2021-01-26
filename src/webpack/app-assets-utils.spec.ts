@@ -1,5 +1,5 @@
 import {
-  AngularCompilerPlugin
+  ivy
 } from '@ngtools/webpack';
 
 import mock from 'mock-require';
@@ -47,7 +47,7 @@ describe('App assets utils', () => {
 
   it('should provide HTML loaders access to component templates', () => {
     webpackConfig.plugins = [
-      new AngularCompilerPlugin({ tsConfigPath: '' } as any)
+      new ivy.AngularWebpackPlugin({ tsConfigPath: '' } as any)
     ];
 
     const { applyAppAssetsConfig } = mock.reRequire('./app-assets-utils');
@@ -56,7 +56,7 @@ describe('App assets utils', () => {
       deployUrl: ''
     });
 
-    const plugin: any = webpackConfig.plugins?.find(p => p instanceof AngularCompilerPlugin);
+    const plugin: any = webpackConfig.plugins?.find(p => p instanceof ivy.AngularWebpackPlugin);
     expect(plugin.options.directTemplateLoading).toBe(false, 'Expected direct template loading to be disabled.');
   });
 
