@@ -1,5 +1,5 @@
 import {
-  AngularCompilerPlugin
+  ivy
 } from '@ngtools/webpack';
 
 import path from 'path';
@@ -56,9 +56,9 @@ export function applyAppAssetsConfig(
    * Allows other Webpack loaders to process component HTML templates.
    * @see https://github.com/angular/angular-cli/issues/15861
    */
-  const compilerPlugin = webpackConfig.plugins.find(plugin => plugin instanceof AngularCompilerPlugin);
+  const compilerPlugin = webpackConfig.plugins.find(plugin => plugin instanceof ivy.AngularWebpackPlugin);
   if (compilerPlugin) {
-    (compilerPlugin as AngularCompilerPlugin).options.directTemplateLoading = false;
+    (compilerPlugin as ivy.AngularWebpackPlugin).options.directTemplateLoading = false;
   }
 
   webpackConfig.plugins.push(
