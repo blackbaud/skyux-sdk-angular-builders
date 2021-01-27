@@ -11,10 +11,6 @@ import {
 } from 'webpack';
 
 import {
-  applyAppAssetsConfig
-} from '../../webpack/app-assets-utils';
-
-import {
   SkyuxOpenHostURLPlugin
 } from '../../webpack/plugins/open-host-url/open-host-url.plugin';
 
@@ -25,6 +21,14 @@ import {
 import {
   getLocalUrlFromOptions
 } from './dev-server-utils';
+
+import {
+  createAppAssetsMap
+} from '../../shared/app-assets-utils';
+
+import {
+  SkyuxAppAssetsPlugin
+} from '../../webpack/plugins/app-assets/app-assets.plugin';
 
 /**
  * Allows adjustments to the default Angular "dev-server" webpack config.
@@ -37,6 +41,9 @@ function getDevServerWepbackConfigTransformer(
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
 
+    const localUrl = getLocalUrlFromOptions(options);
+    const assetsMap = createAppAssetsMap(localUrl);
+
     webpackConfig.plugins = webpackConfig.plugins || [];
 
     if (options.skyuxLaunch === 'host') {
@@ -46,14 +53,18 @@ function getDevServerWepbackConfigTransformer(
       webpackConfig.plugins.push(
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
-          localUrl: getLocalUrlFromOptions(options),
+          localUrl,
           pathName,
           open: options.skyuxOpen!
         })
       );
     }
 
-    applyAppAssetsConfig(webpackConfig, options);
+    webpackConfig.plugins.push(
+      new SkyuxAppAssetsPlugin({
+        assetsMap
+      })
+    );
 
     return webpackConfig;
   };

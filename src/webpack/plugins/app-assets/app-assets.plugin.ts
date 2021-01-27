@@ -1,10 +1,10 @@
-import {
-  Compiler
-} from 'webpack';
+import fs from 'fs-extra';
+
+import webpack from 'webpack';
 
 import {
-  SkyuxAppAssetsState
-} from '../../app-assets-state';
+  SkyuxAppAssets
+} from '../../../shared/app-assets';
 
 import {
   addWebpackAssetsEmitTap
@@ -19,11 +19,44 @@ const PLUGIN_NAME = 'skyux-asset-urls-plugin';
  * @see https://github.com/angular/angular-cli/issues/16544#issuecomment-571245469
  */
 export class SkyuxAppAssetsPlugin {
-  public apply(compiler: Compiler): void {
+
+  constructor(
+    private config: {
+      assetsMap: SkyuxAppAssets
+    }
+  ) { }
+
+  apply(compiler: webpack.Compiler) {
+    compiler.hooks.emit.tap(PLUGIN_NAME, (compilation) => {
+
+      Object.keys(this.config.assetsMap).forEach(filePath => {
+        const asset = this.config.assetsMap[filePath];
+        const contents = fs.readFileSync(asset.absolutePath);
+
+        compilation.assets[asset.hashedRelativePath] = {
+          source() {
+            return contents;
+          },
+          size() {
+            return contents.length;
+          }
+        };
+      });
+
+    });
+
     addWebpackAssetsEmitTap(
       PLUGIN_NAME,
       compiler,
-      (content) => SkyuxAppAssetsState.replaceFilePaths(content)
+      (content) => {
+        for (const [filePath, asset] of Object.entries(this.config.assetsMap)) {
+          content = content.replace(
+            new RegExp(`"${filePath}"`, 'gi'),
+            `"${asset.hashedUrl}"`
+          );
+        }
+        return content;
+      }
     );
   }
 }
