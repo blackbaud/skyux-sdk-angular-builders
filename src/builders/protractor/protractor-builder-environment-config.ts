@@ -1,6 +1,6 @@
 import {
   SkyuxProtractorBuilderOptions
-} from '../builders/protractor/protractor-options';
+} from './protractor-options';
 
 /**
  * Environment configuration passed to the `protractor.default.conf.ts` file.

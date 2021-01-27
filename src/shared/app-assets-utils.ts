@@ -12,7 +12,7 @@ import {
   ensureTrailingSlash
 } from './url-utils';
 
-export function createAppAssetsMap(assetBaseUrl: string): SkyuxAppAssets {
+export function createAppAssetsMap(assetBaseUrl: string = ''): SkyuxAppAssets {
 
   const assetsMap: SkyuxAppAssets = {};
 

@@ -12,6 +12,10 @@ import {
 
 const PLUGIN_NAME = 'skyux-asset-urls-plugin';
 
+interface SkyuxAppAssetsPluginConfig {
+  assetsMap: SkyuxAppAssets;
+}
+
 /**
  * This plugin replaces any asset paths located in the bundle with absolute URLs.
  * Background: Angular's `@ngtools/webpack` plugin overrides all Webpack TypeScript loaders,
@@ -21,30 +25,42 @@ const PLUGIN_NAME = 'skyux-asset-urls-plugin';
 export class SkyuxAppAssetsPlugin {
 
   constructor(
-    private config: {
-      assetsMap: SkyuxAppAssets
-    }
+    private config: SkyuxAppAssetsPluginConfig
   ) { }
 
-  apply(compiler: webpack.Compiler) {
-    compiler.hooks.emit.tap(PLUGIN_NAME, (compilation) => {
+  public apply(compiler: webpack.Compiler): void {
+    this.createHashedAssets(compiler);
+    this.replaceAssetPaths(compiler);
+  }
 
-      Object.keys(this.config.assetsMap).forEach(filePath => {
-        const asset = this.config.assetsMap[filePath];
-        const contents = fs.readFileSync(asset.absolutePath);
+  /**
+   * Create duplicates of all files found in the `src/assets` folder,
+   * using hashed file names.
+   */
+  private createHashedAssets(compiler: webpack.Compiler): void {
+    compiler.hooks.emit.tap(
+      PLUGIN_NAME,
+      (compilation) => {
+        for (const [_filePath, asset] of Object.entries(this.config.assetsMap)) {
+          const contents = fs.readFileSync(asset.absolutePath);
+          compilation.assets[asset.hashedRelativePath] = {
+            source() {
+              return contents;
+            },
+            size() {
+              return contents.length;
+            }
+          };
+        }
+      }
+    );
+  }
 
-        compilation.assets[asset.hashedRelativePath] = {
-          source() {
-            return contents;
-          },
-          size() {
-            return contents.length;
-          }
-        };
-      });
-
-    });
-
+  /**
+   * Replaces unhashed asset file names found within compiled scripts
+   * with the hashed file names.
+   */
+  private replaceAssetPaths(compiler: webpack.Compiler): void {
     addWebpackAssetsEmitTap(
       PLUGIN_NAME,
       compiler,

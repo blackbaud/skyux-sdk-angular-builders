@@ -32,7 +32,7 @@ function getBrowserWepbackConfigTransformer(
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
 
-    const assetsMap = createAppAssetsMap(options.deployUrl || '');
+    const assetsMap = createAppAssetsMap(options.deployUrl);
 
     webpackConfig.plugins = webpackConfig.plugins || [];
 

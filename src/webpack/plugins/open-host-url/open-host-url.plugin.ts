@@ -6,7 +6,7 @@ import {
 
 import {
   applyProtractorEnvironmentConfig
-} from '../../../shared/protractor-environment-utils';
+} from '../../../builders/protractor/protractor-environment-utils';
 
 import {
   createHostUrl
@@ -48,6 +48,7 @@ export class SkyuxOpenHostURLPlugin {
 
         console.log(`\nSKY UX Host URL:\n\n${url}`);
 
+        // TODO: Better place to capture this?
         applyProtractorEnvironmentConfig({
           skyuxHostUrl: url
         });

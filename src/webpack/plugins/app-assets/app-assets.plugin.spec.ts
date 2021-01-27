@@ -1,13 +1,13 @@
 import mock from 'mock-require';
 
 import {
-  SkyuxAppAssetsState
-} from '../../app-assets-state';
+  SkyuxAppAssets
+} from '../../../shared/app-assets';
 
 describe('Asset URLs plugin', () => {
 
   let actualContent: string;
-  let mockAssets: {
+  let mockWebpackAssets: {
     [_: string]: {
       source: () => string;
     }
@@ -15,7 +15,7 @@ describe('Asset URLs plugin', () => {
   let mockCompiler: any;
 
   beforeEach(() => {
-    mockAssets = {};
+    mockWebpackAssets = {};
 
     actualContent = '';
 
@@ -24,7 +24,7 @@ describe('Asset URLs plugin', () => {
         emit: {
           tap(_pluginName: string, callback: (compilation: any) => void) {
             const mockCompilation = {
-              assets: mockAssets
+              assets: mockWebpackAssets
             };
 
             callback(mockCompilation);
@@ -41,23 +41,26 @@ describe('Asset URLs plugin', () => {
 
   afterEach(() => {
     mock.stopAll();
-    SkyuxAppAssetsState.flush();
   });
 
   it('should replace asset paths with hard URLs', () => {
-    mockAssets = {
+    mockWebpackAssets = {
       'foo.js': {
         source: () => '["assets/foo.gif"]'
       }
     };
 
-    SkyuxAppAssetsState.queue({
-      filePath: 'assets/foo.gif',
-      url: 'https://foobar.com/'
-    });
+    // SkyuxAppAssetsState.queue({
+    //   filePath: 'assets/foo.gif',
+    //   url: 'https://foobar.com/'
+    // });
+
+    const assetsMap: SkyuxAppAssets = {};
 
     const { SkyuxAppAssetsPlugin } = mock.reRequire('./app-assets.plugin');
-    const plugin = new SkyuxAppAssetsPlugin();
+    const plugin = new SkyuxAppAssetsPlugin({
+      assetsMap
+    });
 
     plugin.apply(mockCompiler);
 
