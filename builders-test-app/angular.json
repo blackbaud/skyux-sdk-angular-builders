@@ -44,7 +44,7 @@
                 }
               ],
               "optimization": true,
-              "outputHashing": "all",
+              "outputHashing": "bundles",
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,

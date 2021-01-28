@@ -21,17 +21,23 @@ export function createAppAssetsMap(assetBaseUrl: string = ''): SkyuxAppAssets {
 
   // Create a hashed version of each path.
   filePaths.forEach(filePath => {
-    const relativePath = filePath.replace(path.join(process.cwd(), 'src/'), '');
-    const parsed = path.parse(relativePath);
-    const hash = hasha.fromFileSync(filePath);
-    const filePathHashed = `${parsed.dir}/${parsed.name}.${hash}${parsed.ext}`;
     const baseUrl = ensureTrailingSlash(assetBaseUrl);
-    const url = `${baseUrl}${filePathHashed.replace(/\\/g, '/')}`;
 
-    assetsMap[relativePath] = {
+    const relativePath = filePath.replace(path.join(process.cwd(), 'src/'), '');
+
+    const parsed = path.parse(relativePath);
+    const fileName = `${parsed.name}${parsed.ext}`;
+    const hash = hasha.fromFileSync(filePath);
+    const hashedFileName = `${parsed.name}.${hash}${parsed.ext}`;
+
+    assetsMap[fileName] = {
+      lookup: `~/${relativePath.replace(/\\/g, '/')}`,
       absolutePath: filePath,
-      hashedRelativePath: filePathHashed,
-      hashedUrl: url
+      relativeUrl: `${relativePath.replace(/\\/g, '/')}`,
+      hashedFileName,
+      hashedAbsoluteUrl: `${baseUrl}${hashedFileName}`,
+      absoluteUrl: `${baseUrl}${fileName}`,
+      hashedRelativeUrl: `${parsed.dir}${hashedFileName}`
     };
   });
 

@@ -1,12 +1,20 @@
 export interface SkyuxAppAssets {
 
-  [relativePath: string]: {
+  [fileName: string]: {
+
+    lookup: string;
+
+    hashedFileName: string;
 
     absolutePath: string;
 
-    hashedRelativePath: string;
+    hashedAbsoluteUrl: string;
 
-    hashedUrl: string;
+    hashedRelativeUrl: string;
+
+    absoluteUrl: string;
+
+    relativeUrl: string;
 
   };
 

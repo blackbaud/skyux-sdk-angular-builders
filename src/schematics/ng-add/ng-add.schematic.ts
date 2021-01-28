@@ -1,4 +1,8 @@
 import {
+  OutputHashing
+} from '@angular-devkit/build-angular';
+
+import {
   Rule,
   SchematicContext,
   SchematicsException,
@@ -8,6 +12,10 @@ import {
 import {
   NodePackageInstallTask
 } from '@angular-devkit/schematics/tasks';
+
+import {
+  SkyuxBrowserBuilderOptions
+} from '../../builders/browser/browser-options';
 
 import {
   SkyuxDevServerBuilderOptions
@@ -28,6 +36,7 @@ import {
 function setupBrowserBuilder(
   architect: {
     builder: string;
+    options: SkyuxBrowserBuilderOptions;
   },
   projectName: string
 ): void {
@@ -39,6 +48,10 @@ function setupBrowserBuilder(
 
   // Overwrite the default build architect.
   architect.builder = '@skyux-sdk/angular-builders:browser';
+
+  // Set this to only hash bundled JavaScript files;
+  // our builder will handle the files found in `src/assets`.
+  architect.options.outputHashing = OutputHashing.Bundles;
 }
 
 function setupDevServerBuilder(
