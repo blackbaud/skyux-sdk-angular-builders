@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SkyAppAssetsService } from '@skyux/assets';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'builders-test-app';
+
+  constructor(
+    assetService: SkyAppAssetsService
+  ) {
+    console.log('Asset URLs:', assetService.getAllUrls());
+  }
 }
