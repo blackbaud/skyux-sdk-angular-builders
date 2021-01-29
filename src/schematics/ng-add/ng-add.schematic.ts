@@ -37,6 +37,9 @@ function setupBrowserBuilder(
   architect: {
     builder: string;
     options: SkyuxBrowserBuilderOptions;
+    configurations: {
+      production: SkyuxBrowserBuilderOptions;
+    };
   },
   projectName: string
 ): void {
@@ -51,7 +54,7 @@ function setupBrowserBuilder(
 
   // Set this to only hash bundled JavaScript files;
   // our builder will handle the files found in `src/assets`.
-  architect.options.outputHashing = OutputHashing.Bundles;
+  architect.configurations.production!.outputHashing! = OutputHashing.Bundles;
 }
 
 function setupDevServerBuilder(
