@@ -42,7 +42,6 @@ function getDevServerWepbackConfigTransformer(
   return (webpackConfig) => {
 
     const localUrl = getLocalUrlFromOptions(options);
-    const assetsMap = createAppAssetsMap(localUrl);
 
     webpackConfig.plugins = webpackConfig.plugins || [];
 
@@ -62,7 +61,7 @@ function getDevServerWepbackConfigTransformer(
 
     webpackConfig.plugins.push(
       new SkyuxAppAssetsPlugin({
-        assetsMap
+        assetsMap: createAppAssetsMap(localUrl)
       })
     );
 

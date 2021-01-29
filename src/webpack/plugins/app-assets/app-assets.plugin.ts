@@ -1,14 +1,12 @@
 import fs from 'fs-extra';
 
+import path from 'path';
+
 import webpack from 'webpack';
 
 import {
   SkyuxAppAssets
 } from '../../../shared/app-assets';
-
-import {
-  addWebpackAssetsEmitTap
-} from '../../webpack-utils';
 
 const PLUGIN_NAME = 'skyux-asset-urls-plugin';
 
@@ -19,6 +17,10 @@ interface SkyuxAppAssetsPluginConfig {
 function regexEscape(str: string): string {
   return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
+
+interface CompilationAsset {
+  source: () => string;
+};
 
 /**
  * This plugin replaces any asset paths located in the bundle with absolute URLs.
@@ -33,29 +35,11 @@ export class SkyuxAppAssetsPlugin {
   ) { }
 
   public apply(compiler: webpack.Compiler): void {
-    this.writeHashedAssets(compiler);
-    this.replaceAssetPaths(compiler);
-  }
-
-  /**
-   * Create duplicates of all files found in the `src/assets` folder,
-   * using hashed file names.
-   */
-  private writeHashedAssets(compiler: webpack.Compiler): void {
     compiler.hooks.emit.tap(
       PLUGIN_NAME,
       (compilation) => {
-        for (const [_fileName, asset] of Object.entries(this.config.assetsMap)) {
-          const contents = fs.readFileSync(asset.absolutePath);
-          compilation.assets[asset.hashedFileName] = {
-            source() {
-              return contents;
-            },
-            size() {
-              return contents.length;
-            }
-          };
-        }
+        this.replaceAssetPaths(compilation);
+        this.writeHashedAssets(compilation);
       }
     );
   }
@@ -64,35 +48,59 @@ export class SkyuxAppAssetsPlugin {
    * Replaces unhashed asset file names found within compiled scripts
    * with the hashed file names.
    */
-  private replaceAssetPaths(compiler: webpack.Compiler): void {
-    addWebpackAssetsEmitTap(
-      PLUGIN_NAME,
-      compiler,
-      (content) => {
-        for (const [_fileName, asset] of Object.entries(this.config.assetsMap)) {
+  private replaceAssetPaths(compilation: webpack.compilation.Compilation): void {
+    const assets: [string, CompilationAsset][] = Object.entries(compilation.assets);
 
-          // Replace HTML attributes.
-          content = content.replace(
-            new RegExp(regexEscape(`"${asset.relativeUrl}"`), 'gi'),
-            `"${asset.hashedAbsoluteUrl}"`
-          );
+    for (const [filePath, asset] of assets) {
+      if (path.parse(filePath).ext === '.js') {
 
-          // Replace CSS background image URLs.
-          // (Angular flattens all asset paths in CSS, so just search for the file name.)
-          const replacement = `url(${asset.hashedAbsoluteUrl})`;
-          content = content.replace(
-            new RegExp(regexEscape(`url(/${asset.relativeUrl})`), 'g'),
-            replacement
-          )
-            // Account for quoted URLs.
-            .replace(
-              new RegExp(regexEscape(`url(\\"/${asset.relativeUrl}\\")`), 'g'),
-              replacement
+        let content = asset.source();
+
+        asset.source = () => {
+          for (const [relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
+
+            // Replace HTML attributes.
+            content = content.replace(
+              new RegExp(regexEscape(`"${relativeUrl}"`), 'gi'),
+              `"${asset.hashedAbsoluteUrl}"`
             );
-        }
 
-        return content;
+            // Replace CSS background image URLs.
+            // (Angular flattens all asset paths in CSS, so just search for the file name.)
+            const replacement = `url(${asset.hashedAbsoluteUrl})`;
+            content = content.replace(
+              new RegExp(regexEscape(`url(/${relativeUrl})`), 'g'),
+              replacement
+            )
+              // Account for quoted URLs.
+              .replace(
+                new RegExp(regexEscape(`url(\\"/${relativeUrl}\\")`), 'g'),
+                replacement
+              );
+          }
+
+          return content;
+        }
       }
-    );
+    }
   }
+
+  /**
+   * Create duplicates of all files found in the `src/assets` folder,
+   * using hashed file names.
+   */
+  private writeHashedAssets(compilation: webpack.compilation.Compilation): void {
+    for (const [_relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
+      const contents = fs.readFileSync(asset.absolutePath);
+      compilation.assets[asset.hashedFileName] = {
+        source() {
+          return contents;
+        },
+        size() {
+          return contents.length;
+        }
+      };
+    }
+  }
+
 }

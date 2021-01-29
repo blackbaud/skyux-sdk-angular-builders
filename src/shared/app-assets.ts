@@ -1,20 +1,24 @@
 export interface SkyuxAppAssets {
 
-  [fileName: string]: {
+  /**
+   * The relative URL is the original path to the file in the source code.
+   */
+  [relativeUrl: string]: {
 
-    lookup: string;
-
-    hashedFileName: string;
-
+    /**
+     * The absolute path to the original source file. This will be used to read the file's contents.
+     */
     absolutePath: string;
 
+    /**
+     * The hashed absolute URL to the file. This will replace the original file URL in the bundle source code.
+     */
     hashedAbsoluteUrl: string;
 
-    hashedRelativeUrl: string;
-
-    absoluteUrl: string;
-
-    relativeUrl: string;
+    /**
+     * The hashed name of the file to emit with Webpack.
+     */
+    hashedFileName: string;
 
   };
 

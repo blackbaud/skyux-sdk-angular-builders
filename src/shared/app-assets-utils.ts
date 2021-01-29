@@ -17,27 +17,26 @@ export function createAppAssetsMap(assetBaseUrl: string = ''): SkyuxAppAssets {
   const assetsMap: SkyuxAppAssets = {};
 
   // Find all asset file paths.
-  const filePaths = glob.sync(path.join(process.cwd(), 'src/assets/**/*'));
+  const filePaths = glob.sync(
+    path.join(process.cwd(), 'src/assets/**/*'),
+    {
+      nodir: true
+    }
+  );
 
   // Create a hashed version of each path.
   filePaths.forEach(filePath => {
     const baseUrl = ensureTrailingSlash(assetBaseUrl);
-
     const relativePath = filePath.replace(path.join(process.cwd(), 'src/'), '');
-
     const parsed = path.parse(relativePath);
-    const fileName = `${parsed.name}${parsed.ext}`;
     const hash = hasha.fromFileSync(filePath);
     const hashedFileName = `${parsed.name}.${hash}${parsed.ext}`;
+    const relativeUrl = `${relativePath.replace(/\\/g, '/')}`;
 
-    assetsMap[fileName] = {
-      lookup: `~/${relativePath.replace(/\\/g, '/')}`,
+    assetsMap[relativeUrl] = {
       absolutePath: filePath,
-      relativeUrl: `${relativePath.replace(/\\/g, '/')}`,
-      hashedFileName,
       hashedAbsoluteUrl: `${baseUrl}${hashedFileName}`,
-      absoluteUrl: `${baseUrl}${fileName}`,
-      hashedRelativeUrl: `${parsed.dir}${hashedFileName}`
+      hashedFileName
     };
   });
 
