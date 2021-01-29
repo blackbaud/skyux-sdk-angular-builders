@@ -1,12 +1,14 @@
 import fs from 'fs-extra';
 
-import path from 'path';
-
 import webpack from 'webpack';
 
 import {
   SkyuxAppAssets
 } from '../../../shared/app-assets';
+
+import {
+  modifyBundleContents
+} from '../../webpack-utils';
 
 const PLUGIN_NAME = 'skyux-asset-urls-plugin';
 
@@ -17,10 +19,6 @@ interface SkyuxAppAssetsPluginConfig {
 function regexEscape(str: string): string {
   return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
-
-interface CompilationAsset {
-  source: () => string;
-};
 
 /**
  * This plugin replaces any asset paths located in the bundle with absolute URLs.
@@ -49,40 +47,31 @@ export class SkyuxAppAssetsPlugin {
    * with the hashed file names.
    */
   private replaceAssetPaths(compilation: webpack.compilation.Compilation): void {
-    const assets: [string, CompilationAsset][] = Object.entries(compilation.assets);
+    modifyBundleContents(compilation, (content) => {
+      for (const [relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
 
-    for (const [filePath, asset] of assets) {
-      if (path.parse(filePath).ext === '.js') {
+        // Replace HTML attributes.
+        content = content.replace(
+          new RegExp(regexEscape(`"${relativeUrl}"`), 'gi'),
+          `"${asset.hashedAbsoluteUrl}"`
+        );
 
-        let content = asset.source();
-
-        asset.source = () => {
-          for (const [relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
-
-            // Replace HTML attributes.
-            content = content.replace(
-              new RegExp(regexEscape(`"${relativeUrl}"`), 'gi'),
-              `"${asset.hashedAbsoluteUrl}"`
-            );
-
-            // Replace CSS background image URLs.
-            // (Angular flattens all asset paths in CSS, so just search for the file name.)
-            const replacement = `url(${asset.hashedAbsoluteUrl})`;
-            content = content.replace(
-              new RegExp(regexEscape(`url(/${relativeUrl})`), 'g'),
-              replacement
-            )
-              // Account for quoted URLs.
-              .replace(
-                new RegExp(regexEscape(`url(\\"/${relativeUrl}\\")`), 'g'),
-                replacement
-              );
-          }
-
-          return content;
-        }
+        // Replace CSS background image URLs.
+        // (Angular flattens all asset paths in CSS, so just search for the file name.)
+        const replacement = `url(${asset.hashedAbsoluteUrl})`;
+        content = content.replace(
+          new RegExp(regexEscape(`url(/${relativeUrl})`), 'g'),
+          replacement
+        )
+          // Account for quoted URLs.
+          .replace(
+            new RegExp(regexEscape(`url(\\"/${relativeUrl}\\")`), 'g'),
+            replacement
+          );
       }
-    }
+
+      return content;
+    });
   }
 
   /**

@@ -1,9 +1,5 @@
 import mock from 'mock-require';
 
-import {
-  SkyuxAppAssets
-} from '../../../shared/app-assets';
-
 describe('Asset URLs plugin', () => {
 
   let actualContent: string;
@@ -31,12 +27,16 @@ describe('Asset URLs plugin', () => {
 
             // Simulate Webpack emitting all assets.
             for (const [_file, asset] of Object.entries(mockCompilation.assets)) {
-              actualContent = asset.source();
+              actualContent += asset.source();
             }
           }
         }
       }
     };
+
+    mock('fs-extra', {
+      readFileSync: () => ''
+    });
   });
 
   afterEach(() => {
@@ -50,21 +50,20 @@ describe('Asset URLs plugin', () => {
       }
     };
 
-    // SkyuxAppAssetsState.queue({
-    //   filePath: 'assets/foo.gif',
-    //   url: 'https://foobar.com/'
-    // });
-
-    const assetsMap: SkyuxAppAssets = {};
-
     const { SkyuxAppAssetsPlugin } = mock.reRequire('./app-assets.plugin');
     const plugin = new SkyuxAppAssetsPlugin({
-      assetsMap
+      assetsMap: {
+        'assets/foo.gif': {
+          absolutePath: '',
+          hashedAbsoluteUrl: 'https://foobar.com/foo.HASH.gif',
+          hashedFileName: 'foo.HASH.gif'
+        }
+      }
     });
 
     plugin.apply(mockCompiler);
 
-    expect(actualContent).toBe('["https://foobar.com/"]');
+    expect(actualContent).toBe('["https://foobar.com/foo.HASH.gif"]');
   });
 
 });
