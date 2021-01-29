@@ -2,7 +2,7 @@ import karma from 'karma';
 
 import mock from 'mock-require';
 
-describe('ci-platform.utils', () => {
+describe('ci platform utils', () => {
 
   let globSyncSpy: jasmine.Spy;
 
