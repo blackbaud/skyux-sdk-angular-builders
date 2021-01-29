@@ -35,7 +35,7 @@ export function createAppAssetsMap(assetBaseUrl: string = ''): SkyuxAppAssets {
 
     assetsMap[relativeUrl] = {
       absolutePath: filePath,
-      hashedAbsoluteUrl: `${baseUrl}${hashedFileName}`,
+      hashedUrl: `${baseUrl}${hashedFileName}`,
       hashedFileName
     };
   });

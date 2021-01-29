@@ -55,7 +55,7 @@ describe('Asset URLs plugin', () => {
       assetsMap: {
         'assets/foo.gif': {
           absolutePath: '',
-          hashedAbsoluteUrl: 'https://foobar.com/foo.HASH.gif',
+          hashedUrl: 'https://foobar.com/foo.HASH.gif',
           hashedFileName: 'foo.HASH.gif'
         }
       }
@@ -74,7 +74,7 @@ describe('Asset URLs plugin', () => {
       assetsMap: {
         'assets/foo.gif': {
           absolutePath: '',
-          hashedAbsoluteUrl: 'https://foobar.com/foo.HASH.gif',
+          hashedUrl: 'https://foobar.com/foo.HASH.gif',
           hashedFileName: 'foo.HASH.gif'
         }
       }

@@ -11,9 +11,9 @@ export interface SkyuxAppAssets {
     absolutePath: string;
 
     /**
-     * The hashed absolute URL to the file. This will replace the original file URL in the bundle source code.
+     * The hashed URL to the file. This will replace the original file URL in the bundle source code.
      */
-    hashedAbsoluteUrl: string;
+    hashedUrl: string;
 
     /**
      * The hashed name of the file to emit with Webpack.

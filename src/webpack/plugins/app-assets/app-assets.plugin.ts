@@ -53,12 +53,12 @@ export class SkyuxAppAssetsPlugin {
         // Replace HTML attributes.
         content = content.replace(
           new RegExp(regexEscape(`"${relativeUrl}"`), 'gi'),
-          `"${asset.hashedAbsoluteUrl}"`
+          `"${asset.hashedUrl}"`
         );
 
         // Replace CSS background image URLs.
         // (Angular flattens all asset paths in CSS, so just search for the file name.)
-        const replacement = `url(${asset.hashedAbsoluteUrl})`;
+        const replacement = `url(${asset.hashedUrl})`;
         content = content.replace(
           new RegExp(regexEscape(`url(/${relativeUrl})`), 'g'),
           replacement
