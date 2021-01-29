@@ -84,9 +84,6 @@ export class SkyuxAppAssetsPlugin {
       compilation.assets[asset.hashedFileName] = {
         source() {
           return contents;
-        },
-        size() {
-          return contents.length;
         }
       };
     }

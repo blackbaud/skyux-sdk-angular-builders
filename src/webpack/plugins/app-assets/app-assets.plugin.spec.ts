@@ -46,7 +46,7 @@ describe('Asset URLs plugin', () => {
   it('should replace asset paths with hard URLs', () => {
     mockWebpackAssets = {
       'foo.js': {
-        source: () => '["assets/foo.gif"]'
+        source: () => '["assets/foo.gif"], background-image: url(\\"/assets/foo.gif\\"), background-image: url(/assets/foo.gif)'
       }
     };
 
@@ -63,7 +63,26 @@ describe('Asset URLs plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(actualContent).toBe('["https://foobar.com/foo.HASH.gif"]');
+    expect(actualContent).toBe(
+      '["https://foobar.com/foo.HASH.gif"], background-image: url(https://foobar.com/foo.HASH.gif), background-image: url(https://foobar.com/foo.HASH.gif)'
+    );
+  });
+
+  it('should create hashed file names for all assets', () => {
+    const { SkyuxAppAssetsPlugin } = mock.reRequire('./app-assets.plugin');
+    const plugin = new SkyuxAppAssetsPlugin({
+      assetsMap: {
+        'assets/foo.gif': {
+          absolutePath: '',
+          hashedAbsoluteUrl: 'https://foobar.com/foo.HASH.gif',
+          hashedFileName: 'foo.HASH.gif'
+        }
+      }
+    });
+
+    plugin.apply(mockCompiler);
+
+    expect(typeof mockWebpackAssets['foo.HASH.gif'].source).toEqual('function');
   });
 
 });
