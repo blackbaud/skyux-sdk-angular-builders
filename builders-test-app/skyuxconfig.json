@@ -1,8 +1,0 @@
-{
-  "commands": {
-    "serve": {
-      "launch": "host",
-      "hostUrl": "https://app.blackbaud.com/"
-    }
-  }
-}
