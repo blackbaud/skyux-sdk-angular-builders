@@ -11,8 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Install and run tests
-    - uses: actions/checkout@v2
-    - run: |
+      uses: actions/checkout@v2
+      run: |
         npm ci
         npm run ci
         bash <(curl -s https://codecov.io/bash)
