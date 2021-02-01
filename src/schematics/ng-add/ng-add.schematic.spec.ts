@@ -188,19 +188,21 @@ describe('ng-add.schematic', () => {
       const angularJson = JSON.parse(app.readContent('angular.json'));
 
       expect(angularJson.projects.foobar.architect.serve.configurations.e2e).toEqual({
+        browserTarget: 'foobar:build',
         open: false,
         skyuxOpen: false,
         skyuxLaunch: 'host'
       });
 
-      expect(angularJson.projects.foobar.architect.serve.configurations['e2e-production']).toEqual({
+      expect(angularJson.projects.foobar.architect.serve.configurations.e2eProduction).toEqual({
+        browserTarget: 'foobar:build:production',
         open: false,
         skyuxOpen: false,
         skyuxLaunch: 'host'
       });
 
       expect(angularJson.projects.foobar.architect.e2e.options.devServerTarget).toEqual('foobar:serve:e2e');
-      expect(angularJson.projects.foobar.architect.e2e.configurations.production.devServerTarget).toEqual('foobar:serve:e2e-production');
+      expect(angularJson.projects.foobar.architect.e2e.configurations.production.devServerTarget).toEqual('foobar:serve:e2eProduction');
     });
   });
 

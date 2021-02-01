@@ -81,7 +81,7 @@
               "skyuxOpen": false,
               "skyuxLaunch": "host"
             },
-            "e2e-production": {
+            "e2eProduction": {
               "browserTarget": "builders-test-app:build:production",
               "open": false,
               "skyuxOpen": false,
@@ -134,7 +134,7 @@
           },
           "configurations": {
             "production": {
-              "devServerTarget": "builders-test-app:serve:e2e-production"
+              "devServerTarget": "builders-test-app:serve:e2eProduction"
             }
           }
         }

@@ -81,7 +81,7 @@ function setupProtractorBuilder(
     serve: {
       configurations: {
         e2e: SkyuxDevServerBuilderOptions;
-        'e2e-production': SkyuxDevServerBuilderOptions;
+        e2eProduction: SkyuxDevServerBuilderOptions;
       };
     },
     e2e: {
@@ -104,9 +104,17 @@ function setupProtractorBuilder(
   architect.e2e.builder = '@skyux-sdk/angular-builders:protractor';
 
   architect.e2e.options.devServerTarget = `${projectName}:serve:e2e`;
-  architect.e2e.configurations.production.devServerTarget = `${projectName}:serve:e2e-production`
+  architect.e2e.configurations.production.devServerTarget = `${projectName}:serve:e2eProduction`
 
-  architect.serve.configurations.e2e = architect.serve.configurations['e2e-production'] = {
+  architect.serve.configurations.e2e = {
+    browserTarget: `${projectName}:build`,
+    open: false,
+    skyuxOpen: false,
+    skyuxLaunch: 'host'
+  } as SkyuxDevServerBuilderOptions;
+
+  architect.serve.configurations.e2eProduction = {
+    browserTarget: `${projectName}:build:production`,
     open: false,
     skyuxOpen: false,
     skyuxLaunch: 'host'
