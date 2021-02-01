@@ -11,8 +11,12 @@ import {
 } from 'webpack';
 
 import {
-  applyAppAssetsConfig
-} from '../../webpack/app-assets-utils';
+  createAppAssetsMap
+} from '../../shared/app-assets-utils';
+
+import {
+  SkyuxAppAssetsPlugin
+} from '../../webpack/plugins/app-assets/app-assets.plugin';
 
 import {
   SkyuxOpenHostURLPlugin
@@ -37,6 +41,8 @@ function getDevServerWepbackConfigTransformer(
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
 
+    const localUrl = getLocalUrlFromOptions(options);
+
     webpackConfig.plugins = webpackConfig.plugins || [];
 
     if (options.skyuxLaunch === 'host') {
@@ -46,14 +52,18 @@ function getDevServerWepbackConfigTransformer(
       webpackConfig.plugins.push(
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
-          localUrl: getLocalUrlFromOptions(options),
+          localUrl,
           pathName,
           open: options.skyuxOpen!
         })
       );
     }
 
-    applyAppAssetsConfig(webpackConfig, options);
+    webpackConfig.plugins.push(
+      new SkyuxAppAssetsPlugin({
+        assetsMap: createAppAssetsMap(localUrl)
+      })
+    );
 
     return webpackConfig;
   };

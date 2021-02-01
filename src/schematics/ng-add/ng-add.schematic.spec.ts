@@ -82,6 +82,16 @@ describe('ng-add.schematic', () => {
     expect(angularJson.projects.foobar.architect.e2e.builder).toEqual('@skyux-sdk/angular-builders:protractor');
   });
 
+  it('should set options for browser builder', async () => {
+    await runner
+      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+      .toPromise();
+
+    const angularJson = JSON.parse(app.readContent('angular.json'));
+
+    expect(angularJson.projects.foobar.architect.build.configurations.production.outputHashing).toEqual('bundles');
+  });
+
   it('should throw an error if specified project doesn\'t include an `architect.serve` property', async () => {
     // Create an incorrectly formatted project config.
     const angularJson = JSON.parse(app.readContent('angular.json'));

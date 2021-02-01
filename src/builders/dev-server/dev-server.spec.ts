@@ -2,6 +2,8 @@ import * as angularArchitect from '@angular-devkit/architect';
 
 import * as buildAngular from '@angular-devkit/build-angular';
 
+import mock from 'mock-require';
+
 import {
   homedir
 } from 'os';
@@ -10,7 +12,13 @@ import {
   of
 } from 'rxjs';
 
-import * as applyAppAssetsConfigUtil from '../../webpack/app-assets-utils';
+import webpack from 'webpack';
+
+import * as appAssetsUtils from '../../shared/app-assets-utils';
+
+import {
+  SkyuxAppAssetsPlugin
+} from '../../webpack/plugins/app-assets/app-assets.plugin';
 
 import {
   SkyuxOpenHostURLPlugin
@@ -20,17 +28,12 @@ import {
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
 
-import mock from 'mock-require';
-
-import webpack from 'webpack';
-
 class MockWebpackPlugin {
   public apply() { }
 }
 
 describe('dev-server builder', () => {
 
-  let applyAppAssetsConfigSpy: jasmine.Spy;
   let createBuilderSpy: jasmine.Spy;
   let executDevServerBuilderSpy: jasmine.Spy;
   let defaultOptions: SkyuxDevServerBuilderOptions;
@@ -73,7 +76,8 @@ describe('dev-server builder', () => {
     spyOnProperty(buildAngular, 'executeDevServerBuilder', 'get').and
       .returnValue(executDevServerBuilderSpy);
 
-    applyAppAssetsConfigSpy = spyOn(applyAppAssetsConfigUtil, 'applyAppAssetsConfig');
+    spyOn(appAssetsUtils, 'createAppAssetsMap').and
+      .returnValue({});
   });
 
   afterEach(() => {
@@ -214,10 +218,12 @@ describe('dev-server builder', () => {
       expect(plugin).toBeDefined();
     });
 
-    it('should add app assets loaders and plugins', async () => {
+    it('should add `SkyuxAppAssetsPlugin` to webpack plugins', async () => {
       await (mock.reRequire('./dev-server'));
 
-      expect(applyAppAssetsConfigSpy).toHaveBeenCalled();
+      const plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxAppAssetsPlugin);
+
+      expect(plugin).toBeDefined();
     });
 
     it('should not affect other plugins', async () => {
@@ -233,7 +239,7 @@ describe('dev-server builder', () => {
 
       await (mock.reRequire('./dev-server'));
 
-      expect(actualWebpackConfig.plugins?.length).toEqual(2);
+      expect(actualWebpackConfig.plugins?.length).toEqual(3);
     });
 
   });

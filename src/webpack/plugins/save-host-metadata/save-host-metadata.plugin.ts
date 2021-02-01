@@ -12,7 +12,7 @@ import {
 } from '../../host-asset-utils';
 
 import {
-  addWebpackAssetsEmitTap
+  modifyBundleContents
 } from '../../webpack-utils';
 
 const PLUGIN_NAME = 'skyux-save-host-metadata-plugin';
@@ -21,11 +21,12 @@ export class SkyuxSaveHostMetadataPlugin {
   public apply(compiler: Compiler): void {
 
     // Add our fallback variable to the bottom of the JS source files.
-    addWebpackAssetsEmitTap(
-      PLUGIN_NAME,
-      compiler,
-      (content, file) => `${content}\nvar ${getFallbackName(file)} = true;`
-    );
+    compiler.hooks.emit.tap(PLUGIN_NAME, (compilation) => {
+      modifyBundleContents(
+        compilation,
+        (content, file) => `${content}\nvar ${getFallbackName(file)} = true;`
+      );
+    });
 
     // Generates a metadata.json file which is processed by our deployment process.
     // See: https://github.com/blackbaud/skyux-deploy/blob/master/lib/assets.js#L74

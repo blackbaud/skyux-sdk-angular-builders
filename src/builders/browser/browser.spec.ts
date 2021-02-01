@@ -2,11 +2,19 @@ import * as angularArchitect from '@angular-devkit/architect';
 
 import * as buildAngular from '@angular-devkit/build-angular';
 
+import mock from 'mock-require';
+
 import {
   of
 } from 'rxjs';
 
-import * as applyAppAssetsConfigUtil from '../../webpack/app-assets-utils';
+import webpack from 'webpack';
+
+import * as appAssetsUtils from '../../shared/app-assets-utils';
+
+import {
+  SkyuxAppAssetsPlugin
+} from '../../webpack/plugins/app-assets/app-assets.plugin';
 
 import {
   SkyuxSaveHostMetadataPlugin
@@ -16,17 +24,12 @@ import {
   SkyuxBrowserBuilderOptions
 } from './browser-options';
 
-import mock from 'mock-require';
-
-import webpack from 'webpack';
-
 class MockWebpackPlugin {
   public apply() { }
 }
 
 describe('browser builder', () => {
 
-  let applyAppAssetsConfigSpy: jasmine.Spy;
   let createBuilderSpy: jasmine.Spy;
   let executeBrowserBuilderSpy: jasmine.Spy;
   let defaultOptions: SkyuxBrowserBuilderOptions;
@@ -66,7 +69,8 @@ describe('browser builder', () => {
     spyOnProperty(buildAngular, 'executeBrowserBuilder', 'get').and
       .returnValue(executeBrowserBuilderSpy);
 
-    applyAppAssetsConfigSpy = spyOn(applyAppAssetsConfigUtil, 'applyAppAssetsConfig');
+    spyOn(appAssetsUtils, 'createAppAssetsMap').and
+      .returnValue({});
   });
 
   afterEach(() => {
@@ -81,10 +85,12 @@ describe('browser builder', () => {
     expect(plugin).toBeDefined();
   });
 
-  it('should add app assets loaders and plugins', async () => {
+  it('should add `SkyuxAppAssetsPlugin` to webpack plugins', async () => {
     await (mock.reRequire('./browser'));
 
-    expect(applyAppAssetsConfigSpy).toHaveBeenCalled();
+    const plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxAppAssetsPlugin);
+
+    expect(plugin).toBeDefined();
   });
 
   it('should not affect other plugins', async () => {
@@ -96,7 +102,7 @@ describe('browser builder', () => {
 
     await (mock.reRequire('./browser'));
 
-    expect(actualWebpackConfig.plugins?.length).toEqual(2);
+    expect(actualWebpackConfig.plugins?.length).toEqual(3);
   });
 
 });
