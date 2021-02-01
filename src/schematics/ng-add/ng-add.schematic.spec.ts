@@ -82,95 +82,128 @@ describe('ng-add.schematic', () => {
     expect(angularJson.projects.foobar.architect.e2e.builder).toEqual('@skyux-sdk/angular-builders:protractor');
   });
 
-  it('should set options for browser builder', async () => {
-    await runner
-      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-      .toPromise();
+  describe('serve', () => {
+    it('should throw an error if specified project doesn\'t include an `architect.serve` property', async () => {
+      // Create an incorrectly formatted project config.
+      const angularJson = JSON.parse(app.readContent('angular.json'));
+      delete angularJson.projects.foobar.architect.serve;
+      app.overwrite('angular.json', JSON.stringify(angularJson));
 
-    const angularJson = JSON.parse(app.readContent('angular.json'));
-
-    expect(angularJson.projects.foobar.architect.build.configurations.production.outputHashing).toEqual('bundles');
+      await expectAsync(
+        runner
+          .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+          .toPromise()
+      ).toBeRejectedWithError('Expected node projects/foobar/architect/serve in angular.json!');
+    });
   });
 
-  it('should throw an error if specified project doesn\'t include an `architect.serve` property', async () => {
-    // Create an incorrectly formatted project config.
-    const angularJson = JSON.parse(app.readContent('angular.json'));
-    delete angularJson.projects.foobar.architect.serve;
-    app.overwrite('angular.json', JSON.stringify(angularJson));
+  describe('build', () => {
+    it('should throw an error if specified project doesn\'t include an `architect.build` property', async () => {
+      // Create an incorrectly formatted project config.
+      const angularJson = JSON.parse(app.readContent('angular.json'));
+      delete angularJson.projects.foobar.architect.build;
+      app.overwrite('angular.json', JSON.stringify(angularJson));
 
-    await expectAsync(
-      runner
+      await expectAsync(
+        runner
+          .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+          .toPromise()
+      ).toBeRejectedWithError('Expected node projects/foobar/architect/build in angular.json!');
+    });
+
+    it('should set options for browser builder', async () => {
+      await runner
         .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-        .toPromise()
-    ).toBeRejectedWithError('Expected node projects/foobar/architect/serve in angular.json!');
+        .toPromise();
+
+      const angularJson = JSON.parse(app.readContent('angular.json'));
+
+      expect(angularJson.projects.foobar.architect.build.configurations.production.outputHashing).toEqual('bundles');
+    });
   });
 
-  it('should throw an error if specified project doesn\'t include an `architect.build` property', async () => {
-    // Create an incorrectly formatted project config.
-    const angularJson = JSON.parse(app.readContent('angular.json'));
-    delete angularJson.projects.foobar.architect.build;
-    app.overwrite('angular.json', JSON.stringify(angularJson));
+  describe('test', () => {
+    it('should throw an error if specified project doesn\'t include an `architect.test` property', async () => {
+      // Create an incorrectly formatted project config.
+      const angularJson = JSON.parse(app.readContent('angular.json'));
+      delete angularJson.projects.foobar.architect.test;
+      app.overwrite('angular.json', JSON.stringify(angularJson));
 
-    await expectAsync(
-      runner
+      await expectAsync(
+        runner
+          .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+          .toPromise()
+      ).toBeRejectedWithError('Expected node projects/foobar/architect/test in angular.json!');
+    });
+
+    it('should modify the app\'s karma.conf.js file', async () => {
+      await runner
         .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-        .toPromise()
-    ).toBeRejectedWithError('Expected node projects/foobar/architect/build in angular.json!');
-  });
+        .toPromise();
 
-  it('should throw an error if specified project doesn\'t include an `architect.test` property', async () => {
-    // Create an incorrectly formatted project config.
-    const angularJson = JSON.parse(app.readContent('angular.json'));
-    delete angularJson.projects.foobar.architect.test;
-    app.overwrite('angular.json', JSON.stringify(angularJson));
+      const contents = app.read('karma.conf.js')?.toString();
+      expect(contents).toContain('DO NOT MODIFY');
+    });
 
-    await expectAsync(
-      runner
+    it('should modify a library\'s karma.conf.js file', async () => {
+      const library = await generateTestLibrary(runner, workspaceTree, { name: 'foolib' });
+
+      await runner
         .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-        .toPromise()
-    ).toBeRejectedWithError('Expected node projects/foobar/architect/test in angular.json!');
+        .toPromise();
+
+      const contents = library.read('projects/foolib/karma.conf.js')?.toString();
+      expect(contents).toContain('DO NOT MODIFY');
+    });
   });
 
-  it('should modify the app\'s karma.conf.js file', async () => {
-    await runner
-      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-      .toPromise();
+  describe('e2e', () => {
+    it('should throw an error if specified project doesn\'t include an `architect.e2e` property', async () => {
+      // Create an incorrectly formatted project config.
+      const angularJson = JSON.parse(app.readContent('angular.json'));
+      delete angularJson.projects.foobar.architect.e2e;
+      app.overwrite('angular.json', JSON.stringify(angularJson));
 
-    const contents = app.read('karma.conf.js')?.toString();
-    expect(contents).toContain('DO NOT MODIFY');
-  });
+      await expectAsync(
+        runner
+          .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+          .toPromise()
+      ).toBeRejectedWithError('Expected node projects/foobar/architect/e2e in angular.json!');
+    });
 
-  it('should modify a library\'s karma.conf.js file', async () => {
-    const library = await generateTestLibrary(runner, workspaceTree, { name: 'foolib' });
-
-    await runner
-      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-      .toPromise();
-
-    const contents = library.read('projects/foolib/karma.conf.js')?.toString();
-    expect(contents).toContain('DO NOT MODIFY');
-  });
-
-  it('should throw an error if specified project doesn\'t include an `architect.e2e` property', async () => {
-    // Create an incorrectly formatted project config.
-    const angularJson = JSON.parse(app.readContent('angular.json'));
-    delete angularJson.projects.foobar.architect.e2e;
-    app.overwrite('angular.json', JSON.stringify(angularJson));
-
-    await expectAsync(
-      runner
+    it('should modify the app\'s protractor.conf.js file', async () => {
+      await runner
         .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-        .toPromise()
-    ).toBeRejectedWithError('Expected node projects/foobar/architect/e2e in angular.json!');
-  });
+        .toPromise();
 
-  it('should modify the app\'s protractor.conf.js file', async () => {
-    await runner
-      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-      .toPromise();
+      const contents = app.read('e2e/protractor.conf.js')?.toString();
+      expect(contents).toContain('DO NOT MODIFY');
+    });
 
-    const contents = app.read('e2e/protractor.conf.js')?.toString();
-    expect(contents).toContain('DO NOT MODIFY');
+    it('should modify settings in angular.json', async () => {
+      await runner
+        .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+        .toPromise();
+
+      const angularJson = JSON.parse(app.readContent('angular.json'));
+
+      expect(angularJson.projects.foobar.architect.serve.configurations.e2e).toEqual({
+        browserTarget: 'foobar:build',
+        open: false,
+        skyuxOpen: false,
+        skyuxLaunch: 'host'
+      });
+
+      expect(angularJson.projects.foobar.architect.serve.configurations.e2eProduction).toEqual({
+        browserTarget: 'foobar:build:production',
+        open: false,
+        skyuxOpen: false,
+        skyuxLaunch: 'host'
+      });
+
+      expect(angularJson.projects.foobar.architect.e2e.options.devServerTarget).toEqual('foobar:serve:e2e');
+      expect(angularJson.projects.foobar.architect.e2e.configurations.production.devServerTarget).toEqual('foobar:serve:e2eProduction');
+    });
   });
 
 });
