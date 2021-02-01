@@ -12,6 +12,10 @@ import {
   ensureTrailingSlash
 } from './url-utils';
 
+/**
+ * Creates an object which maps relative asset paths to absolute URLs with hashed file names.
+ * @param assetBaseUrl The base URL where the assets are served.
+ */
 export function createAppAssetsMap(assetBaseUrl: string = ''): SkyuxAppAssets {
 
   const assetsMap: SkyuxAppAssets = {};
