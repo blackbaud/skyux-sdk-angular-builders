@@ -15,4 +15,5 @@ jobs:
       run: |
         npm ci
         npm run ci
-        bash <(curl -s https://codecov.io/bash)
+    - name: Upload Coverage
+      uses: codecov/codecov-action@v1
