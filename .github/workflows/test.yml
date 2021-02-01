@@ -9,8 +9,8 @@ on:
 jobs:
   coverage:
     runs-on: ubuntu-latest
-    uses: actions/checkout@v2
     steps:
+    - uses: actions/checkout@v2
     - name: Install and run tests
       run: |
         npm ci
