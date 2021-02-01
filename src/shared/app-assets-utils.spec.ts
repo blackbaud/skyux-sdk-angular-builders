@@ -2,15 +2,15 @@ import mock from 'mock-require';
 
 describe('app assets utils', () => {
 
-  let mockAssetPaths: string[];
+  let mockGlobResult: string[];
 
   beforeEach(() => {
 
-    mockAssetPaths = [];
+    mockGlobResult = [];
 
     mock('glob', {
       sync() {
-        return mockAssetPaths;
+        return mockGlobResult;
       }
     });
 
@@ -26,12 +26,14 @@ describe('app assets utils', () => {
   });
 
   it('should create an asset map', () => {
-    mockAssetPaths = [
+    mockGlobResult = [
       '/assets/foo.jpg',
       '/assets/img/bar.png',
       '/assets/img/icon/baz.ico'
     ];
+
     const { createAppAssetsMap } = mock.reRequire('./app-assets-utils');
+
     const result = createAppAssetsMap();
     expect(result).toEqual({
       '/assets/foo.jpg': Object({ absolutePath: '/assets/foo.jpg', hashedUrl: '/foo.MOCK_HASH.jpg', hashedFileName: 'foo.MOCK_HASH.jpg' }),

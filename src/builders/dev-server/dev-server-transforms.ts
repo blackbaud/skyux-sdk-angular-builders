@@ -11,6 +11,14 @@ import {
 } from 'webpack';
 
 import {
+  createAppAssetsMap
+} from '../../shared/app-assets-utils';
+
+import {
+  SkyuxAppAssetsPlugin
+} from '../../webpack/plugins/app-assets/app-assets.plugin';
+
+import {
   SkyuxOpenHostURLPlugin
 } from '../../webpack/plugins/open-host-url/open-host-url.plugin';
 
@@ -21,14 +29,6 @@ import {
 import {
   getLocalUrlFromOptions
 } from './dev-server-utils';
-
-import {
-  createAppAssetsMap
-} from '../../shared/app-assets-utils';
-
-import {
-  SkyuxAppAssetsPlugin
-} from '../../webpack/plugins/app-assets/app-assets.plugin';
 
 /**
  * Allows adjustments to the default Angular "dev-server" webpack config.
