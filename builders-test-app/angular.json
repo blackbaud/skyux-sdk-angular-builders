@@ -74,6 +74,18 @@
           "configurations": {
             "production": {
               "browserTarget": "builders-test-app:build:production"
+            },
+            "e2e": {
+              "browserTarget": "builders-test-app:build",
+              "open": false,
+              "skyuxOpen": false,
+              "skyuxLaunch": "host"
+            },
+            "e2e-production": {
+              "browserTarget": "builders-test-app:build:production",
+              "open": false,
+              "skyuxOpen": false,
+              "skyuxLaunch": "host"
             }
           }
         },
@@ -118,11 +130,11 @@
           "builder": "@skyux-sdk/angular-builders:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "builders-test-app:serve"
+            "devServerTarget": "builders-test-app:serve:e2e"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "builders-test-app:serve:production"
+              "devServerTarget": "builders-test-app:serve:e2e-production"
             }
           }
         }

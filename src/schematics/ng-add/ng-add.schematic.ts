@@ -78,19 +78,39 @@ function setupDevServerBuilder(
 function setupProtractorBuilder(
   tree: Tree,
   architect: {
-    builder: string;
-    options: SkyuxProtractorBuilderOptions;
+    serve: {
+      configurations: {
+        e2e: SkyuxDevServerBuilderOptions;
+        'e2e-production': SkyuxDevServerBuilderOptions;
+      };
+    },
+    e2e: {
+      builder: string;
+      options: SkyuxProtractorBuilderOptions;
+      configurations: {
+        production: SkyuxProtractorBuilderOptions;
+      };
+    }
   },
   projectName: string
 ): void {
-  if (!architect) {
+  if (!architect.e2e) {
     throw new SchematicsException(
       `Expected node projects/${projectName}/architect/e2e in angular.json!`
     );
   }
 
   // Overwrite the default e2e architect.
-  architect.builder = '@skyux-sdk/angular-builders:protractor';
+  architect.e2e.builder = '@skyux-sdk/angular-builders:protractor';
+
+  architect.e2e.options.devServerTarget = `${projectName}:serve:e2e`;
+  architect.e2e.configurations.production.devServerTarget = `${projectName}:serve:e2e-production`
+
+  architect.serve.configurations.e2e = architect.serve.configurations['e2e-production'] = {
+    open: false,
+    skyuxOpen: false,
+    skyuxLaunch: 'host'
+  } as SkyuxDevServerBuilderOptions;
 
   const contents = `// DO NOT MODIFY
 // This file is handled by the \`@skyux-sdk/angular-builders:protractor\` builder.
@@ -161,7 +181,7 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
 
     setupBrowserBuilder(architect.build, options.project);
     setupDevServerBuilder(architect.serve, options.project);
-    setupProtractorBuilder(tree, architect.e2e, options.project);
+    setupProtractorBuilder(tree, architect, options.project);
 
     // Setup karma for all projects.
     Object.keys(workspace.projects).forEach(project => {
