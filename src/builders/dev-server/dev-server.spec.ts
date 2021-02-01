@@ -162,24 +162,6 @@ describe('dev-server builder', () => {
       expect(actualOptions.open).toEqual(true);
     });
 
-    it('should set specific options when served using `ng e2e` command', async () => {
-      defaultOptions = overrideOptions({
-        open: true,
-        skyuxLaunch: 'host',
-        skyuxOpen: true
-      });
-
-      mockContext.target.configuration = undefined;
-
-      await (mock.reRequire('./dev-server'));
-
-      const actualOptions = getActualOptions();
-
-      expect(actualOptions.open).toBe(false);
-      expect(actualOptions.skyuxOpen).toBe(false);
-      expect(actualOptions.skyuxLaunch).toBe('host');
-    });
-
     it('should allow setting a custom `skyuxHostUrl` and append a trailing slash', async () => {
       defaultOptions = overrideOptions({
         skyuxLaunch: 'host',
