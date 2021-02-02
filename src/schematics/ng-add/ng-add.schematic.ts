@@ -205,6 +205,8 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
 
     // TODO: Add `esModuleInterop` and `resolveJsonModule` to tsconfig.json
 
+    // TODO: Put file creation/modification in schematic?
+
     return tree;
   };
 }
