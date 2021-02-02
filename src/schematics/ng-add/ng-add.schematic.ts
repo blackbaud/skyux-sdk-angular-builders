@@ -201,6 +201,10 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
 
     tree.overwrite('angular.json', JSON.stringify(workspace, undefined, 2));
 
+    // TODO: Add `@skyux/*` libraries to package.json
+
+    // TODO: Add `esModuleInterop` and `resolveJsonModule` to tsconfig.json
+
     return tree;
   };
 }

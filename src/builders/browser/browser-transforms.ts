@@ -7,16 +7,12 @@ import {
 } from 'webpack';
 
 import {
-  createAppAssetsMap
-} from '../../shared/app-assets-utils';
-
-import {
-  SkyuxAppAssetsPlugin
-} from '../../webpack/plugins/app-assets/app-assets.plugin';
-
-import {
   SkyuxSaveHostMetadataPlugin
 } from '../../webpack/plugins/save-host-metadata/save-host-metadata.plugin';
+
+import {
+  applyAppAssetsWebpackConfig
+} from '../../webpack/app-assets-webpack-config';
 
 import {
   SkyuxBrowserBuilderOptions
@@ -31,13 +27,10 @@ function getBrowserWepbackConfigTransformer(
   options: SkyuxBrowserBuilderOptions
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
-    webpackConfig.plugins = webpackConfig.plugins || [];
+    applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl || '');
 
-    webpackConfig.plugins.push(
-      new SkyuxSaveHostMetadataPlugin(),
-      new SkyuxAppAssetsPlugin({
-        assetsMap: createAppAssetsMap(options.deployUrl)
-      })
+    webpackConfig.plugins!.push(
+      new SkyuxSaveHostMetadataPlugin()
     );
 
     return webpackConfig;

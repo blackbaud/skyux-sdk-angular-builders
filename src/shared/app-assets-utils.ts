@@ -16,7 +16,7 @@ import {
  * Creates an object which maps relative asset paths to absolute URLs with hashed file names.
  * @param assetBaseUrl The base URL where the assets are served.
  */
-export function createAppAssetsMap(assetBaseUrl: string = ''): SkyuxAppAssets {
+export function createAppAssetsMap(assetsBaseUrl: string = ''): SkyuxAppAssets {
 
   const assetsMap: SkyuxAppAssets = {};
 
@@ -30,7 +30,7 @@ export function createAppAssetsMap(assetBaseUrl: string = ''): SkyuxAppAssets {
 
   // Create a hashed version of each path.
   filePaths.forEach(filePath => {
-    const baseUrl = ensureTrailingSlash(assetBaseUrl);
+    const baseUrl = ensureTrailingSlash(assetsBaseUrl);
     const relativePath = filePath.replace(path.join(process.cwd(), 'src/'), '');
     const parsed = path.parse(relativePath);
 

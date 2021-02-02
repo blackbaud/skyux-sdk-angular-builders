@@ -3,7 +3,10 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SkyuxAppModule } from './skyux/skyux-app.module';
+
+import {
+  SkyAppModule
+} from './__skyux/sky-app.module';
 
 @NgModule({
   declarations: [
@@ -12,7 +15,7 @@ import { SkyuxAppModule } from './skyux/skyux-app.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SkyuxAppModule
+    SkyAppModule
   ],
   providers: [],
   bootstrap: [AppComponent]

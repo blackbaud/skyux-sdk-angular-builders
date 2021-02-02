@@ -42,7 +42,6 @@ export class SkyuxAppAssetsPlugin {
       (compilation) => {
         this.replaceAssetPaths(compilation);
         this.writeHashedAssets(compilation);
-        this.writeAppAssetsService(compilation);
       }
     );
   }
@@ -86,28 +85,15 @@ export class SkyuxAppAssetsPlugin {
   private writeHashedAssets(compilation: webpack.compilation.Compilation): void {
     for (const [_relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
       const contents = fs.readFileSync(asset.absolutePath);
+
+      // TODO: Check if resources file and merge/cleanup?
+
       compilation.assets[asset.hashedFileName] = {
         source() {
           return contents;
         }
       };
     }
-  }
-
-  private writeAppAssetsService(compilation: webpack.compilation.Compilation): void {
-    const values: {[_:string]: string} = {};
-    for (const [relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
-      values[relativeUrl.replace('assets/', '')] = asset.hashedUrl;
-    }
-    const stringified = JSON.stringify(values);
-    const replacement = `this.__SKYUX_APP_ASSETS_VALUES=${stringified}`;
-
-    modifyBundleContents(compilation, (content) => {
-      content = content
-        .replace('this.__SKYUX_APP_ASSETS_VALUES = {}', replacement)
-        .replace('this.__SKYUX_APP_ASSETS_VALUES={}', replacement);
-      return content;
-    });
   }
 
 }
