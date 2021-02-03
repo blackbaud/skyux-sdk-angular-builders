@@ -163,6 +163,44 @@ module.exports = function (config) {
   }
 }
 
+function modifyTsConfig(tree: Tree, context: SchematicContext): void {
+  try {
+    const tsConfigBuffer = tree.read('tsconfig.json');
+    const banner = '/* To learn more about this file see: https://angular.io/config/tsconfig. */\n';
+    const tsConfig = JSON.parse(tsConfigBuffer!.toString().replace(banner, ''));
+    tsConfig.compilerOptions.resolveJsonModule = true;
+    tsConfig.compilerOptions.esModuleInterop = true;
+    tree.overwrite('tsconfig.json', banner + JSON.stringify(tsConfig, undefined, 2));
+  } catch (err) {
+    context.logger.error('Error modifying tsconfig.json file!');
+  }
+}
+
+function writeSkyuxModule(tree: Tree): void {
+  tree.overwrite('src/app/__skyux/skyux.module.ts', `import {
+  NgModule
+} from '@angular/core';
+
+import {
+  SkyAppAssetsService
+} from '@skyux/assets';
+
+import {
+  SkyAppAssetsImplService
+} from './app-assets-impl.service';
+
+@NgModule({
+  providers: [
+    {
+      provide: SkyAppAssetsService,
+      useClass: SkyAppAssetsImplService
+    }
+  ]
+})
+export class __SkyuxModule { }
+`);
+}
+
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
   return (tree: Tree, context: SchematicContext) => {
 
@@ -201,11 +239,9 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
 
     tree.overwrite('angular.json', JSON.stringify(workspace, undefined, 2));
 
-    // TODO: Add `@skyux/*` libraries to package.json
+    modifyTsConfig(tree, context);
 
-    // TODO: Add `esModuleInterop` and `resolveJsonModule` to tsconfig.json
-
-    // TODO: Put file creation/modification in schematic?
+    writeSkyuxModule(tree);
 
     return tree;
   };
