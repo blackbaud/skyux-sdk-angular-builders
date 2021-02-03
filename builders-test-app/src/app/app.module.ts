@@ -5,17 +5,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import {
-  SkyAppModule
-} from './__skyux/sky-app.module';
+  __SkyuxModule
+} from './__skyux/skyux.module';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
+    __SkyuxModule,
     BrowserModule,
-    AppRoutingModule,
-    SkyAppModule
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,7 +4,7 @@ import webpack from 'webpack';
 
 import {
   SkyuxAppAssets
-} from '../../../shared/app-assets';
+} from '../../app-assets';
 
 import {
   modifyBundleContents

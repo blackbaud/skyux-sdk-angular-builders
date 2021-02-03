@@ -1,9 +1,3 @@
-/* tslint:disable */
-/**
- * DO NOT MODIFY!
- * This file is handled by the `@skyux-sdk/angular-builders` Angular CLI builder.
- */
-
 import {
   Injectable
 } from '@angular/core';

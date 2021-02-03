@@ -25,4 +25,4 @@ import {
     }
   ]
 })
-export class SkyAppModule { }
+export class __SkyuxModule { }
