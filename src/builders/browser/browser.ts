@@ -28,9 +28,6 @@ function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext
 ): Observable<BuilderOutput> {
-
-  // TODO: Run a check of angular.json to make sure the settings are correct?
-
   return executeBrowserBuilder(
     options,
     context,

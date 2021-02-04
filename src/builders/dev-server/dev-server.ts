@@ -30,8 +30,6 @@ function executeSkyuxDevServerBuilder(
 ): Observable<DevServerBuilderOutput> {
   applySkyuxDevServerOptions(options);
 
-  // TODO: Run a check of angular.json to make sure the settings are correct?
-
   return executeDevServerBuilder(
     options,
     context,

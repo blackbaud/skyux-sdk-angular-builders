@@ -85,9 +85,6 @@ export class SkyuxAppAssetsPlugin {
   private writeHashedAssets(compilation: webpack.compilation.Compilation): void {
     for (const [_relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
       const contents = fs.readFileSync(asset.absolutePath);
-
-      // TODO: Check if resources file and merge/cleanup?
-
       compilation.assets[asset.hashedFileName] = {
         source() {
           return contents;
