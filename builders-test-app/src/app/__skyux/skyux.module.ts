@@ -1,4 +1,5 @@
 import {
+  ModuleWithProviders,
   NgModule
 } from '@angular/core';
 
@@ -10,12 +11,17 @@ import {
   SkyAppAssetsImplService
 } from './app-assets-impl.service';
 
-@NgModule({
-  providers: [
-    {
-      provide: SkyAppAssetsService,
-      useClass: SkyAppAssetsImplService
-    }
-  ]
-})
-export class __SkyuxModule { }
+@NgModule({})
+export class SkyuxModule {
+  public static forRoot(): ModuleWithProviders<SkyuxModule> {
+    return {
+      ngModule: SkyuxModule,
+      providers: [
+        {
+          provide: SkyAppAssetsService,
+          useClass: SkyAppAssetsImplService
+        }
+      ]
+    };
+  }
+}

@@ -4,9 +4,7 @@ import {
 
 import assetsMap from './app-assets-map.json';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class SkyAppAssetsImplService {
 
   private get assetsMap(): {[_: string]: string} {

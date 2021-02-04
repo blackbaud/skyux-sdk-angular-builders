@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import {
-  __SkyuxModule
+  SkyuxModule
 } from './__skyux/skyux.module';
 
 @NgModule({
@@ -13,7 +13,7 @@ import {
     AppComponent
   ],
   imports: [
-    __SkyuxModule,
+    SkyuxModule.forRoot(),
     BrowserModule,
     AppRoutingModule
   ],

@@ -177,7 +177,12 @@ function modifyTsConfig(tree: Tree, context: SchematicContext): void {
 }
 
 function writeSkyuxModule(tree: Tree): void {
-  tree.overwrite('src/app/__skyux/skyux.module.ts', `import {
+  // TODO: Need to add the module to AppModule imports.
+
+  tree.overwrite(
+    'src/app/__skyux/skyux.module.ts',
+`import {
+  ModuleWithProviders,
   NgModule
 } from '@angular/core';
 
@@ -189,15 +194,20 @@ import {
   SkyAppAssetsImplService
 } from './app-assets-impl.service';
 
-@NgModule({
-  providers: [
-    {
-      provide: SkyAppAssetsService,
-      useClass: SkyAppAssetsImplService
-    }
-  ]
-})
-export class __SkyuxModule { }
+@NgModule({})
+export class SkyuxModule {
+  public static forRoot(): ModuleWithProviders<SkyuxModule> {
+    return {
+      ngModule: SkyuxModule,
+      providers: [
+        {
+          provide: SkyAppAssetsService,
+          useClass: SkyAppAssetsImplService
+        }
+      ]
+    };
+  }
+}
 `);
 }
 
