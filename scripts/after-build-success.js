@@ -20,6 +20,8 @@ function copyFilesToDist() {
       throw `File not found: ${sourcePath}`;
     }
   });
+
+  fs.copySync('dist', path.join('builders-test-app/.skyux-sdk-angular-builders-dist'));
 }
 
 function mergeBuilderSchemas() {
@@ -69,4 +71,4 @@ function copyDistToNodeModules() {
 
 copyFilesToDist();
 mergeBuilderSchemas();
-copyDistToNodeModules();
+// copyDistToNodeModules();

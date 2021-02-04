@@ -6,7 +6,6 @@ import assetsMap from './app-assets-map.json';
 
 @Injectable()
 export class SkyAppAssetsImplService {
-
   private get assetsMap(): {[_: string]: string} {
     return assetsMap;
   }
@@ -18,5 +17,4 @@ export class SkyAppAssetsImplService {
   public getAllUrls(): {[key: string]: string} {
     return this.assetsMap;
   }
-
 }

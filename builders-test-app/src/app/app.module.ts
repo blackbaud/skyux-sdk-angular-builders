@@ -3,19 +3,16 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-import {
-  SkyuxModule
-} from './__skyux/skyux.module';
+import { SkyuxModule } from './__skyux/skyux.module';
 
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    SkyuxModule.forRoot(),
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    SkyuxModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -5,3 +5,4 @@
 screenshots-baseline-local
 screenshots-diff-local
 .DS_Store
+.skyux-sdk-angular-builders-dist

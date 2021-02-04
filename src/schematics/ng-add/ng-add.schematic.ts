@@ -3,6 +3,16 @@ import {
 } from '@angular-devkit/build-angular';
 
 import {
+  addModuleImportToRootModule,
+  getProjectFromWorkspace
+  // getProjectMainFile
+  // hasNgModuleImport
+  } from '@angular/cdk/schematics';
+import { Observable } from 'rxjs';
+
+  import { getWorkspace } from '@schematics/angular/utility/workspace';
+
+import {
   Rule,
   SchematicContext,
   SchematicsException,
@@ -12,6 +22,10 @@ import {
 import {
   NodePackageInstallTask
 } from '@angular-devkit/schematics/tasks';
+
+// import {
+//   getAppModulePath
+// } from '@schematics/angular/utility/ng-ast-utils';
 
 import {
   SkyuxBrowserBuilderOptions
@@ -211,6 +225,34 @@ export class SkyuxModule {
 `);
 }
 
+function writeAppAssetFiles(tree: Tree): void {
+  tree.overwrite(
+    'src/app/__skyux/app-assets-impl.service.ts',
+`import {
+  Injectable
+} from '@angular/core';
+
+import assetsMap from './app-assets-map.json';
+
+@Injectable()
+export class SkyAppAssetsImplService {
+  private get assetsMap(): {[_: string]: string} {
+    return assetsMap;
+  }
+
+  public getUrl(filePath: string): string {
+    return this.assetsMap[filePath];
+  }
+
+  public getAllUrls(): {[key: string]: string} {
+    return this.assetsMap;
+  }
+}
+`);
+
+  tree.overwrite('src/app/__skyux/app-assets-map.json', '{}');
+}
+
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
   return (tree: Tree, context: SchematicContext) => {
 
@@ -252,7 +294,27 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     modifyTsConfig(tree, context);
 
     writeSkyuxModule(tree);
+    writeAppAssetFiles(tree);
 
-    return tree;
+    const observer = new Observable<Tree>((observer) => {
+      getWorkspace(tree).then(ws => {
+        const soup = getProjectFromWorkspace(ws, options.project);
+        addModuleImportToRootModule(tree, 'SkyuxModule.forRoot()', './__skyux/skyux.module', soup);
+        observer.next(tree);
+        observer.complete();
+      }).catch(function (err: any) {
+        observer.error(err);
+      });
+    });
+
+    return observer;
+
+    // return getWorkspace(tree).then(ws => {
+    //   const soup = getProjectFromWorkspace(ws, options.project);
+    //   addModuleImportToRootModule(tree, 'SkyuxModule.forRoot()', './__skyux/skyux.module', soup);
+    //   // const appModulePath = getAppModulePath(tree, getProjectMainFile(options.project));
+    //   // console.log('APP:', appModulePath);
+    //   return tree;
+    // });
   };
 }
