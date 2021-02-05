@@ -11,7 +11,8 @@
       "enum": [
         "local",
         "host"
-      ]
+      ],
+      "default": "host"
     },
     "skyuxOpen": {
       "type": "boolean",
