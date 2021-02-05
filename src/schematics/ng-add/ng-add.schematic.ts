@@ -172,8 +172,10 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
 
     // Install this builder as a development dependency.
     context.addTask(new NodePackageInstallTask());
-    installPackages(['@skyux/assets']);
-    installPackages(['@skyux-sdk/e2e', '@skyux-sdk/testing'], { location: 'devDependencies' });
+    installPackages(['@skyux/assets@^4']);
+    installPackages(['@skyux-sdk/e2e@^4', '@skyux-sdk/testing@^4'], {
+      location: 'devDependencies'
+    });
 
     return createTemplateFiles(tree, project);
   };
