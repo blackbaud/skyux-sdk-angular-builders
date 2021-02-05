@@ -7,16 +7,16 @@ import path from 'path';
 import webpack from 'webpack';
 
 import {
+  ensureTrailingSlash
+} from '../shared/url-utils';
+
+import {
   SkyuxAppAssetsPlugin
 } from './plugins/app-assets/app-assets.plugin';
 
 import {
   SkyuxAppAssets
 } from './app-assets';
-
-import {
-  ensureTrailingSlash
-} from '../shared/url-utils';
 
 /**
  * Creates an object which maps relative asset paths to absolute URLs with hashed file names.
@@ -29,9 +29,7 @@ function createAppAssetsMap(assetsBaseUrl: string = ''): SkyuxAppAssets {
   // Find all asset file paths.
   const filePaths = glob.sync(
     path.join(process.cwd(), 'src/assets/**/*'),
-    {
-      nodir: true
-    }
+    { nodir: true }
   );
 
   // Create a hashed version of each path.
