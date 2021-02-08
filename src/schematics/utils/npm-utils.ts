@@ -8,9 +8,7 @@ export function installPackages(
   packages: string[],
   config?: InstallPackagesConfig
 ): void {
-  console.log(`Installing ${packages.join(' ')}...`);
-
-  const args = ['install', ...packages, '--silent', '--quiet'];
+  const args = ['install', ...packages];
   if (config?.location === 'devDependencies') {
     args.push('--save-dev');
   }
@@ -18,6 +16,4 @@ export function installPackages(
   spawn.sync('npm', args, {
     stdio: 'pipe' // Suppress output from NPM.
   });
-
-  console.log(`Installed ${packages.join(' ')} successfully.`);
 }

@@ -22,7 +22,7 @@ import {
  * Creates an object which maps relative asset paths to absolute URLs with hashed file names.
  * @param assetBaseUrl The base URL where the assets are served.
  */
-function createAppAssetsMap(assetsBaseUrl: string = ''): SkyuxAppAssets {
+function createAppAssetsMap(assetsBaseUrl: string): SkyuxAppAssets {
 
   const assetsMap: SkyuxAppAssets = {};
 

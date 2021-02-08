@@ -3,7 +3,7 @@ import {
   UnitTestTree
 } from '@angular-devkit/schematics/testing';
 
-import mock from 'mock-require';
+import spawn from 'cross-spawn';
 
 import path from 'path';
 
@@ -18,8 +18,11 @@ describe('ng-add.schematic', () => {
   let app: UnitTestTree;
   let runner: SchematicTestRunner;
   let workspaceTree: UnitTestTree;
+  let spawnSyncSpy: jasmine.Spy;
 
   beforeEach(async () => {
+    spawnSyncSpy = spyOn(spawn, 'sync');
+
     runner = new SchematicTestRunner('schematics', COLLECTION_PATH);
 
     const result = await createTestApp(runner, {
@@ -27,14 +30,6 @@ describe('ng-add.schematic', () => {
     });
     app = result.appTree;
     workspaceTree = result.workspaceTree;
-
-    mock('../utils/npm-utils', {
-      installPackages() {}
-    });
-  });
-
-  afterEach(() => {
-    mock.stopAll();
   });
 
   it('should update package.json', async () => {
@@ -48,6 +43,15 @@ describe('ng-add.schematic', () => {
     );
   });
 
+  it('should use the default project if none provided', async () => {
+    const emptyOptions = {};
+    await expectAsync(
+      runner
+        .runSchematicAsync('ng-add', emptyOptions, app)
+        .toPromise()
+    ).not.toBeRejected();
+  });
+
   it('should throw an error if angular.json doesn\'t exist', async () => {
     app.delete('angular.json');
 
@@ -56,6 +60,19 @@ describe('ng-add.schematic', () => {
         .runSchematicAsync('ng-add', { project: 'invalid-project' }, app)
         .toPromise()
     ).toBeRejectedWithError('Unable to locate a workspace file for workspace path.');
+  });
+
+  it('should throw an error if added directly to library', async () => {
+    const library = await generateTestLibrary(runner, workspaceTree, { name: 'foo-lib' });
+
+    await expectAsync(
+      runner
+        .runSchematicAsync('ng-add', { project: 'foo-lib' }, library)
+        .toPromise()
+    ).toBeRejectedWithError(
+      'You are attempting to add this builder to a library project, ' +
+      'but it is designed to be added only to the primary application.'
+    );
   });
 
   it('should throw an error if specified project doesn\'t exist', async () => {
@@ -92,6 +109,19 @@ describe('ng-add.schematic', () => {
     expect(angularJson.projects.foobar.architect.serve.builder).toEqual('@skyux-sdk/angular-builders:dev-server');
     expect(angularJson.projects.foobar.architect.test.builder).toEqual('@skyux-sdk/angular-builders:karma');
     expect(angularJson.projects.foobar.architect.e2e.builder).toEqual('@skyux-sdk/angular-builders:protractor');
+  });
+
+  it('should install SKY UX packages', async () => {
+    await runner
+      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+      .toPromise();
+
+    expect(spawnSyncSpy).toHaveBeenCalledWith('npm', [
+      'install', '@skyux/assets@^4'
+    ], { stdio: 'pipe' });
+    expect(spawnSyncSpy).toHaveBeenCalledWith('npm', [
+      'install', '@skyux-sdk/e2e@^4', '@skyux-sdk/testing@^4', '--save-dev'
+    ], { stdio: 'pipe' });
   });
 
   describe('serve', () => {

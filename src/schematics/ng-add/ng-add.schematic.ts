@@ -151,10 +151,12 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
 function installDependencies(context: SchematicContext): void {
   // Install this builder as a development dependency.
   context.addTask(new NodePackageInstallTask());
+  context.logger.info('Installing SKY UX packages...');
   installPackages(['@skyux/assets@^4']);
   installPackages(['@skyux-sdk/e2e@^4', '@skyux-sdk/testing@^4'], {
     location: 'devDependencies'
   });
+  context.logger.info('Installed SKY UX packages.');
 }
 
 function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
