@@ -64,15 +64,17 @@ export function applyAppAssetsWebpackConfig(
   webpackConfig: webpack.Configuration,
   assetsBaseUrl: string = ''
 ): void {
-
   const assetsMap = createAppAssetsMap(assetsBaseUrl);
-
   const processedAssetsMap: {[_:string]: string} = {};
   for (const [relativeUrl, asset] of Object.entries(assetsMap)) {
     processedAssetsMap[relativeUrl.replace('assets/', '')] = asset.hashedUrl;
   }
 
-  webpackConfig.module?.rules.push({
+  webpackConfig.module = webpackConfig.module || {
+    rules: []
+  };
+
+  webpackConfig.module.rules.push({
     enforce: 'pre',
     test: /(\/|\\)__skyux(\/|\\)app-assets-map\.json$/,
     use: {

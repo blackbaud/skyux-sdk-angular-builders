@@ -48,62 +48,91 @@ async function modifyAngularJson(
   host: workspaces.WorkspaceHost,
   options: SkyuxNgAddOptions
 ): Promise<void> {
+  const projectName = options.project;
   const angularJsonContents = await host.readFile('angular.json');
   const angularJson = JSON.parse(angularJsonContents);
-  const architectConfig = angularJson.projects[options.project].architect;
-  setupBrowserBuilder(architectConfig.build);
-  setupDevServerBuilder(architectConfig.serve);
-  setupProtractorBuilder(architectConfig.e2e, architectConfig.serve, options.project);
-  setupKarmaBuilder(architectConfig.test);
+
+  const architectConfig = angularJson.projects[projectName].architect;
+  if (!architectConfig) {
+    throw new SchematicsException(
+      `Expected node projects/${projectName}/architect in angular.json!`
+    );
+  }
+
+  if (architectConfig.build) {
+    architectConfig.build.builder = '@skyux-sdk/angular-builders:browser';
+    // Configure Angular to only hash bundled JavaScript files.
+    // Our builder will handle hashing the file names found in `src/assets`.
+    architectConfig.build.configurations!.production!.outputHashing! = OutputHashing.Bundles;
+  } else {
+    throw new SchematicsException(
+      `Expected node projects/${projectName}/architect/build in angular.json!`
+    );
+  }
+
+  if (architectConfig.serve) {
+    architectConfig.serve.builder = '@skyux-sdk/angular-builders:dev-server';
+  } else {
+    throw new SchematicsException(
+      `Expected node projects/${projectName}/architect/serve in angular.json!`
+    );
+  }
+
+  if (architectConfig.e2e) {
+    architectConfig.e2e.builder = '@skyux-sdk/angular-builders:protractor';
+    architectConfig.e2e.options!.devServerTarget = `${projectName}:serve:e2e`;
+    architectConfig.e2e.configurations!.production!.devServerTarget = `${projectName}:serve:e2eProduction`
+    architectConfig.serve.configurations!.e2e = {
+      browserTarget: `${projectName}:build`,
+      open: false,
+      skyuxOpen: false,
+      skyuxLaunch: 'host'
+    } as SkyuxDevServerBuilderOptions;
+    architectConfig.serve.configurations!.e2eProduction = {
+      browserTarget: `${projectName}:build:production`,
+      open: false,
+      skyuxOpen: false,
+      skyuxLaunch: 'host'
+    } as SkyuxDevServerBuilderOptions;
+  } else {
+    throw new SchematicsException(
+      `Expected node projects/${projectName}/architect/e2e in angular.json!`
+    );
+  }
+
+  // Setup karma builder for all projects.
+  for (const project in angularJson.projects) {
+    const testTarget = angularJson.projects[project].architect.test;
+    if (testTarget) {
+      testTarget.builder = '@skyux-sdk/angular-builders:karma';
+      testTarget.options!.codeCoverage = true;
+    } else {
+      throw new SchematicsException(
+        `Expected node projects/${project}/architect/test in angular.json!`
+      );
+    }
+  }
+
   await host.writeFile('angular.json', JSON.stringify(angularJson, undefined, 2));
 }
 
-function setupBrowserBuilder(buildTarget: workspaces.TargetDefinition): void {
-  buildTarget.builder = '@skyux-sdk/angular-builders:browser';
-  // Configure Angular to only hash bundled JavaScript files.
-  // Our builder will handle hashing the file names found in `src/assets`.
-  buildTarget.configurations!.production!.outputHashing! = OutputHashing.Bundles;
-}
-
-function setupDevServerBuilder(serveTarget: workspaces.TargetDefinition): void {
-  serveTarget.builder = '@skyux-sdk/angular-builders:dev-server';
-}
-
-function setupProtractorBuilder(
-  e2eTarget: workspaces.TargetDefinition,
-  serveTarget: workspaces.TargetDefinition,
-  projectName: string
-): void {
-  e2eTarget.builder = '@skyux-sdk/angular-builders:protractor';
-  e2eTarget.options!.devServerTarget = `${projectName}:serve:e2e`;
-  e2eTarget.configurations!.production!.devServerTarget = `${projectName}:serve:e2eProduction`
-  serveTarget.configurations!.e2e = {
-    browserTarget: `${projectName}:build`,
-    open: false,
-    skyuxOpen: false,
-    skyuxLaunch: 'host'
-  } as SkyuxDevServerBuilderOptions;
-  serveTarget.configurations!.e2eProduction = {
-    browserTarget: `${projectName}:build:production`,
-    open: false,
-    skyuxOpen: false,
-    skyuxLaunch: 'host'
-  } as SkyuxDevServerBuilderOptions;
-}
-
-function setupKarmaBuilder(testTarget: workspaces.TargetDefinition): void {
-  testTarget.builder = '@skyux-sdk/angular-builders:karma';
-  testTarget.options!.codeCoverage = true;
-}
-
-async function modifyTestFrameworkConfigs(host: workspaces.WorkspaceHost): Promise<void> {
-  await host.writeFile('karma.conf.js', `// DO NOT MODIFY
+async function modifyKarmaConfig(
+  host: workspaces.WorkspaceHost,
+  projectRoot: string
+): Promise<void> {
+  await host.writeFile(`${projectRoot}/karma.conf.js`, `// DO NOT MODIFY
 // This file is handled by the '@skyux-sdk/angular-builders' library.
 module.exports = function (config) {
   config.set({});
 };
 `);
-  await host.writeFile('e2e/protractor.conf.js', `// DO NOT MODIFY
+}
+
+async function modifyProtractorConfig(
+  host: workspaces.WorkspaceHost,
+  projectRoot: string
+): Promise<void> {
+  await host.writeFile(`${projectRoot}/e2e/protractor.conf.js`, `// DO NOT MODIFY
 // This file is handled by the '@skyux-sdk/angular-builders' library.
 exports.config = {};
 `);
@@ -145,6 +174,16 @@ function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule
   return mergeWith(templateSource, MergeStrategy.Overwrite);
 }
 
+function setupLibraries(
+  host: workspaces.WorkspaceHost,
+  workspace: workspaces.WorkspaceDefinition
+): void {
+  // Modify the karma configs for all libraries.
+  workspace.projects.forEach(async project => {
+    await modifyKarmaConfig(host, project.root);
+  });
+}
+
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
   return async (tree: Tree, context: SchematicContext) => {
 
@@ -162,16 +201,17 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
       );
     }
 
-    // TODO: Need to add support for libraries?
     if (project.extensions.projectType !== 'application') {
       throw new SchematicsException(
-        `This builder is only useful for application projects.`
+        `You are attempting to add this builder to a library project, but it is designed to be added only to the primary application.`
       );
     }
 
     await modifyAngularJson(host, options);
     await modifyTsConfig(host);
-    await modifyTestFrameworkConfigs(host);
+    await modifyKarmaConfig(host, project.root);
+    await modifyProtractorConfig(host, project.root);
+    await setupLibraries(host, workspace);
     installDependencies(context);
     return createAppFiles(tree, project);
   };

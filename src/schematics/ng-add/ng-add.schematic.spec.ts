@@ -3,6 +3,8 @@ import {
   UnitTestTree
 } from '@angular-devkit/schematics/testing';
 
+import mock from 'mock-require';
+
 import path from 'path';
 
 import {
@@ -25,6 +27,14 @@ describe('ng-add.schematic', () => {
     });
     app = result.appTree;
     workspaceTree = result.workspaceTree;
+
+    mock('../utils/npm-utils', {
+      installPackages() {}
+    });
+  });
+
+  afterEach(() => {
+    mock.stopAll();
   });
 
   it('should update package.json', async () => {
@@ -45,7 +55,7 @@ describe('ng-add.schematic', () => {
       runner
         .runSchematicAsync('ng-add', { project: 'invalid-project' }, app)
         .toPromise()
-    ).toBeRejectedWithError('Not an Angular CLI workspace.');
+    ).toBeRejectedWithError('Unable to locate a workspace file for workspace path.');
   });
 
   it('should throw an error if specified project doesn\'t exist', async () => {
@@ -59,7 +69,9 @@ describe('ng-add.schematic', () => {
   it('should throw an error if specified project doesn\'t include an `architect` property', async () => {
     // Create an incorrectly formatted project config.
     const angularJson = JSON.parse(app.readContent('angular.json'));
-    angularJson.projects['invalid-project'] = {};
+    angularJson.projects['invalid-project'] = {
+      projectType: 'application'
+    };
     app.overwrite('angular.json', JSON.stringify(angularJson));
 
     await expectAsync(

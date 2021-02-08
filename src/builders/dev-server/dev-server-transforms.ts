@@ -39,13 +39,13 @@ function getDevServerWepbackConfigTransformer(
 
     const localUrl = getLocalUrlFromOptions(options);
 
-    applyAppAssetsWebpackConfig(webpackConfig, localUrl);
+    webpackConfig.plugins = webpackConfig.plugins || [];
 
     if (options.skyuxLaunch === 'host') {
       /*istanbul ignore next line*/
       const pathName = context.target?.project!;
 
-      webpackConfig.plugins!.push(
+      webpackConfig.plugins.push(
         new SkyuxOpenHostURLPlugin({
           hostUrl: options.skyuxHostUrl!,
           localUrl,
@@ -54,6 +54,9 @@ function getDevServerWepbackConfigTransformer(
         })
       );
     }
+
+
+    applyAppAssetsWebpackConfig(webpackConfig, localUrl);
 
     return webpackConfig;
   };

@@ -27,11 +27,13 @@ function getBrowserWepbackConfigTransformer(
   options: SkyuxBrowserBuilderOptions
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
-    applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl);
+    webpackConfig.plugins = webpackConfig.plugins || [];
 
-    webpackConfig.plugins!.push(
+    webpackConfig.plugins.push(
       new SkyuxSaveHostMetadataPlugin()
     );
+
+    applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl);
 
     return webpackConfig;
   };
