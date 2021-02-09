@@ -27,7 +27,7 @@ describe('ng-add.schematic', () => {
     workspaceTree = result.workspaceTree;
   });
 
-  it('should update package.json', async () => {
+  it('should run the NodePackageInstallTask', async () => {
     await runner
       .runSchematicAsync('ng-add', { project: 'foobar' }, app)
       .toPromise();
@@ -106,18 +106,34 @@ describe('ng-add.schematic', () => {
     expect(angularJson.projects.foobar.architect.e2e.builder).toEqual('@skyux-sdk/angular-builders:protractor');
   });
 
-  // it('should add packages to package.json', async () => {
-  //   await runner
-  //     .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-  //     .toPromise();
+  it('should add packages to package.json', async () => {
+    await runner
+      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+      .toPromise();
 
-  //   expect(spawnSyncSpy).toHaveBeenCalledWith('npm', [
-  //     'install', '@skyux/assets@^4'
-  //   ], { stdio: 'pipe' });
-  //   expect(spawnSyncSpy).toHaveBeenCalledWith('npm', [
-  //     'install', '@skyux-sdk/e2e@^4', '@skyux-sdk/testing@^4', '--save-dev'
-  //   ], { stdio: 'pipe' });
-  // });
+    const packageJson = JSON.parse(app.readContent('package.json'));
+    expect(packageJson.dependencies).toEqual(jasmine.objectContaining({
+      '@skyux/assets': '^4.0.0'
+    }));
+    expect(packageJson.devDependencies).toEqual(jasmine.objectContaining({
+      '@angular/cdk': '~11.1.0',
+      '@skyux-sdk/e2e': '^4.0.0',
+      '@skyux-sdk/testing': '^4.0.0'
+    }));
+  });
+
+  it('should add packages to package.json files without dependency sections', async () => {
+    // Create an empty package.json file.
+    app.overwrite('package.json', JSON.stringify({}));
+
+    await runner
+      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+      .toPromise();
+
+    const packageJson = JSON.parse(app.readContent('package.json'));
+    expect(packageJson.dependencies).toBeDefined();
+    expect(packageJson.devDependencies).toBeDefined();
+  });
 
   describe('serve', () => {
     it('should throw an error if specified project doesn\'t include an `architect.serve` property', async () => {

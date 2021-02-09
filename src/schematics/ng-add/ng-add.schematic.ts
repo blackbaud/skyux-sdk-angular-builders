@@ -10,7 +10,6 @@ import {
 import {
   apply,
   applyTemplates,
-  chain,
   MergeStrategy,
   mergeWith,
   move,
@@ -149,7 +148,6 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
   await host.writeFile('tsconfig.json', banner + JSON.stringify(tsConfig, undefined, 2));
 }
 
-
 function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
   addModuleImportToRootModule(
     tree,
@@ -209,7 +207,7 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await addPackageToPackageJson(host, '@skyux/assets', '^4.0.0');
     await addPackageToPackageJson(host, '@skyux-sdk/e2e', '^4.0.0', 'devDependencies');
     await addPackageToPackageJson(host, '@skyux-sdk/testing', '^4.0.0', 'devDependencies');
-    await addPackageToPackageJson(host, '@angular/cdk', '~11.1.0', 'dependencies');
+    await addPackageToPackageJson(host, '@angular/cdk', '~11.1.0', 'devDependencies');
 
     context.addTask(new NodePackageInstallTask());
 
