@@ -25,12 +25,12 @@ import {
 } from '@angular-devkit/schematics/tasks';
 
 import {
-  SkyuxDevServerBuilderOptions
-} from '../../builders/dev-server/dev-server-options';
+  addPackageJsonDependency, NodeDependencyType
+} from '@schematics/angular/utility/dependencies';
 
 import {
-  addPackageToPackageJson
-} from '../utils/package-utils';
+  SkyuxDevServerBuilderOptions
+} from '../../builders/dev-server/dev-server-options';
 
 import {
   addModuleImportToRootModule,
@@ -200,9 +200,26 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await modifyProtractorConfig(host, project.root);
     await setupLibraries(host, workspace);
 
-    await addPackageToPackageJson(host, '@skyux/assets', '^4.0.0');
-    await addPackageToPackageJson(host, '@skyux-sdk/e2e', '^4.0.0', 'devDependencies');
-    await addPackageToPackageJson(host, '@skyux-sdk/testing', '^4.0.0', 'devDependencies');
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/assets',
+      version: '^4.0.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Dev,
+      name: '@skyux-sdk/e2e',
+      version: '^4.0.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Dev,
+      name: '@skyux-sdk/testing',
+      version: '^4.0.0',
+      overwrite: true
+    });
 
     context.addTask(new NodePackageInstallTask());
 
