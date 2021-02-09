@@ -3,10 +3,21 @@ import {
 } from '@angular-devkit/build-angular';
 
 import {
+  normalize,
+  workspaces
+} from '@angular-devkit/core';
+
+import {
+  apply,
+  applyTemplates,
+  MergeStrategy,
+  mergeWith,
+  move,
   Rule,
   SchematicContext,
   SchematicsException,
-  Tree
+  Tree,
+  url
 } from '@angular-devkit/schematics';
 
 import {
@@ -14,193 +25,196 @@ import {
 } from '@angular-devkit/schematics/tasks';
 
 import {
-  SkyuxBrowserBuilderOptions
-} from '../../builders/browser/browser-options';
+  addModuleImportToRootModule
+} from '@angular/cdk/schematics';
 
 import {
   SkyuxDevServerBuilderOptions
 } from '../../builders/dev-server/dev-server-options';
 
 import {
-  SkyuxKarmaBuilderOptions
-} from '../../builders/karma/karma-options';
+  installPackages
+} from '../utils/npm-utils';
 
 import {
-  SkyuxProtractorBuilderOptions
-} from '../../builders/protractor/protractor-options';
+  createHost
+} from '../utils/schematics-utils';
 
 import {
   SkyuxNgAddOptions
 } from './schema';
 
-function setupBrowserBuilder(
-  architect: {
-    builder: string;
-    options: SkyuxBrowserBuilderOptions;
-    configurations: {
-      production: SkyuxBrowserBuilderOptions;
-    };
-  },
-  projectName: string
-): void {
-  if (!architect) {
+async function modifyAngularJson(
+  host: workspaces.WorkspaceHost,
+  options: SkyuxNgAddOptions
+): Promise<void> {
+  const projectName = options.project;
+  const angularJsonContents = await host.readFile('angular.json');
+  const angularJson = JSON.parse(angularJsonContents);
+
+  const architectConfig = angularJson.projects[projectName].architect;
+  if (!architectConfig) {
+    throw new SchematicsException(
+      `Expected node projects/${projectName}/architect in angular.json!`
+    );
+  }
+
+  if (architectConfig.build) {
+    architectConfig.build.builder = '@skyux-sdk/angular-builders:browser';
+    // Configure Angular to only hash bundled JavaScript files.
+    // Our builder will handle hashing the file names found in `src/assets`.
+    architectConfig.build.configurations!.production!.outputHashing! = OutputHashing.Bundles;
+  } else {
     throw new SchematicsException(
       `Expected node projects/${projectName}/architect/build in angular.json!`
     );
   }
 
-  // Overwrite the default build architect.
-  architect.builder = '@skyux-sdk/angular-builders:browser';
-
-  // Configure Angular to only hash bundled JavaScript files.
-  // Our builder will handle hashing the file names found in `src/assets`.
-  architect.configurations.production!.outputHashing! = OutputHashing.Bundles;
-}
-
-function setupDevServerBuilder(
-  architect: {
-    builder: string;
-    options: SkyuxDevServerBuilderOptions;
-  },
-  projectName: string
-): void {
-  if (!architect) {
+  if (architectConfig.serve) {
+    architectConfig.serve.builder = '@skyux-sdk/angular-builders:dev-server';
+  } else {
     throw new SchematicsException(
       `Expected node projects/${projectName}/architect/serve in angular.json!`
     );
   }
 
-  // Overwrite the default serve architect.
-  architect.builder = '@skyux-sdk/angular-builders:dev-server';
-  architect.options.skyuxLaunch = 'host';
-}
-
-function setupProtractorBuilder(
-  tree: Tree,
-  architect: {
-    serve: {
-      configurations: {
-        e2e: SkyuxDevServerBuilderOptions;
-        e2eProduction: SkyuxDevServerBuilderOptions;
-      };
-    },
-    e2e: {
-      builder: string;
-      options: SkyuxProtractorBuilderOptions;
-      configurations: {
-        production: SkyuxProtractorBuilderOptions;
-      };
-    }
-  },
-  projectName: string
-): void {
-  if (!architect.e2e) {
+  if (architectConfig.e2e) {
+    architectConfig.e2e.builder = '@skyux-sdk/angular-builders:protractor';
+    architectConfig.e2e.options!.devServerTarget = `${projectName}:serve:e2e`;
+    architectConfig.e2e.configurations!.production!.devServerTarget = `${projectName}:serve:e2eProduction`
+    architectConfig.serve.configurations!.e2e = {
+      browserTarget: `${projectName}:build`,
+      open: false,
+      skyuxOpen: false,
+      skyuxLaunch: 'host'
+    } as SkyuxDevServerBuilderOptions;
+    architectConfig.serve.configurations!.e2eProduction = {
+      browserTarget: `${projectName}:build:production`,
+      open: false,
+      skyuxOpen: false,
+      skyuxLaunch: 'host'
+    } as SkyuxDevServerBuilderOptions;
+  } else {
     throw new SchematicsException(
       `Expected node projects/${projectName}/architect/e2e in angular.json!`
     );
   }
 
-  // Overwrite the default e2e architect.
-  architect.e2e.builder = '@skyux-sdk/angular-builders:protractor';
-
-  architect.e2e.options.devServerTarget = `${projectName}:serve:e2e`;
-  architect.e2e.configurations.production.devServerTarget = `${projectName}:serve:e2eProduction`
-
-  architect.serve.configurations.e2e = {
-    browserTarget: `${projectName}:build`,
-    open: false,
-    skyuxOpen: false,
-    skyuxLaunch: 'host'
-  } as SkyuxDevServerBuilderOptions;
-
-  architect.serve.configurations.e2eProduction = {
-    browserTarget: `${projectName}:build:production`,
-    open: false,
-    skyuxOpen: false,
-    skyuxLaunch: 'host'
-  } as SkyuxDevServerBuilderOptions;
-
-  const contents = `// DO NOT MODIFY
-// This file is handled by the \`@skyux-sdk/angular-builders:protractor\` builder.
-
-exports.config = {};
-`;
-
-  tree.overwrite('e2e/protractor.conf.js', contents);
-}
-
-function setupKarmaBuilder(
-  tree: Tree,
-  architect: {
-    builder: string;
-    options: SkyuxKarmaBuilderOptions;
-  },
-  projectName: string
-): void {
-  if (!architect) {
-    throw new SchematicsException(
-      `Expected node projects/${projectName}/architect/test in angular.json!`
-    );
+  // Setup karma builder for all projects.
+  for (const project in angularJson.projects) {
+    const testTarget = angularJson.projects[project].architect.test;
+    if (testTarget) {
+      testTarget.builder = '@skyux-sdk/angular-builders:karma';
+      testTarget.options!.codeCoverage = true;
+    } else {
+      throw new SchematicsException(
+        `Expected node projects/${project}/architect/test in angular.json!`
+      );
+    }
   }
 
-  // Overwrite the default test architect.
-  architect.builder = `@skyux-sdk/angular-builders:karma`;
-  architect.options.codeCoverage = true;
+  await host.writeFile('angular.json', JSON.stringify(angularJson, undefined, 2));
+}
 
-  const contents = `// DO NOT MODIFY
-// This file is handled by the \`@skyux-sdk/angular-builders:karma\` builder.
-
+async function modifyKarmaConfig(
+  host: workspaces.WorkspaceHost,
+  projectRoot: string
+): Promise<void> {
+  await host.writeFile(`${projectRoot}/karma.conf.js`, `// DO NOT MODIFY
+// This file is handled by the '@skyux-sdk/angular-builders' library.
 module.exports = function (config) {
   config.set({});
 };
-`;
+`);
+}
 
-  const libraryKarmaConfig = `projects/${projectName}/karma.conf.js`;
-  if (tree.exists(libraryKarmaConfig)) {
-    tree.overwrite(libraryKarmaConfig, contents);
-  } else {
-    tree.overwrite('karma.conf.js', contents);
-  }
+async function modifyProtractorConfig(
+  host: workspaces.WorkspaceHost,
+  projectRoot: string
+): Promise<void> {
+  await host.writeFile(`${projectRoot}/e2e/protractor.conf.js`, `// DO NOT MODIFY
+// This file is handled by the '@skyux-sdk/angular-builders' library.
+exports.config = {};
+`);
+}
+
+async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
+  const tsConfigContents = await host.readFile('tsconfig.json');
+  // JavaScript has difficulty parsing JSON with comments.
+  const banner = '/* To learn more about this file see: https://angular.io/config/tsconfig. */\n';
+  const tsConfig = JSON.parse(tsConfigContents.replace(banner, ''));
+  tsConfig.compilerOptions.resolveJsonModule = true;
+  tsConfig.compilerOptions.esModuleInterop = true;
+  await host.writeFile('tsconfig.json', banner + JSON.stringify(tsConfig, undefined, 2));
+}
+
+function installDependencies(context: SchematicContext): void {
+  // Install this builder as a development dependency.
+  context.addTask(new NodePackageInstallTask());
+  context.logger.info('Installing SKY UX packages...');
+  installPackages(['@skyux/assets@^4']);
+  installPackages(['@skyux-sdk/e2e@^4', '@skyux-sdk/testing@^4'], {
+    location: 'devDependencies'
+  });
+  context.logger.info('Installed SKY UX packages.');
+}
+
+function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
+  addModuleImportToRootModule(
+    tree,
+    'SkyuxModule.forRoot()',
+    './__skyux/skyux.module',
+    project
+  );
+
+  const sourcePath = `${project!.sourceRoot}/app`;
+  const templateSource = apply(url('./files'), [
+    applyTemplates({}),
+    move(normalize(sourcePath))
+  ]);
+
+  return mergeWith(templateSource, MergeStrategy.Overwrite);
+}
+
+function setupLibraries(
+  host: workspaces.WorkspaceHost,
+  workspace: workspaces.WorkspaceDefinition
+): void {
+  // Modify the karma configs for all libraries.
+  workspace.projects.forEach(async project => {
+    await modifyKarmaConfig(host, project.root);
+  });
 }
 
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
-  return (tree: Tree, context: SchematicContext) => {
+  return async (tree: Tree, context: SchematicContext) => {
 
-    // Get the workspace config.
-    const workspaceConfigBuffer = tree.read('angular.json');
-    if (!workspaceConfigBuffer) {
-      throw new SchematicsException('Not an Angular CLI workspace.');
+    const host = createHost(tree);
+    const { workspace } = await workspaces.readWorkspace('/', host);
+
+    if (!options.project) {
+      options.project = workspace.extensions.defaultProject as string;
     }
-    const workspace = JSON.parse(workspaceConfigBuffer.toString());
 
-    const projectConfig = workspace.projects[options.project];
-    if (!projectConfig) {
+    const project = workspace.projects.get(options.project);
+    if (!project) {
       throw new SchematicsException(
         `The "${options.project}" project is not defined in angular.json. Provide a valid project name.`
       );
     }
 
-    const architect = workspace.projects[options.project].architect;
-    if (!architect) {
+    if (project.extensions.projectType !== 'application') {
       throw new SchematicsException(
-        `Expected node projects/${options.project}/architect in angular.json!`
+        `You are attempting to add this builder to a library project, but it is designed to be added only to the primary application.`
       );
     }
 
-    setupBrowserBuilder(architect.build, options.project);
-    setupDevServerBuilder(architect.serve, options.project);
-    setupProtractorBuilder(tree, architect, options.project);
-
-    // Setup karma for all projects.
-    Object.keys(workspace.projects).forEach(project => {
-      setupKarmaBuilder(tree, workspace.projects[project].architect.test, project);
-    });
-
-    // Install as a development dependency.
-    context.addTask(new NodePackageInstallTask());
-
-    tree.overwrite('angular.json', JSON.stringify(workspace, undefined, 2));
-
-    return tree;
+    await modifyAngularJson(host, options);
+    await modifyTsConfig(host);
+    await modifyKarmaConfig(host, project.root);
+    await modifyProtractorConfig(host, project.root);
+    await setupLibraries(host, workspace);
+    installDependencies(context);
+    return createAppFiles(tree, project);
   };
 }

@@ -10,8 +10,6 @@ import {
 
 import webpack from 'webpack';
 
-import * as appAssetsUtils from '../../shared/app-assets-utils';
-
 import {
   SkyuxAppAssetsPlugin
 } from '../../webpack/plugins/app-assets/app-assets.plugin';
@@ -69,8 +67,13 @@ describe('browser builder', () => {
     spyOnProperty(buildAngular, 'executeBrowserBuilder', 'get').and
       .returnValue(executeBrowserBuilderSpy);
 
-    spyOn(appAssetsUtils, 'createAppAssetsMap').and
-      .returnValue({});
+    mock('glob', {
+      sync: () => ['foo.jpg']
+    });
+
+    mock('hasha', {
+      fromFileSync: () => 'MOCK_HASH'
+    });
   });
 
   afterEach(() => {

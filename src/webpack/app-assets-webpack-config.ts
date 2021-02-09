@@ -4,33 +4,37 @@ import hasha from 'hasha';
 
 import path from 'path';
 
-import {
-  SkyuxAppAssets
-} from './app-assets';
+import webpack from 'webpack';
 
 import {
   ensureTrailingSlash
-} from './url-utils';
+} from '../shared/url-utils';
+
+import {
+  SkyuxAppAssetsPlugin
+} from './plugins/app-assets/app-assets.plugin';
+
+import {
+  SkyuxAppAssets
+} from './app-assets';
 
 /**
  * Creates an object which maps relative asset paths to absolute URLs with hashed file names.
  * @param assetBaseUrl The base URL where the assets are served.
  */
-export function createAppAssetsMap(assetBaseUrl: string = ''): SkyuxAppAssets {
+function createAppAssetsMap(assetsBaseUrl: string): SkyuxAppAssets {
 
   const assetsMap: SkyuxAppAssets = {};
 
   // Find all asset file paths.
   const filePaths = glob.sync(
     path.join(process.cwd(), 'src/assets/**/*'),
-    {
-      nodir: true
-    }
+    { nodir: true }
   );
 
   // Create a hashed version of each path.
   filePaths.forEach(filePath => {
-    const baseUrl = ensureTrailingSlash(assetBaseUrl);
+    const baseUrl = ensureTrailingSlash(assetsBaseUrl);
     const relativePath = filePath.replace(path.join(process.cwd(), 'src/'), '');
     const parsed = path.parse(relativePath);
 
@@ -54,4 +58,36 @@ export function createAppAssetsMap(assetBaseUrl: string = ''): SkyuxAppAssets {
   });
 
   return assetsMap;
+}
+
+export function applyAppAssetsWebpackConfig(
+  webpackConfig: webpack.Configuration,
+  assetsBaseUrl: string = ''
+): void {
+  const assetsMap = createAppAssetsMap(assetsBaseUrl);
+  const processedAssetsMap: {[_:string]: string} = {};
+  for (const [relativeUrl, asset] of Object.entries(assetsMap)) {
+    processedAssetsMap[relativeUrl.replace('assets/', '')] = asset.hashedUrl;
+  }
+
+  webpackConfig.module = webpackConfig.module || {
+    rules: []
+  };
+
+  webpackConfig.module.rules.push({
+    enforce: 'pre',
+    test: /(\/|\\)__skyux(\/|\\)app-assets-map\.json$/,
+    use: {
+      loader: path.resolve(__dirname, './loaders/app-assets/app-assets.loader'),
+      options: {
+        assetsMapStringified: JSON.stringify(processedAssetsMap)
+      }
+    }
+  });
+
+  webpackConfig.plugins!.push(
+    new SkyuxAppAssetsPlugin({
+      assetsMap
+    })
+  );
 }

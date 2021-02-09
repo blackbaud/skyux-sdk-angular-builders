@@ -1,13 +1,20 @@
 const fs = require('fs-extra');
 const path = require('path');
 
+const TEST_DIST = 'builders-test-app/.skyux-sdk-angular-builders-dist';
+
+function cleanDist() {
+  require('rimraf').sync(path.join(TEST_DIST));
+}
+
 function copyFilesToDist() {
   const pathsToCopy = [
     ['README.md'],
     ['CHANGELOG.md'],
     ['package.json'],
     ['builders.json'],
-    ['collection.json']
+    ['collection.json'],
+    ['src/schematics/ng-add/files']
   ];
 
   pathsToCopy.forEach(pathArr => {
@@ -20,6 +27,8 @@ function copyFilesToDist() {
       throw `File not found: ${sourcePath}`;
     }
   });
+
+  fs.copySync('dist', path.join(TEST_DIST));
 }
 
 function mergeBuilderSchemas() {
@@ -67,6 +76,7 @@ function copyDistToNodeModules() {
   console.log('Successfully copied `dist` to `builders-test-app/node_modules`');
 }
 
+cleanDist();
 copyFilesToDist();
 mergeBuilderSchemas();
 copyDistToNodeModules();

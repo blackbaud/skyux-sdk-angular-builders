@@ -11,16 +11,12 @@ import {
 } from 'webpack';
 
 import {
-  createAppAssetsMap
-} from '../../shared/app-assets-utils';
-
-import {
-  SkyuxAppAssetsPlugin
-} from '../../webpack/plugins/app-assets/app-assets.plugin';
-
-import {
   SkyuxOpenHostURLPlugin
 } from '../../webpack/plugins/open-host-url/open-host-url.plugin';
+
+import {
+  applyAppAssetsWebpackConfig
+} from '../../webpack/app-assets-webpack-config';
 
 import {
   SkyuxDevServerBuilderOptions
@@ -59,11 +55,8 @@ function getDevServerWepbackConfigTransformer(
       );
     }
 
-    webpackConfig.plugins.push(
-      new SkyuxAppAssetsPlugin({
-        assetsMap: createAppAssetsMap(localUrl)
-      })
-    );
+
+    applyAppAssetsWebpackConfig(webpackConfig, localUrl);
 
     return webpackConfig;
   };
