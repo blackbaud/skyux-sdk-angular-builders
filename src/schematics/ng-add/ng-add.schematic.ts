@@ -10,6 +10,7 @@ import {
 import {
   apply,
   applyTemplates,
+  chain,
   MergeStrategy,
   mergeWith,
   move,
@@ -33,8 +34,8 @@ import {
 } from '../../builders/dev-server/dev-server-options';
 
 import {
-  installPackages
-} from '../utils/npm-utils';
+  addPackageToPackageJson
+} from '../utils/package-utils';
 
 import {
   createHost
@@ -148,16 +149,6 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
   await host.writeFile('tsconfig.json', banner + JSON.stringify(tsConfig, undefined, 2));
 }
 
-function installDependencies(context: SchematicContext): void {
-  // Install this builder as a development dependency.
-  context.addTask(new NodePackageInstallTask());
-  context.logger.info('Installing SKY UX packages...');
-  installPackages(['@skyux/assets@^4']);
-  installPackages(['@skyux-sdk/e2e@^4', '@skyux-sdk/testing@^4'], {
-    location: 'devDependencies'
-  });
-  context.logger.info('Installed SKY UX packages.');
-}
 
 function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
   addModuleImportToRootModule(
@@ -214,7 +205,14 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await modifyKarmaConfig(host, project.root);
     await modifyProtractorConfig(host, project.root);
     await setupLibraries(host, workspace);
-    installDependencies(context);
+
+    await addPackageToPackageJson(host, '@skyux/assets', '^4.0.0');
+    await addPackageToPackageJson(host, '@skyux-sdk/e2e', '^4.0.0', 'devDependencies');
+    await addPackageToPackageJson(host, '@skyux-sdk/testing', '^4.0.0', 'devDependencies');
+    await addPackageToPackageJson(host, '@angular/cdk', '~11.1.0', 'dependencies');
+
+    context.addTask(new NodePackageInstallTask());
+
     return createAppFiles(tree, project);
   };
 }
