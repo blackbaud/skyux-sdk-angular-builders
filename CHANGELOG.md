@@ -1,3 +1,7 @@
+# 4.0.0-alpha.18 (2021-02-09)
+
+- Added module and provider for `SkyAppAssetsService` in `@skyux/asssets`. [#54](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/54)
+
 # 4.0.0-alpha.17 (2021-01-26)
 
 - Updated the package dependencies. [#52](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/52)
