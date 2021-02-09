@@ -116,7 +116,6 @@ describe('ng-add.schematic', () => {
       '@skyux/assets': '^4.0.0'
     }));
     expect(packageJson.devDependencies).toEqual(jasmine.objectContaining({
-      '@angular/cdk': '~11.1.0',
       '@skyux-sdk/e2e': '^4.0.0',
       '@skyux-sdk/testing': '^4.0.0'
     }));

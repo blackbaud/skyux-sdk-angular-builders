@@ -21,8 +21,7 @@
     "test": "npm run lint && ts-node --project tsconfig.test.json ./node_modules/.bin/jasmine --config=jasmine.json"
   },
   "peerDependencies": {
-    "@angular-devkit/build-angular": "~0.1101.4",
-    "@angular/cdk": "^11.1.2"
+    "@angular-devkit/build-angular": "~0.1101.4"
   },
   "dependencies": {
     "glob": "7.1.6",
@@ -34,7 +33,6 @@
     "@angular-devkit/build-angular": "0.1101.4",
     "@angular-devkit/core": "11.1.4",
     "@angular-devkit/schematics": "11.1.4",
-    "@angular/cdk": "11.1.2",
     "@angular/compiler": "11.1.2",
     "@angular/compiler-cli": "11.1.2",
     "@istanbuljs/nyc-config-typescript": "1.0.1",

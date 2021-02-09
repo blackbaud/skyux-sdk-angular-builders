@@ -25,10 +25,6 @@ import {
 } from '@angular-devkit/schematics/tasks';
 
 import {
-  addModuleImportToRootModule
-} from '@angular/cdk/schematics';
-
-import {
   SkyuxDevServerBuilderOptions
 } from '../../builders/dev-server/dev-server-options';
 
@@ -37,6 +33,7 @@ import {
 } from '../utils/package-utils';
 
 import {
+  addModuleImportToRootModule,
   createHost
 } from '../utils/schematics-utils';
 
@@ -152,8 +149,7 @@ function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule
   addModuleImportToRootModule(
     tree,
     'SkyuxModule.forRoot()',
-    './__skyux/skyux.module',
-    project
+    './__skyux/skyux.module'
   );
 
   const sourcePath = `${project!.sourceRoot}/app`;
@@ -207,7 +203,6 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await addPackageToPackageJson(host, '@skyux/assets', '^4.0.0');
     await addPackageToPackageJson(host, '@skyux-sdk/e2e', '^4.0.0', 'devDependencies');
     await addPackageToPackageJson(host, '@skyux-sdk/testing', '^4.0.0', 'devDependencies');
-    await addPackageToPackageJson(host, '@angular/cdk', '~11.1.0', 'devDependencies');
 
     context.addTask(new NodePackageInstallTask());
 
