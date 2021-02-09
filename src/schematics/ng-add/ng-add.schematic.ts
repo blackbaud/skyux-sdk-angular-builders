@@ -153,7 +153,7 @@ function installDependencies(context: SchematicContext): void {
   context.addTask(new NodePackageInstallTask());
   context.logger.info('Installing SKY UX packages...');
   installPackages(['@skyux/assets@^4']);
-  installPackages(['@skyux-sdk/e2e@^4', '@skyux-sdk/testing@^4'], {
+  installPackages(['@angular/cdk@~11.1.0', '@skyux-sdk/e2e@^4', '@skyux-sdk/testing@^4'], {
     location: 'devDependencies'
   });
   context.logger.info('Installed SKY UX packages.');
