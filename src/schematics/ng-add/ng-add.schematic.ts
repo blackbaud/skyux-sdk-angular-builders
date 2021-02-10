@@ -25,7 +25,8 @@ import {
 } from '@angular-devkit/schematics/tasks';
 
 import {
-  addPackageJsonDependency, NodeDependencyType
+  addPackageJsonDependency,
+  NodeDependencyType
 } from '@schematics/angular/utility/dependencies';
 
 import {
