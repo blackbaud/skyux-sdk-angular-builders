@@ -1,3 +1,7 @@
+# 4.0.0-alpha.19 (2021-02-10)
+
+- Removed the `@angular/cdk` dependency. [#56](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/56)
+
 # 4.0.0-alpha.18 (2021-02-09)
 
 - Added module and provider for `SkyAppAssetsService` in `@skyux/asssets`. [#54](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/54)
