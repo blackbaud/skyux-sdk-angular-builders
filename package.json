@@ -21,8 +21,7 @@
     "test": "npm run lint && ts-node --project tsconfig.test.json ./node_modules/.bin/jasmine --config=jasmine.json"
   },
   "peerDependencies": {
-    "@angular-devkit/build-angular": "~0.1101.4",
-    "@angular/cdk": "^11.1.2"
+    "@angular-devkit/build-angular": "~0.1101.4"
   },
   "dependencies": {
     "glob": "7.1.6",
@@ -34,12 +33,10 @@
     "@angular-devkit/build-angular": "0.1101.4",
     "@angular-devkit/core": "11.1.4",
     "@angular-devkit/schematics": "11.1.4",
-    "@angular/cdk": "11.1.2",
     "@angular/compiler": "11.1.2",
     "@angular/compiler-cli": "11.1.2",
     "@istanbuljs/nyc-config-typescript": "1.0.1",
     "@schematics/angular": "11.1.4",
-    "@types/cross-spawn": "6.0.2",
     "@types/fs-extra": "9.0.6",
     "@types/jasmine": "3.6.3",
     "@types/karma": "5.0.1",
@@ -48,7 +45,6 @@
     "@types/mock-require": "2.0.0",
     "@types/node": "12.12.6",
     "@types/webpack": "4.41.26",
-    "cross-spawn": "7.0.3",
     "fs-extra": "9.1.0",
     "jasmine": "3.6.4",
     "jasmine-spec-reporter": "6.0.0",

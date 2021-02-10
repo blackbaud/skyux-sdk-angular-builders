@@ -3,8 +3,6 @@ import {
   UnitTestTree
 } from '@angular-devkit/schematics/testing';
 
-import spawn from 'cross-spawn';
-
 import path from 'path';
 
 import {
@@ -18,11 +16,8 @@ describe('ng-add.schematic', () => {
   let app: UnitTestTree;
   let runner: SchematicTestRunner;
   let workspaceTree: UnitTestTree;
-  let spawnSyncSpy: jasmine.Spy;
 
   beforeEach(async () => {
-    spawnSyncSpy = spyOn(spawn, 'sync');
-
     runner = new SchematicTestRunner('schematics', COLLECTION_PATH);
 
     const result = await createTestApp(runner, {
@@ -32,7 +27,7 @@ describe('ng-add.schematic', () => {
     workspaceTree = result.workspaceTree;
   });
 
-  it('should update package.json', async () => {
+  it('should run the NodePackageInstallTask', async () => {
     await runner
       .runSchematicAsync('ng-add', { project: 'foobar' }, app)
       .toPromise();
@@ -111,17 +106,32 @@ describe('ng-add.schematic', () => {
     expect(angularJson.projects.foobar.architect.e2e.builder).toEqual('@skyux-sdk/angular-builders:protractor');
   });
 
-  it('should install SKY UX packages', async () => {
+  it('should add packages to package.json', async () => {
     await runner
       .runSchematicAsync('ng-add', { project: 'foobar' }, app)
       .toPromise();
 
-    expect(spawnSyncSpy).toHaveBeenCalledWith('npm', [
-      'install', '@skyux/assets@^4'
-    ], { stdio: 'pipe' });
-    expect(spawnSyncSpy).toHaveBeenCalledWith('npm', [
-      'install', '@skyux-sdk/e2e@^4', '@skyux-sdk/testing@^4', '--save-dev'
-    ], { stdio: 'pipe' });
+    const packageJson = JSON.parse(app.readContent('package.json'));
+    expect(packageJson.dependencies).toEqual(jasmine.objectContaining({
+      '@skyux/assets': '^4.0.0'
+    }));
+    expect(packageJson.devDependencies).toEqual(jasmine.objectContaining({
+      '@skyux-sdk/e2e': '^4.0.0',
+      '@skyux-sdk/testing': '^4.0.0'
+    }));
+  });
+
+  it('should add packages to package.json files without dependency sections', async () => {
+    // Create an empty package.json file.
+    app.overwrite('package.json', JSON.stringify({}));
+
+    await runner
+      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+      .toPromise();
+
+    const packageJson = JSON.parse(app.readContent('package.json'));
+    expect(packageJson.dependencies).toBeDefined();
+    expect(packageJson.devDependencies).toBeDefined();
   });
 
   describe('serve', () => {

@@ -25,18 +25,16 @@ import {
 } from '@angular-devkit/schematics/tasks';
 
 import {
-  addModuleImportToRootModule
-} from '@angular/cdk/schematics';
+  addPackageJsonDependency,
+  NodeDependencyType
+} from '@schematics/angular/utility/dependencies';
 
 import {
   SkyuxDevServerBuilderOptions
 } from '../../builders/dev-server/dev-server-options';
 
 import {
-  installPackages
-} from '../utils/npm-utils';
-
-import {
+  addModuleImportToRootModule,
   createHost
 } from '../utils/schematics-utils';
 
@@ -148,23 +146,11 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
   await host.writeFile('tsconfig.json', banner + JSON.stringify(tsConfig, undefined, 2));
 }
 
-function installDependencies(context: SchematicContext): void {
-  // Install this builder as a development dependency.
-  context.addTask(new NodePackageInstallTask());
-  context.logger.info('Installing SKY UX packages...');
-  installPackages(['@skyux/assets@^4']);
-  installPackages(['@skyux-sdk/e2e@^4', '@skyux-sdk/testing@^4'], {
-    location: 'devDependencies'
-  });
-  context.logger.info('Installed SKY UX packages.');
-}
-
 function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
   addModuleImportToRootModule(
     tree,
     'SkyuxModule.forRoot()',
-    './__skyux/skyux.module',
-    project
+    './__skyux/skyux.module'
   );
 
   const sourcePath = `${project!.sourceRoot}/app`;
@@ -214,7 +200,30 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await modifyKarmaConfig(host, project.root);
     await modifyProtractorConfig(host, project.root);
     await setupLibraries(host, workspace);
-    installDependencies(context);
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/assets',
+      version: '^4.0.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Dev,
+      name: '@skyux-sdk/e2e',
+      version: '^4.0.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Dev,
+      name: '@skyux-sdk/testing',
+      version: '^4.0.0',
+      overwrite: true
+    });
+
+    context.addTask(new NodePackageInstallTask());
+
     return createAppFiles(tree, project);
   };
 }
