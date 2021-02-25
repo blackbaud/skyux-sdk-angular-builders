@@ -22,6 +22,10 @@ import {
   SkyuxKarmaBuilderOptions
 } from './karma-options';
 
+import {
+  getKarmaTransforms
+} from './karma-transforms';
+
 function executeSkyuxKarmaBuilder(
   options: SkyuxKarmaBuilderOptions,
   context: BuilderContext
@@ -40,7 +44,8 @@ function executeSkyuxKarmaBuilder(
 
   return executeKarmaBuilder(
     options,
-    context
+    context,
+    getKarmaTransforms(options, context)
   );
 }
 

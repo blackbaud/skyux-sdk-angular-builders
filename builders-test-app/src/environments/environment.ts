@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  skyux: {
+    params: {} // TODO: find some way to add these values with `ng add`
+  }
 };
 
 /*

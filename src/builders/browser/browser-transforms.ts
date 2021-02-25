@@ -15,6 +15,10 @@ import {
 } from '../../webpack/app-assets-webpack-config';
 
 import {
+  applySkyuxconfigWebpackConfig
+} from '../../webpack/skyuxconfig-webpack-config';
+
+import {
   SkyuxBrowserBuilderOptions
 } from './browser-options';
 
@@ -34,6 +38,11 @@ function getBrowserWepbackConfigTransformer(
     );
 
     applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl);
+    applySkyuxconfigWebpackConfig(webpackConfig, {
+      host: {
+        url: undefined
+      }
+    });
 
     return webpackConfig;
   };

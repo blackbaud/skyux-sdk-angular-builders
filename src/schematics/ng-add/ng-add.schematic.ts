@@ -147,6 +147,10 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
 }
 
 function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
+//   tree.overwrite('skyuxconfig.json', `{
+//   "$schema": ""
+// }\n`);
+
   addModuleImportToRootModule(
     tree,
     'SkyuxModule.forRoot()',
@@ -204,6 +208,13 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
       name: '@skyux/assets',
+      version: '^4.0.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/config',
       version: '^4.0.0',
       overwrite: true
     });

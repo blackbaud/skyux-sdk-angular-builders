@@ -11,10 +11,29 @@ import {
 } from '@skyux/assets';
 
 import {
+  SkyAppConfigModule
+} from '@skyux/config';
+
+import {
+  environment
+} from '../../environments/environment';
+
+import {
+  builderConfig
+} from './.builderconfig';
+
+import {
   SkyAppAssetsImplService
 } from './app-assets-impl.service';
 
-@NgModule({})
+@NgModule({
+  imports: [
+    SkyAppConfigModule.forRoot({
+      params: environment?.skyux?.params,
+      host: builderConfig.host
+    })
+  ]
+})
 export class SkyuxModule {
   public static forRoot(): ModuleWithProviders<SkyuxModule> {
     return {
