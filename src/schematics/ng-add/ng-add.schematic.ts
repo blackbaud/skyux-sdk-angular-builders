@@ -175,11 +175,6 @@ function setupLibraries(
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
   return async (tree: Tree, context: SchematicContext) => {
 
-    // TODO: Check if any uncommitted changes. Abort if so.
-    // git add .
-    // git diff-index
-    // See: https://stackoverflow.com/questions/3878624/how-do-i-programmatically-determine-if-there-are-uncommitted-changes
-
     const host = createHost(tree);
     const { workspace } = await workspaces.readWorkspace('/', host);
 

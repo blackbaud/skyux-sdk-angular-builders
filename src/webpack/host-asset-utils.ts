@@ -24,8 +24,7 @@ export function getHostAssets(
     // Only include primary and lazy-loaded scripts.
     return isJavaScript(chunk.files[0]) &&
       (chunk.initial || config?.includeLazyloadedChunks);
-  })
-  .forEach(chunk => {
+  }).forEach(chunk => {
     const asset: SkyuxHostAsset = {
       name: chunk.files[0]
     };
