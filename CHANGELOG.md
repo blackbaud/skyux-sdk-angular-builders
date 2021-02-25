@@ -1,3 +1,7 @@
+# 4.0.0-alpha.20 (2021-02-25)
+
+- Upgraded development and peer dependencies. [#57](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/57)
+
 # 4.0.0-alpha.19 (2021-02-10)
 
 - Removed the `@angular/cdk` dependency. [#56](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/56)
