@@ -1,3 +1,7 @@
+# 4.0.0-alpha.21 (2021-02-25)
+
+- Fixed the `SkyuxSaveHostMetadataPlugin` to only include JavaScript files in `metadata.json`. [#58](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/58)
+
 # 4.0.0-alpha.20 (2021-02-25)
 
 - Upgraded development and peer dependencies. [#57](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/57)
