@@ -78,7 +78,7 @@ describe('open host url webpack plugin', () => {
       chunks: [
         {
           initial: true,
-          files: ['main.ts']
+          files: ['main.js']
         },
         {
           initial: false,
@@ -93,7 +93,34 @@ describe('open host url webpack plugin', () => {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [
-        { name: 'main.ts' }
+        { name: 'main.js' }
+      ]
+    });
+  });
+
+  it('should only send javascript files', () => {
+    const plugin = getPlugin();
+
+    mockStats = {
+      chunks: [
+        {
+          initial: true,
+          files: ['main.js']
+        },
+        {
+          initial: true,
+          files: ['styles.css']
+        }
+      ]
+    };
+
+    plugin.apply(mockCompiler);
+
+    expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
+      scripts: [
+        { name: 'main.js' }
       ]
     });
   });
@@ -105,11 +132,11 @@ describe('open host url webpack plugin', () => {
       chunks: [
         {
           initial: true,
-          files: ['main.ts']
+          files: ['main.js']
         },
         {
           initial: true,
-          files: ['polyfills.ts']
+          files: ['polyfills.js']
         }
       ]
     };
@@ -118,10 +145,10 @@ describe('open host url webpack plugin', () => {
 
     expect(createSpy.calls.mostRecent().args[2].scripts).toEqual([
       {
-        name: 'polyfills.ts'
+        name: 'polyfills.js'
       },
       {
-        name: 'main.ts'
+        name: 'main.js'
       }
     ]);
   });
