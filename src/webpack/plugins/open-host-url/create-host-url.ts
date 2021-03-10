@@ -19,5 +19,7 @@ import {
     Buffer.from(JSON.stringify(config)).toString('base64')
   );
 
+  console.log('Sending config to Host:', config);
+
   return `${baseUrl}${pathName}/?local=true&_cfg=${configEncoded}`;
 }
