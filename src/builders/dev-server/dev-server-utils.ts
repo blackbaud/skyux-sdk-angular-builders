@@ -20,6 +20,9 @@ function getHostBaseUrlFromOptions(options: Partial<SkyuxDevServerBuilderOptions
 
 export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): void {
 
+  options.host = options.host || 'localhost';
+  options.port = options.port || 4200;
+
   // Enforce HTTPS.
   options.ssl = true;
   options.sslCert = getCertPath('skyux-server.crt');

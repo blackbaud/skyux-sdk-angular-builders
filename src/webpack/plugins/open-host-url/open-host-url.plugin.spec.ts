@@ -68,9 +68,7 @@ describe('open host url webpack plugin', () => {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [],
-      host: {
-        url: hostUrl
-      }
+      host: {}
     });
   });
 
@@ -98,9 +96,7 @@ describe('open host url webpack plugin', () => {
       scripts: [
         { name: 'main.js' }
       ],
-      host: {
-        url: hostUrl
-      }
+      host: {}
     });
   });
 
@@ -128,9 +124,7 @@ describe('open host url webpack plugin', () => {
       scripts: [
         { name: 'main.js' }
       ],
-      host: {
-        url: hostUrl
-      }
+      host: {}
     });
   });
 
@@ -175,9 +169,7 @@ describe('open host url webpack plugin', () => {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [],
-      host: {
-        url: hostUrl
-      }
+      host: {}
     });
   });
 

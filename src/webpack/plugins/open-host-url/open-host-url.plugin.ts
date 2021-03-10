@@ -44,9 +44,7 @@ export class SkyuxOpenHostUrlPlugin {
 
         const assets = getHostAssets(webpackStats.toJson());
 
-        const hostConfig: SkyuxHostUrlConfigHost = {
-          url: this.config.hostUrl
-        };
+        const hostConfig: SkyuxHostUrlConfigHost = {};
 
         const hostUrlConfig: SkyuxHostUrlConfig = {
           localUrl: this.config.localUrl,

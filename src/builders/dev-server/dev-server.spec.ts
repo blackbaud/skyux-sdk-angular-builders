@@ -41,9 +41,7 @@ describe('dev-server builder', () => {
 
   beforeEach(() => {
     defaultOptions = {
-      browserTarget: 'foo:build',
-      host: 'localhost',
-      port: 4200
+      browserTarget: 'foo:build'
     };
 
     defaultWebpackConfig = {};
@@ -97,14 +95,21 @@ describe('dev-server builder', () => {
 
   describe('configuration', () => {
 
-    it('should not affect Angular options if `skyuxLaunch` is undefined', async () => {
+    it('should set defaults', async () => {
       defaultOptions = overrideOptions({});
 
       await (mock.reRequire('./dev-server'));
 
       const actualOptions = getActualOptions();
 
-      expect(actualOptions).toEqual(defaultOptions);
+      expect(actualOptions).toEqual({
+        browserTarget: 'foo:build',
+        host: 'localhost',
+        port: 4200,
+        ssl: true,
+        sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
+        sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
+      });
     });
 
     it('should overwrite Angular options if `skyuxLaunch` is set to "host"', async () => {
