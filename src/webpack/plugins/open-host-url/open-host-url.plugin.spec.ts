@@ -1,7 +1,7 @@
 import mock from 'mock-require';
 
 import {
-  SkyuxOpenHostURLPluginConfig
+  SkyuxOpenHostUrlPluginConfig
 } from './open-host-url-config';
 
 describe('open host url webpack plugin', () => {
@@ -36,7 +36,7 @@ describe('open host url webpack plugin', () => {
 
     spyOn(console, 'log');
 
-    mock('../../../shared/host-utils', {
+    mock('./create-host-url', {
       createHostUrl: createSpy
     });
 
@@ -47,10 +47,10 @@ describe('open host url webpack plugin', () => {
     mock.stopAll();
   });
 
-  function getPlugin(options: Partial<SkyuxOpenHostURLPluginConfig> = {}): typeof SkyuxOpenHostURLPlugin {
-    const SkyuxOpenHostURLPlugin = mock.reRequire('./open-host-url.plugin').SkyuxOpenHostURLPlugin;
+  function getPlugin(options: Partial<SkyuxOpenHostUrlPluginConfig> = {}): typeof SkyuxOpenHostUrlPlugin {
+    const SkyuxOpenHostUrlPlugin = mock.reRequire('./open-host-url.plugin').SkyuxOpenHostUrlPlugin;
 
-    const plugin = new SkyuxOpenHostURLPlugin({...{
+    const plugin = new SkyuxOpenHostUrlPlugin({...{
       hostUrl,
       localUrl,
       pathName: 'my-project'
@@ -67,7 +67,8 @@ describe('open host url webpack plugin', () => {
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
-      scripts: []
+      scripts: [],
+      host: {}
     });
   });
 
@@ -94,7 +95,8 @@ describe('open host url webpack plugin', () => {
       rootElementTagName: 'app-root',
       scripts: [
         { name: 'main.js' }
-      ]
+      ],
+      host: {}
     });
   });
 
@@ -121,7 +123,8 @@ describe('open host url webpack plugin', () => {
       rootElementTagName: 'app-root',
       scripts: [
         { name: 'main.js' }
-      ]
+      ],
+      host: {}
     });
   });
 
@@ -165,7 +168,8 @@ describe('open host url webpack plugin', () => {
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
-      scripts: []
+      scripts: [],
+      host: {}
     });
   });
 

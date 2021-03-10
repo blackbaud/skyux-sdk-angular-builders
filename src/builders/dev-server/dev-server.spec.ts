@@ -19,7 +19,7 @@ import {
 } from '../../webpack/plugins/app-assets/app-assets.plugin';
 
 import {
-  SkyuxOpenHostURLPlugin
+  SkyuxOpenHostUrlPlugin
 } from '../../webpack/plugins/open-host-url/open-host-url.plugin';
 
 import {
@@ -41,9 +41,7 @@ describe('dev-server builder', () => {
 
   beforeEach(() => {
     defaultOptions = {
-      browserTarget: 'foo:build',
-      host: 'localhost',
-      port: 4200
+      browserTarget: 'foo:build'
     };
 
     defaultWebpackConfig = {};
@@ -97,14 +95,21 @@ describe('dev-server builder', () => {
 
   describe('configuration', () => {
 
-    it('should not affect Angular options if `skyuxLaunch` is undefined', async () => {
+    it('should set defaults', async () => {
       defaultOptions = overrideOptions({});
 
       await (mock.reRequire('./dev-server'));
 
       const actualOptions = getActualOptions();
 
-      expect(actualOptions).toEqual(defaultOptions);
+      expect(actualOptions).toEqual({
+        browserTarget: 'foo:build',
+        host: 'localhost',
+        port: 4200,
+        ssl: true,
+        sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
+        sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
+      });
     });
 
     it('should overwrite Angular options if `skyuxLaunch` is set to "host"', async () => {
@@ -183,10 +188,10 @@ describe('dev-server builder', () => {
   });
 
   describe('webpack config', () => {
-    it('should add `SkyuxOpenHostURLPlugin` to webpack plugins', async () => {
+    it('should add `SkyuxOpenHostUrlPlugin` to webpack plugins', async () => {
       await (mock.reRequire('./dev-server'));
 
-      let plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostURLPlugin);
+      let plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostUrlPlugin);
 
       expect(plugin).toBeUndefined(
         'Expected the plugin not to be included by default.'
@@ -198,7 +203,7 @@ describe('dev-server builder', () => {
 
       await (mock.reRequire('./dev-server'));
 
-      plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostURLPlugin);
+      plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostUrlPlugin);
 
       expect(plugin).toBeDefined();
     });

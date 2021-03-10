@@ -1,4 +1,8 @@
-interface SkyuxHostUrlScript {
+import {
+  SkyuxHostUrlConfigHost
+} from './host-url-config-host';
+
+interface SkyuxHostUrlConfigScript {
   name: string;
 }
 
@@ -21,5 +25,11 @@ export interface SkyuxHostUrlConfig {
    * An array of JavaScript file names to inject into Host's index.html file.
    * These files should only reference initial chunks. (Lazyloaded chunks are handled locally.)
    */
-  scripts?: SkyuxHostUrlScript[];
+  scripts?: SkyuxHostUrlConfigScript[];
+
+  /**
+   * Options specific to the host platform.
+   */
+  host: SkyuxHostUrlConfigHost;
+
 }

@@ -9,23 +9,31 @@ import {
 } from '../../../builders/protractor/protractor-environment-utils';
 
 import {
-  createHostUrl
-} from '../../../shared/host-utils';
-
-import {
   getHostAssets
 } from '../../host-asset-utils';
 
 import {
-  SkyuxOpenHostURLPluginConfig
+  createHostUrl
+} from './create-host-url';
+
+import {
+  SkyuxHostUrlConfig
+} from './host-url-config';
+
+import {
+  SkyuxHostUrlConfigHost
+} from './host-url-config-host';
+
+import {
+  SkyuxOpenHostUrlPluginConfig
 } from './open-host-url-config';
 
 const PLUGIN_NAME = 'open-skyux-host-plugin';
 
-export class SkyuxOpenHostURLPlugin {
+export class SkyuxOpenHostUrlPlugin {
 
   constructor(
-    private config: SkyuxOpenHostURLPluginConfig
+    private config: SkyuxOpenHostUrlPluginConfig
   ) { }
 
   public apply(compiler: Compiler): void {
@@ -36,14 +44,19 @@ export class SkyuxOpenHostURLPlugin {
 
         const assets = getHostAssets(webpackStats.toJson());
 
+        const hostConfig: SkyuxHostUrlConfigHost = {};
+
+        const hostUrlConfig: SkyuxHostUrlConfig = {
+          localUrl: this.config.localUrl,
+          rootElementTagName: 'app-root',
+          scripts: assets,
+          host: hostConfig
+        };
+
         const url = createHostUrl(
           this.config.hostUrl,
           this.config.pathName,
-          {
-            localUrl: this.config.localUrl,
-            rootElementTagName: 'app-root',
-            scripts: assets
-          }
+          hostUrlConfig
         );
 
         console.log(`\nSKY UX Host URL:\n\n${url}`);

@@ -11,7 +11,7 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxOpenHostURLPlugin
+  SkyuxOpenHostUrlPlugin
 } from '../../webpack/plugins/open-host-url/open-host-url.plugin';
 
 import {
@@ -42,11 +42,10 @@ function getDevServerWepbackConfigTransformer(
     webpackConfig.plugins = webpackConfig.plugins || [];
 
     if (options.skyuxLaunch === 'host') {
-      /*istanbul ignore next line*/
-      const pathName = context.target?.project!;
+      const pathName = context.target!.project!;
 
       webpackConfig.plugins.push(
-        new SkyuxOpenHostURLPlugin({
+        new SkyuxOpenHostUrlPlugin({
           hostUrl: options.skyuxHostUrl!,
           localUrl,
           pathName,
@@ -54,7 +53,6 @@ function getDevServerWepbackConfigTransformer(
         })
       );
     }
-
 
     applyAppAssetsWebpackConfig(webpackConfig, localUrl);
 

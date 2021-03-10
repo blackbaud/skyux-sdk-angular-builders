@@ -1,4 +1,4 @@
-export interface SkyuxOpenHostURLPluginConfig {
+export interface SkyuxOpenHostUrlPluginConfig {
 
   /**
    * The URL of the SKY UX Host server.

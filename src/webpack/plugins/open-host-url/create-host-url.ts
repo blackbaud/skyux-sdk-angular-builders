@@ -2,23 +2,13 @@ import {
   SkyuxHostUrlConfig
 } from './host-url-config';
 
-import {
-  ensureTrailingSlash
-} from './url-utils';
-
-export function getHostBaseUrlFromOptions(options?: {
-  skyuxHostUrl?: string
-}): string {
-  return ensureTrailingSlash(options?.skyuxHostUrl || 'https://app.blackbaud.com/');
-}
-
 /**
  * Creates the SKY UX Host URL.
  * @param baseUrl The base SKY UX Host URL, including the protocol.
  * @param pathName The URL-friendly pathname where the project will be served.
  * @param config Configuration that will be sent to the host server.
  */
-export function createHostUrl(
+ export function createHostUrl(
   baseUrl: string,
   pathName: string,
   config: SkyuxHostUrlConfig
@@ -29,7 +19,7 @@ export function createHostUrl(
     Buffer.from(JSON.stringify(config)).toString('base64')
   );
 
-  const url = `${baseUrl}${pathName}/?local=true&_cfg=${configEncoded}`;
+  console.log('Sending config to Host:', config);
 
-  return url;
+  return `${baseUrl}${pathName}/?local=true&_cfg=${configEncoded}`;
 }
