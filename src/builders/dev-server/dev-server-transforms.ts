@@ -49,10 +49,7 @@ function getDevServerWepbackConfigTransformer(
           hostUrl: options.skyuxHostUrl!,
           localUrl,
           pathName,
-          open: options.skyuxOpen!,
-          externals: [],
-          bbCheckout: {},
-          frameOptions: {}
+          open: options.skyuxOpen!
         })
       );
     }

@@ -1,14 +1,4 @@
-import { SkyuxConfigExternals } from './config-externals';
-import {SkyuxConfigHostBBCheckout} from './config-host-bb-checkout';
-import {SkyuxConfigHostFrameOptionsNone, SkyuxConfigHostFrameOptionsOthers} from './config-host-frame-options';
-
 export interface SkyuxOpenHostUrlPluginConfig {
-
-  externals?: SkyuxConfigExternals;
-
-  bbCheckout?: SkyuxConfigHostBBCheckout;
-
-  frameOptions?: SkyuxConfigHostFrameOptionsNone | SkyuxConfigHostFrameOptionsOthers;
 
   /**
    * The URL of the SKY UX Host server.

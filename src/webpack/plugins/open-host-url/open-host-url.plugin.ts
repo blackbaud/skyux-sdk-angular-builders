@@ -13,13 +13,16 @@ import {
 } from '../../host-asset-utils';
 
 import {
-  SkyuxConfigHost
-} from './config-host';
-
-import {
   createHostUrl
 } from './create-host-url';
-import { SkyuxHostUrlConfig } from './host-url-config';
+
+import {
+  SkyuxHostUrlConfig
+} from './host-url-config';
+
+import {
+  SkyuxHostUrlConfigHost
+} from './host-url-config-host';
 
 import {
   SkyuxOpenHostUrlPluginConfig
@@ -41,17 +44,9 @@ export class SkyuxOpenHostUrlPlugin {
 
         const assets = getHostAssets(webpackStats.toJson());
 
-        const hostConfig: SkyuxConfigHost = {
+        const hostConfig: SkyuxHostUrlConfigHost = {
           url: this.config.hostUrl
         };
-
-        if (this.config.bbCheckout) {
-          hostConfig.bbCheckout = this.config.bbCheckout;
-        }
-
-        if (this.config.frameOptions) {
-          hostConfig.frameOptions = this.config.frameOptions;
-        }
 
         const hostUrlConfig: SkyuxHostUrlConfig = {
           localUrl: this.config.localUrl,
@@ -59,10 +54,6 @@ export class SkyuxOpenHostUrlPlugin {
           scripts: assets,
           host: hostConfig
         };
-
-        if (this.config.externals) {
-          hostUrlConfig.externals = this.config.externals;
-        }
 
         const url = createHostUrl(
           this.config.hostUrl,
