@@ -53,6 +53,10 @@ export class SkyuxOpenHostUrlPlugin {
           host: hostConfig
         };
 
+        if (this.config.externals) {
+          hostUrlConfig.externals = this.config.externals;
+        }
+
         const url = createHostUrl(
           this.config.hostUrl,
           this.config.pathName,

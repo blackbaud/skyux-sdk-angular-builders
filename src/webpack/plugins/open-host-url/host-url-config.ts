@@ -2,14 +2,25 @@ import {
   SkyuxHostUrlConfigHost
 } from './host-url-config-host';
 
-interface SkyuxHostUrlConfigScript {
-  name: string;
-}
+import {
+  SkyuxHostUrlConfigExternals
+} from './host-url-config-externals';
+
+import {
+  SkyuxHostUrlConfigScript
+} from './host-url-config-script';
 
 /**
  * Configuration that is encoded as part of the SKY UX Host URL.
  */
 export interface SkyuxHostUrlConfig {
+
+  externals?: SkyuxHostUrlConfigExternals;
+
+  /**
+   * Options specific to the host platform.
+   */
+   host?: SkyuxHostUrlConfigHost;
 
   /**
    * The URL of the localhost server, serving the asset files.
@@ -26,10 +37,5 @@ export interface SkyuxHostUrlConfig {
    * These files should only reference initial chunks. (Lazyloaded chunks are handled locally.)
    */
   scripts?: SkyuxHostUrlConfigScript[];
-
-  /**
-   * Options specific to the host platform.
-   */
-  host: SkyuxHostUrlConfigHost;
 
 }
