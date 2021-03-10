@@ -4,7 +4,7 @@ import {
   SkyuxHostUrlConfig
 } from './host-url-config';
 
-describe('host utils', () => {
+describe('create host url', () => {
 
   let hostUrl: string;
   let pathName: string;
@@ -14,7 +14,10 @@ describe('host utils', () => {
     hostUrl = 'https://app.blackbaud.com/';
     pathName = 'my-project';
     defaultHostConfig = {
-      localUrl: 'https://localhost:4200/'
+      localUrl: 'https://localhost:4200/',
+      host: {
+        url: hostUrl
+      }
     };
   });
 
@@ -27,21 +30,24 @@ describe('host utils', () => {
   }
 
   it('should open the SKY UX Host URL with Host config', () => {
-    const { createHostUrl } = mock.reRequire('./host-utils');
+    const { createHostUrl } = mock.reRequire('./create-host-url');
 
     const actualUrl = createHostUrl(hostUrl, pathName, defaultHostConfig);
 
     expect(actualUrl).toEqual(
-      'https://app.blackbaud.com/my-project/?local=true&_cfg=eyJsb2NhbFVybCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAvIn0%3D'
+      'https://app.blackbaud.com/my-project/?local=true&_cfg=eyJsb2NhbFVybCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAvIiwiaG9zdCI6eyJ1cmwiOiJodHRwczovL2FwcC5ibGFja2JhdWQuY29tLyJ9fQ%3D%3D'
     );
 
     expect(decode(actualUrl)).toEqual({
-      localUrl: 'https://localhost:4200/'
+      localUrl: 'https://localhost:4200/',
+      host: {
+        url: 'https://app.blackbaud.com/'
+      }
     });
   });
 
   it('should send scripts to SKY UX Host', () => {
-    const { createHostUrl } = mock.reRequire('./host-utils');
+    const { createHostUrl } = mock.reRequire('./create-host-url');
 
     defaultHostConfig.scripts = [
       {
@@ -55,12 +61,15 @@ describe('host utils', () => {
       localUrl: 'https://localhost:4200/',
       scripts: [
         { name: 'main.ts' }
-      ]
+      ],
+      host: {
+        url: 'https://app.blackbaud.com/'
+      }
     });
   });
 
   it('should handle empty scripts', () => {
-    const { createHostUrl } = mock.reRequire('./host-utils');
+    const { createHostUrl } = mock.reRequire('./create-host-url');
 
     defaultHostConfig.scripts = [];
 
@@ -68,14 +77,11 @@ describe('host utils', () => {
 
     expect(decode(actualUrl)).toEqual({
       localUrl: 'https://localhost:4200/',
-      scripts: []
+      scripts: [],
+      host: {
+        url: 'https://app.blackbaud.com/'
+      }
     });
-  });
-
-  it('should return the default Host URL', () => {
-    const { getHostBaseUrlFromOptions } = mock.reRequire('./host-utils');
-    const url = getHostBaseUrlFromOptions();
-    expect(url).toEqual('https://app.blackbaud.com/');
   });
 
 });

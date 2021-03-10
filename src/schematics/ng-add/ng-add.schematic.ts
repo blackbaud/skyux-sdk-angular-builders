@@ -147,6 +147,11 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
 }
 
 function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
+
+  tree.create('skyuxconfig.json', JSON.stringify({
+    '$schema': './node_modules/@skyux/config/skyuxconfig-schema.json'
+  }, undefined, 2));
+
   addModuleImportToRootModule(
     tree,
     'SkyuxModule.forRoot()',

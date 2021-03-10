@@ -19,7 +19,7 @@ import {
 } from '../../webpack/plugins/app-assets/app-assets.plugin';
 
 import {
-  SkyuxOpenHostURLPlugin
+  SkyuxOpenHostUrlPlugin
 } from '../../webpack/plugins/open-host-url/open-host-url.plugin';
 
 import {
@@ -183,10 +183,10 @@ describe('dev-server builder', () => {
   });
 
   describe('webpack config', () => {
-    it('should add `SkyuxOpenHostURLPlugin` to webpack plugins', async () => {
+    it('should add `SkyuxOpenHostUrlPlugin` to webpack plugins', async () => {
       await (mock.reRequire('./dev-server'));
 
-      let plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostURLPlugin);
+      let plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostUrlPlugin);
 
       expect(plugin).toBeUndefined(
         'Expected the plugin not to be included by default.'
@@ -198,7 +198,7 @@ describe('dev-server builder', () => {
 
       await (mock.reRequire('./dev-server'));
 
-      plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostURLPlugin);
+      plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostUrlPlugin);
 
       expect(plugin).toBeDefined();
     });
