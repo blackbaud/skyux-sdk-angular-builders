@@ -25,7 +25,7 @@ describe('create host url', () => {
     mock.stopAll();
   });
 
-  function decode(url: string): object {
+  function decode(url: string): SkyuxCreateHostUrlConfig {
     return JSON.parse(Buffer.from(decodeURIComponent(url.split('_cfg=')[1]), 'base64').toString());
   }
 
@@ -66,6 +66,24 @@ describe('create host url', () => {
         url: 'https://host.nxt.blackbaud.com/'
       }
     });
+  });
+
+  it('should send `externals` to SKY UX Host', () => {
+    const { createHostUrl } = mock.reRequire('./create-host-url');
+
+    const externals = {
+      js: {
+        before: [{
+          url: 'foo.js'
+        }]
+      }
+    };
+
+    defaultHostConfig.externals = externals;
+
+    const actualUrl = createHostUrl(hostUrl, pathName, defaultHostConfig);
+
+    expect(decode(actualUrl).externals).toEqual(externals);
   });
 
   it('should handle empty scripts', () => {
