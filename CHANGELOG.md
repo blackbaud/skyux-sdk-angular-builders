@@ -1,3 +1,9 @@
+# 4.0.0-alpha.22 (2021-03-11)
+
+- Implemented basic support for the `skyuxconfig.json` file. [#60](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/60)
+- Changed the default SKY UX Host URL from `https://app.blackbaud.com/` to `https://host.nxt.blackbaud.com/`. [#60](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/60)
+- Added ability to send external JavaScript and CSS files to SKY UX Host. [#60](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/60)
+
 # 4.0.0-alpha.21 (2021-02-25)
 
 - Fixed the `SkyuxSaveHostMetadataPlugin` to only include JavaScript files in `metadata.json`. [#58](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/58)
