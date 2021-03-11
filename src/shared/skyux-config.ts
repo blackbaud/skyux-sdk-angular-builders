@@ -1,3 +1,4 @@
+// TODO: Add/remove the properties we'll need from @skyux/config.
 // export interface SkyuxConfig {
 //   app: {
 //     base: string;
@@ -47,6 +48,11 @@
 //   }
 // }
 
+/**
+ * Dynamically injects CSS and JavaScript files into SKY UX Host.
+ * You should have a specific use-case for an externals and they must
+ * be white-listed by the SKY UX team.
+ */
 export interface SkyuxConfigAppExternals {
   css?: {
     before?: {
@@ -72,11 +78,11 @@ export interface SkyuxConfigAppExternals {
   }
 }
 
-/* tslint:disable-next-line*/
+/**
+ * Options specific to the host platform.
+ */
 export interface SkyuxConfigHost {
-
   url: string;
-
 }
 
 export interface SkyuxConfig {
@@ -84,7 +90,7 @@ export interface SkyuxConfig {
     externals?: SkyuxConfigAppExternals;
   };
 
-  codeCoverageThreshold?: 'none'|'standard'|'strict';
+  codeCoverageThreshold?: 'none' | 'standard' | 'strict';
 
   host: SkyuxConfigHost;
 }

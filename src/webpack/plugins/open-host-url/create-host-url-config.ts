@@ -10,10 +10,7 @@ export interface SkyuxCreateHostUrlConfig {
 
   externals?: SkyuxConfigAppExternals;
 
-  /**
-   * Options specific to the host platform.
-   */
-   host?: SkyuxConfigHost;
+  host?: SkyuxConfigHost;
 
   /**
    * The URL of the localhost server, serving the asset files.

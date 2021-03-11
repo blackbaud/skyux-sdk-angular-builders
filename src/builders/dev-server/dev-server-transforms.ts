@@ -10,7 +10,9 @@ import {
   Configuration as WebpackConfig
 } from 'webpack';
 
-import { SkyuxConfig } from '../../shared/skyux-config';
+import {
+  SkyuxConfig
+} from '../../shared/skyux-config';
 
 import {
   SkyuxOpenHostUrlPlugin
