@@ -11,8 +11,8 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxConfig
-} from '../../shared/skyux-config';
+  getSkyuxConfig
+} from '../../shared/skyux-config-utils';
 
 import {
   SkyuxOpenHostUrlPlugin
@@ -37,12 +37,12 @@ import {
  */
 function getDevServerWepbackConfigTransformer(
   options: SkyuxDevServerBuilderOptions,
-  context: BuilderContext,
-  skyuxConfig: SkyuxConfig
+  context: BuilderContext
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
 
     const localUrl = getLocalUrlFromOptions(options);
+    const skyuxConfig = getSkyuxConfig();
 
     webpackConfig.plugins = webpackConfig.plugins || [];
 
@@ -68,10 +68,9 @@ function getDevServerWepbackConfigTransformer(
 
 export function getDevServerTransforms(
   options: SkyuxDevServerBuilderOptions,
-  context: BuilderContext,
-  skyuxConfig: SkyuxConfig
+  context: BuilderContext
 ) {
   return {
-    webpackConfiguration: getDevServerWepbackConfigTransformer(options, context, skyuxConfig)
+    webpackConfiguration: getDevServerWepbackConfigTransformer(options, context)
   };
 }

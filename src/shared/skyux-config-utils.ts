@@ -1,22 +1,22 @@
 import fs from 'fs-extra';
-import { SkyuxConfig } from './skyux-config';
+
+import {
+  SkyuxConfig
+} from './skyux-config';
 
 const DEFAULTS: SkyuxConfig = {
 };
 
-export async function getSkyuxConfig(): Promise<SkyuxConfig> {
+export function getSkyuxConfig(): SkyuxConfig {
 
   if (!fs.existsSync('skyuxconfig.json')) {
     throw new Error('A skyuxconfig.json file was not found at the project root.');
   }
 
-  const skyuxJson: SkyuxConfig = await fs.readJson('skyuxconfig.json');
-  const skyuxConfig: SkyuxConfig = {};
+  const skyuxJson: SkyuxConfig = fs.readJsonSync('skyuxconfig.json');
 
-  if (skyuxJson?.app?.externals) {
-    skyuxConfig.app = skyuxConfig.app || {};
-    skyuxConfig.app.externals = skyuxJson.app.externals;
-  }
-
-  return {...DEFAULTS, ...skyuxConfig};
+  return {
+    ...DEFAULTS,
+    ...skyuxJson
+  };
 }

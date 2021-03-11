@@ -15,6 +15,10 @@ import {
 } from 'rxjs';
 
 import {
+  getSkyuxConfig
+} from '../../shared/skyux-config-utils';
+
+import {
   SkyuxKarmaConfigAdapter
 } from './karma-config-adapter';
 
@@ -27,7 +31,6 @@ function executeSkyuxKarmaBuilder(
   context: BuilderContext
 ): Observable<BuilderOutput> {
 
-  options.skyuxCodeCoverageThreshold = options.skyuxCodeCoverageThreshold || 'none';
   options.karmaConfig = path.join(__dirname, 'karma.default.conf.js');
 
   // Enforce code coverage for CI platforms.
@@ -37,6 +40,7 @@ function executeSkyuxKarmaBuilder(
   }
 
   SkyuxKarmaConfigAdapter.builderOptions = options;
+  SkyuxKarmaConfigAdapter.skyuxConfig = getSkyuxConfig();
 
   return executeKarmaBuilder(
     options,

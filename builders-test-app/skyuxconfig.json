@@ -1,4 +1,5 @@
 {
+  "$schema": "./node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json",
   "app":{
     "externals": {
       "js": {
@@ -9,5 +10,6 @@
         ]
       }
     }
-  }
+  },
+  "codeCoverageThreshold": "strict"
 }
