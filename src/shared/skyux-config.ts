@@ -74,6 +74,9 @@ export interface SkyuxConfigAppExternals {
 
 /* tslint:disable-next-line*/
 export interface SkyuxConfigHost {
+
+  url: string;
+
 }
 
 export interface SkyuxConfig {
@@ -82,4 +85,6 @@ export interface SkyuxConfig {
   };
 
   codeCoverageThreshold?: 'none'|'standard'|'strict';
+
+  host: SkyuxConfigHost;
 }

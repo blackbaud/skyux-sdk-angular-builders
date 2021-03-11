@@ -16,11 +16,11 @@ import webpack from 'webpack';
 
 import {
   SkyuxAppAssetsPlugin
-} from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
+} from '../../webpack/plugins/app-assets/app-assets.plugin';
 
 import {
   SkyuxOpenHostUrlPlugin
-} from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
+} from '../../webpack/plugins/open-host-url/open-host-url.plugin';
 
 import {
   SkyuxDevServerBuilderOptions
@@ -130,7 +130,6 @@ describe('dev-server builder', () => {
         port: 4200,
         publicHost: 'https://localhost:4200/',
         servePath: '/',
-        skyuxHostUrl: 'https://app.blackbaud.com/',
         skyuxLaunch: 'host',
         skyuxOpen: true,
         ssl: true,

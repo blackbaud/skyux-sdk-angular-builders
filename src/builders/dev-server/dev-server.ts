@@ -13,6 +13,10 @@ import {
 } from 'rxjs';
 
 import {
+  getSkyuxConfig
+} from '../../shared/skyux-config-utils';
+
+import {
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
 
@@ -28,12 +32,14 @@ function executeSkyuxDevServerBuilder(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
 ): Observable<DevServerBuilderOutput> {
+  const skyuxConfig = getSkyuxConfig();
+
   applySkyuxDevServerOptions(options);
 
   return executeDevServerBuilder(
     options,
     context,
-    getDevServerTransforms(options, context)
+    getDevServerTransforms(options, context, skyuxConfig)
   );
 }
 

@@ -11,5 +11,7 @@
       }
     }
   },
-  "codeCoverageThreshold": "strict"
+  "codeCoverageThreshold": "strict",
+  "host": {
+  }
 }

@@ -7,8 +7,6 @@ import {
  */
 export type SkyuxDevServerBuilderOptions = DevServerBuilderOptions & {
 
-  skyuxHostUrl?: string;
-
   /**
    * Specifies whether or not the app should be launched with the SKY UX Host server or the localhost server.
    */

@@ -11,7 +11,7 @@ describe('create host url', () => {
   let defaultHostConfig: SkyuxCreateHostUrlConfig;
 
   beforeEach(() => {
-    hostUrl = 'https://app.blackbaud.com/';
+    hostUrl = 'https://host.nxt.blackbaud.com/';
     pathName = 'my-project';
     defaultHostConfig = {
       localUrl: 'https://localhost:4200/',
@@ -35,13 +35,13 @@ describe('create host url', () => {
     const actualUrl = createHostUrl(hostUrl, pathName, defaultHostConfig);
 
     expect(actualUrl).toEqual(
-      'https://app.blackbaud.com/my-project/?local=true&_cfg=eyJsb2NhbFVybCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAvIiwiaG9zdCI6eyJ1cmwiOiJodHRwczovL2FwcC5ibGFja2JhdWQuY29tLyJ9fQ%3D%3D'
+      'https://host.nxt.blackbaud.com/my-project/?local=true&_cfg=eyJsb2NhbFVybCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAvIiwiaG9zdCI6eyJ1cmwiOiJodHRwczovL2FwcC5ibGFja2JhdWQuY29tLyJ9fQ%3D%3D'
     );
 
     expect(decode(actualUrl)).toEqual({
       localUrl: 'https://localhost:4200/',
       host: {
-        url: 'https://app.blackbaud.com/'
+        url: 'https://host.nxt.blackbaud.com/'
       }
     });
   });
@@ -63,7 +63,7 @@ describe('create host url', () => {
         { name: 'main.ts' }
       ],
       host: {
-        url: 'https://app.blackbaud.com/'
+        url: 'https://host.nxt.blackbaud.com/'
       }
     });
   });
@@ -79,7 +79,7 @@ describe('create host url', () => {
       localUrl: 'https://localhost:4200/',
       scripts: [],
       host: {
-        url: 'https://app.blackbaud.com/'
+        url: 'https://host.nxt.blackbaud.com/'
       }
     });
   });

@@ -84,7 +84,6 @@
         }
       }
     },
-
     "codeCoverageThreshold": {
       "description": "Specifies the minimum required code coverage threshold.",
       "type": "string",
@@ -94,7 +93,6 @@
         "strict"
       ]
     },
-
     "host": {
       "description": "Blackbaud Only - Specifies configuration options for communication with SKY UX Host.",
       "type": "object",
@@ -102,7 +100,7 @@
         "url": {
           "description": "Specifies a base URL to pass information from skyux serve to the SKY UX Host.",
           "type": "string",
-          "default": "https://host.nxt.blackbaud.com"
+          "default": "https://host.nxt.blackbaud.com/"
         }
       }
     }

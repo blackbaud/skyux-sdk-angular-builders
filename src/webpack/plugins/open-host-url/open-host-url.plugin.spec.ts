@@ -31,7 +31,7 @@ describe('open host url webpack plugin', () => {
       }
     };
 
-    hostUrl = 'https://app.blackbaud.com/';
+    hostUrl = 'https://host.nxt.blackbaud.com/';
     localUrl = 'https://localhost:4200/';
 
     spyOn(console, 'log');
