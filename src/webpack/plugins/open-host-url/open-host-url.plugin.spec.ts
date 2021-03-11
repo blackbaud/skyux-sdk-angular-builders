@@ -67,6 +67,9 @@ describe('open host url webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: []
@@ -110,6 +113,9 @@ describe('open host url webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [
@@ -137,6 +143,9 @@ describe('open host url webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [
@@ -183,6 +192,9 @@ describe('open host url webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: []

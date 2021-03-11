@@ -13,5 +13,8 @@
   },
   "codeCoverageThreshold": "strict",
   "host": {
+    "bbCheckout": {
+      "version": "2"
+    }
   }
 }
