@@ -1,5 +1,8 @@
 import mock from 'mock-require';
-import { SkyuxConfigHost } from '../../../shared/skyux-config';
+
+import {
+  SkyuxConfigHost
+} from '../../../shared/skyux-config';
 
 import {
   SkyuxCreateHostUrlConfig
