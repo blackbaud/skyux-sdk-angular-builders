@@ -17,12 +17,8 @@ import {
 } from './create-host-url';
 
 import {
-  SkyuxHostUrlConfig
-} from './host-url-config';
-
-import {
-  SkyuxHostUrlConfigHost
-} from './host-url-config-host';
+  SkyuxCreateHostUrlConfig
+} from './create-host-url-config';
 
 import {
   SkyuxOpenHostUrlPluginConfig
@@ -44,13 +40,10 @@ export class SkyuxOpenHostUrlPlugin {
 
         const assets = getHostAssets(webpackStats.toJson());
 
-        const hostConfig: SkyuxHostUrlConfigHost = {};
-
-        const hostUrlConfig: SkyuxHostUrlConfig = {
+        const hostUrlConfig: SkyuxCreateHostUrlConfig = {
           localUrl: this.config.localUrl,
           rootElementTagName: 'app-root',
-          scripts: assets,
-          host: hostConfig
+          scripts: assets
         };
 
         if (this.config.externals) {

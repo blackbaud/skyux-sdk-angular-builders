@@ -16,11 +16,11 @@ import webpack from 'webpack';
 
 import {
   SkyuxAppAssetsPlugin
-} from '../../webpack/plugins/app-assets/app-assets.plugin';
+} from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
 
 import {
   SkyuxOpenHostUrlPlugin
-} from '../../webpack/plugins/open-host-url/open-host-url.plugin';
+} from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
 
 import {
   SkyuxDevServerBuilderOptions

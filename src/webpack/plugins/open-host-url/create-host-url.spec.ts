@@ -1,14 +1,14 @@
 import mock from 'mock-require';
 
 import {
-  SkyuxHostUrlConfig
-} from './host-url-config';
+  SkyuxCreateHostUrlConfig
+} from './create-host-url-config';
 
 describe('create host url', () => {
 
   let hostUrl: string;
   let pathName: string;
-  let defaultHostConfig: SkyuxHostUrlConfig;
+  let defaultHostConfig: SkyuxCreateHostUrlConfig;
 
   beforeEach(() => {
     hostUrl = 'https://app.blackbaud.com/';

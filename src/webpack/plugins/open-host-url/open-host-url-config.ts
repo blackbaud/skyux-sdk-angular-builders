@@ -1,10 +1,10 @@
 import {
-  SkyuxHostUrlConfigExternals
-} from './host-url-config-externals';
+  SkyuxConfigAppExternals
+} from '../../../shared/skyux-config';
 
 export interface SkyuxOpenHostUrlPluginConfig {
 
-  externals?: SkyuxHostUrlConfigExternals;
+  externals?: SkyuxConfigAppExternals;
 
   /**
    * The URL of the SKY UX Host server.

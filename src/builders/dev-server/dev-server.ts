@@ -9,8 +9,8 @@ import {
 } from '@angular-devkit/build-angular';
 
 import {
-  Observable
-} from 'rxjs';
+  getSkyuxConfig
+} from '../../shared/skyux-config-utils';
 
 import {
   SkyuxDevServerBuilderOptions
@@ -24,17 +24,20 @@ import {
   getDevServerTransforms
 } from './dev-server-transforms';
 
-function executeSkyuxDevServerBuilder(
+async function executeSkyuxDevServerBuilder(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
-): Observable<DevServerBuilderOutput> {
+): Promise<DevServerBuilderOutput> {
+
+  const skyuxConfig = await getSkyuxConfig();
+
   applySkyuxDevServerOptions(options);
 
   return executeDevServerBuilder(
     options,
     context,
-    getDevServerTransforms(options, context)
-  );
+    getDevServerTransforms(options, context, skyuxConfig)
+  ).toPromise();
 }
 
 export default createBuilder<SkyuxDevServerBuilderOptions, DevServerBuilderOutput>(
