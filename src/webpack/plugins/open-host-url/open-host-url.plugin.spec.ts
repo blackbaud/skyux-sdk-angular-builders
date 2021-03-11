@@ -71,6 +71,24 @@ describe('open host url webpack plugin', () => {
     });
   });
 
+  it('should open host URL with `externals`', () => {
+    const externals = {
+      js: {
+        before: [{
+          url: 'foo.js'
+        }]
+      }
+    };
+
+    const plugin = getPlugin({
+      externals
+    });
+
+    plugin.apply(mockCompiler);
+
+    expect(createSpy.calls.mostRecent().args[2].externals).toEqual(externals);
+  });
+
   it('should send scripts to SKY UX Host', () => {
     const plugin = getPlugin();
 

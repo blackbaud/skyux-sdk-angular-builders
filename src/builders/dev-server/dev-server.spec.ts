@@ -13,6 +13,7 @@ import {
 } from 'rxjs';
 
 import webpack from 'webpack';
+import { SkyuxConfig } from '../../shared/skyux-config';
 
 import {
   SkyuxAppAssetsPlugin
@@ -38,6 +39,7 @@ describe('dev-server builder', () => {
   let defaultWebpackConfig: webpack.Configuration;
   let actualWebpackConfig: webpack.Configuration;
   let mockContext: any;
+  let mockSkyuxConfig: SkyuxConfig;
 
   beforeEach(() => {
     defaultOptions = {
@@ -80,13 +82,14 @@ describe('dev-server builder', () => {
       fromFileSync: () => 'MOCK_HASH'
     });
 
+    mockSkyuxConfig = {
+      host: {
+        url: 'https://foo.blackbaud.com/'
+      }
+    };
     mock('../../shared/skyux-config-utils', {
       getSkyuxConfig() {
-        return {
-          host: {
-            url: 'https://foo.blackbaud.com/'
-          }
-        };
+        return mockSkyuxConfig;
       }
     });
   });
@@ -182,10 +185,16 @@ describe('dev-server builder', () => {
   });
 
   describe('webpack config', () => {
+
+    function getOpenHostUrlPlugin(): SkyuxOpenHostUrlPlugin {
+      return actualWebpackConfig.plugins?.find(p =>
+        p instanceof SkyuxOpenHostUrlPlugin) as SkyuxOpenHostUrlPlugin;
+    }
+
     it('should add `SkyuxOpenHostUrlPlugin` to webpack plugins', async () => {
       await (mock.reRequire('./dev-server'));
 
-      let plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostUrlPlugin);
+      let plugin = getOpenHostUrlPlugin();
 
       expect(plugin).toBeUndefined(
         'Expected the plugin not to be included by default.'
@@ -197,9 +206,33 @@ describe('dev-server builder', () => {
 
       await (mock.reRequire('./dev-server'));
 
-      plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxOpenHostUrlPlugin);
+      plugin = getOpenHostUrlPlugin();
 
       expect(plugin).toBeDefined();
+    });
+
+    it('should pass `externals` to `SkyuxOpenHostUrlPlugin` if defined', async () => {
+      const externals = {
+        js: {
+          before: [{
+            url: 'foo.js'
+          }]
+        }
+      };
+
+      mockSkyuxConfig.app = {
+        externals
+      };
+
+      defaultOptions = overrideOptions({
+        skyuxLaunch: 'host'
+      });
+
+      await (mock.reRequire('./dev-server'));
+
+      const plugin = getOpenHostUrlPlugin();
+
+      expect(plugin['config'].externals).toEqual(externals);
     });
 
     it('should add `SkyuxAppAssetsPlugin` to webpack plugins', async () => {
