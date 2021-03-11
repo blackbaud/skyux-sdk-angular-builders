@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json",
+  "app":{
+    "externals": {
+      "js": {
+        "after": [
+          {
+            "url": "https://www.bing.com/maps/sdk/mapcontrol"
+          }
+        ]
+      }
+    }
+  },
+  "codeCoverageThreshold": "strict",
+  "host": {
+  }
+}

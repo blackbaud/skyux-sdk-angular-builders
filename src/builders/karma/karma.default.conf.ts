@@ -29,7 +29,8 @@ function getCodeCoverageThresholdPercent(threshold?: SkyuxCodeCoverageThreshold)
 module.exports = (config: karma.Config): void => {
 
   const codeCoverageThresholdPercent = getCodeCoverageThresholdPercent(
-    SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold
+    SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold ||
+    SkyuxKarmaConfigAdapter.skyuxConfig.codeCoverageThreshold
   );
 
   console.log(`[SKY UX] Minimum required code coverage threshold set to ${codeCoverageThresholdPercent} percent.`);

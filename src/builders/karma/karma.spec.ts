@@ -46,6 +46,16 @@ describe('karma builder', () => {
 
     spyOnProperty(buildAngular, 'executeKarmaBuilder', 'get').and
       .returnValue(executeKarmaBuilderSpy);
+
+    mock('../../shared/skyux-config-utils', {
+      getSkyuxConfig() {
+        return {
+          host: {
+            url: 'https://foo.blackbaud.com/'
+          }
+        };
+      }
+    });
   });
 
   afterEach(() => {
@@ -58,7 +68,6 @@ describe('karma builder', () => {
     expect(options).toEqual({
       karmaConfig: path.resolve(__dirname, 'karma.default.conf.js'),
       main: 'main.ts',
-      skyuxCodeCoverageThreshold: 'none',
       tsConfig: 'tsconfig.json'
     });
   });
@@ -73,7 +82,6 @@ describe('karma builder', () => {
       karmaConfig: path.resolve(__dirname, 'karma.default.conf.js'),
       main: 'main.ts',
       skyuxCiPlatform: 'ado',
-      skyuxCodeCoverageThreshold: 'none',
       tsConfig: 'tsconfig.json',
       watch: false
     });

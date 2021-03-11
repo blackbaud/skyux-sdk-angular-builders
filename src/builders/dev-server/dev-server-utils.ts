@@ -3,19 +3,11 @@ import {
 } from '../../shared/cert-utils';
 
 import {
-  ensureTrailingSlash
-} from '../../shared/url-utils';
-
-import {
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
 
 export function getLocalUrlFromOptions(options: SkyuxDevServerBuilderOptions): string {
   return `https://${options.host}:${options.port}/`;
-}
-
-function getHostBaseUrlFromOptions(options: Partial<SkyuxDevServerBuilderOptions>): string {
-  return ensureTrailingSlash(options.skyuxHostUrl || 'https://app.blackbaud.com/');
 }
 
 export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): void {
@@ -30,10 +22,7 @@ export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions
 
   // Set options specific to SKY UX Host.
   if (options.skyuxLaunch === 'host') {
-    const hostUrl = getHostBaseUrlFromOptions(options);
     const localUrl = getLocalUrlFromOptions(options);
-
-    options.skyuxHostUrl = hostUrl;
 
     // Point live-reloading back to localhost.
     options.publicHost = localUrl;

@@ -31,7 +31,7 @@ describe('open host url webpack plugin', () => {
       }
     };
 
-    hostUrl = 'https://app.blackbaud.com/';
+    hostUrl = 'https://host.nxt.blackbaud.com/';
     localUrl = 'https://localhost:4200/';
 
     spyOn(console, 'log');
@@ -67,9 +67,26 @@ describe('open host url webpack plugin', () => {
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
-      scripts: [],
-      host: {}
+      scripts: []
     });
+  });
+
+  it('should open host URL with `externals`', () => {
+    const externals = {
+      js: {
+        before: [{
+          url: 'foo.js'
+        }]
+      }
+    };
+
+    const plugin = getPlugin({
+      externals
+    });
+
+    plugin.apply(mockCompiler);
+
+    expect(createSpy.calls.mostRecent().args[2].externals).toEqual(externals);
   });
 
   it('should send scripts to SKY UX Host', () => {
@@ -95,8 +112,7 @@ describe('open host url webpack plugin', () => {
       rootElementTagName: 'app-root',
       scripts: [
         { name: 'main.js' }
-      ],
-      host: {}
+      ]
     });
   });
 
@@ -123,8 +139,7 @@ describe('open host url webpack plugin', () => {
       rootElementTagName: 'app-root',
       scripts: [
         { name: 'main.js' }
-      ],
-      host: {}
+      ]
     });
   });
 
@@ -168,8 +183,7 @@ describe('open host url webpack plugin', () => {
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
-      scripts: [],
-      host: {}
+      scripts: []
     });
   });
 

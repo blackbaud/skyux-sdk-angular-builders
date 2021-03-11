@@ -1,4 +1,10 @@
+import {
+  SkyuxConfigAppExternals
+} from '../../../shared/skyux-config';
+
 export interface SkyuxOpenHostUrlPluginConfig {
+
+  externals?: SkyuxConfigAppExternals;
 
   /**
    * The URL of the SKY UX Host server.
