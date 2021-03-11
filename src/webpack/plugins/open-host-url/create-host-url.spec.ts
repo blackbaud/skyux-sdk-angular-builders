@@ -35,7 +35,7 @@ describe('create host url', () => {
     const actualUrl = createHostUrl(hostUrl, pathName, defaultHostConfig);
 
     expect(actualUrl).toEqual(
-      'https://host.nxt.blackbaud.com/my-project/?local=true&_cfg=eyJsb2NhbFVybCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAvIiwiaG9zdCI6eyJ1cmwiOiJodHRwczovL2FwcC5ibGFja2JhdWQuY29tLyJ9fQ%3D%3D'
+      'https://host.nxt.blackbaud.com/my-project/?local=true&_cfg=eyJsb2NhbFVybCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAvIiwiaG9zdCI6eyJ1cmwiOiJodHRwczovL2hvc3Qubnh0LmJsYWNrYmF1ZC5jb20vIn19'
     );
 
     expect(decode(actualUrl)).toEqual({

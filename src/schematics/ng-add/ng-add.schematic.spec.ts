@@ -134,6 +134,16 @@ describe('ng-add.schematic', () => {
     expect(packageJson.devDependencies).toBeDefined();
   });
 
+  it('should generate an empty skyuxconfig.json file', async () => {
+    await runner
+      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+      .toPromise();
+    const skyuxconfigJson = JSON.parse(app.readContent('skyuxconfig.json'));
+    expect(skyuxconfigJson).toEqual({
+      $schema: './node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json'
+    });
+  });
+
   describe('serve', () => {
     it('should throw an error if specified project doesn\'t include an `architect.serve` property', async () => {
       // Create an incorrectly formatted project config.

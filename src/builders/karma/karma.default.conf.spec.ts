@@ -50,6 +50,12 @@ describe('karma.default.conf.ts', () => {
       tsConfig: 'tsconfig.json'
     };
 
+    SkyuxKarmaConfigAdapter.skyuxConfig = {
+      host: {
+        url: 'https://foo.blackbaud.com/'
+      }
+    };
+
     spyOn(console, 'log');
 
     mock('../../shared/ci-platform-utils', {

@@ -79,6 +79,16 @@ describe('dev-server builder', () => {
     mock('hasha', {
       fromFileSync: () => 'MOCK_HASH'
     });
+
+    mock('../../shared/skyux-config-utils', {
+      getSkyuxConfig() {
+        return {
+          host: {
+            url: 'https://foo.blackbaud.com/'
+          }
+        };
+      }
+    });
   });
 
   afterEach(() => {
@@ -167,21 +177,6 @@ describe('dev-server builder', () => {
       const actualOptions = getActualOptions();
 
       expect(actualOptions.open).toEqual(true);
-    });
-
-    it('should allow setting a custom `skyuxHostUrl` and append a trailing slash', async () => {
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'host',
-        skyuxHostUrl: 'https://my-host-url.com'
-      });
-
-      await (mock.reRequire('./dev-server'));
-
-      const actualOptions = getActualOptions();
-
-      expect(actualOptions).toEqual(jasmine.objectContaining({
-        skyuxHostUrl: 'https://my-host-url.com/'
-      }));
     });
 
   });
