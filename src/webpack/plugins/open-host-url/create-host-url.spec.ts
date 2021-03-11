@@ -1,4 +1,5 @@
 import mock from 'mock-require';
+import { SkyuxConfigHost } from '../../../shared/skyux-config';
 
 import {
   SkyuxCreateHostUrlConfig
@@ -44,6 +45,26 @@ describe('create host url', () => {
         url: 'https://host.nxt.blackbaud.com/'
       }
     });
+  });
+
+  it('should send bbCheckout and frameOptions to Host', () => {
+    const { createHostUrl } = mock.reRequire('./create-host-url');
+
+    const hostConfig: SkyuxConfigHost = {
+      url: 'https://foo.blackbaud.com/',
+      bbCheckout: {
+        version: '2'
+      },
+      frameOptions: {
+        none: true
+      },
+    };
+
+    defaultHostConfig.host = hostConfig;
+
+    const actualUrl = createHostUrl(hostUrl, pathName, defaultHostConfig);
+
+    expect(decode(actualUrl).host).toEqual(hostConfig);
   });
 
   it('should send scripts to SKY UX Host', () => {

@@ -51,11 +51,11 @@ function getDevServerWepbackConfigTransformer(
 
       webpackConfig.plugins.push(
         new SkyuxOpenHostUrlPlugin({
-          hostUrl: skyuxConfig.host.url,
+          externals: skyuxConfig.app?.externals,
+          host: skyuxConfig.host,
           localUrl,
-          pathName: projectName,
           open: options.skyuxOpen!,
-          externals: skyuxConfig.app?.externals
+          pathName: projectName
         })
       );
     }

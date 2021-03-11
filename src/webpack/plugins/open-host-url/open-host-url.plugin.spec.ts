@@ -51,7 +51,9 @@ describe('open host url webpack plugin', () => {
     const SkyuxOpenHostUrlPlugin = mock.reRequire('./open-host-url.plugin').SkyuxOpenHostUrlPlugin;
 
     const plugin = new SkyuxOpenHostUrlPlugin({...{
-      hostUrl,
+      host: {
+        url: hostUrl
+      },
       localUrl,
       pathName: 'my-project'
     }, ...options});
