@@ -13,7 +13,10 @@ import {
 } from 'rxjs';
 
 import webpack from 'webpack';
-import { SkyuxConfig } from '../../shared/skyux-config';
+
+import {
+  SkyuxConfig
+} from '../../shared/skyux-config';
 
 import {
   SkyuxAppAssetsPlugin
