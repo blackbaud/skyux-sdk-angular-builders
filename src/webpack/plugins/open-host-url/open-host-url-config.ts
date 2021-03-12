@@ -3,8 +3,6 @@ import {
   SkyuxConfigHost
 } from '../../../shared/skyux-config';
 
-// TODO: Use the same types from `@skyux/config`?
-
 export interface SkyuxOpenHostUrlPluginConfig {
 
   externals?: SkyuxConfigAppExternals;
