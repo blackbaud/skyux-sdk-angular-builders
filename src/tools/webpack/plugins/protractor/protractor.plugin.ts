@@ -4,7 +4,7 @@ import {
 
 import {
   applyProtractorEnvironmentConfig
-} from '../../../../builders/protractor/protractor-environment-utils';
+} from '../../../../shared/protractor-environment-utils';
 
 import {
   SkyuxProtractorPluginConfig

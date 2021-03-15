@@ -18,7 +18,7 @@ import {
 
 import {
   getProtractorEnvironmentConfig
-} from './protractor-environment-utils';
+} from '../../shared/protractor-environment-utils';
 
 function mergeConfigs(
   defaults: ProtractorConfig,
