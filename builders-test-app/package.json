@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1102.4",
-    "@angular/cli": "~11.2.3",
+    "@angular/cli": "~11.2.4",
     "@angular/compiler-cli": "~11.2.5",
     "@skyux-sdk/angular-builders": "file:.skyux-sdk-angular-builders-dist",
     "@skyux-sdk/e2e": "^4.0.0",
