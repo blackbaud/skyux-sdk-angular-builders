@@ -8,11 +8,11 @@ import {
 
 import {
   SkyuxSaveHostMetadataPlugin
-} from '../../webpack/plugins/save-host-metadata/save-host-metadata.plugin';
+} from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
 
 import {
   applyAppAssetsWebpackConfig
-} from '../../webpack/app-assets-webpack-config';
+} from '../../tools/webpack/app-assets-webpack-config';
 
 import {
   SkyuxBrowserBuilderOptions

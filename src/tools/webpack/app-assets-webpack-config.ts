@@ -8,7 +8,7 @@ import webpack from 'webpack';
 
 import {
   ensureTrailingSlash
-} from '../shared/url-utils';
+} from '../../shared/url-utils';
 
 import {
   SkyuxAppAssetsPlugin

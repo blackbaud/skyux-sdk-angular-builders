@@ -12,11 +12,11 @@ import webpack from 'webpack';
 
 import {
   SkyuxAppAssetsPlugin
-} from '../../webpack/plugins/app-assets/app-assets.plugin';
+} from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
 
 import {
   SkyuxSaveHostMetadataPlugin
-} from '../../webpack/plugins/save-host-metadata/save-host-metadata.plugin';
+} from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
 
 import {
   SkyuxBrowserBuilderOptions

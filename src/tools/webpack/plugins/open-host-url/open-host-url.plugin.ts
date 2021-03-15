@@ -6,7 +6,7 @@ import {
 
 import {
   applyProtractorEnvironmentConfig
-} from '../../../builders/protractor/protractor-environment-utils';
+} from '../../../../builders/protractor/protractor-environment-utils';
 
 import {
   getHostAssets
