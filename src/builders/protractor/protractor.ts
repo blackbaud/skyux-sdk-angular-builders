@@ -11,6 +11,10 @@ import {
 import path from 'path';
 
 import {
+  getSkyuxConfig
+} from '../../shared/skyux-config-utils';
+
+import {
   applyProtractorEnvironmentConfig
 } from './protractor-environment-utils';
 
@@ -22,12 +26,14 @@ function executeSkyuxProtractorBuilder(
   options: SkyuxProtractorBuilderOptions,
   context: BuilderContext
 ): Promise<BuilderOutput> {
+  const skyuxConfig = getSkyuxConfig();
 
   options.skyuxHeadless = !!options.skyuxHeadless;
   options.protractorConfig = path.join(__dirname, 'protractor.default.conf.js');
 
   applyProtractorEnvironmentConfig({
-    builderOptions: options
+    builderOptions: options,
+    skyuxHostUrl: skyuxConfig.host.url
   });
 
   return executeProtractorBuilder(

@@ -5,10 +5,6 @@ import {
 } from 'webpack';
 
 import {
-  applyProtractorEnvironmentConfig
-} from '../../../../builders/protractor/protractor-environment-utils';
-
-import {
   getHostAssets
 } from '../../host-asset-utils';
 
@@ -58,11 +54,6 @@ export class SkyuxOpenHostUrlPlugin {
         );
 
         console.log(`\nSKY UX Host URL:\n\n${url}`);
-
-        // TODO: Better place to capture this?
-        applyProtractorEnvironmentConfig({
-          skyuxHostUrl: url
-        });
 
         if (this.config.open) {
           open(url);

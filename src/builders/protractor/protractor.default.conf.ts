@@ -80,6 +80,7 @@ function getConfig(): ProtractorConfig {
    * Save the full SKY UX Host URL so that `@skyux-sdk/e2e` has access to it.
    * @see: https://github.com/blackbaud/skyux-sdk-e2e/blob/master/src/host-browser/host-browser.ts#L32
    */
+  console.log('Setting SKY UX Host URL to:', env.skyuxHostUrl);
   config.params = {
     skyuxHostUrl: env.skyuxHostUrl
   };
