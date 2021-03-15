@@ -1,3 +1,7 @@
+# 4.0.0-alpha.23 (2021-03-15)
+
+- Updated the `SkyuxOpenHostUrlPlugin` to send `externals` and `bbCheckout` values to SKY UX Host. [#61](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/61)
+
 # 4.0.0-alpha.22 (2021-03-11)
 
 - Implemented basic support for the `skyuxconfig.json` file. [#60](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/60)
