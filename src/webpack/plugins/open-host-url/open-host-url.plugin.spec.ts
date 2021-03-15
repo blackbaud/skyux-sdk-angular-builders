@@ -51,7 +51,9 @@ describe('open host url webpack plugin', () => {
     const SkyuxOpenHostUrlPlugin = mock.reRequire('./open-host-url.plugin').SkyuxOpenHostUrlPlugin;
 
     const plugin = new SkyuxOpenHostUrlPlugin({...{
-      hostUrl,
+      host: {
+        url: hostUrl
+      },
       localUrl,
       pathName: 'my-project'
     }, ...options});
@@ -65,6 +67,9 @@ describe('open host url webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: []
@@ -108,6 +113,9 @@ describe('open host url webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [
@@ -135,6 +143,9 @@ describe('open host url webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [
@@ -181,6 +192,9 @@ describe('open host url webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: []
