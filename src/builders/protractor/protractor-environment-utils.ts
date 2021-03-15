@@ -22,3 +22,7 @@ export function applyProtractorEnvironmentConfig(value: SkyuxProtractorBuilderEn
 
   process.env[environmentVariableName] = JSON.stringify(merged);
 }
+
+export function clearProtractorEnvironmentConfig(): void {
+  delete process.env[environmentVariableName];
+}

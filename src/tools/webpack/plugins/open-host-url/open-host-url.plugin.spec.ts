@@ -1,8 +1,16 @@
 import mock from 'mock-require';
 
 import {
+  take
+} from 'rxjs/operators';
+
+import {
   SkyuxOpenHostUrlPluginConfig
 } from './open-host-url-config';
+
+import {
+  SkyuxOpenHostUrlPlugin
+} from './open-host-url.plugin';
 
 describe('open host url webpack plugin', () => {
 
@@ -47,7 +55,7 @@ describe('open host url webpack plugin', () => {
     mock.stopAll();
   });
 
-  function getPlugin(options: Partial<SkyuxOpenHostUrlPluginConfig> = {}): typeof SkyuxOpenHostUrlPlugin {
+  function getPlugin(options: Partial<SkyuxOpenHostUrlPluginConfig> = {}): SkyuxOpenHostUrlPlugin {
     const SkyuxOpenHostUrlPlugin = mock.reRequire('./open-host-url.plugin').SkyuxOpenHostUrlPlugin;
 
     const plugin = new SkyuxOpenHostUrlPlugin({...{
@@ -234,6 +242,16 @@ describe('open host url webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(openSpy).toHaveBeenCalled();
+  });
+
+  it('should provide a public observable for the generated Host URL', async () => {
+    createSpy.and.returnValue('foobar.com?cfg=baz');
+
+    const plugin = getPlugin();
+    plugin.apply(mockCompiler);
+
+    const url = await plugin.$hostUrl.pipe(take(1)).toPromise();
+    expect(url).toEqual('foobar.com?cfg=baz');
   });
 
 });

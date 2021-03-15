@@ -7,10 +7,7 @@ import mock from 'mock-require';
 import path from 'path';
 
 import {
-  SkyuxConfig
-} from '../../shared/skyux-config';
-
-import {
+  clearProtractorEnvironmentConfig,
   getProtractorEnvironmentConfig
 } from './protractor-environment-utils';
 
@@ -23,18 +20,11 @@ describe('protractor builder', () => {
   let createBuilderSpy: jasmine.Spy;
   let executeProtractorBuilder: jasmine.Spy;
   let options: SkyuxProtractorBuilderOptions;
-  let mockSkyuxConfig: SkyuxConfig;
 
   beforeEach(() => {
 
     options = {
       protractorConfig: 'protractor.conf.js'
-    };
-
-    mockSkyuxConfig = {
-      host: {
-        url: 'https://foo.blackbaud.com/'
-      }
     };
 
     createBuilderSpy = jasmine.createSpy('createBuilder').and
@@ -56,17 +46,11 @@ describe('protractor builder', () => {
 
     spyOnProperty(buildAngular, 'executeProtractorBuilder', 'get').and
       .returnValue(executeProtractorBuilder);
-
-    mock('../../shared/skyux-config-utils', {
-      getSkyuxConfig() {
-        return mockSkyuxConfig;
-      }
-    });
-
   });
 
   afterEach(() => {
     mock.stopAll();
+    clearProtractorEnvironmentConfig();
   });
 
   it('should overwrite Angular Protractor config with defaults', async () => {
@@ -78,12 +62,10 @@ describe('protractor builder', () => {
     });
   });
 
-  it('should save options as an environment variable', async () => {
+  it('should save builder options as an environment variable', async () => {
     options.skyuxHeadless = true;
     await (mock.reRequire('./protractor'));
-    const config = getProtractorEnvironmentConfig();
-    expect(config?.builderOptions?.skyuxHeadless).toBeTrue();
-    expect(config?.skyuxHostUrl).toBe(mockSkyuxConfig.host.url);
+    expect(getProtractorEnvironmentConfig()?.builderOptions?.skyuxHeadless).toBeTrue();
   });
 
 });

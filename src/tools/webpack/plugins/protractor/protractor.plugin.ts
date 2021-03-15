@@ -6,6 +6,10 @@ import {
   applyProtractorEnvironmentConfig
 } from '../../../../builders/protractor/protractor-environment-utils';
 
+import {
+  SkyuxProtractorPluginConfig
+} from './protractor-plugin-config';
+
 const PLUGIN_NAME = 'skyux-protractor-plugin';
 
 /**
@@ -13,9 +17,7 @@ const PLUGIN_NAME = 'skyux-protractor-plugin';
  */
 export class SkyuxProtractorPlugin {
   constructor(
-    private config: {
-      hostUrlFactory: () => Promise<string>
-    }
+    private config: SkyuxProtractorPluginConfig
   ) { }
 
   public apply(compiler: Compiler): void {

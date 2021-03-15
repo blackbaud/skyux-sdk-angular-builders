@@ -70,7 +70,7 @@ function getDevServerWepbackConfigTransformer(
       /**
        * If we're running e2e tests, add the Protractor Webpack plugin.
        */
-      const configurationName = context.target?.configuration;
+      const configurationName = context.target!.configuration;
       if (
         configurationName === 'e2e' ||
         configurationName === 'e2eProduction'
