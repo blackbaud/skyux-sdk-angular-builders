@@ -24,8 +24,8 @@ import {
 @NgModule({
   imports: [
     SkyAppConfigModule.forRoot({
-      params: skyuxConfig.params,
-      host: skyuxConfig.host
+      host: skyuxConfig.host,
+      params: skyuxConfig.params
     })
   ]
 })
