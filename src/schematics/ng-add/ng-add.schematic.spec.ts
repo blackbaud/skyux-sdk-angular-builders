@@ -28,11 +28,11 @@ describe('ng-add.schematic', () => {
   });
 
   async function runSchematic(
-    app: UnitTestTree,
+    tree: UnitTestTree,
     options?: { project?: string }
   ): Promise<void> {
     await runner
-      .runSchematicAsync('ng-add', options, app)
+      .runSchematicAsync('ng-add', options, tree)
       .toPromise();
   }
 
