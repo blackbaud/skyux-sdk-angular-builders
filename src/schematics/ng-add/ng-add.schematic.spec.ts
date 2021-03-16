@@ -27,6 +27,14 @@ describe('ng-add.schematic', () => {
     workspaceTree = result.workspaceTree;
   });
 
+  function getAngularJson(app: UnitTestTree): any {
+    return JSON.parse(app.readContent('angular.json'));
+  }
+
+  function writeAngularJson(app: UnitTestTree, content: any) {
+    app.overwrite('angular.json', JSON.stringify(content));
+  }
+
   it('should run the NodePackageInstallTask', async () => {
     await runner
       .runSchematicAsync('ng-add', { project: 'foobar' }, app)
@@ -80,11 +88,12 @@ describe('ng-add.schematic', () => {
 
   it('should throw an error if specified project doesn\'t include an `architect` property', async () => {
     // Create an incorrectly formatted project config.
-    const angularJson = JSON.parse(app.readContent('angular.json'));
+    const angularJson = getAngularJson(app);
     angularJson.projects['invalid-project'] = {
       projectType: 'application'
     };
-    app.overwrite('angular.json', JSON.stringify(angularJson));
+
+    writeAngularJson(app, angularJson);
 
     await expectAsync(
       runner
@@ -98,8 +107,7 @@ describe('ng-add.schematic', () => {
       .runSchematicAsync('ng-add', { project: 'foobar' }, app)
       .toPromise();
 
-    const angularJson = JSON.parse(app.readContent('angular.json'));
-
+    const angularJson = getAngularJson(app);
     expect(angularJson.projects.foobar.architect.build.builder).toEqual('@skyux-sdk/angular-builders:browser');
     expect(angularJson.projects.foobar.architect.serve.builder).toEqual('@skyux-sdk/angular-builders:dev-server');
     expect(angularJson.projects.foobar.architect.test.builder).toEqual('@skyux-sdk/angular-builders:karma');
@@ -144,12 +152,32 @@ describe('ng-add.schematic', () => {
     });
   });
 
+  it('should not generate skyuxconfig.json file if already exists', async () => {
+    app.create('skyuxconfig.json', '{"foo": "Hello, world!"}');
+
+    await runner
+      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+      .toPromise();
+    const skyuxconfigJson = JSON.parse(app.readContent('skyuxconfig.json'));
+    expect(skyuxconfigJson).toEqual({
+      foo: 'Hello, world!'
+    });
+  });
+
+  it('should overwrite SkyuxModule if it exists', async () => {
+    app.create('src/app/__skyux/skyux.module.ts', 'foobar');
+    await runner
+      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+      .toPromise();
+    expect(app.readContent('src/app/__skyux/skyux.module.ts')).not.toEqual('foobar');
+  });
+
   describe('serve', () => {
     it('should throw an error if specified project doesn\'t include an `architect.serve` property', async () => {
       // Create an incorrectly formatted project config.
-      const angularJson = JSON.parse(app.readContent('angular.json'));
+      const angularJson = getAngularJson(app);
       delete angularJson.projects.foobar.architect.serve;
-      app.overwrite('angular.json', JSON.stringify(angularJson));
+      writeAngularJson(app, angularJson);
 
       await expectAsync(
         runner
@@ -162,9 +190,9 @@ describe('ng-add.schematic', () => {
   describe('build', () => {
     it('should throw an error if specified project doesn\'t include an `architect.build` property', async () => {
       // Create an incorrectly formatted project config.
-      const angularJson = JSON.parse(app.readContent('angular.json'));
+      const angularJson = getAngularJson(app);
       delete angularJson.projects.foobar.architect.build;
-      app.overwrite('angular.json', JSON.stringify(angularJson));
+      writeAngularJson(app, angularJson);
 
       await expectAsync(
         runner
@@ -178,7 +206,7 @@ describe('ng-add.schematic', () => {
         .runSchematicAsync('ng-add', { project: 'foobar' }, app)
         .toPromise();
 
-      const angularJson = JSON.parse(app.readContent('angular.json'));
+      const angularJson = getAngularJson(app);
 
       expect(angularJson.projects.foobar.architect.build.configurations.production.outputHashing).toEqual('bundles');
     });
@@ -187,9 +215,9 @@ describe('ng-add.schematic', () => {
   describe('test', () => {
     it('should throw an error if specified project doesn\'t include an `architect.test` property', async () => {
       // Create an incorrectly formatted project config.
-      const angularJson = JSON.parse(app.readContent('angular.json'));
+      const angularJson = getAngularJson(app);
       delete angularJson.projects.foobar.architect.test;
-      app.overwrite('angular.json', JSON.stringify(angularJson));
+      writeAngularJson(app, angularJson);
 
       await expectAsync(
         runner
@@ -217,14 +245,27 @@ describe('ng-add.schematic', () => {
       const contents = library.read('projects/foolib/karma.conf.js')?.toString();
       expect(contents).toContain('DO NOT MODIFY');
     });
+
+    it('should set codeCoverage and codeCoverageExclude', async () => {
+      const library = await generateTestLibrary(runner, workspaceTree, { name: 'foolib' });
+
+      await runner
+        .runSchematicAsync('ng-add', { project: 'foobar' }, app)
+        .toPromise();
+
+      const angularJson = getAngularJson(library);
+      const options = angularJson.projects.foolib.architect.test.options;
+      expect(options.codeCoverage).toEqual(true);
+      expect(options.codeCoverageExclude).toEqual(['src/app/__skyux/**/*']);
+    });
   });
 
   describe('e2e', () => {
     it('should throw an error if specified project doesn\'t include an `architect.e2e` property', async () => {
       // Create an incorrectly formatted project config.
-      const angularJson = JSON.parse(app.readContent('angular.json'));
+      const angularJson = getAngularJson(app);
       delete angularJson.projects.foobar.architect.e2e;
-      app.overwrite('angular.json', JSON.stringify(angularJson));
+      writeAngularJson(app, angularJson);
 
       await expectAsync(
         runner
@@ -247,7 +288,7 @@ describe('ng-add.schematic', () => {
         .runSchematicAsync('ng-add', { project: 'foobar' }, app)
         .toPromise();
 
-      const angularJson = JSON.parse(app.readContent('angular.json'));
+      const angularJson = getAngularJson(app);
 
       expect(angularJson.projects.foobar.architect.serve.configurations.e2e).toEqual({
         browserTarget: 'foobar:build',

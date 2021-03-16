@@ -1,5 +1,16 @@
-import { Component } from '@angular/core';
-import { SkyAppAssetsService } from '@skyux/assets';
+import {
+  Component
+} from '@angular/core';
+
+import {
+  SkyAppAssetsService
+} from '@skyux/assets';
+
+import {
+  SkyAppConfigHost,
+  SkyAppParamsConfig,
+  SkyAppRuntimeConfigParamsProvider
+} from '@skyux/config';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +21,14 @@ export class AppComponent {
   title = 'builders-test-app';
 
   constructor(
-    assetService: SkyAppAssetsService
+    assetService: SkyAppAssetsService,
+    hostConfig: SkyAppConfigHost,
+    paramsConfig: SkyAppParamsConfig,
+    runtimeParams: SkyAppRuntimeConfigParamsProvider
   ) {
     console.log('Asset URLs:', assetService.getAllUrls());
+    console.log('Host config:', hostConfig);
+    console.log('Params config:', paramsConfig);
+    console.log('Runtime params:', runtimeParams.params.getAll());
   }
 }

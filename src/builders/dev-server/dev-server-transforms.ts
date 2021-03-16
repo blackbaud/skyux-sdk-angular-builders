@@ -31,6 +31,10 @@ import {
 } from '../../tools/webpack/app-assets-webpack-config';
 
 import {
+  applySkyuxConfigWebpackConfig
+} from '../../tools/webpack/skyux-config-webpack-config';
+
+import {
   SkyuxDevServerBuilderOptions
 } from './dev-server-options';
 
@@ -86,6 +90,7 @@ function getDevServerWepbackConfigTransformer(
     }
 
     applyAppAssetsWebpackConfig(webpackConfig, localUrl);
+    applySkyuxConfigWebpackConfig(webpackConfig);
 
     return webpackConfig;
   };

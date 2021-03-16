@@ -10,6 +10,7 @@ import {
 import {
   apply,
   applyTemplates,
+  forEach,
   MergeStrategy,
   mergeWith,
   move,
@@ -104,6 +105,11 @@ async function modifyAngularJson(
     if (testTarget) {
       testTarget.builder = '@skyux-sdk/angular-builders:karma';
       testTarget.options!.codeCoverage = true;
+
+      // Exclude our generated files from the consumers' code coverage.
+      testTarget.options!.codeCoverageExclude = [
+        'src/app/__skyux/**/*'
+      ];
     } else {
       throw new SchematicsException(
         `Expected node projects/${project}/architect/test in angular.json!`
@@ -146,12 +152,28 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
   await host.writeFile('tsconfig.json', banner + JSON.stringify(tsConfig, undefined, 2));
 }
 
+/**
+ * Fixes an Angular CLI issue with merge strategies.
+ * @see https://github.com/angular/angular-cli/issues/11337#issuecomment-516543220
+ */
+ function overwriteIfExists(tree: Tree): Rule {
+  return forEach(fileEntry => {
+    if (tree.exists(fileEntry.path)) {
+      tree.overwrite(fileEntry.path, fileEntry.content);
+      return null;
+    }
+    return fileEntry;
+  });
+}
+
 function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
 
   // Create an empty skyuxconfig.json file.
-  tree.create('skyuxconfig.json', JSON.stringify({
-    $schema: './node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json'
-  }, undefined, 2));
+  if (!tree.exists('skyuxconfig.json')) {
+    tree.create('skyuxconfig.json', JSON.stringify({
+      $schema: './node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json'
+    }, undefined, 2));
+  }
 
   addModuleImportToRootModule(
     tree,
@@ -162,7 +184,8 @@ function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule
   const sourcePath = `${project!.sourceRoot}/app`;
   const templateSource = apply(url('./files'), [
     applyTemplates({}),
-    move(normalize(sourcePath))
+    move(normalize(sourcePath)),
+    overwriteIfExists(tree)
   ]);
 
   return mergeWith(templateSource, MergeStrategy.Overwrite);
@@ -211,6 +234,13 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
       type: NodeDependencyType.Default,
       name: '@skyux/assets',
       version: '^4.0.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/config',
+      version: '^4.4.0',
       overwrite: true
     });
 
