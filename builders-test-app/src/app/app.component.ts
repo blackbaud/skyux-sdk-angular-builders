@@ -1,6 +1,16 @@
-import { Component } from '@angular/core';
-import { SkyAppAssetsService } from '@skyux/assets';
-import { SkyAppConfigHost, SkyAppParamsConfig, SkyAppRuntimeConfigParamsProvider } from '@skyux/config';
+import {
+  Component
+} from '@angular/core';
+
+import {
+  SkyAppAssetsService
+} from '@skyux/assets';
+
+import {
+  SkyAppConfigHost,
+  SkyAppParamsConfig,
+  SkyAppRuntimeConfigParamsProvider
+} from '@skyux/config';
 
 @Component({
   selector: 'app-root',
