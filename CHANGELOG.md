@@ -1,3 +1,7 @@
+# 4.0.0-alpha.24 (2021-03-16)
+
+- Added support for `@skyux/config@4.4.0`. [#64](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/64)
+
 # 4.0.0-alpha.23 (2021-03-15)
 
 - Updated the `SkyuxOpenHostUrlPlugin` to send `externals` and `bbCheckout` values to SKY UX Host. [#61](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/61)
