@@ -17,7 +17,7 @@ ng add @skyux-sdk/angular-builders
 - Change directory to `/builders-test-app` and run:
 ```
 npm install
-ng add ./.skyux-sdk-angular-builders-dist
+npm run dev-setup
 ng serve
 ```
 
