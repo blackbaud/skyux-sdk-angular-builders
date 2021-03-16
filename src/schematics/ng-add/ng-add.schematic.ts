@@ -105,6 +105,8 @@ async function modifyAngularJson(
     if (testTarget) {
       testTarget.builder = '@skyux-sdk/angular-builders:karma';
       testTarget.options!.codeCoverage = true;
+
+      // Exclude our generated files from the consumers' code coverage.
       testTarget.options!.codeCoverageExclude = [
         'src/app/__skyux/**/*'
       ];
