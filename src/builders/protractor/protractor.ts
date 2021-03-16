@@ -12,7 +12,7 @@ import path from 'path';
 
 import {
   applyProtractorEnvironmentConfig
-} from './protractor-environment-utils';
+} from '../../shared/protractor-environment-utils';
 
 import {
   SkyuxProtractorBuilderOptions

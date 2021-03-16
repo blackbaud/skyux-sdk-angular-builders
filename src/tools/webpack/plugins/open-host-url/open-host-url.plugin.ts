@@ -1,12 +1,13 @@
 import open from 'open';
 
 import {
-  Compiler
-} from 'webpack';
+  BehaviorSubject,
+  Observable
+} from 'rxjs';
 
 import {
-  applyProtractorEnvironmentConfig
-} from '../../../../builders/protractor/protractor-environment-utils';
+  Compiler
+} from 'webpack';
 
 import {
   getHostAssets
@@ -27,6 +28,15 @@ import {
 const PLUGIN_NAME = 'open-skyux-host-plugin';
 
 export class SkyuxOpenHostUrlPlugin {
+
+  /**
+   * The fully-formed SKY UX Host URL.
+   */
+  public get $hostUrl(): Observable<string> {
+    return this._$hostUrl.asObservable();
+  }
+
+  private _$hostUrl = new BehaviorSubject<string>('');
 
   constructor(
     private config: SkyuxOpenHostUrlPluginConfig
@@ -57,12 +67,9 @@ export class SkyuxOpenHostUrlPlugin {
           hostUrlConfig
         );
 
-        console.log(`\nSKY UX Host URL:\n\n${url}`);
+        this._$hostUrl.next(url);
 
-        // TODO: Better place to capture this?
-        applyProtractorEnvironmentConfig({
-          skyuxHostUrl: url
-        });
+        console.log(`\n\n==================\n SKY UX Host URL:\n==================\n\n${url}\n\n`);
 
         if (this.config.open) {
           open(url);

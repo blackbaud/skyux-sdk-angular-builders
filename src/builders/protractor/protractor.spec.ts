@@ -7,8 +7,9 @@ import mock from 'mock-require';
 import path from 'path';
 
 import {
+  clearProtractorEnvironmentConfig,
   getProtractorEnvironmentConfig
-} from './protractor-environment-utils';
+} from '../../shared/protractor-environment-utils';
 
 import {
   SkyuxProtractorBuilderOptions
@@ -45,11 +46,11 @@ describe('protractor builder', () => {
 
     spyOnProperty(buildAngular, 'executeProtractorBuilder', 'get').and
       .returnValue(executeProtractorBuilder);
-
   });
 
   afterEach(() => {
     mock.stopAll();
+    clearProtractorEnvironmentConfig();
   });
 
   it('should overwrite Angular Protractor config with defaults', async () => {

@@ -23,6 +23,10 @@ import {
 } from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
 
 import {
+  SkyuxProtractorPlugin
+} from '../../tools/webpack/plugins/protractor/protractor.plugin';
+
+import {
   SkyuxOpenHostUrlPlugin
 } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
 
@@ -194,6 +198,11 @@ describe('dev-server builder', () => {
         p instanceof SkyuxOpenHostUrlPlugin) as SkyuxOpenHostUrlPlugin;
     }
 
+    function getProtractorPlugin(): SkyuxProtractorPlugin {
+      return actualWebpackConfig.plugins?.find(p =>
+        p instanceof SkyuxProtractorPlugin) as SkyuxProtractorPlugin;
+    }
+
     it('should add `SkyuxOpenHostUrlPlugin` to webpack plugins', async () => {
       await (mock.reRequire('./dev-server'));
 
@@ -260,6 +269,58 @@ describe('dev-server builder', () => {
       await (mock.reRequire('./dev-server'));
 
       expect(actualWebpackConfig.plugins?.length).toEqual(3);
+    });
+
+    it('should add `SkyuxProtractorPlugin` when running e2e', async () => {
+      await (mock.reRequire('./dev-server'));
+
+      let plugin = getProtractorPlugin();
+
+      expect(plugin).toBeUndefined(
+        'Expected the plugin not to be included by default.'
+      );
+
+      mockContext.target.configuration = 'e2e';
+      defaultOptions = overrideOptions({
+        skyuxLaunch: 'host'
+      });
+
+      await (mock.reRequire('./dev-server'));
+
+      plugin = getProtractorPlugin();
+
+      expect(plugin).toBeDefined(
+        'Expected the plugin to be added for `ng e2e`.'
+      );
+
+      mockContext.target.configuration = 'e2eProduction';
+      defaultOptions = overrideOptions({
+        skyuxLaunch: 'host'
+      });
+
+      await (mock.reRequire('./dev-server'));
+
+      plugin = getProtractorPlugin();
+
+      expect(plugin).toBeDefined(
+        'Expected the plugin to be added for `ng e2e --prod`.'
+      );
+    });
+
+    it('should pass Host URL to `SkyuxProtractorPlugin`', async () => {
+      mockContext.target.configuration = 'e2e';
+      defaultOptions = overrideOptions({
+        skyuxLaunch: 'host'
+      });
+
+      await (mock.reRequire('./dev-server'));
+
+      const protractorPlugin = getProtractorPlugin();
+      const hostUrlPlugin = getOpenHostUrlPlugin();
+      hostUrlPlugin['_$hostUrl'].next('https://foo.bar.com');
+
+      const url = await protractorPlugin['config'].hostUrlFactory();
+      expect(url).toEqual('https://foo.bar.com');
     });
 
   });
