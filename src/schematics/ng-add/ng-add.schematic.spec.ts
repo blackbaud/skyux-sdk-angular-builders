@@ -27,6 +27,15 @@ describe('ng-add.schematic', () => {
     workspaceTree = result.workspaceTree;
   });
 
+  async function runSchematic(
+    app: UnitTestTree,
+    options?: { project?: string }
+  ): Promise<void> {
+    await runner
+      .runSchematicAsync('ng-add', options, app)
+      .toPromise();
+  }
+
   function getAngularJson(app: UnitTestTree): any {
     return JSON.parse(app.readContent('angular.json'));
   }
@@ -36,9 +45,9 @@ describe('ng-add.schematic', () => {
   }
 
   it('should run the NodePackageInstallTask', async () => {
-    await runner
-      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-      .toPromise();
+    await runSchematic(app, {
+      project: 'foobar'
+    });
 
     expect(runner.tasks.some(task => task.name === 'node-package')).toEqual(
       true,
@@ -49,9 +58,7 @@ describe('ng-add.schematic', () => {
   it('should use the default project if none provided', async () => {
     const emptyOptions = {};
     await expectAsync(
-      runner
-        .runSchematicAsync('ng-add', emptyOptions, app)
-        .toPromise()
+      runSchematic(app, emptyOptions)
     ).not.toBeRejected();
   });
 
@@ -59,9 +66,9 @@ describe('ng-add.schematic', () => {
     app.delete('angular.json');
 
     await expectAsync(
-      runner
-        .runSchematicAsync('ng-add', { project: 'invalid-project' }, app)
-        .toPromise()
+      runSchematic(app, {
+        project: 'invalid-foobar'
+      })
     ).toBeRejectedWithError('Unable to locate a workspace file for workspace path.');
   });
 
@@ -69,9 +76,9 @@ describe('ng-add.schematic', () => {
     const library = await generateTestLibrary(runner, workspaceTree, { name: 'foo-lib' });
 
     await expectAsync(
-      runner
-        .runSchematicAsync('ng-add', { project: 'foo-lib' }, library)
-        .toPromise()
+      runSchematic(library, {
+        project: 'foo-lib'
+      })
     ).toBeRejectedWithError(
       'You are attempting to add this builder to a library project, ' +
       'but it is designed to be added only to the primary application.'
@@ -80,9 +87,9 @@ describe('ng-add.schematic', () => {
 
   it('should throw an error if specified project doesn\'t exist', async () => {
     await expectAsync(
-      runner
-        .runSchematicAsync('ng-add', { project: 'invalid-project' }, app)
-        .toPromise()
+      runSchematic(app, {
+        project: 'invalid-project'
+      })
     ).toBeRejectedWithError('The "invalid-project" project is not defined in angular.json. Provide a valid project name.');
   });
 
@@ -96,16 +103,16 @@ describe('ng-add.schematic', () => {
     writeAngularJson(app, angularJson);
 
     await expectAsync(
-      runner
-        .runSchematicAsync('ng-add', { project: 'invalid-project' }, app)
-        .toPromise()
+      runSchematic(app, {
+        project: 'invalid-project'
+      })
     ).toBeRejectedWithError('Expected node projects/invalid-project/architect in angular.json!');
   });
 
   it('should overwrite the default build, serve, test, and e2e architects', async () => {
-    await runner
-      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-      .toPromise();
+    await runSchematic(app, {
+      project: 'foobar'
+    });
 
     const angularJson = getAngularJson(app);
     expect(angularJson.projects.foobar.architect.build.builder).toEqual('@skyux-sdk/angular-builders:browser');
@@ -115,9 +122,9 @@ describe('ng-add.schematic', () => {
   });
 
   it('should add packages to package.json', async () => {
-    await runner
-      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-      .toPromise();
+    await runSchematic(app, {
+      project: 'foobar'
+    });
 
     const packageJson = JSON.parse(app.readContent('package.json'));
     expect(packageJson.dependencies).toEqual(jasmine.objectContaining({
@@ -133,9 +140,9 @@ describe('ng-add.schematic', () => {
     // Create an empty package.json file.
     app.overwrite('package.json', JSON.stringify({}));
 
-    await runner
-      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-      .toPromise();
+    await runSchematic(app, {
+      project: 'foobar'
+    });
 
     const packageJson = JSON.parse(app.readContent('package.json'));
     expect(packageJson.dependencies).toBeDefined();
@@ -143,9 +150,10 @@ describe('ng-add.schematic', () => {
   });
 
   it('should generate an empty skyuxconfig.json file', async () => {
-    await runner
-      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-      .toPromise();
+    await runSchematic(app, {
+      project: 'foobar'
+    });
+
     const skyuxconfigJson = JSON.parse(app.readContent('skyuxconfig.json'));
     expect(skyuxconfigJson).toEqual({
       $schema: './node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json'
@@ -155,9 +163,10 @@ describe('ng-add.schematic', () => {
   it('should not generate skyuxconfig.json file if already exists', async () => {
     app.create('skyuxconfig.json', '{"foo": "Hello, world!"}');
 
-    await runner
-      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-      .toPromise();
+    await runSchematic(app, {
+      project: 'foobar'
+    });
+
     const skyuxconfigJson = JSON.parse(app.readContent('skyuxconfig.json'));
     expect(skyuxconfigJson).toEqual({
       foo: 'Hello, world!'
@@ -166,9 +175,9 @@ describe('ng-add.schematic', () => {
 
   it('should overwrite SkyuxModule if it exists', async () => {
     app.create('src/app/__skyux/skyux.module.ts', 'foobar');
-    await runner
-      .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-      .toPromise();
+    await runSchematic(app, {
+      project: 'foobar'
+    });
     expect(app.readContent('src/app/__skyux/skyux.module.ts')).not.toEqual('foobar');
   });
 
@@ -180,9 +189,9 @@ describe('ng-add.schematic', () => {
       writeAngularJson(app, angularJson);
 
       await expectAsync(
-        runner
-          .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-          .toPromise()
+        runSchematic(app, {
+          project: 'foobar'
+        })
       ).toBeRejectedWithError('Expected node projects/foobar/architect/serve in angular.json!');
     });
   });
@@ -195,19 +204,18 @@ describe('ng-add.schematic', () => {
       writeAngularJson(app, angularJson);
 
       await expectAsync(
-        runner
-          .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-          .toPromise()
+        runSchematic(app, {
+          project: 'foobar'
+        })
       ).toBeRejectedWithError('Expected node projects/foobar/architect/build in angular.json!');
     });
 
     it('should set options for browser builder', async () => {
-      await runner
-        .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-        .toPromise();
+      await runSchematic(app, {
+        project: 'foobar'
+      });
 
       const angularJson = getAngularJson(app);
-
       expect(angularJson.projects.foobar.architect.build.configurations.production.outputHashing).toEqual('bundles');
     });
   });
@@ -220,16 +228,16 @@ describe('ng-add.schematic', () => {
       writeAngularJson(app, angularJson);
 
       await expectAsync(
-        runner
-          .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-          .toPromise()
+        runSchematic(app, {
+          project: 'foobar'
+        })
       ).toBeRejectedWithError('Expected node projects/foobar/architect/test in angular.json!');
     });
 
     it('should modify the app\'s karma.conf.js file', async () => {
-      await runner
-        .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-        .toPromise();
+      await runSchematic(app, {
+        project: 'foobar'
+      });
 
       const contents = app.read('karma.conf.js')?.toString();
       expect(contents).toContain('DO NOT MODIFY');
@@ -238,9 +246,9 @@ describe('ng-add.schematic', () => {
     it('should modify a library\'s karma.conf.js file', async () => {
       const library = await generateTestLibrary(runner, workspaceTree, { name: 'foolib' });
 
-      await runner
-        .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-        .toPromise();
+      await runSchematic(library, {
+        project: 'foobar'
+      });
 
       const contents = library.read('projects/foolib/karma.conf.js')?.toString();
       expect(contents).toContain('DO NOT MODIFY');
@@ -249,9 +257,9 @@ describe('ng-add.schematic', () => {
     it('should set codeCoverage and codeCoverageExclude', async () => {
       const library = await generateTestLibrary(runner, workspaceTree, { name: 'foolib' });
 
-      await runner
-        .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-        .toPromise();
+      await runSchematic(library, {
+        project: 'foobar'
+      });
 
       const angularJson = getAngularJson(library);
       const options = angularJson.projects.foolib.architect.test.options;
@@ -268,25 +276,25 @@ describe('ng-add.schematic', () => {
       writeAngularJson(app, angularJson);
 
       await expectAsync(
-        runner
-          .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-          .toPromise()
+        runSchematic(app, {
+          project: 'foobar'
+        })
       ).toBeRejectedWithError('Expected node projects/foobar/architect/e2e in angular.json!');
     });
 
     it('should modify the app\'s protractor.conf.js file', async () => {
-      await runner
-        .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-        .toPromise();
+      await runSchematic(app, {
+        project: 'foobar'
+      });
 
       const contents = app.read('e2e/protractor.conf.js')?.toString();
       expect(contents).toContain('DO NOT MODIFY');
     });
 
     it('should modify settings in angular.json', async () => {
-      await runner
-        .runSchematicAsync('ng-add', { project: 'foobar' }, app)
-        .toPromise();
+      await runSchematic(app, {
+        project: 'foobar'
+      });
 
       const angularJson = getAngularJson(app);
 
