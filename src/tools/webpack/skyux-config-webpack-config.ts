@@ -5,7 +5,7 @@ import webpack from 'webpack';
 export function applySkyuxConfigWebpackConfig(
   webpackConfig: webpack.Configuration
 ): void {
-  webpackConfig.module?.rules.push({
+  webpackConfig.module!.rules.push({
     enforce: 'pre',
     test: /(\/|\\)__skyux(\/|\\)processed-skyuxconfig\.json$/,
     use: {
