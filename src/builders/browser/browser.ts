@@ -17,6 +17,10 @@ import {
 } from 'rxjs';
 
 import {
+  getSkyuxConfig
+} from '../../shared/skyux-config-utils';
+
+import {
   SkyuxBrowserBuilderOptions
 } from './browser-options';
 
@@ -28,10 +32,12 @@ function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext
 ): Observable<BuilderOutput> {
+  const skyuxConfig = getSkyuxConfig();
+
   return executeBrowserBuilder(
     options,
     context,
-    getBrowserTransforms(options)
+    getBrowserTransforms(options, skyuxConfig)
   );
 }
 

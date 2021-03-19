@@ -244,7 +244,7 @@ describe('dev-server builder', () => {
 
       const plugin = getOpenHostUrlPlugin();
 
-      expect(plugin['config'].externals).toEqual(externals);
+      expect(plugin['config'].skyuxConfig.app?.externals).toEqual(externals);
     });
 
     it('should add `SkyuxAppAssetsPlugin` to webpack plugins', async () => {

@@ -74,6 +74,12 @@ describe('browser builder', () => {
     mock('hasha', {
       fromFileSync: () => 'MOCK_HASH'
     });
+
+    mock('../../shared/skyux-config-utils', {
+      getSkyuxConfig() {
+        return {};
+      }
+    });
   });
 
   afterEach(() => {

@@ -7,6 +7,10 @@ import {
 } from 'webpack';
 
 import {
+  SkyuxConfig
+} from '../../../../shared/skyux-config';
+
+import {
   getFallbackName,
   getHostAssets
 } from '../../host-asset-utils';
@@ -18,6 +22,11 @@ import {
 const PLUGIN_NAME = 'skyux-save-host-metadata-plugin';
 
 export class SkyuxSaveHostMetadataPlugin {
+
+  constructor(
+    private skyuxConfig: SkyuxConfig
+  ) { }
+
   public apply(compiler: Compiler): void {
 
     // Add our fallback variable to the bottom of the JS source files.
@@ -32,14 +41,18 @@ export class SkyuxSaveHostMetadataPlugin {
     // See: https://github.com/blackbaud/skyux-deploy/blob/master/lib/assets.js#L74
     compiler.hooks.done.tap(PLUGIN_NAME, (webpackStats) => {
       const stats = webpackStats.toJson();
-      const assets = getHostAssets(stats, {
-        includeFallback: true,
-        includeLazyloadedChunks: true
-      });
+      const assets = getHostAssets(
+        stats,
+        this.skyuxConfig,
+        {
+          includeFallback: true,
+          includeLazyloadedChunks: true
+        }
+      );
 
       fs.writeJsonSync(
         path.join(stats.outputPath!, 'metadata.json'),
-        assets,
+        assets.scripts.concat(assets.styleSheets),
         {
           spaces: 2
         }

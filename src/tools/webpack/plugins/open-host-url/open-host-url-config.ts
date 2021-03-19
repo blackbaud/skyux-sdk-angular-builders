@@ -1,13 +1,8 @@
 import {
-  SkyuxConfigAppExternals,
-  SkyuxConfigHost
+  SkyuxConfig
 } from '../../../../shared/skyux-config';
 
 export interface SkyuxOpenHostUrlPluginConfig {
-
-  externals?: SkyuxConfigAppExternals;
-
-  host: SkyuxConfigHost;
 
   /**
    * The URL of the localhost server, serving the asset files.
@@ -23,5 +18,10 @@ export interface SkyuxOpenHostUrlPluginConfig {
    * The unique pathname of the SPA, e.g. 'my-spa'.
    */
   pathName: string;
+
+  /**
+   * Builder configuration.
+   */
+  skyuxConfig: SkyuxConfig;
 
 }
