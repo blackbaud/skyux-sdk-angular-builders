@@ -41,8 +41,8 @@ export function getHostAssets(
       .filter(chunk => isCss(chunk.files[0]))
       .forEach(chunk => {
         styleSheets.push({
-          type: SkyuxHostAssetType.StyleSheet,
-          name: chunk.files[0]
+          name: chunk.files[0],
+          type: SkyuxHostAssetType.StyleSheet
         });
       });
 
