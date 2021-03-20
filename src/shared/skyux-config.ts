@@ -110,7 +110,6 @@ export interface SkyuxConfigHost {
 export interface SkyuxConfig {
   app?: {
     externals?: SkyuxConfigAppExternals;
-    styles?: string[];
   };
 
   codeCoverageThreshold?: 'none' | 'standard' | 'strict';

@@ -3,10 +3,6 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxConfig
-} from '../../shared/skyux-config';
-
-import {
   SkyuxHostAsset
 } from './host-asset';
 
@@ -23,7 +19,6 @@ export function getFallbackName(name: string): string {
  */
 export function getHostAssets(
   stats: Stats.ToJsonOutput,
-  skyuxConfig: SkyuxConfig,
   config?: {
     includeFallback?: boolean;
     includeLazyloadedChunks?: boolean;
@@ -79,17 +74,6 @@ export function getHostAssets(
           scripts.push(script);
         }
       });
-  }
-
-  // Add any style sheets from skyuxConfig.
-  const skyuxStyles = skyuxConfig.app?.styles;
-  if (skyuxStyles) {
-    styleSheets.concat(skyuxStyles.map(x => {
-      return {
-        name: x,
-        type: SkyuxHostAssetType.StyleSheet
-      };
-    }))
   }
 
   return {

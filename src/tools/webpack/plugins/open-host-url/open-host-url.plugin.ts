@@ -48,22 +48,22 @@ export class SkyuxOpenHostUrlPlugin {
     compiler.hooks.done.tap(PLUGIN_NAME, (webpackStats) => {
       if (!opened) {
 
-        const assets = getHostAssets(webpackStats.toJson(), this.config.skyuxConfig);
+        const assets = getHostAssets(webpackStats.toJson());
 
         const hostUrlConfig: SkyuxCreateHostUrlConfig = {
-          host: this.config.skyuxConfig.host,
+          host: this.config.host,
           localUrl: this.config.localUrl,
           rootElementTagName: 'app-root',
           scripts: assets.scripts,
           styleSheets: assets.styleSheets
         };
 
-        if (this.config.skyuxConfig.app?.externals) {
-          hostUrlConfig.externals = this.config.skyuxConfig.app.externals;
+        if (this.config.externals) {
+          hostUrlConfig.externals = this.config.externals;
         }
 
         const url = createHostUrl(
-          this.config.skyuxConfig.host.url,
+          this.config.host.url,
           this.config.pathName,
           hostUrlConfig
         );

@@ -7,10 +7,6 @@ import {
 } from 'webpack';
 
 import {
-  SkyuxConfig
-} from '../../shared/skyux-config';
-
-import {
   SkyuxSaveHostMetadataPlugin
 } from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
 
@@ -28,16 +24,13 @@ import {
  * @param context The context of the builder execution.
  */
 function getBrowserWepbackConfigTransformer(
-  options: SkyuxBrowserBuilderOptions,
-  skyuxConfig: SkyuxConfig
+  options: SkyuxBrowserBuilderOptions
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
     webpackConfig.plugins = webpackConfig.plugins || [];
 
     webpackConfig.plugins.push(
-      new SkyuxSaveHostMetadataPlugin(
-        skyuxConfig
-      )
+      new SkyuxSaveHostMetadataPlugin()
     );
 
     applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl);
@@ -47,11 +40,8 @@ function getBrowserWepbackConfigTransformer(
 
 }
 
-export function getBrowserTransforms(
-  options: SkyuxBrowserBuilderOptions,
-  skyuxConfig: SkyuxConfig
-) {
+export function getBrowserTransforms(options: SkyuxBrowserBuilderOptions) {
   return {
-    webpackConfiguration: getBrowserWepbackConfigTransformer(options, skyuxConfig)
+    webpackConfiguration: getBrowserWepbackConfigTransformer(options)
   };
 }
