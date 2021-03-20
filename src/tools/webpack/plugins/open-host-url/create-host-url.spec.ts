@@ -74,12 +74,19 @@ describe('create host url', () => {
     expect(decode(actualUrl).host).toEqual(hostConfig);
   });
 
-  it('should send scripts to SKY UX Host', () => {
+  it('should send scripts and style sheets to SKY UX Host', () => {
     const { createHostUrl } = mock.reRequire('./create-host-url');
 
     defaultHostConfig.scripts = [
       {
         name: 'main.js',
+        type: SkyuxHostAssetType.Script
+      }
+    ];
+
+    defaultHostConfig.styleSheets = [
+      {
+        name: 'styles.css',
         type: SkyuxHostAssetType.StyleSheet
       }
     ];
@@ -91,6 +98,12 @@ describe('create host url', () => {
       scripts: [
         {
           name: 'main.js',
+          type: SkyuxHostAssetType.Script
+        }
+      ],
+      styleSheets: [
+        {
+          name: 'styles.css',
           type: SkyuxHostAssetType.StyleSheet
         }
       ],
