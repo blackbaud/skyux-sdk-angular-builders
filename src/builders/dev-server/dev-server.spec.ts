@@ -109,34 +109,9 @@ describe('dev-server builder', () => {
     return executDevServerBuilderSpy.calls.mostRecent().args[0];
   }
 
-  function overrideOptions(config: any): SkyuxDevServerBuilderOptions {
-    return {...defaultOptions, ...config} as SkyuxDevServerBuilderOptions;
-  }
-
   describe('configuration', () => {
 
     it('should set defaults', async () => {
-      defaultOptions = overrideOptions({});
-
-      await (mock.reRequire('./dev-server'));
-
-      const actualOptions = getActualOptions();
-
-      expect(actualOptions).toEqual({
-        browserTarget: 'foo:build',
-        host: 'localhost',
-        port: 4200,
-        ssl: true,
-        sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
-        sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
-      });
-    });
-
-    it('should overwrite Angular options if `skyuxLaunch` is set to "host"', async () => {
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'host'
-      });
-
       await (mock.reRequire('./dev-server'));
 
       const actualOptions = getActualOptions();
@@ -150,43 +125,11 @@ describe('dev-server builder', () => {
         port: 4200,
         publicHost: 'https://localhost:4200/',
         servePath: '/',
-        skyuxLaunch: 'host',
         skyuxOpen: true,
         ssl: true,
         sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
         sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
       });
-    });
-
-    it('should enforce HTTPS if `skyuxLaunch` is defined', async () => {
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'local'
-      });
-
-      await (mock.reRequire('./dev-server'));
-
-      const actualOptions = getActualOptions();
-
-      expect(actualOptions).toEqual({
-        ...defaultOptions,
-        ...{
-          ssl: true,
-          sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
-          sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
-        }
-      } as SkyuxDevServerBuilderOptions);
-    });
-
-    it('should open the default browser if `skyuxLaunch` is set to "local"', async () => {
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'local'
-      });
-
-      await (mock.reRequire('./dev-server'));
-
-      const actualOptions = getActualOptions();
-
-      expect(actualOptions.open).toEqual(true);
     });
 
   });
@@ -205,21 +148,7 @@ describe('dev-server builder', () => {
 
     it('should add `SkyuxOpenHostUrlPlugin` to webpack plugins', async () => {
       await (mock.reRequire('./dev-server'));
-
-      let plugin = getOpenHostUrlPlugin();
-
-      expect(plugin).toBeUndefined(
-        'Expected the plugin not to be included by default.'
-      );
-
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'host'
-      });
-
-      await (mock.reRequire('./dev-server'));
-
-      plugin = getOpenHostUrlPlugin();
-
+      const plugin = getOpenHostUrlPlugin();
       expect(plugin).toBeDefined();
     });
 
@@ -235,10 +164,6 @@ describe('dev-server builder', () => {
       mockSkyuxConfig.app = {
         externals
       };
-
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'host'
-      });
 
       await (mock.reRequire('./dev-server'));
 
@@ -262,10 +187,6 @@ describe('dev-server builder', () => {
         ]
       };
 
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'host'
-      });
-
       await (mock.reRequire('./dev-server'));
 
       expect(actualWebpackConfig.plugins?.length).toEqual(3);
@@ -281,9 +202,6 @@ describe('dev-server builder', () => {
       );
 
       mockContext.target.configuration = 'e2e';
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'host'
-      });
 
       await (mock.reRequire('./dev-server'));
 
@@ -294,9 +212,6 @@ describe('dev-server builder', () => {
       );
 
       mockContext.target.configuration = 'e2eProduction';
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'host'
-      });
 
       await (mock.reRequire('./dev-server'));
 
@@ -309,9 +224,6 @@ describe('dev-server builder', () => {
 
     it('should pass Host URL to `SkyuxProtractorPlugin`', async () => {
       mockContext.target.configuration = 'e2e';
-      defaultOptions = overrideOptions({
-        skyuxLaunch: 'host'
-      });
 
       await (mock.reRequire('./dev-server'));
 
