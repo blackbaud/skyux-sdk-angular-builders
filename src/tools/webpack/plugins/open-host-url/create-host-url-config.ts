@@ -35,6 +35,6 @@ export interface SkyuxCreateHostUrlConfig {
   /**
    * An array of CSS file names to inject into Host's index.html file.
    */
-  styleSheets?: SkyuxHostAsset[];
+  stylesheets?: SkyuxHostAsset[];
 
 }

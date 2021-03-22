@@ -25,10 +25,10 @@ export function getHostAssets(
   }
 ): {
   scripts: SkyuxHostAsset[];
-  styleSheets: SkyuxHostAsset[];
+  stylesheets: SkyuxHostAsset[];
 } {
   const scripts: SkyuxHostAsset[] = [];
-  const styleSheets: SkyuxHostAsset[] = [];
+  const stylesheets: SkyuxHostAsset[] = [];
 
   const isJavaScript = (filepath: string) => /\.js$/.test(filepath);
   const isCss = (filepath: string) => /\.css$/.test(filepath);
@@ -40,9 +40,9 @@ export function getHostAssets(
     chunks
       .filter(chunk => isCss(chunk.files[0]))
       .forEach(chunk => {
-        styleSheets.push({
+        stylesheets.push({
           name: chunk.files[0],
-          type: SkyuxHostAssetType.StyleSheet
+          type: SkyuxHostAssetType.Stylesheet
         });
       });
 
@@ -78,6 +78,6 @@ export function getHostAssets(
 
   return {
     scripts,
-    styleSheets
+    stylesheets
   };
 }

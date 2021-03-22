@@ -84,10 +84,10 @@ describe('create host url', () => {
       }
     ];
 
-    defaultHostConfig.styleSheets = [
+    defaultHostConfig.stylesheets = [
       {
         name: 'styles.css',
-        type: SkyuxHostAssetType.StyleSheet
+        type: SkyuxHostAssetType.Stylesheet
       }
     ];
 
@@ -101,10 +101,10 @@ describe('create host url', () => {
           type: SkyuxHostAssetType.Script
         }
       ],
-      styleSheets: [
+      stylesheets: [
         {
           name: 'styles.css',
-          type: SkyuxHostAssetType.StyleSheet
+          type: SkyuxHostAssetType.Stylesheet
         }
       ],
       host: {

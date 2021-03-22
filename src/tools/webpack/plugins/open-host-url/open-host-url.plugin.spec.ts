@@ -85,7 +85,7 @@ describe('open host url webpack plugin', () => {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [],
-      styleSheets: []
+      stylesheets: []
     });
   });
 
@@ -137,7 +137,7 @@ describe('open host url webpack plugin', () => {
           type: SkyuxHostAssetType.Script
         }
       ],
-      styleSheets: []
+      stylesheets: []
     });
   });
 
@@ -174,10 +174,10 @@ describe('open host url webpack plugin', () => {
           type: SkyuxHostAssetType.Script
         }
       ],
-      styleSheets: [
+      stylesheets: [
         {
           name: 'styles.css',
-          type: SkyuxHostAssetType.StyleSheet
+          type: SkyuxHostAssetType.Stylesheet
         }
       ]
     });
@@ -229,7 +229,7 @@ describe('open host url webpack plugin', () => {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [],
-      styleSheets: []
+      stylesheets: []
     });
   });
 

@@ -96,7 +96,7 @@ describe('save metadata webpack plugin', () => {
         },
         {
           name: 'styles.css',
-          type: 'styleSheet'
+          type: 'stylesheet'
         }
       ],
       {

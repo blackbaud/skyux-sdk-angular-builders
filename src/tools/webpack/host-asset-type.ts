@@ -1,6 +1,6 @@
 export const enum SkyuxHostAssetType {
 
-  StyleSheet = 'styleSheet',
+  Stylesheet = 'stylesheet',
 
   Script = 'script'
 

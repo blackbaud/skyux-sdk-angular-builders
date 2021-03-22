@@ -39,7 +39,7 @@ export class SkyuxSaveHostMetadataPlugin {
 
       fs.writeJsonSync(
         path.join(stats.outputPath!, 'metadata.json'),
-        assets.scripts.concat(assets.styleSheets),
+        assets.scripts.concat(assets.stylesheets),
         {
           spaces: 2
         }
