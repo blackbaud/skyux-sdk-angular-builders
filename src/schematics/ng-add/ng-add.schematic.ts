@@ -84,14 +84,12 @@ async function modifyAngularJson(
     architectConfig.serve.configurations!.e2e = {
       browserTarget: `${projectName}:build`,
       open: false,
-      skyuxOpen: false,
-      skyuxLaunch: 'host'
+      skyuxOpen: false
     } as SkyuxDevServerBuilderOptions;
     architectConfig.serve.configurations!.e2eProduction = {
       browserTarget: `${projectName}:build:production`,
       open: false,
-      skyuxOpen: false,
-      skyuxLaunch: 'host'
+      skyuxOpen: false
     } as SkyuxDevServerBuilderOptions;
   } else {
     throw new SchematicsException(

@@ -58,35 +58,33 @@ function getDevServerWepbackConfigTransformer(
 
     webpackConfig.plugins = webpackConfig.plugins || [];
 
-    if (options.skyuxLaunch === 'host') {
-      const openHostUrlPlugin = new SkyuxOpenHostUrlPlugin({
-        externals: skyuxConfig.app?.externals,
-        host: skyuxConfig.host,
-        localUrl,
-        open: options.skyuxOpen!,
-        pathName: context.target!.project!
-      });
+    const openHostUrlPlugin = new SkyuxOpenHostUrlPlugin({
+      externals: skyuxConfig.app?.externals,
+      host: skyuxConfig.host,
+      localUrl,
+      open: options.skyuxOpen!,
+      pathName: context.target!.project!
+    });
 
+    webpackConfig.plugins.push(
+      openHostUrlPlugin
+    );
+
+    /**
+     * If we're running e2e tests, add the Protractor Webpack plugin.
+     */
+    const configurationName = context.target!.configuration;
+    if (
+      configurationName === 'e2e' ||
+      configurationName === 'e2eProduction'
+    ) {
       webpackConfig.plugins.push(
-        openHostUrlPlugin
+        new SkyuxProtractorPlugin({
+          hostUrlFactory: () => {
+            return openHostUrlPlugin.$hostUrl.pipe(take(1)).toPromise();
+          }
+        })
       );
-
-      /**
-       * If we're running e2e tests, add the Protractor Webpack plugin.
-       */
-      const configurationName = context.target!.configuration;
-      if (
-        configurationName === 'e2e' ||
-        configurationName === 'e2eProduction'
-      ) {
-        webpackConfig.plugins.push(
-          new SkyuxProtractorPlugin({
-            hostUrlFactory: () => {
-              return openHostUrlPlugin.$hostUrl.pipe(take(1)).toPromise();
-            }
-          })
-        );
-      }
     }
 
     applyAppAssetsWebpackConfig(webpackConfig, localUrl);
