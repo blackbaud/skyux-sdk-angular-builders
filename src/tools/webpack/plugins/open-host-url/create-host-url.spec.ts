@@ -5,6 +5,10 @@ import {
 } from '../../../../shared/skyux-config';
 
 import {
+  SkyuxHostAssetType
+} from '../../host-asset-type';
+
+import {
   SkyuxCreateHostUrlConfig
 } from './create-host-url-config';
 
@@ -70,12 +74,20 @@ describe('create host url', () => {
     expect(decode(actualUrl).host).toEqual(hostConfig);
   });
 
-  it('should send scripts to SKY UX Host', () => {
+  it('should send scripts and style sheets to SKY UX Host', () => {
     const { createHostUrl } = mock.reRequire('./create-host-url');
 
     defaultHostConfig.scripts = [
       {
-        name: 'main.ts'
+        name: 'main.js',
+        type: SkyuxHostAssetType.Script
+      }
+    ];
+
+    defaultHostConfig.stylesheets = [
+      {
+        name: 'styles.css',
+        type: SkyuxHostAssetType.Stylesheet
       }
     ];
 
@@ -84,7 +96,16 @@ describe('create host url', () => {
     expect(decode(actualUrl)).toEqual({
       localUrl: 'https://localhost:4200/',
       scripts: [
-        { name: 'main.ts' }
+        {
+          name: 'main.js',
+          type: SkyuxHostAssetType.Script
+        }
+      ],
+      stylesheets: [
+        {
+          name: 'styles.css',
+          type: SkyuxHostAssetType.Stylesheet
+        }
       ],
       host: {
         url: 'https://host.nxt.blackbaud.com/'

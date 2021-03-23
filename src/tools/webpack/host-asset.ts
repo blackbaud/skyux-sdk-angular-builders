@@ -1,3 +1,7 @@
+import {
+  SkyuxHostAssetType
+} from './host-asset-type';
+
 export interface SkyuxHostAsset {
 
   /**
@@ -16,5 +20,10 @@ export interface SkyuxHostAsset {
    * The name of the file.
    */
   name: string;
+
+  /**
+   * The type of asset.
+   */
+  type: SkyuxHostAssetType;
 
 }

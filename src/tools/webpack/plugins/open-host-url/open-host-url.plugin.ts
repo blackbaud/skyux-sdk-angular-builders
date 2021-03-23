@@ -54,7 +54,8 @@ export class SkyuxOpenHostUrlPlugin {
           host: this.config.host,
           localUrl: this.config.localUrl,
           rootElementTagName: 'app-root',
-          scripts: assets
+          scripts: assets.scripts,
+          stylesheets: assets.stylesheets
         };
 
         if (this.config.externals) {
