@@ -66,6 +66,9 @@ describe('save metadata webpack plugin', () => {
             {
               initial: false,
               files: ['default~app-module~app-module~mo~0d131e23.js']
+            },
+            {
+              files: ['styles.css']
             }
           ],
           outputPath: './dist'
@@ -82,12 +85,18 @@ describe('save metadata webpack plugin', () => {
         {
           name: 'main.js',
           initial: true,
-          fallback: 'SKY_PAGES_READY_MAIN_JS'
+          fallback: 'SKY_PAGES_READY_MAIN_JS',
+          type: 'script'
         },
         {
           name: 'default~app-module~app-module~mo~0d131e23.js',
           initial: false,
-          fallback: 'SKY_PAGES_READY_DEFAULT_APP_MODULE_APP_MODULE_MO_0D131E23_JS'
+          fallback: 'SKY_PAGES_READY_DEFAULT_APP_MODULE_APP_MODULE_MO_0D131E23_JS',
+          type: 'script'
+        },
+        {
+          name: 'styles.css',
+          type: 'stylesheet'
         }
       ],
       {
