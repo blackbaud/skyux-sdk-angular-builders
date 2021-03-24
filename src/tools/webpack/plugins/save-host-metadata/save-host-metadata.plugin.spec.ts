@@ -54,7 +54,9 @@ describe('save metadata webpack plugin', () => {
         'main.js': {
           source: () => '[main content here]'
         },
-        'styles.css': {}
+        'styles.css': {
+          source: () => ''
+        }
       },
       toJson: () => {
         return {
@@ -96,7 +98,12 @@ describe('save metadata webpack plugin', () => {
         },
         {
           name: 'styles.css',
-          type: 'stylesheet'
+          type: 'stylesheet',
+          fallbackStylesheet: {
+            class: 'sky-pages-ready-styles-css',
+            property: 'visibility',
+            value: 'hidden'
+          }
         }
       ],
       {
