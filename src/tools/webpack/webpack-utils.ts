@@ -2,22 +2,26 @@ import path from 'path';
 
 import webpack from 'webpack';
 
-type AssetSourceCallback = (content: string, filePath: string) => string;
+import {
+  ConcatSource
+} from 'webpack-sources';
 
-interface CompilationAsset {
-  source: () => string;
-};
+type AssetSourceCallback = (content: string, filePath: string) => string;
 
 function modifyChunkContents(
   fileExtension: 'css' | 'js',
   compilation: webpack.compilation.Compilation,
   callback: AssetSourceCallback
 ): void {
-  const assets: [string, CompilationAsset][] = Object.entries(compilation.assets);
-  for (const [filePath, asset] of assets) {
+  const filePaths = Object.keys(compilation.assets);
+
+  for (const filePath of filePaths) {
     if (path.parse(filePath).ext === `.${fileExtension}`) {
-      const content = asset.source();
-      asset.source = () => callback(content, filePath);
+      compilation.updateAsset(filePath, old => {
+        return new ConcatSource(
+          callback(old.source(), filePath)
+        );
+      });
     }
   }
 }

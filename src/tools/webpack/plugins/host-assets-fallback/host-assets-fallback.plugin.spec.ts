@@ -1,27 +1,49 @@
 import mock from 'mock-require';
 
 import {
+  ConcatSource
+} from 'webpack-sources';
+
+import {
   SkyuxHostAssetsFallbackPlugin
 } from './host-assets-fallback.plugin';
 
 describe('host assets fallback webpack plugin', () => {
 
+  let mockAssets: {[filePath: string]: {
+    source: () => string;
+  }};
+
   let mockCompiler: any;
+
+  let assetsToUpdate: {
+    [filePath: string]: (
+      asset: {
+        source: () => string;
+      }
+    ) => ConcatSource;
+  };
 
   afterEach(() => {
     mock.stopAll();
   });
   
-  function setupTest(mockAssets: any): void {
-    const mockStats = {
-      assets: mockAssets
+  function setupTest(assets: any): void {
+    assetsToUpdate = {};
+    mockAssets = assets;
+
+    const mockCompilation = {
+      assets,
+      updateAsset: (filePath: string, cb: () => ConcatSource) => {
+        assetsToUpdate[filePath] = cb;
+      }
     };
     
     mockCompiler = {
       hooks: {
         emit: {
-          tap(_pluginName: string, callback: (stats: any) => void) {
-            callback(mockStats);
+          tap(_pluginName: string, callback: (compilation: any) => void) {
+            callback(mockCompilation);
           }
         }
       }
@@ -33,39 +55,38 @@ describe('host assets fallback webpack plugin', () => {
     return new SkyuxHostAssetsFallbackPlugin('my-project');
   }
 
+  // Simulate Webpack calling the source callback.
+  function getAssetContent(fileName: string): string {
+    return assetsToUpdate[fileName](
+      mockAssets[fileName]
+    ).source();
+  }
+
   it('should add a fallback variable to the end of a JavaScript file\'s source', () => {
-    const mockAssets = {
+    setupTest({
       'main.js': {
         source: () => '[main content here]'
       }
-    };
-    
-    setupTest(mockAssets);
+    });
 
     const plugin = getPlugin();
     plugin.apply(mockCompiler);
 
-    // Simulate Webpack calling the source callback.
-    const content = mockAssets['main.js'].source();
-
+    const content = getAssetContent('main.js');
     expect(content).toEqual('[main content here]\nvar SKY_PAGES_READY_MAIN_JS = true;');
   });
   
   it('should add a fallback CSS rule to the end of a CSS file\'s source', () => {
-    const mockAssets = {
+    setupTest({
       'styles.css': {
         source: () => '[main content here]'
       }
-    };
-    
-    setupTest(mockAssets);
+    });
 
     const plugin = getPlugin();
     plugin.apply(mockCompiler);
 
-    // Simulate Webpack calling the source callback.
-    const content = mockAssets['styles.css'].source();
-
+    const content = getAssetContent('styles.css');
     expect(content).toEqual('[main content here]\n.sky-pages-ready-styles-css {visibility:hidden;}');
   });
 
