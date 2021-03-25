@@ -89,9 +89,11 @@ describe('save metadata webpack plugin', () => {
         {
           name: 'styles.css',
           type: 'stylesheet',
-          fallbackStylesheetClass: 'sky-pages-ready-styles-css',
-          fallbackStylesheetProperty: 'visibility',
-          fallbackStylesheetValue: 'hidden'
+          fallbackStylesheet: {
+            class: 'sky-pages-ready-styles-css',
+            property: 'visibility',
+            value: 'hidden'
+          }
         }
       ],
       {

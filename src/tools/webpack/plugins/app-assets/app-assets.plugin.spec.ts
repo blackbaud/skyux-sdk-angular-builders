@@ -50,6 +50,11 @@ describe('Asset URLs plugin', () => {
         emit: {
           tap(_pluginName: string, callback: (compilation: any) => void) {
             callback(mockCompilation);
+
+            // Simulate Webpack emitting all assets.
+            for (const fileName of Object.keys(mockCompilation.assets)) {
+              mockCompilation.assets[fileName].source();
+            }
           }
         }
       }

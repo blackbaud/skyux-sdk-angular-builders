@@ -14,9 +14,11 @@ export interface SkyuxHostAsset {
    * The CSS fallback rule to test if the style sheet file has loaded.
    * @see: https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/built-in/link-tag-helper
    */
-  fallbackStylesheetClass?: string;
-  fallbackStylesheetProperty?: string;
-  fallbackStylesheetValue?: string;
+  fallbackStylesheet?: {
+    class: string;
+    property: string;
+    value: string;
+  };
 
   /**
    * Specifies if the chunk is the main chunk for the entry point.
