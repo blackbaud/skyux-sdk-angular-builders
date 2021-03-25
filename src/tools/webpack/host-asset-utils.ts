@@ -63,11 +63,9 @@ export function getHostAssets(
         };
 
         if (config?.includeFallback) {
-          stylesheet.fallbackStylesheet = {
-            class: getFallbackCssClassName(fileName),
-            property: FALLBACK_CSS_PROPERTY,
-            value: FALLBACK_CSS_VALUE
-          };
+          stylesheet.fallbackStylesheetClass = getFallbackCssClassName(fileName);
+          stylesheet.fallbackStylesheetProperty = FALLBACK_CSS_PROPERTY;
+          stylesheet.fallbackStylesheetValue = FALLBACK_CSS_VALUE;
         }
 
         stylesheets.push(stylesheet);

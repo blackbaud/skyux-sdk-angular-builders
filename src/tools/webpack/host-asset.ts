@@ -5,20 +5,18 @@ import {
 export interface SkyuxHostAsset {
 
   /**
-   * The name of the global "fallback" variable to test if the asset file has loaded.
-   * @see: https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/built-in/link-tag-helper
+   * The name of the global "fallback" variable to test if the JavaScript file has loaded.
+   * @see: https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/built-in/script-tag-helper
    */
   fallback?: string;
 
   /**
-   * The name of the global "fallback" variable to test if the asset file has loaded.
+   * The CSS fallback rule to test if the style sheet file has loaded.
    * @see: https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/built-in/link-tag-helper
    */
-  fallbackStylesheet?: {
-    class: string;
-    property: string;
-    value: string;
-  };
+  fallbackStylesheetClass?: string;
+  fallbackStylesheetProperty?: string;
+  fallbackStylesheetValue?: string;
 
   /**
    * Specifies if the chunk is the main chunk for the entry point.
