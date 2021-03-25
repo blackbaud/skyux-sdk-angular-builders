@@ -1,32 +1,16 @@
 import mock from 'mock-require';
 
+import {
+  SkyuxSaveHostMetadataPlugin
+} from './save-host-metadata.plugin';
+
 describe('save metadata webpack plugin', () => {
 
   let writeJsonSpy: jasmine.Spy;
   let mockCompiler: any;
-  let mockStats: any;
 
   beforeEach(() => {
     writeJsonSpy = jasmine.createSpy('writeJsonSync');
-
-    mockStats = {
-      toJson: () => ({})
-    };
-
-    mockCompiler = {
-      hooks: {
-        done: {
-          tap(_pluginName: string, callback: (stats: any) => void) {
-            callback(mockStats);
-          }
-        },
-        emit: {
-          tap(_pluginName: string, callback: (stats: any) => void) {
-            callback(mockStats);
-          }
-        }
-      }
-    };
 
     mock('fs-extra', {
       writeJsonSync: writeJsonSpy
@@ -36,8 +20,29 @@ describe('save metadata webpack plugin', () => {
   afterEach(() => {
     mock.stopAll();
   });
+  
+  function setupTest(mockChunks: any[]): void {
+    const mockStats = {
+      toJson: () => {
+        return {
+          chunks: mockChunks,
+          outputPath: './dist'
+        };
+      }
+    };
+    
+    mockCompiler = {
+      hooks: {
+        done: {
+          tap(_pluginName: string, callback: (stats: any) => void) {
+            callback(mockStats);
+          }
+        }
+      }
+    };
+  }
 
-  function getPlugin(): typeof SkyuxSaveHostMetadataPlugin {
+  function getPlugin(): SkyuxSaveHostMetadataPlugin {
     const SkyuxSaveHostMetadataPlugin = mock.reRequire('./save-host-metadata.plugin').SkyuxSaveHostMetadataPlugin;
 
     const plugin = new SkyuxSaveHostMetadataPlugin('my-project', {
@@ -49,34 +54,19 @@ describe('save metadata webpack plugin', () => {
   }
 
   it('should write metadata.json file', () => {
-    mockStats = {
-      assets: {
-        'main.js': {
-          source: () => '[main content here]'
-        },
-        'styles.css': {
-          source: () => ''
-        }
+    setupTest([
+      {
+        initial: true,
+        files: ['main.js']
       },
-      toJson: () => {
-        return {
-          chunks: [
-            {
-              initial: true,
-              files: ['main.js']
-            },
-            {
-              initial: false,
-              files: ['default~app-module~app-module~mo~0d131e23.js']
-            },
-            {
-              files: ['styles.css']
-            }
-          ],
-          outputPath: './dist'
-        };
+      {
+        initial: false,
+        files: ['default~app-module~app-module~mo~0d131e23.js']
+      },
+      {
+        files: ['styles.css']
       }
-    };
+    ]);
 
     const plugin = getPlugin();
     plugin.apply(mockCompiler);
@@ -110,37 +100,6 @@ describe('save metadata webpack plugin', () => {
         spaces: 2
       }
     );
-  });
-
-  it('should add a fallback variable to the end of a JavaScript file\'s source', () => {
-    const mockAssets = {
-      'main.js': {
-        source: () => '[main content here]'
-      }
-    };
-
-    mockStats = {
-      assets: mockAssets,
-      toJson: () => {
-        return {
-          chunks: [
-            {
-              initial: true,
-              files: ['main.js']
-            }
-          ],
-          outputPath: './dist'
-        };
-      }
-    };
-
-    const plugin = getPlugin();
-    plugin.apply(mockCompiler);
-
-    // Simulate Webpack calling the source callback.
-    const content = mockAssets['main.js'].source();
-
-    expect(content).toEqual('[main content here]\nvar SKY_PAGES_READY_MAIN_JS = true;');
   });
 
 });
