@@ -27,7 +27,7 @@ export class SkyuxHostAssetsFallbackPlugin {
         (content, file) => `${content}\nvar ${getFallbackTestVariable(file)} = true;`
       );
 
-      // Add a fallback class name to each CSS file.
+      // Add a fallback CSS rule to the bottom of each style sheet.
       modifyStylesheetContents(
         compilation,
         (content, file) => `${content}\n${getFallbackTestCssRule(file)}`
