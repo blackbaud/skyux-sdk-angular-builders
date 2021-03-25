@@ -5,12 +5,12 @@ import {
 /**
  * Creates the SKY UX Host URL.
  * @param baseUrl The base SKY UX Host URL, including the protocol.
- * @param pathName The URL-friendly pathname where the project will be served.
+ * @param baseHref The URL-friendly base HREF where the project will be served.
  * @param config Configuration that will be sent to the host server.
  */
  export function createHostUrl(
   baseUrl: string,
-  pathName: string,
+  baseHref: string,
   config: SkyuxCreateHostUrlConfig
 ): string {
   // We need to URL-encode the config so that characters such as '+'
@@ -19,5 +19,5 @@ import {
     Buffer.from(JSON.stringify(config)).toString('base64')
   );
 
-  return `${baseUrl}${pathName}/?local=true&_cfg=${configEncoded}`;
+  return `${baseUrl}${baseHref}/?local=true&_cfg=${configEncoded}`;
 }
