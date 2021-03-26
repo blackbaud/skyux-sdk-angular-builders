@@ -8,7 +8,7 @@ export interface SkyuxOpenHostUrlPluginConfig {
   /**
    * The unique base HREF of the SPA, e.g. 'my-spa'.
    */
-   baseHref: string;
+  baseHref: string;
 
   externals?: SkyuxConfigAppExternals;
 
