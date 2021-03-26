@@ -6,13 +6,9 @@ import {
   SkyuxConfig
 } from './skyux-config';
 
-import {
-  ensureTrailingSlash
-} from './url-utils';
-
 const DEFAULTS: SkyuxConfig = {
   host: {
-    url: 'https://host.nxt.blackbaud.com/'
+    url: 'https://host.nxt.blackbaud.com'
   }
 };
 
@@ -26,7 +22,10 @@ export function getSkyuxConfig(): SkyuxConfig {
     fs.readJsonSync('skyuxconfig.json')
   );
 
-  skyuxConfig.host.url = ensureTrailingSlash(skyuxConfig.host.url);
+  const hostUrl = skyuxConfig.host.url;
+  if (hostUrl.charAt(hostUrl.length - 1) === '/') {
+    throw new Error('The host URL must not end with a forward slash.');
+  }
 
   return skyuxConfig;
 }

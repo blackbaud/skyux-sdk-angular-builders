@@ -30,23 +30,23 @@ describe('skyux config utils', () => {
     const util = mock.reRequire('./skyux-config-utils');
     expect(util.getSkyuxConfig()).toEqual({
       host: {
-        url: 'https://host.nxt.blackbaud.com/'
+        url: 'https://host.nxt.blackbaud.com'
       }
     });
   });
 
-  it('should add trailing slash to host url', () => {
+  it('should throw error if host URL contains trailing slash', () => {
     mockSkyuxConfig = {
-      host: {
-        url: 'https://foo.blackbaud.com'
-      }
-    };
-    const util = mock.reRequire('./skyux-config-utils');
-    expect(util.getSkyuxConfig()).toEqual({
       host: {
         url: 'https://foo.blackbaud.com/'
       }
-    });
+    };
+    const util = mock.reRequire('./skyux-config-utils');
+    expect(() => {
+      util.getSkyuxConfig();
+    }).toThrowError(
+      'The host URL must not end with a forward slash.'
+    );
   });
 
   it('should throw an error if skyuxconfig.json does not exist', () => {

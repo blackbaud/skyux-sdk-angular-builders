@@ -1,4 +1,8 @@
 import {
+  ensureTrailingSlash
+} from '../../../../shared/url-utils';
+
+import {
   SkyuxCreateHostUrlConfig
 } from './create-host-url-config';
 
@@ -18,6 +22,8 @@ import {
   const configEncoded = encodeURIComponent(
     Buffer.from(JSON.stringify(config)).toString('base64')
   );
+
+  baseUrl = ensureTrailingSlash(baseUrl);
 
   return `${baseUrl}${baseHref}/?local=true&_cfg=${configEncoded}`;
 }
