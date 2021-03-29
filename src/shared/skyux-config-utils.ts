@@ -25,7 +25,7 @@ export function getSkyuxConfig(): SkyuxConfig {
   );
 
   const hostUrl = skyuxConfig.host.url;
-  if (hostUrl.charAt(hostUrl.length - 1) === '/') {
+  if (hostUrl.endsWith('/')) {
     throw new Error(
       `[@skyux-sdk/angular-builders] The host URL must not end with a forward slash. You provided: "${hostUrl}"`
     );
