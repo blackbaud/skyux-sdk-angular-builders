@@ -36,16 +36,18 @@ describe('skyux config utils', () => {
   });
 
   it('should throw error if host URL contains trailing slash', () => {
+    const invalidUrl = 'https://foo.blackbaud.com/';
+
     mockSkyuxConfig = {
       host: {
-        url: 'https://foo.blackbaud.com/'
+        url: invalidUrl
       }
     };
     const util = mock.reRequire('./skyux-config-utils');
     expect(() => {
       util.getSkyuxConfig();
     }).toThrowError(
-      'The host URL must not end with a forward slash.'
+      `[@skyux-sdk/angular-builders] The host URL must not end with a forward slash. You provided: "${invalidUrl}"`
     );
   });
 
@@ -53,7 +55,7 @@ describe('skyux config utils', () => {
     fileExists = false;
     const util = mock.reRequire('./skyux-config-utils');
     expect(util.getSkyuxConfig).toThrowError(
-      'A skyuxconfig.json file was not found at the project root.'
+      '[@skyux-sdk/angular-builders] A skyuxconfig.json file was not found at the project root. Did you run `ng add @skyux-sdk/angular-builders`?'
     );
   });
 });

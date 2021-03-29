@@ -14,7 +14,9 @@ const DEFAULTS: SkyuxConfig = {
 
 export function getSkyuxConfig(): SkyuxConfig {
   if (!fs.existsSync('skyuxconfig.json')) {
-    throw new Error('A skyuxconfig.json file was not found at the project root.');
+    throw new Error(
+      '[@skyux-sdk/angular-builders] A skyuxconfig.json file was not found at the project root. Did you run `ng add @skyux-sdk/angular-builders`?'
+    );
   }
 
   const skyuxConfig: SkyuxConfig = mergeWith(
@@ -24,7 +26,9 @@ export function getSkyuxConfig(): SkyuxConfig {
 
   const hostUrl = skyuxConfig.host.url;
   if (hostUrl.charAt(hostUrl.length - 1) === '/') {
-    throw new Error('The host URL must not end with a forward slash.');
+    throw new Error(
+      `[@skyux-sdk/angular-builders] The host URL must not end with a forward slash. You provided: "${hostUrl}"`
+    );
   }
 
   return skyuxConfig;
