@@ -39,7 +39,9 @@ jobs:
         node ./scripts/after-build-success.js --test-dir builders-e2e-app
         cd builders-e2e-app
         ng add ./.skyux-sdk-angular-builders-dist
+        ng version
+        ng test --help
+        ng test --browsers=ChromeHeadless --code-coverage --watch=false
         ng lint
         ng build --prod
-        ng test --browsers=ChromeHeadless --code-coverage --watch=false
         ng e2e
