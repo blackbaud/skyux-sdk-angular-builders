@@ -321,15 +321,13 @@ describe('ng-add.schematic', () => {
       expect(angularJson.projects.foobar.architect.serve.configurations.e2e).toEqual({
         browserTarget: 'foobar:build',
         open: false,
-        skyuxOpen: false,
-        skyuxLaunch: 'host'
+        skyuxOpen: false
       });
 
       expect(angularJson.projects.foobar.architect.serve.configurations.e2eProduction).toEqual({
         browserTarget: 'foobar:build:production',
         open: false,
-        skyuxOpen: false,
-        skyuxLaunch: 'host'
+        skyuxOpen: false
       });
 
       expect(angularJson.projects.foobar.architect.e2e.options.devServerTarget).toEqual('foobar:serve:e2e');

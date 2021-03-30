@@ -5,18 +5,22 @@ import {
 } from '../../../../shared/skyux-config';
 
 import {
+  SkyuxHostAssetType
+} from '../../host-asset-type';
+
+import {
   SkyuxCreateHostUrlConfig
 } from './create-host-url-config';
 
 describe('create host url', () => {
 
   let hostUrl: string;
-  let pathName: string;
+  let baseHref: string;
   let defaultHostConfig: SkyuxCreateHostUrlConfig;
 
   beforeEach(() => {
     hostUrl = 'https://host.nxt.blackbaud.com/';
-    pathName = 'my-project';
+    baseHref = 'my-project';
     defaultHostConfig = {
       localUrl: 'https://localhost:4200/',
       host: {
@@ -36,7 +40,7 @@ describe('create host url', () => {
   it('should open the SKY UX Host URL with Host config', () => {
     const { createHostUrl } = mock.reRequire('./create-host-url');
 
-    const actualUrl = createHostUrl(hostUrl, pathName, defaultHostConfig);
+    const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
 
     expect(actualUrl).toEqual(
       'https://host.nxt.blackbaud.com/my-project/?local=true&_cfg=eyJsb2NhbFVybCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAvIiwiaG9zdCI6eyJ1cmwiOiJodHRwczovL2hvc3Qubnh0LmJsYWNrYmF1ZC5jb20vIn19'
@@ -65,26 +69,43 @@ describe('create host url', () => {
 
     defaultHostConfig.host = hostConfig;
 
-    const actualUrl = createHostUrl(hostUrl, pathName, defaultHostConfig);
+    const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
 
     expect(decode(actualUrl).host).toEqual(hostConfig);
   });
 
-  it('should send scripts to SKY UX Host', () => {
+  it('should send scripts and style sheets to SKY UX Host', () => {
     const { createHostUrl } = mock.reRequire('./create-host-url');
 
     defaultHostConfig.scripts = [
       {
-        name: 'main.ts'
+        name: 'main.js',
+        type: SkyuxHostAssetType.Script
       }
     ];
 
-    const actualUrl = createHostUrl(hostUrl, pathName, defaultHostConfig);
+    defaultHostConfig.stylesheets = [
+      {
+        name: 'styles.css',
+        type: SkyuxHostAssetType.Stylesheet
+      }
+    ];
+
+    const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
 
     expect(decode(actualUrl)).toEqual({
       localUrl: 'https://localhost:4200/',
       scripts: [
-        { name: 'main.ts' }
+        {
+          name: 'main.js',
+          type: SkyuxHostAssetType.Script
+        }
+      ],
+      stylesheets: [
+        {
+          name: 'styles.css',
+          type: SkyuxHostAssetType.Stylesheet
+        }
       ],
       host: {
         url: 'https://host.nxt.blackbaud.com/'
@@ -105,7 +126,7 @@ describe('create host url', () => {
 
     defaultHostConfig.externals = externals;
 
-    const actualUrl = createHostUrl(hostUrl, pathName, defaultHostConfig);
+    const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
 
     expect(decode(actualUrl).externals).toEqual(externals);
   });
@@ -115,7 +136,7 @@ describe('create host url', () => {
 
     defaultHostConfig.scripts = [];
 
-    const actualUrl = createHostUrl(hostUrl, pathName, defaultHostConfig);
+    const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
 
     expect(decode(actualUrl)).toEqual({
       localUrl: 'https://localhost:4200/',

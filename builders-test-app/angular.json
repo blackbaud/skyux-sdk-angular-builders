@@ -77,14 +77,12 @@
             "e2e": {
               "browserTarget": "builders-test-app:build",
               "open": false,
-              "skyuxOpen": false,
-              "skyuxLaunch": "host"
+              "skyuxOpen": false
             },
             "e2eProduction": {
               "browserTarget": "builders-test-app:build:production",
               "open": false,
-              "skyuxOpen": false,
-              "skyuxLaunch": "host"
+              "skyuxOpen": false
             }
           }
         },

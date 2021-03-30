@@ -7,7 +7,7 @@ import {
 } from '../../app-assets';
 
 import {
-  modifyBundleContents
+  modifyScriptContents
 } from '../../webpack-utils';
 
 const PLUGIN_NAME = 'skyux-asset-urls-plugin';
@@ -51,7 +51,7 @@ export class SkyuxAppAssetsPlugin {
    * with the hashed file names.
    */
   private replaceAssetPaths(compilation: webpack.compilation.Compilation): void {
-    modifyBundleContents(compilation, (content) => {
+    modifyScriptContents(compilation, (content) => {
       for (const [relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
 
         // Replace HTML attributes.

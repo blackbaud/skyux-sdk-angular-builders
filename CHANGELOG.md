@@ -1,3 +1,11 @@
+# 4.0.0-alpha.25 (2021-03-30)
+
+- Added `params` to `skyuxconfig-schema.json`. [#66](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/66)
+- Updated `SkyuxOpenHostUrlPlugin` to send stylesheets to SKY UX Host. [#67](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/67)
+- Removed the `--skyux-launch` option from `ng serve`. [#68](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/68)
+- Updated `SkyuxHostMetadataPlugin` to append Webpack stylesheet assets to the `metadata.json` file, including fallback tests. [#69](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/69)
+- Fixed the `host.url` property of `skyuxconfig.json` to throw an error if the URL includes a trailing slash. [#70](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/70)
+
 # 4.0.0-alpha.24 (2021-03-16)
 
 - Added support for `@skyux/config@4.4.0`. [#64](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/64)

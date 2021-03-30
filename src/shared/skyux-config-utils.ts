@@ -6,19 +6,17 @@ import {
   SkyuxConfig
 } from './skyux-config';
 
-import {
-  ensureTrailingSlash
-} from './url-utils';
-
 const DEFAULTS: SkyuxConfig = {
   host: {
-    url: 'https://host.nxt.blackbaud.com/'
+    url: 'https://host.nxt.blackbaud.com'
   }
 };
 
 export function getSkyuxConfig(): SkyuxConfig {
   if (!fs.existsSync('skyuxconfig.json')) {
-    throw new Error('A skyuxconfig.json file was not found at the project root.');
+    throw new Error(
+      '[@skyux-sdk/angular-builders] A skyuxconfig.json file was not found at the project root. Did you run `ng add @skyux-sdk/angular-builders`?'
+    );
   }
 
   const skyuxConfig = merge<SkyuxConfig, SkyuxConfig>(
@@ -26,7 +24,12 @@ export function getSkyuxConfig(): SkyuxConfig {
     fs.readJsonSync('skyuxconfig.json')
   );
 
-  skyuxConfig.host.url = ensureTrailingSlash(skyuxConfig.host.url);
+  const hostUrl = skyuxConfig.host.url;
+  if (hostUrl.endsWith('/')) {
+    throw new Error(
+      `[@skyux-sdk/angular-builders] The host URL must not end with a forward slash. You provided: "${hostUrl}"`
+    );
+  }
 
   return skyuxConfig;
 }

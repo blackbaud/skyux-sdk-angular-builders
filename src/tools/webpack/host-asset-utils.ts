@@ -3,47 +3,108 @@ import {
 } from 'webpack';
 
 import {
+  dasherize,
+  underscore
+} from '../../shared/string-utils';
+
+import {
   SkyuxHostAsset
 } from './host-asset';
 
-export function getFallbackName(name: string): string {
-  return `SKY_PAGES_READY_${name.toUpperCase().replace(/(\.|-|~)/g, '_')}`;
+import {
+  SkyuxHostAssetType
+} from './host-asset-type';
+
+const FALLBACK_CSS_PROPERTY = 'visibility';
+const FALLBACK_CSS_VALUE = 'hidden';
+
+function getFallbackCssClassName(fileName: string): string {
+  return `sky-pages-ready-${dasherize(fileName)}`;
 }
 
+export function getFallbackTestCssRule(name: string): string {
+  return `.${getFallbackCssClassName(name)} {${FALLBACK_CSS_PROPERTY}:${FALLBACK_CSS_VALUE};}`;
+}
+
+export function getFallbackTestVariable(name: string): string {
+  return `SKY_PAGES_READY_${underscore(name).toUpperCase()}`;
+}
+
+/**
+ * Returns scripts and style sheet assets from Webpack chunks.
+ */
 export function getHostAssets(
   stats: Stats.ToJsonOutput,
   config?: {
     includeFallback?: boolean;
     includeLazyloadedChunks?: boolean;
   }
-): SkyuxHostAsset[] {
-  const assets: SkyuxHostAsset[] = [];
+): {
+  scripts: SkyuxHostAsset[];
+  stylesheets: SkyuxHostAsset[];
+} {
+  const scripts: SkyuxHostAsset[] = [];
+  const stylesheets: SkyuxHostAsset[] = [];
+
   const isJavaScript = (filepath: string) => /\.js$/.test(filepath);
+  const isCss = (filepath: string) => /\.css$/.test(filepath);
 
-  stats?.chunks?.filter(chunk => {
-    // Only include primary and lazy-loaded scripts.
-    return isJavaScript(chunk.files[0]) &&
-      (chunk.initial || config?.includeLazyloadedChunks);
-  }).forEach(chunk => {
-    const asset: SkyuxHostAsset = {
-      name: chunk.files[0]
-    };
+  const chunks = stats?.chunks;
+  if (chunks) {
 
-    if (config?.includeFallback) {
-      asset.fallback = getFallbackName(asset.name);
-    }
+    // Get style sheets.
+    chunks
+      .filter(chunk => isCss(chunk.files[0]))
+      .forEach(chunk => {
+        const fileName = chunk.files[0];
+        const stylesheet: SkyuxHostAsset = {
+          name: fileName,
+          type: SkyuxHostAssetType.Stylesheet
+        };
 
-    if (config?.includeLazyloadedChunks) {
-      asset.initial = !!chunk.initial;
-    }
+        if (config?.includeFallback) {
+          stylesheet.fallbackStylesheet = {
+            class: getFallbackCssClassName(fileName),
+            property: FALLBACK_CSS_PROPERTY,
+            value: FALLBACK_CSS_VALUE
+          };
+        }
 
-    // Polyfills (and in consequence, `zone.js`) need to be loaded first during AoT builds.
-    if (asset.name.indexOf('polyfill') > -1) {
-      assets.unshift(asset);
-    } else {
-      assets.push(asset);
-    }
-  });
+        stylesheets.push(stylesheet);
+      });
 
-  return assets;
+    // Get scripts.
+    chunks
+      .filter(chunk => {
+        // Only include primary and lazy-loaded scripts.
+        return isJavaScript(chunk.files[0]) &&
+          (chunk.initial || config?.includeLazyloadedChunks);
+      })
+      .forEach(chunk => {
+        const script: SkyuxHostAsset = {
+          name: chunk.files[0],
+          type: SkyuxHostAssetType.Script
+        };
+
+        if (config?.includeFallback) {
+          script.fallback = getFallbackTestVariable(script.name);
+        }
+
+        if (config?.includeLazyloadedChunks) {
+          script.initial = !!chunk.initial;
+        }
+
+        // Polyfills (and in consequence, `zone.js`) need to be loaded first during AoT builds.
+        if (script.name.indexOf('polyfill') > -1) {
+          scripts.unshift(script);
+        } else {
+          scripts.push(script);
+        }
+      });
+  }
+
+  return {
+    scripts,
+    stylesheets
+  };
 }

@@ -5,6 +5,10 @@ import {
 } from 'rxjs/operators';
 
 import {
+  SkyuxHostAssetType
+} from '../../host-asset-type';
+
+import {
   SkyuxOpenHostUrlPluginConfig
 } from './open-host-url-config';
 
@@ -63,7 +67,7 @@ describe('open host url webpack plugin', () => {
         url: hostUrl
       },
       localUrl,
-      pathName: 'my-project'
+      baseHref: 'my-project'
     }, ...options});
 
     return plugin;
@@ -80,7 +84,8 @@ describe('open host url webpack plugin', () => {
       },
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
-      scripts: []
+      scripts: [],
+      stylesheets: []
     });
   });
 
@@ -127,12 +132,16 @@ describe('open host url webpack plugin', () => {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [
-        { name: 'main.js' }
-      ]
+        {
+          name: 'main.js',
+          type: SkyuxHostAssetType.Script
+        }
+      ],
+      stylesheets: []
     });
   });
 
-  it('should only send javascript files', () => {
+  it('should only send javascript and css files', () => {
     const plugin = getPlugin();
 
     mockStats = {
@@ -142,8 +151,11 @@ describe('open host url webpack plugin', () => {
           files: ['main.js']
         },
         {
-          initial: true,
           files: ['styles.css']
+        },
+        {
+          initial: true,
+          files: ['foo.txt']
         }
       ]
     };
@@ -157,7 +169,16 @@ describe('open host url webpack plugin', () => {
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
       scripts: [
-        { name: 'main.js' }
+        {
+          name: 'main.js',
+          type: SkyuxHostAssetType.Script
+        }
+      ],
+      stylesheets: [
+        {
+          name: 'styles.css',
+          type: SkyuxHostAssetType.Stylesheet
+        }
       ]
     });
   });
@@ -182,10 +203,12 @@ describe('open host url webpack plugin', () => {
 
     expect(createSpy.calls.mostRecent().args[2].scripts).toEqual([
       {
-        name: 'polyfills.js'
+        name: 'polyfills.js',
+        type: SkyuxHostAssetType.Script
       },
       {
-        name: 'main.js'
+        name: 'main.js',
+        type: SkyuxHostAssetType.Script
       }
     ]);
   });
@@ -205,7 +228,8 @@ describe('open host url webpack plugin', () => {
       },
       localUrl: 'https://localhost:4200/',
       rootElementTagName: 'app-root',
-      scripts: []
+      scripts: [],
+      stylesheets: []
     });
   });
 

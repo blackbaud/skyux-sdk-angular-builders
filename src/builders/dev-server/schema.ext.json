@@ -1,15 +1,6 @@
 {
   "$schema": "http://json-schema.org/schema",
   "properties": {
-    "skyuxLaunch": {
-      "type": "string",
-      "description": "Opens URL in localhost or with the SKY UX host URL.",
-      "enum": [
-        "local",
-        "host"
-      ],
-      "default": "host"
-    },
     "skyuxOpen": {
       "type": "boolean",
       "description": "Specifies if the SKY UX Host URL should be automatically opened in the user's default browser."
