@@ -4,7 +4,8 @@ const minimist = require('minimist');
 
 const argv = minimist(process.argv.slice(2));
 
-const TEST_DIST = `${argv['test-dir'] || 'builders-test-app'}/.skyux-sdk-angular-builders-dist`;
+const TEST_PROJECT_DIR = argv['test-dir'] || 'builders-test-app';
+const TEST_DIST = `${TEST_PROJECT_DIR}/.skyux-sdk-angular-builders-dist`;
 
 function cleanDist() {
   require('rimraf').sync(path.join(TEST_DIST));
@@ -55,8 +56,10 @@ function mergeBuilderSchemas() {
   ];
 
   schemaConfigs.forEach((config) => {
-    const schemaJson = fs.readJsonSync(path.resolve(config.schemaPath));
-    const baseSchemaJson = fs.readJsonSync(path.resolve(config.baseSchemaPath));
+    const schemaJson = fs.readJsonSync(path.join(config.schemaPath));
+    const baseSchemaJson = fs.readJsonSync(path.join(config.baseSchemaPath));
+
+    console.log('MERGING SCHEMA:', baseSchemaJson.properties, schemaJson.properties);
 
     const newJson = Object.assign({}, baseSchemaJson, schemaJson);
     newJson.properties = Object.assign({}, baseSchemaJson.properties, schemaJson.properties || {});
@@ -72,11 +75,11 @@ function mergeBuilderSchemas() {
 
 function copyDistToNodeModules() {
   fs.copySync(
-    path.resolve(process.cwd(), 'dist'),
-    path.resolve(__dirname, '../', 'builders-test-app', 'node_modules', '@skyux-sdk/angular-builders')
+    path.join(process.cwd(), 'dist'),
+    path.join(__dirname, '../', TEST_PROJECT_DIR, 'node_modules', '@skyux-sdk/angular-builders')
   );
 
-  console.log('Successfully copied `dist` to `builders-test-app/node_modules`');
+  console.log(`Successfully copied 'dist' to '${TEST_PROJECT_DIR}/node_modules'.`);
 }
 
 cleanDist();
