@@ -3,6 +3,11 @@ import {
 } from 'webpack';
 
 import {
+  dasherize,
+  underscore
+} from '../../shared/string-utils';
+
+import {
   SkyuxHostAsset
 } from './host-asset';
 
@@ -10,8 +15,19 @@ import {
   SkyuxHostAssetType
 } from './host-asset-type';
 
-export function getFallbackName(name: string): string {
-  return `SKY_PAGES_READY_${name.toUpperCase().replace(/(\.|-|~)/g, '_')}`;
+const FALLBACK_CSS_PROPERTY = 'visibility';
+const FALLBACK_CSS_VALUE = 'hidden';
+
+function getFallbackCssClassName(fileName: string): string {
+  return `sky-pages-ready-${dasherize(fileName)}`;
+}
+
+export function getFallbackTestCssRule(name: string): string {
+  return `.${getFallbackCssClassName(name)} {${FALLBACK_CSS_PROPERTY}:${FALLBACK_CSS_VALUE};}`;
+}
+
+export function getFallbackTestVariable(name: string): string {
+  return `SKY_PAGES_READY_${underscore(name).toUpperCase()}`;
 }
 
 /**
@@ -40,10 +56,21 @@ export function getHostAssets(
     chunks
       .filter(chunk => isCss(chunk.files[0]))
       .forEach(chunk => {
-        stylesheets.push({
-          name: chunk.files[0],
+        const fileName = chunk.files[0];
+        const stylesheet: SkyuxHostAsset = {
+          name: fileName,
           type: SkyuxHostAssetType.Stylesheet
-        });
+        };
+
+        if (config?.includeFallback) {
+          stylesheet.fallbackStylesheet = {
+            class: getFallbackCssClassName(fileName),
+            property: FALLBACK_CSS_PROPERTY,
+            value: FALLBACK_CSS_VALUE
+          };
+        }
+
+        stylesheets.push(stylesheet);
       });
 
     // Get scripts.
@@ -60,7 +87,7 @@ export function getHostAssets(
         };
 
         if (config?.includeFallback) {
-          script.fallback = getFallbackName(script.name);
+          script.fallback = getFallbackTestVariable(script.name);
         }
 
         if (config?.includeLazyloadedChunks) {

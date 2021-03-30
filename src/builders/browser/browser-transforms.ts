@@ -7,6 +7,10 @@ import {
 } from 'webpack';
 
 import {
+  SkyuxHostAssetsFallbackPlugin
+} from '../../tools/webpack/plugins/host-assets-fallback/host-assets-fallback.plugin';
+
+import {
   SkyuxSaveHostMetadataPlugin
 } from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
 
@@ -30,6 +34,7 @@ function getBrowserWepbackConfigTransformer(
     webpackConfig.plugins = webpackConfig.plugins || [];
 
     webpackConfig.plugins.push(
+      new SkyuxHostAssetsFallbackPlugin(),
       new SkyuxSaveHostMetadataPlugin()
     );
 
