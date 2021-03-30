@@ -1,7 +1,10 @@
 const fs = require('fs-extra');
 const path = require('path');
+const minimist = require('minimist');
 
-const TEST_DIST = 'builders-test-app/.skyux-sdk-angular-builders-dist';
+const argv = minimist(process.argv.slice(2));
+
+const TEST_DIST = `${argv['test-dir'] || 'builders-test-app'}/.skyux-sdk-angular-builders-dist`;
 
 function cleanDist() {
   require('rimraf').sync(path.join(TEST_DIST));

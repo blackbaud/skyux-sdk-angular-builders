@@ -26,11 +26,12 @@ jobs:
         fetch-depth: 5
     - name: Install and run e2e
       run: |
-        npx -p @angular/cli@11 ng new builders-e2e-test --legacy-browsers --routing --strict --style=scss
+        npx -p @angular/cli@11 ng new builders-e2e-app --legacy-browsers --routing --strict --style=scss
         npm ci
-        npm run build
-        cd builders-e2e-test
-        npm run dev-setup
+        node_modules/.bin/tsc -p tsconfig.json
+        node ./scripts/after-build-success.js --test-dir builders-e2e-app
+        cd builders-e2e-app
+        npx -p @angular/cli@11 ng add ./.skyux-sdk-angular-builders-dist
         npx -p @angular/cli@11 ng lint
         npx -p @angular/cli@11 ng build --prod
         npx -p @angular/cli@11 ng test --browsers ChromeHeadless --no-watch
