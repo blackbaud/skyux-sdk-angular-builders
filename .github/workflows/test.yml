@@ -18,3 +18,20 @@ jobs:
         npm ci
         npm run ci
         bash <(curl -s https://codecov.io/bash)
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 5
+    - name: Install and run e2e
+      run: |
+        npm ci
+        npm run build
+        cd builders-test-app
+        npm ci
+        npm run dev-setup
+        ng lint
+        ng build --prod
+        ng test --browsers="ChromeHeadless" --no-watch
+        ng e2e
