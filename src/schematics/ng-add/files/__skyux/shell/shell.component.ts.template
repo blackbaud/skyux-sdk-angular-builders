@@ -21,12 +21,6 @@ import {
 } from 'rxjs/operators';
 
 import {
-  BBOmnibarNavigation,
-  BBOmnibarNavigationItem,
-  BBOmnibarSearchArgs
-} from '@blackbaud/auth-client';
-
-import {
   HelpInitializationService
 } from '@blackbaud/skyux-lib-help';
 
@@ -214,7 +208,7 @@ export class ShellComponent implements OnInit, OnDestroy {
 
   private setOnSearch(omnibarConfig: any): void {
     if (this.searchProvider) {
-      omnibarConfig.onSearch = (searchArgs: BBOmnibarSearchArgs) => {
+      omnibarConfig.onSearch = (searchArgs: any) => {
         return this.searchProvider?.getSearchResults(searchArgs);
       };
     }
@@ -227,7 +221,7 @@ export class ShellComponent implements OnInit, OnDestroy {
         this.startupSvc.config.base.substr(0, this.startupSvc.config.base.length - 1)
       ).toLowerCase();
 
-    let nav: BBOmnibarNavigation;
+    let nav: any;
 
     if (omnibarConfig.nav) {
       nav = omnibarConfig.nav;
@@ -236,7 +230,7 @@ export class ShellComponent implements OnInit, OnDestroy {
       nav = omnibarConfig.nav = {};
     }
 
-    nav.beforeNavCallback = (item: BBOmnibarNavigationItem) => {
+    nav.beforeNavCallback = (item: any) => {
       const url = item.url?.toLowerCase();
 
       if (

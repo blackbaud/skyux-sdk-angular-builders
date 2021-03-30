@@ -20,7 +20,6 @@
     "@angular/platform-browser": "~11.2.7",
     "@angular/platform-browser-dynamic": "~11.2.7",
     "@angular/router": "~11.2.7",
-    "@blackbaud/auth-client": "^2.45.0",
     "@blackbaud/help-client": "^3.0.0",
     "@blackbaud/skyux-lib-help": "^4.0.0",
     "@skyux/assets": "^4.0.0",

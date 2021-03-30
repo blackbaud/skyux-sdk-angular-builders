@@ -248,13 +248,6 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
 
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
-      name: '@blackbaud/auth-client',
-      version: '^2.45.0',
-      overwrite: true
-    });
-
-    addPackageJsonDependency(tree, {
-      type: NodeDependencyType.Default,
       name: '@blackbaud/help-client',
       version: '^3.0.0',
       overwrite: true
@@ -271,13 +264,6 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
       type: NodeDependencyType.Default,
       name: '@skyux/assets',
       version: '^4.0.0',
-      overwrite: true
-    });
-
-    addPackageJsonDependency(tree, {
-      type: NodeDependencyType.Default,
-      name: '@skyux/auth-client-factory',
-      version: '^1.2.0',
       overwrite: true
     });
 
