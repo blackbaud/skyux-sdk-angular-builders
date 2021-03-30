@@ -1,4 +1,4 @@
-import mergeWith from 'lodash.mergewith';
+import merge from 'lodash.merge';
 
 import {
   SkyuxProtractorBuilderEnvironmentConfig
@@ -18,7 +18,7 @@ export function getProtractorEnvironmentConfig(): SkyuxProtractorBuilderEnvironm
  */
 export function applyProtractorEnvironmentConfig(value: SkyuxProtractorBuilderEnvironmentConfig): void {
   const env = getProtractorEnvironmentConfig();
-  const merged = mergeWith(env, value);
+  const merged = merge(env, value);
 
   process.env[environmentVariableName] = JSON.stringify(merged);
 }

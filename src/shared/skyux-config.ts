@@ -6,7 +6,7 @@
 //     port: string;
 //     externals: {};
 //     styles: string[];
-//     themeing: {
+//     theming: {
 //       theme: string;
 //       supportedThemes: string[];
 //     };
@@ -110,9 +110,19 @@ export interface SkyuxConfigHost {
 export interface SkyuxConfig {
   app?: {
     externals?: SkyuxConfigAppExternals;
+    theming?: {
+      theme: string;
+      supportedThemes: string[];
+    };
   };
+
+  auth?: boolean;
 
   codeCoverageThreshold?: 'none' | 'standard' | 'strict';
 
+  help?: {} | boolean;
+
   host: SkyuxConfigHost;
+
+  omnibar?: {} | boolean;
 }

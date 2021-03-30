@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 
-import mergeWith from 'lodash.mergewith';
+import merge from 'lodash.merge';
 
 import {
   SkyuxConfig
@@ -21,7 +21,7 @@ export function getSkyuxConfig(): SkyuxConfig {
     throw new Error('A skyuxconfig.json file was not found at the project root.');
   }
 
-  const skyuxConfig: SkyuxConfig = mergeWith(
+  const skyuxConfig = merge<SkyuxConfig, SkyuxConfig>(
     DEFAULTS,
     fs.readJsonSync('skyuxconfig.json')
   );

@@ -152,6 +152,23 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
   await host.writeFile('tsconfig.json', banner + JSON.stringify(tsConfig, undefined, 2));
 }
 
+async function modifyAppComponentTemplate(host: workspaces.WorkspaceHost): Promise<void> {
+  const path = 'src/app/app.component.html';
+
+  let template = await host.readFile('src/app/app.component.html');
+
+  if (template.indexOf('</app-shell>') < 0) {
+    template = `<!-- SKY UX SHELL SUPPORT - DO NOT REMOVE -->
+<!-- Enables omnibar, help, and other shell components configured in skyuxconfig.json. -->
+<app-shell></app-shell>
+<!-- END SKY UX SHELL SUPPORT -->
+
+${template}`;
+
+    await host.writeFile(path, template);
+  }
+}
+
 /**
  * Fixes an Angular CLI issue with merge strategies.
  * @see https://github.com/angular/angular-cli/issues/11337#issuecomment-516543220
@@ -228,7 +245,29 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await modifyTsConfig(host);
     await modifyKarmaConfig(host, project.root);
     await modifyProtractorConfig(host, project.root);
-    await setupLibraries(host, workspace);
+    await modifyAppComponentTemplate(host);
+    setupLibraries(host, workspace);
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@blackbaud/auth-client',
+      version: '^2.45.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@blackbaud/help-client',
+      version: '^3.0.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@blackbaud/skyux-lib-help',
+      version: '^4.0.0',
+      overwrite: true
+    });
 
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
@@ -239,8 +278,43 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
 
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
+      name: '@skyux/auth-client-factory',
+      version: '^1.2.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
       name: '@skyux/config',
       version: '^4.4.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/core',
+      version: '^4.4.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/i18n',
+      version: '^4.0.3',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/omnibar-interop',
+      version: '^4.0.1',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/theme',
+      version: '^4.15.3',
       overwrite: true
     });
 
