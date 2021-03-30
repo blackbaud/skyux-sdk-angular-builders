@@ -105,7 +105,9 @@ describe('browser builder', () => {
 
     await (mock.reRequire('./browser'));
 
-    expect(actualWebpackConfig.plugins?.length).toEqual(3);
+    const plugin = actualWebpackConfig.plugins?.find(p => p instanceof MockWebpackPlugin);
+
+    expect(plugin).toBeDefined();
   });
 
 });
