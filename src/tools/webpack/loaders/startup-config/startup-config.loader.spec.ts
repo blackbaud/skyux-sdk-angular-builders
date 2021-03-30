@@ -26,11 +26,11 @@ describe('startup config loader', () => {
         }
       },
       auth: true,
-      help: true,
+      help: {},
       host: {
         url: 'https://example.com'
       },
-      omnibar: true
+      omnibar: {}
     });
 
     const loader = mock.reRequire('./startup-config.loader').default;
@@ -43,9 +43,9 @@ describe('startup config loader', () => {
 
     expect(JSON.parse(result)).toEqual({
       auth: true,
-      base: '/bar/',
-      help: true,
-      omnibar: true,
+      baseHref: '/bar/',
+      help: {},
+      omnibar: {},
       theming: {
         supportedThemes: ['default', 'modern'],
         theme: 'modern'
@@ -69,7 +69,7 @@ describe('startup config loader', () => {
     });
 
     expect(JSON.parse(result)).toEqual({
-      base: '/bar/'
+      baseHref: '/bar/'
     });
   });
 

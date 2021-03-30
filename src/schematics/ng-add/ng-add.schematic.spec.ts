@@ -44,18 +44,6 @@ describe('ng-add.schematic', () => {
     app.overwrite('angular.json', JSON.stringify(content));
   }
 
-  async function validateShellComponentAdded(appComponentHtml: string): Promise<void> {
-    app.overwrite('src/app/app.component.html', appComponentHtml);
-
-    await runSchematic(app, {
-      project: 'foobar'
-    });
-
-    const appTemplate = app.readContent('src/app/app.component.html');
-
-    expect(appTemplate).toContain('<app-shell></app-shell>');
-  }
-
   it('should run the NodePackageInstallTask', async () => {
     await runSchematic(app, {
       project: 'foobar'
@@ -166,6 +154,7 @@ describe('ng-add.schematic', () => {
       project: 'foobar'
     });
 
+
     const skyuxconfigJson = JSON.parse(app.readContent('skyuxconfig.json'));
     expect(skyuxconfigJson).toEqual({
       $schema: './node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json'
@@ -193,12 +182,50 @@ describe('ng-add.schematic', () => {
     expect(app.readContent('src/app/__skyux/skyux.module.ts')).not.toEqual('foobar');
   });
 
-  it('should add the shell component to the app component template', async () => {
-    validateShellComponentAdded('');
+  it('should wrap the app component template with the shell component', async () => {
+
+    app.overwrite(
+      'src/app/app.component.html',
+`<div>
+  Some text
+
+  <span>Some more text</span>
+
+
+</div>`);
+
+    await runSchematic(app, {
+      project: 'foobar'
+    });
+
+    const appTemplate = app.readContent('src/app/app.component.html');
+
+    expect(appTemplate).toBe(
+`<!-- SKY UX SHELL SUPPORT - DO NOT REMOVE -->
+<!-- Enables omnibar, help, and other shell components configured in skyuxconfig.json. -->
+<skyux-app-shell>
+  <div>
+    Some text
+
+    <span>Some more text</span>
+
+
+  </div>
+</skyux-app-shell>
+`
+    );
   });
 
   it('should not add the shell component to the app component template if it is already present', async () => {
-    validateShellComponentAdded('<app-shell></app-shell>');
+    app.overwrite('src/app/app.component.html', '<skyux-app-shell></skyux-app-shell>');
+
+    await runSchematic(app, {
+      project: 'foobar'
+    });
+
+    const appTemplate = app.readContent('src/app/app.component.html');
+
+    expect(appTemplate).toBe('<skyux-app-shell></skyux-app-shell>');
   });
 
   describe('serve', () => {

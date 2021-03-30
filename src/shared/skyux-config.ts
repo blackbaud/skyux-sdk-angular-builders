@@ -120,9 +120,9 @@ export interface SkyuxConfig {
 
   codeCoverageThreshold?: 'none' | 'standard' | 'strict';
 
-  help?: {} | boolean;
+  help?: {};
 
   host: SkyuxConfigHost;
 
-  omnibar?: {} | boolean;
+  omnibar?: {};
 }

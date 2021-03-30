@@ -26,7 +26,7 @@ export default function startupConfigLoader(
 
   return JSON.stringify({
     auth: skyuxConfig.auth,
-    base: `/${options.projectName}/`,
+    baseHref: `/${options.projectName}/`,
     help: skyuxConfig.help,
     omnibar: skyuxConfig.omnibar,
     theming: skyuxConfig.app?.theming

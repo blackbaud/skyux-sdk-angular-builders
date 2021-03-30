@@ -1,10 +1,17 @@
+/* tslint:disable */
+/* istanbul ignore file */
+
+// DO NOT MODIFY
+// This file is handled by the '@skyux-sdk/angular-builders' library.
+
 import {
   Component,
   NgZone,
   OnDestroy,
   OnInit,
   Optional,
-  Renderer2
+  Renderer2,
+  ViewEncapsulation
 } from '@angular/core';
 
 import {
@@ -109,8 +116,10 @@ function fixUpNav(
 }
 
 @Component({
-  selector: 'app-shell',
-  templateUrl: './shell.component.html'
+  selector: 'skyux-app-shell',
+  templateUrl: './shell.component.html',
+  styleUrls: ['./shell.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ShellComponent implements OnInit, OnDestroy {
   public isReady = false;
@@ -218,7 +227,7 @@ export class ShellComponent implements OnInit, OnDestroy {
     const baseUrl: string =
       (
         this.hostConfig.host.url +
-        this.startupSvc.config.base.substr(0, this.startupSvc.config.base.length - 1)
+        this.startupSvc.config.baseHref.substr(0, this.startupSvc.config.baseHref.length - 1)
       ).toLowerCase();
 
     let nav: any;

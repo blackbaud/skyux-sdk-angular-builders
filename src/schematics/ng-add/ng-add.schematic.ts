@@ -115,7 +115,7 @@ async function modifyAngularJson(
     }
   }
 
-  await host.writeFile('angular.json', JSON.stringify(angularJson, undefined, 2));
+  await host.writeFile('angular.json', JSON.stringify(angularJson, undefined, 2) + '\n');
 }
 
 async function modifyKarmaConfig(
@@ -151,19 +151,21 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
 }
 
 async function modifyAppComponentTemplate(host: workspaces.WorkspaceHost): Promise<void> {
-  const path = 'src/app/app.component.html';
+  const templatePath = 'src/app/app.component.html';
 
-  let template = await host.readFile('src/app/app.component.html');
+  let templateHtml = await host.readFile(templatePath);
 
-  if (template.indexOf('</app-shell>') < 0) {
-    template = `<!-- SKY UX SHELL SUPPORT - DO NOT REMOVE -->
+  if (templateHtml.indexOf('</skyux-app-shell>') < 0) {
+    // Indent all non-blank lines by 2 spaces and wrap the contents in the shell component
+    // with a trailing newline.
+    templateHtml = `<!-- SKY UX SHELL SUPPORT - DO NOT REMOVE -->
 <!-- Enables omnibar, help, and other shell components configured in skyuxconfig.json. -->
-<app-shell></app-shell>
-<!-- END SKY UX SHELL SUPPORT -->
+<skyux-app-shell>
+  ${templateHtml.trim().replace(/\n(?!(\n|$))/g, '\n  ')}
+</skyux-app-shell>
+`;
 
-${template}`;
-
-    await host.writeFile(path, template);
+    await host.writeFile(templatePath, templateHtml);
   }
 }
 

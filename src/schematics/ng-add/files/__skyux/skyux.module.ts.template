@@ -1,5 +1,12 @@
+/* tslint:disable */
+/* istanbul ignore file */
+
 // DO NOT MODIFY
 // This file is handled by the '@skyux-sdk/angular-builders' library.
+
+import {
+  CommonModule
+} from '@angular/common';
 
 import {
   ModuleWithProviders,
@@ -48,6 +55,7 @@ import {
     ShellComponent
   ],
   imports: [
+    CommonModule,
     SkyAppConfigModule.forRoot({
       host: skyuxConfig.host,
       params: skyuxConfig.params
