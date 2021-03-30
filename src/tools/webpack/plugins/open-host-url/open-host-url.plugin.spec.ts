@@ -67,7 +67,7 @@ describe('open host url webpack plugin', () => {
         url: hostUrl
       },
       localUrl,
-      pathName: 'my-project'
+      baseHref: 'my-project'
     }, ...options});
 
     return plugin;

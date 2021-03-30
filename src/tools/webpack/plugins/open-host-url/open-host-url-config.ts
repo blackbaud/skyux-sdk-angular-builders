@@ -5,6 +5,11 @@ import {
 
 export interface SkyuxOpenHostUrlPluginConfig {
 
+  /**
+   * The unique base HREF of the SPA, e.g. 'my-spa'.
+   */
+  baseHref: string;
+
   externals?: SkyuxConfigAppExternals;
 
   host: SkyuxConfigHost;
@@ -18,10 +23,5 @@ export interface SkyuxOpenHostUrlPluginConfig {
    * Specifies if the URL should be opened in the default browser automatically.
    */
   open: boolean;
-
-  /**
-   * The unique pathname of the SPA, e.g. 'my-spa'.
-   */
-  pathName: string;
 
 }

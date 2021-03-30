@@ -63,7 +63,7 @@ function getDevServerWepbackConfigTransformer(
       host: skyuxConfig.host,
       localUrl,
       open: options.skyuxOpen!,
-      pathName: context.target!.project!
+      baseHref: context.target!.project!
     });
 
     webpackConfig.plugins.push(
