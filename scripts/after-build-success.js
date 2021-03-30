@@ -59,7 +59,10 @@ function mergeBuilderSchemas() {
     const schemaJson = fs.readJsonSync(path.join(config.schemaPath));
     const baseSchemaJson = fs.readJsonSync(path.join(config.baseSchemaPath));
 
-    console.log('MERGING SCHEMA:', baseSchemaJson.properties, schemaJson.properties);
+    console.log(
+      '\n===========\nMERGING SCHEMAS:\n', config.schemaPath, '\n', config.baseSchemaPath, '\n', baseSchemaJson.properties, '\n', schemaJson.properties,
+      '\n\n\n\n'
+    );
 
     const newJson = Object.assign({}, baseSchemaJson, schemaJson);
     newJson.properties = Object.assign({}, baseSchemaJson.properties, schemaJson.properties || {});
