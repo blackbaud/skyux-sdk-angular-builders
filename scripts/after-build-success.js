@@ -39,21 +39,20 @@ function mergeBuilderSchema(baseSchemaPath, schemaPath) {
   const schemaJson = fs.readJsonSync(path.join(process.cwd(), schemaPath));
   const baseSchemaJson = fs.readJsonSync(path.join(process.cwd(), baseSchemaPath));
 
+  const newJson = Object.assign({}, baseSchemaJson, schemaJson);
+  newJson.properties = Object.assign({}, baseSchemaJson.properties, schemaJson.properties || {});
+
   console.log(
     '\n===========\nMERGING SCHEMAS:\n',
     baseSchemaPath, '\n',
     schemaPath, '\n',
     baseSchemaJson.properties, '\n',
     schemaJson.properties,
+    newJson.properties, '\n',
     '\n\n\n\n'
   );
 
-  const newJson = Object.assign({}, baseSchemaJson, schemaJson);
-  newJson.properties = Object.assign({}, baseSchemaJson.properties, schemaJson.properties || {});
-
-  fs.writeJsonSync(path.join(process.cwd(), schemaPath), newJson, {
-    spaces: 2
-  });
+  fs.writeJsonSync(path.join(process.cwd(), schemaPath), newJson);
 
   console.log(`Successfully merged ${schemaPath}`);
 }
