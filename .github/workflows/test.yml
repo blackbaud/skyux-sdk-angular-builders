@@ -13,6 +13,9 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 5
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
     - name: Install and run tests
       run: |
         npm ci
@@ -24,15 +27,19 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 5
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
     - name: Install and run e2e
       run: |
-        npx -p @angular/cli@11 ng new builders-e2e-app --legacy-browsers --routing --strict --style=scss
+        npm i -g @angular/cli@11
+        ng new builders-e2e-app --legacy-browsers --routing --strict --style=scss
         npm ci
         node_modules/.bin/tsc -p tsconfig.json
         node ./scripts/after-build-success.js --test-dir builders-e2e-app
         cd builders-e2e-app
-        npx -p @angular/cli@11 ng add ./.skyux-sdk-angular-builders-dist
-        npx -p @angular/cli@11 ng lint
-        npx -p @angular/cli@11 ng build --prod
-        npx -p @angular/cli@11 ng test --browsers=ChromeHeadless --code-coverage --watch=false
-        npx -p @angular/cli@11 ng e2e
+        ng add ./.skyux-sdk-angular-builders-dist
+        ng lint
+        ng build --prod
+        ng test --browsers=ChromeHeadless --code-coverage --watch=false
+        ng e2e
