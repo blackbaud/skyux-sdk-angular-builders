@@ -81,8 +81,30 @@
               }
             }
           }
+        },
+        "theming": {
+          "description": "Specifies the theming capabilities of the application.",
+          "type": "object",
+          "properties": {
+            "theme": {
+              "description": "The visual theme to apply to this application.",
+              "type": "string",
+              "default": "default",
+              "$ref": "#/definitions/availableThemes"
+            },
+            "supportedThemes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/availableThemes"
+              }
+            }
+          }
         }
       }
+    },
+    "auth": {
+      "description": "Indicates whether the application requires an authenticated Blackbaud ID",
+      "type": "boolean"
     },
     "codeCoverageThreshold": {
       "description": "Specifies the minimum required code coverage threshold.",
@@ -91,6 +113,12 @@
         "none",
         "standard",
         "strict"
+      ]
+    },
+    "help": {
+      "description": " Indicates whether to automatically include the help widget in the application to identify the current page and display relevant help content. This property is for internal Blackbaud use only.",
+      "type": [
+        "object"
       ]
     },
     "host": {
@@ -184,6 +212,10 @@
           "default": "https://host.nxt.blackbaud.com"
         }
       }
+    },
+    "omnibar": {
+      "description": "Specifies an object to pass to the omnibar's load method. This property is for internal Blackbaud use only.",
+      "type": "object"
     },
     "params": {
       "description": "Specifies a list of parameters that are allowed at runtime.",
