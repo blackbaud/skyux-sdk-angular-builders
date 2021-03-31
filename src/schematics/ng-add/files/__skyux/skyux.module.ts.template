@@ -13,6 +13,10 @@ import {
 } from '@angular/core';
 
 import {
+  Title
+} from '@angular/platform-browser';
+
+import {
   SkyAppAssetsService
 } from '@skyux/assets';
 
@@ -21,6 +25,7 @@ import {
 } from '@skyux/config';
 
 import {
+  SkyAppTitleService,
   SkyAppWindowRef
 } from '@skyux/core';
 
@@ -45,6 +50,10 @@ import {
 import {
   SkyuxStartupService
 } from './startup.service';
+
+import {
+  SkyAppOmnibarTitleService
+} from './omnibar/omnibar-title.service';
 
 @NgModule({
   declarations: [
@@ -80,6 +89,17 @@ export class SkyuxModule {
 
             return svc;
           }
+        },
+        {
+          provide: SkyAppTitleService,
+          useFactory: (title: Title) => {
+            if (startupConfig.omnibar) {
+              return new SkyAppOmnibarTitleService();
+            }
+
+            return new SkyAppTitleService(title);
+          },
+          deps: [Title]
         }
       ]
     };
