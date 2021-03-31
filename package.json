@@ -17,6 +17,7 @@
     "clean": "rimraf dist",
     "coverage": "nyc npm run test",
     "lint": "tslint --project tsconfig.json",
+    "format-all": "npx prettier --write .",
     "start": "npm run clean && tsc-watch -p tsconfig.json --onSuccess \"npm run postbuild\"",
     "test": "npm run lint && ts-node --project tsconfig.test.json ./node_modules/.bin/jasmine --config=jasmine.json"
   },
