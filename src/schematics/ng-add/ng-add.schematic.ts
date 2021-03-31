@@ -35,6 +35,10 @@ import {
 } from '../../builders/dev-server/dev-server-options';
 
 import {
+  SkyuxConfig
+} from '../../shared/skyux-config';
+
+import {
   addModuleImportToRootModule,
   createHost
 } from '../utils/schematics-utils';
@@ -43,13 +47,37 @@ import {
   SkyuxNgAddOptions
 } from './schema';
 
+async function readJson(
+  host: workspaces.WorkspaceHost,
+  filePath: string
+) {
+  const contents = await host.readFile(filePath);
+  return JSON.parse(contents);
+}
+
+async function getThemeStylesheets(
+  host: workspaces.WorkspaceHost
+): Promise<string[]> {
+  const themeStylesheets = ['@skyux/theme/css/sky.css'];
+
+  const skyuxConfig: SkyuxConfig = await readJson(host, 'skyuxconfig.json');
+  if (skyuxConfig.app?.theming?.supportedThemes) {
+    for (const theme of skyuxConfig.app.theming.supportedThemes) {
+      if (theme !== 'default') {
+        themeStylesheets.push(`@skyux/theme/css/themes/${theme}/styles.css`);
+      }
+    }
+  }
+
+  return themeStylesheets;
+}
+
 async function modifyAngularJson(
   host: workspaces.WorkspaceHost,
   options: SkyuxNgAddOptions
 ): Promise<void> {
   const projectName = options.project;
-  const angularJsonContents = await host.readFile('angular.json');
-  const angularJson = JSON.parse(angularJsonContents);
+  const angularJson = await readJson(host, 'angular.json');
 
   const architectConfig = angularJson.projects[projectName].architect;
   if (!architectConfig) {
@@ -80,7 +108,7 @@ async function modifyAngularJson(
   if (architectConfig.e2e) {
     architectConfig.e2e.builder = '@skyux-sdk/angular-builders:protractor';
     architectConfig.e2e.options!.devServerTarget = `${projectName}:serve:e2e`;
-    architectConfig.e2e.configurations!.production!.devServerTarget = `${projectName}:serve:e2eProduction`
+    architectConfig.e2e.configurations!.production!.devServerTarget = `${projectName}:serve:e2eProduction`;
     architectConfig.serve.configurations!.e2e = {
       browserTarget: `${projectName}:build`,
       open: false,
@@ -114,6 +142,11 @@ async function modifyAngularJson(
       );
     }
   }
+
+  // Add theme stylesheets.
+  const angularStylesheets = architectConfig.build.options.styles.filter((stylesheet: string) => !stylesheet.startsWith('@skyux/theme'));
+  const themeStylesheets = await getThemeStylesheets(host);
+  architectConfig.build.options.styles = themeStylesheets.concat(angularStylesheets);
 
   await host.writeFile('angular.json', JSON.stringify(angularJson, undefined, 2) + '\n');
 }
@@ -183,15 +216,15 @@ async function modifyAppComponentTemplate(host: workspaces.WorkspaceHost): Promi
   });
 }
 
-function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
-
-  // Create an empty skyuxconfig.json file.
+function createSkyuxConfigIfNotExists(tree: Tree) {
   if (!tree.exists('skyuxconfig.json')) {
     tree.create('skyuxconfig.json', JSON.stringify({
       $schema: './node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json'
     }, undefined, 2));
   }
+}
 
+function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
   addModuleImportToRootModule(
     tree,
     'SkyuxModule.forRoot()',
@@ -208,10 +241,10 @@ function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule
   return mergeWith(templateSource, MergeStrategy.Overwrite);
 }
 
-function setupLibraries(
+async function setupLibraries(
   host: workspaces.WorkspaceHost,
   workspace: workspaces.WorkspaceDefinition
-): void {
+): Promise<void> {
   // Modify the karma configs for all libraries.
   workspace.projects.forEach(async project => {
     await modifyKarmaConfig(host, project.root);
@@ -241,12 +274,13 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
       );
     }
 
+    createSkyuxConfigIfNotExists(tree);
     await modifyAngularJson(host, options);
     await modifyTsConfig(host);
     await modifyKarmaConfig(host, project.root);
     await modifyProtractorConfig(host, project.root);
     await modifyAppComponentTemplate(host);
-    setupLibraries(host, workspace);
+    await setupLibraries(host, workspace);
 
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
