@@ -2,6 +2,13 @@
   "$schema": "http://json-schema.org/schema",
   "title": "JSON schema for SKY UX CLI skyuxconfig.json",
   "definitions": {
+    "availableThemes": {
+      "type": "string",
+      "enum": [
+        "default",
+        "modern"
+      ]
+    },
     "externalFileCSS": {
       "type": "object",
       "properties": {
