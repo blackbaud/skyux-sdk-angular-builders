@@ -30,19 +30,27 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - name: Install and run e2e
+    - name: Install dependencies
       run: |
         npm i -g @angular/cli@11 @skyux-sdk/cli
-        npm i --no-save --no-package-lock blackbaud/skyux-sdk-pipeline-settings
-        skyux certs install
-        ng new builders-e2e-app --legacy-browsers --routing --strict --style=scss
         npm ci
+    - name: Install SKY UX certificates
+      run: |
+        skyux certs install
+    - name: Create new Angular CLI application
+      run: |
+        ng new builders-e2e-app --legacy-browsers --routing --strict --style=scss
+    - name: Build `@skyux-sdk/angular-builders`
+      run: |
         node_modules/.bin/tsc -p tsconfig.json
         node ./scripts/after-build-success.js --test-dir builders-e2e-app
         cd builders-e2e-app
         ng add ./.skyux-sdk-angular-builders-dist
         rm -r node_modules/@skyux-sdk/angular-builders
         mv ../dist node_modules/@skyux-sdk/angular-builders
+    - name: Run Angular CLI commands
+      run: |
+        npm i --no-save --no-package-lock blackbaud/skyux-sdk-pipeline-settings
         ng version
         ng lint
         ng build --prod
