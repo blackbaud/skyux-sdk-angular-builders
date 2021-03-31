@@ -75,7 +75,7 @@ function mergeBuilderSchemas() {
 function copyDistToNodeModules() {
   fs.copySync(
     path.join(process.cwd(), 'dist'),
-    path.join(__dirname, '../', TEST_APP_DIR, 'node_modules', '@skyux-sdk/angular-builders')
+    path.join(__dirname, `../${TEST_APP_DIR}/node_modules/@skyux-sdk/angular-builders`)
   );
 
   console.log(`Successfully copied 'dist' to '${TEST_APP_DIR}/node_modules'.`);
