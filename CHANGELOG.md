@@ -1,3 +1,8 @@
+# 4.0.0-alpha.26 (2021-03-31)
+
+- Added the `skyux-app-shell` component which sets up omnibar, help, and other shell components configured in `skyuxconfig.json`. [#72](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/72)
+- Updated the `ng add` schematic to add SKY UX Theme stylesheets to `angular.json`. [#72](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/72)
+
 # 4.0.0-alpha.25 (2021-03-30)
 
 - Added `params` to `skyuxconfig-schema.json`. [#66](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/66)

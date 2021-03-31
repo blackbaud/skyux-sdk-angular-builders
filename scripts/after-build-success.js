@@ -1,7 +1,12 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const TEST_DIST = 'builders-test-app/.skyux-sdk-angular-builders-dist';
+const minimist = require('minimist');
+const argv = minimist(process.argv.slice(2));
+
+// Pass `--test-app-directory=my-dir` to change the testing application directory.
+const TEST_APP_DIR = argv['test-app-directory'] || 'builders-test-app';
+const TEST_DIST = `${TEST_APP_DIR}/.skyux-sdk-angular-builders-dist`;
 
 function cleanDist() {
   require('rimraf').sync(path.join(TEST_DIST));
@@ -69,11 +74,11 @@ function mergeBuilderSchemas() {
 
 function copyDistToNodeModules() {
   fs.copySync(
-    path.resolve(process.cwd(), 'dist'),
-    path.resolve(__dirname, '../', 'builders-test-app', 'node_modules', '@skyux-sdk/angular-builders')
+    path.join(process.cwd(), 'dist'),
+    path.join(__dirname, `../${TEST_APP_DIR}/node_modules/@skyux-sdk/angular-builders`)
   );
 
-  console.log('Successfully copied `dist` to `builders-test-app/node_modules`');
+  console.log(`Successfully copied 'dist' to '${TEST_APP_DIR}/node_modules'.`);
 }
 
 cleanDist();
