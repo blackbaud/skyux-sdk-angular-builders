@@ -32,7 +32,8 @@ jobs:
         node-version: '12.x'
     - name: Install and run e2e
       run: |
-        npm i -g @angular/cli@11
+        npm i -g @angular/cli@11 @skyux-sdk/cli
+        skyux certs install
         ng new builders-e2e-app --legacy-browsers --routing --strict --style=scss
         npm ci
         node_modules/.bin/tsc -p tsconfig.json
