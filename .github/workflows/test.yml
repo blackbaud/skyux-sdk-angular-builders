@@ -13,8 +13,49 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 5
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
     - name: Install and run tests
       run: |
         npm ci
         npm run ci
         bash <(curl -s https://codecov.io/bash)
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 5
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: Install dependencies
+      run: |
+        npm i -g @angular/cli@11 @skyux-sdk/cli
+        npm ci
+    - name: Install SKY UX certificate
+      run: |
+        skyux certs install
+    - name: Create new Angular CLI application
+      run: |
+        ng new builders-e2e-app --legacy-browsers --routing --strict --style=scss
+    - name: Build `@skyux-sdk/angular-builders`
+      run: |
+        node_modules/.bin/tsc -p tsconfig.json
+        node ./scripts/after-build-success.js --test-app-directory builders-e2e-app
+    - name: Add `@skyux-sdk/angular-builders`
+      working-directory: builders-e2e-app
+      run: |
+        ng add ./.skyux-sdk-angular-builders-dist
+        rm -r node_modules/@skyux-sdk/angular-builders
+        mv ../dist node_modules/@skyux-sdk/angular-builders
+    - name: Run Angular CLI commands
+      working-directory: builders-e2e-app
+      run: |
+        npm i --no-save --no-package-lock blackbaud/skyux-sdk-pipeline-settings
+        ng version
+        ng lint
+        ng build --prod
+        ng test --browsers=ChromeHeadless --watch=false --skyux-ci-platform=gh-actions
+        ng e2e --skyux-ci-platform=gh-actions
