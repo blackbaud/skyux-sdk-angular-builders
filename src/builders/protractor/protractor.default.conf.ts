@@ -24,11 +24,15 @@ function mergeConfigs(
   defaults: ProtractorConfig,
   overrides: ProtractorConfig
 ): ProtractorConfig {
-  return mergeWith(defaults, overrides, (defaultValue, overrideValue) => {
-    if (Array.isArray(defaultValue)) {
-      return overrideValue;
+  return mergeWith<ProtractorConfig, ProtractorConfig>(
+    defaults,
+    overrides,
+    (defaultValue, overrideValue) => {
+      if (Array.isArray(defaultValue)) {
+        return overrideValue;
+      }
     }
-  });
+  );
 }
 
 function getConfig(): ProtractorConfig {

@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 
-import mergeWith from 'lodash.mergewith';
+import merge from 'lodash.merge';
 
 import {
   SkyuxConfig
@@ -19,7 +19,7 @@ export function getSkyuxConfig(): SkyuxConfig {
     );
   }
 
-  const skyuxConfig: SkyuxConfig = mergeWith(
+  const skyuxConfig = merge<SkyuxConfig, SkyuxConfig>(
     DEFAULTS,
     fs.readJsonSync('skyuxconfig.json')
   );

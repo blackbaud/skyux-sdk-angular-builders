@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/angular-builders",
-  "version": "4.0.0-alpha.25",
+  "version": "4.0.0-alpha.26",
   "repository": {
     "url": "https://github.com/blackbaud/skyux-sdk-angular-builders"
   },
@@ -26,6 +26,7 @@
   "dependencies": {
     "glob": "7.1.6",
     "hasha": "5.2.2",
+    "lodash.merge": "4.6.2",
     "lodash.mergewith": "4.6.2"
   },
   "devDependencies": {
@@ -41,6 +42,7 @@
     "@types/jasmine": "3.6.9",
     "@types/karma": "5.0.1",
     "@types/loader-utils": "2.0.2",
+    "@types/lodash.merge": "4.6.6",
     "@types/lodash.mergewith": "4.6.6",
     "@types/mock-require": "2.0.0",
     "@types/node": "12.12.6",
