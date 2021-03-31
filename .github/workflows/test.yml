@@ -33,6 +33,7 @@ jobs:
     - name: Install and run e2e
       run: |
         npm i -g @angular/cli@11 @skyux-sdk/cli
+        npm i --no-save --no-package-lock blackbaud/skyux-sdk-pipeline-settings
         skyux certs install
         ng new builders-e2e-app --legacy-browsers --routing --strict --style=scss
         npm ci
@@ -45,6 +46,5 @@ jobs:
         ng version
         ng lint
         ng build --prod
-        ng test --help
-        ng test --browsers=ChromeHeadless --code-coverage --watch=false
-        ng e2e
+        ng test --browsers=ChromeHeadless --watch=false --skyux-ci-platform=gh-actions
+        ng e2e --skyux-ci-platform=gh-actions
