@@ -1,3 +1,7 @@
+# 4.0.0-alpha.27 (2021-03-31)
+
+- Added the `SkyAppOmnibarTitleService`. [#77](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/77)
+
 # 4.0.0-alpha.26 (2021-03-31)
 
 - Added the `skyux-app-shell` component which sets up omnibar, help, and other shell components configured in `skyuxconfig.json`. [#72](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/72)
