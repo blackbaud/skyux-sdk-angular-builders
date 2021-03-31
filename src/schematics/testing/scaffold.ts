@@ -1,6 +1,4 @@
-import {
-  Tree
-} from '@angular-devkit/schematics';
+import { Tree } from '@angular-devkit/schematics';
 
 import {
   SchematicTestRunner,
@@ -19,26 +17,25 @@ export async function createTestApp(
   appTree: UnitTestTree;
   workspaceTree: UnitTestTree;
 }> {
-
-  const workspaceTree = await runner.runExternalSchematicAsync(
-    '@schematics/angular',
-    'workspace',
-    {
+  const workspaceTree = await runner
+    .runExternalSchematicAsync('@schematics/angular', 'workspace', {
       name: 'workspace',
       version: '11.0.0',
       newProjectRoot: 'projects'
-    }
-  ).toPromise();
+    })
+    .toPromise();
 
-  const appTree = await runner.runExternalSchematicAsync(
-    '@schematics/angular',
-    'application',
-    {
-      name: appOptions.defaultProjectName,
-      projectRoot: ''
-    },
-    workspaceTree
-  ).toPromise();
+  const appTree = await runner
+    .runExternalSchematicAsync(
+      '@schematics/angular',
+      'application',
+      {
+        name: appOptions.defaultProjectName,
+        projectRoot: ''
+      },
+      workspaceTree
+    )
+    .toPromise();
 
   return {
     appTree,
@@ -56,12 +53,14 @@ export async function generateTestLibrary(
     name: string;
   }
 ): Promise<UnitTestTree> {
-  return runner.runExternalSchematicAsync(
-    '@schematics/angular',
-    'library',
-    {
-      ...libOptions
-    },
-    workspaceTree
-  ).toPromise();
+  return runner
+    .runExternalSchematicAsync(
+      '@schematics/angular',
+      'library',
+      {
+        ...libOptions
+      },
+      workspaceTree
+    )
+    .toPromise();
 }

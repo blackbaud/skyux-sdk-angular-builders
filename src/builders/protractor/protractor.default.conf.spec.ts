@@ -1,23 +1,15 @@
 import mock from 'mock-require';
 
-import {
-  Config as ProtractorConfig
-} from 'protractor';
+import { Config as ProtractorConfig } from 'protractor';
 
-import {
-  applyProtractorEnvironmentConfig
-} from '../../shared/protractor-environment-utils';
+import { applyProtractorEnvironmentConfig } from '../../shared/protractor-environment-utils';
 
-import {
-  SkyuxProtractorBuilderOptions
-} from './protractor-options';
+import { SkyuxProtractorBuilderOptions } from './protractor-options';
 
 describe('protractor.default.conf', () => {
-
   let mockPlatformConfig: ProtractorConfig | undefined;
 
   beforeEach(() => {
-
     setBuilderOptions({});
 
     mockPlatformConfig = {};
@@ -27,14 +19,15 @@ describe('protractor.default.conf', () => {
     mock('../../shared/ci-platform-utils', {
       getCiPlatformProtractorConfig: () => mockPlatformConfig
     });
-
   });
 
   afterEach(() => {
     mock.stopAll();
   });
 
-  function setBuilderOptions(value: Partial<SkyuxProtractorBuilderOptions>): void {
+  function setBuilderOptions(
+    value: Partial<SkyuxProtractorBuilderOptions>
+  ): void {
     applyProtractorEnvironmentConfig({
       builderOptions: value as SkyuxProtractorBuilderOptions
     });
@@ -43,7 +36,9 @@ describe('protractor.default.conf', () => {
   it('should allow setting the test browser to "headless" mode', () => {
     let config = mock.reRequire('./protractor.default.conf').config;
 
-    expect(config.capabilities.chromeOptions.args.indexOf('--headless') === -1).toBeTrue();
+    expect(
+      config.capabilities.chromeOptions.args.indexOf('--headless') === -1
+    ).toBeTrue();
 
     setBuilderOptions({
       skyuxHeadless: true
@@ -51,7 +46,9 @@ describe('protractor.default.conf', () => {
 
     config = mock.reRequire('./protractor.default.conf').config;
 
-    expect(config.capabilities.chromeOptions.args.indexOf('--headless') === -1).toBeFalse();
+    expect(
+      config.capabilities.chromeOptions.args.indexOf('--headless') === -1
+    ).toBeFalse();
   });
 
   it('should apply CI platform overrides', () => {
@@ -89,5 +86,4 @@ describe('protractor.default.conf', () => {
 
     expect(config.capabilities.browserName).toBe('chrome');
   });
-
 });

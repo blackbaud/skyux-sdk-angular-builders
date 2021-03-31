@@ -1,18 +1,14 @@
 import karma from 'karma';
 
-import {
-  getCiPlatformKarmaConfig
-} from '../../shared/ci-platform-utils';
+import { getCiPlatformKarmaConfig } from '../../shared/ci-platform-utils';
 
-import {
-  SkyuxCodeCoverageThreshold
-} from './code-coverage-threshold';
+import { SkyuxCodeCoverageThreshold } from './code-coverage-threshold';
 
-import {
-  SkyuxKarmaConfigAdapter
-} from './karma-config-adapter';
+import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
 
-function getCodeCoverageThresholdPercent(threshold?: SkyuxCodeCoverageThreshold): number {
+function getCodeCoverageThresholdPercent(
+  threshold?: SkyuxCodeCoverageThreshold
+): number {
   switch (threshold) {
     default:
     case 'none':
@@ -27,13 +23,14 @@ function getCodeCoverageThresholdPercent(threshold?: SkyuxCodeCoverageThreshold)
 }
 
 module.exports = (config: karma.Config): void => {
-
   const codeCoverageThresholdPercent = getCodeCoverageThresholdPercent(
     SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold ||
-    SkyuxKarmaConfigAdapter.skyuxConfig.codeCoverageThreshold
+      SkyuxKarmaConfigAdapter.skyuxConfig.codeCoverageThreshold
   );
 
-  console.log(`[SKY UX] Minimum required code coverage threshold set to ${codeCoverageThresholdPercent} percent.`);
+  console.log(
+    `[SKY UX] Minimum required code coverage threshold set to ${codeCoverageThresholdPercent} percent.`
+  );
 
   // The default Karma configuration provided by Angular CLI.
   config.set({
@@ -61,10 +58,7 @@ module.exports = (config: karma.Config): void => {
     coverageReporter: {
       dir: require('path').join(process.cwd(), './coverage'),
       subdir: '.',
-      reporters: [
-        { type: 'html' },
-        { type: 'text-summary' }
-      ],
+      reporters: [{ type: 'html' }, { type: 'text-summary' }],
       check: {
         global: {
           branches: codeCoverageThresholdPercent,
@@ -96,7 +90,7 @@ module.exports = (config: karma.Config): void => {
   } else {
     console.log(
       '[SKY UX] A specific CI platform configuration was not requested. ' +
-      'Using default Karma configuration.'
+        'Using default Karma configuration.'
     );
   }
-}
+};

@@ -1,11 +1,8 @@
 import mock from 'mock-require';
 
-import {
-  SkyuxSaveHostMetadataPlugin
-} from './save-host-metadata.plugin';
+import { SkyuxSaveHostMetadataPlugin } from './save-host-metadata.plugin';
 
 describe('save metadata webpack plugin', () => {
-
   let writeJsonSpy: jasmine.Spy;
   let mockCompiler: any;
 
@@ -20,7 +17,7 @@ describe('save metadata webpack plugin', () => {
   afterEach(() => {
     mock.stopAll();
   });
-  
+
   function setupTest(mockChunks: any[]): void {
     const mockStats = {
       toJson: () => {
@@ -30,7 +27,7 @@ describe('save metadata webpack plugin', () => {
         };
       }
     };
-    
+
     mockCompiler = {
       hooks: {
         done: {
@@ -43,7 +40,9 @@ describe('save metadata webpack plugin', () => {
   }
 
   function getPlugin(): SkyuxSaveHostMetadataPlugin {
-    const SkyuxSaveHostMetadataPlugin = mock.reRequire('./save-host-metadata.plugin').SkyuxSaveHostMetadataPlugin;
+    const SkyuxSaveHostMetadataPlugin = mock.reRequire(
+      './save-host-metadata.plugin'
+    ).SkyuxSaveHostMetadataPlugin;
 
     const plugin = new SkyuxSaveHostMetadataPlugin('my-project', {
       hostUrl: 'https://host.nxt.blackbaud.com/',
@@ -83,7 +82,8 @@ describe('save metadata webpack plugin', () => {
         {
           name: 'default~app-module~app-module~mo~0d131e23.js',
           initial: false,
-          fallback: 'SKY_PAGES_READY_DEFAULT_APP_MODULE_APP_MODULE_MO_0D131E23_JS',
+          fallback:
+            'SKY_PAGES_READY_DEFAULT_APP_MODULE_APP_MODULE_MO_0D131E23_JS',
           type: 'script'
         },
         {
@@ -101,5 +101,4 @@ describe('save metadata webpack plugin', () => {
       }
     );
   });
-
 });
