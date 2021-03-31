@@ -35,45 +35,40 @@ function copyFilesToDist() {
   fs.copySync('dist', path.join(TEST_DIST));
 }
 
-function mergeBuilderSchema(baseSchemaPath, schemaPath) {
-  const schemaJson = fs.readJsonSync(path.join(process.cwd(), schemaPath));
-  const baseSchemaJson = fs.readJsonSync(path.join(process.cwd(), baseSchemaPath));
-
-  const newJson = Object.assign({}, baseSchemaJson, schemaJson);
-  newJson.properties = Object.assign({}, baseSchemaJson.properties, schemaJson.properties || {});
-
-  console.log(
-    '\n===========\nMERGING SCHEMAS:\n',
-    baseSchemaPath, '\n',
-    schemaPath, '\n',
-    baseSchemaJson.properties, '\n',
-    schemaJson.properties,
-    newJson.properties, '\n',
-    '\n\n\n\n'
-  );
-
-  fs.writeJsonSync(path.join(process.cwd(), schemaPath), newJson);
-
-  console.log(`Successfully merged ${schemaPath}`);
-}
-
 function mergeBuilderSchemas() {
-  mergeBuilderSchema(
-    './node_modules/@angular-devkit/build-angular/src/browser/schema.json',
-    './dist/src/builders/browser/schema.ext.json'
-  );
-  mergeBuilderSchema(
-    './node_modules/@angular-devkit/build-angular/src/dev-server/schema.json',
-    './dist/src/builders/dev-server/schema.ext.json'
-  );
-  mergeBuilderSchema(
-    './node_modules/@angular-devkit/build-angular/src/karma/schema.json',
-    './dist/src/builders/karma/schema.ext.json'
-  );
-  mergeBuilderSchema(
-    './node_modules/@angular-devkit/build-angular/src/protractor/schema.json',
-    './dist/src/builders/protractor/schema.ext.json'
-  );
+  const schemaConfigs = [
+    {
+      baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/browser/schema.json',
+      schemaPath: './dist/src/builders/browser/schema.ext.json'
+    },
+    {
+      baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/dev-server/schema.json',
+      schemaPath: './dist/src/builders/dev-server/schema.ext.json'
+    },
+    {
+      baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/karma/schema.json',
+      schemaPath: './dist/src/builders/karma/schema.ext.json'
+    },
+    {
+      baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/protractor/schema.json',
+      schemaPath: './dist/src/builders/protractor/schema.ext.json'
+    }
+  ];
+
+  schemaConfigs.forEach((config) => {
+    const schemaJson = fs.readJsonSync(path.resolve(config.schemaPath));
+    const baseSchemaJson = fs.readJsonSync(path.resolve(config.baseSchemaPath));
+
+    const newJson = Object.assign({}, baseSchemaJson, schemaJson);
+    newJson.properties = Object.assign({}, baseSchemaJson.properties, schemaJson.properties || {});
+
+    fs.writeJsonSync(config.schemaPath, newJson, {
+      encoding: 'utf8',
+      spaces: 2
+    });
+
+    console.log(`Successfully merged ${config.schemaPath}`);
+  });
 }
 
 function copyDistToNodeModules() {
