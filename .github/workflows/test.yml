@@ -34,7 +34,7 @@ jobs:
       run: |
         npm i -g @angular/cli@11 @skyux-sdk/cli
         npm ci
-    - name: Install SKY UX certificates
+    - name: Install SKY UX certificate
       run: |
         skyux certs install
     - name: Create new Angular CLI application
@@ -43,7 +43,7 @@ jobs:
     - name: Build `@skyux-sdk/angular-builders`
       run: |
         node_modules/.bin/tsc -p tsconfig.json
-        node ./scripts/after-build-success.js --test-dir builders-e2e-app
+        node ./scripts/after-build-success.js --test-app-directory builders-e2e-app
     - name: Add `@skyux-sdk/angular-builders`
       working-directory: builders-e2e-app
       run: |
