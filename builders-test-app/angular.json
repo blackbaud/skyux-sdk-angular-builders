@@ -31,6 +31,8 @@
               "src/assets"
             ],
             "styles": [
+              "@skyux/theme/css/sky.css",
+              "@skyux/theme/css/themes/modern/styles.css",
               "src/styles.scss"
             ],
             "scripts": []

@@ -35,6 +35,10 @@ import {
 } from '../../builders/dev-server/dev-server-options';
 
 import {
+  SkyuxConfig
+} from '../../shared/skyux-config';
+
+import {
   addModuleImportToRootModule,
   createHost
 } from '../utils/schematics-utils';
@@ -43,13 +47,37 @@ import {
   SkyuxNgAddOptions
 } from './schema';
 
+async function readJson<T = any>(host: workspaces.WorkspaceHost, filePath: string): Promise<T> {
+  const contents = await host.readFile(filePath);
+  const value: T = JSON.parse(contents);
+  return value;
+}
+
+async function getThemeStylesheets(
+  host: workspaces.WorkspaceHost
+): Promise<string[]> {
+  const themeStylesheets = [
+    '@skyux/theme/css/sky.css'
+  ];
+
+  const skyuxConfig = await readJson<SkyuxConfig>(host, 'skyuxconfig.json');
+  if (skyuxConfig.app?.theming?.supportedThemes) {
+    for (const theme of skyuxConfig.app.theming.supportedThemes) {
+      if (theme !== 'default') {
+        themeStylesheets.push(`@skyux/theme/css/themes/${theme}/styles.css`);
+      }
+    }
+  }
+
+  return themeStylesheets;
+}
+
 async function modifyAngularJson(
   host: workspaces.WorkspaceHost,
   options: SkyuxNgAddOptions
 ): Promise<void> {
   const projectName = options.project;
-  const angularJsonContents = await host.readFile('angular.json');
-  const angularJson = JSON.parse(angularJsonContents);
+  const angularJson = await readJson(host, 'angular.json');
 
   const architectConfig = angularJson.projects[projectName].architect;
   if (!architectConfig) {
@@ -115,6 +143,12 @@ async function modifyAngularJson(
     }
   }
 
+  // Add theme stylesheets.
+  const angularStylesheets = (architectConfig.build.options.styles || [])
+    .filter((stylesheet: string) => !stylesheet.startsWith('@skyux/theme'));
+  const themeStylesheets = await getThemeStylesheets(host);
+  architectConfig.build.options.styles = themeStylesheets.concat(angularStylesheets);
+
   await host.writeFile('angular.json', JSON.stringify(angularJson, undefined, 2));
 }
 
@@ -154,7 +188,7 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
  * Fixes an Angular CLI issue with merge strategies.
  * @see https://github.com/angular/angular-cli/issues/11337#issuecomment-516543220
  */
- function overwriteIfExists(tree: Tree): Rule {
+function overwriteIfExists(tree: Tree): Rule {
   return forEach(fileEntry => {
     if (tree.exists(fileEntry.path)) {
       tree.overwrite(fileEntry.path, fileEntry.content);
@@ -165,7 +199,6 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
 }
 
 function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
-
   // Create an empty skyuxconfig.json file.
   if (!tree.exists('skyuxconfig.json')) {
     tree.create('skyuxconfig.json', JSON.stringify({

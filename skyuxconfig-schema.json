@@ -29,6 +29,13 @@
           }
         }
       ]
+    },
+    "availableThemes": {
+      "type": "string",
+      "enum": [
+        "default",
+        "modern"
+      ]
     }
   },
   "properties": {
@@ -78,6 +85,24 @@
                     "$ref": "#/definitions/externalFileJS"
                   }
                 }
+              }
+            }
+          }
+        },
+        "theming": {
+          "description": "Specifies the theming capabilities of the application.",
+          "type": "object",
+          "properties": {
+            "theme": {
+              "description": "The visual theme to apply to this application.",
+              "type": "string",
+              "default": "default",
+              "$ref": "#/definitions/availableThemes"
+            },
+            "supportedThemes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/availableThemes"
               }
             }
           }

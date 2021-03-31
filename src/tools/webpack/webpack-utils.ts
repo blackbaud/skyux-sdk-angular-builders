@@ -39,7 +39,7 @@ export function modifyScriptContents(
 /**
  * Allows a Webpack plugin to modify the contents of all emitted CSS assets.
  */
- export function modifyStylesheetContents(
+export function modifyStylesheetContents(
   compilation: webpack.compilation.Compilation,
   callback: AssetSourceCallback
 ): void {

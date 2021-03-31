@@ -1,4 +1,13 @@
 {
   "$schema": "./node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json",
-  "codeCoverageThreshold": "strict"
+  "codeCoverageThreshold": "strict",
+  "app": {
+    "theming": {
+      "supportedThemes": [
+        "default",
+        "modern"
+      ],
+      "theme": "default"
+    }
+  }
 }
