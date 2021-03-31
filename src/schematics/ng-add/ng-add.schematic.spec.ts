@@ -174,6 +174,31 @@ describe('ng-add.schematic', () => {
     });
   });
 
+  it('should add theme stylesheets to angular.json', async () => {
+    app.create('skyuxconfig.json', JSON.stringify({
+      app: {
+        theming: {
+          theme: 'default',
+          supportedThemes: [
+            'default',
+            'modern'
+          ]
+        }
+      }
+    }));
+    
+    await runSchematic(app, {
+      project: 'foobar'
+    });
+
+    const angularJson = getAngularJson(app);
+    expect(angularJson.projects['foobar'].architect.build.options.styles).toEqual([
+      '@skyux/theme/css/sky.css',
+      '@skyux/theme/css/themes/modern/styles.css',
+      'src/styles.css'
+    ]);
+  });
+
   it('should overwrite SkyuxModule if it exists', async () => {
     app.create('src/app/__skyux/skyux.module.ts', 'foobar');
     await runSchematic(app, {
