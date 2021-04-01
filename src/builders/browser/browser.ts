@@ -13,7 +13,11 @@ function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext
 ): Observable<BuilderOutput> {
-  return executeBrowserBuilder(options, context, getBrowserTransforms(options));
+  return executeBrowserBuilder(
+    options,
+    context,
+    getBrowserTransforms(options, context)
+  );
 }
 
 export default createBuilder<JsonObject & SkyuxBrowserBuilderOptions>(

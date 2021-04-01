@@ -1,3 +1,7 @@
+# 4.0.0-alpha.30 (2021-04-01)
+
+- Fixed the `browser` builder to run skyux and startup configurations. [#84](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/84)
+
 # 4.0.0-alpha.29 (2021-04-01)
 
 - Fixed the application assets service to format file paths correctly for OSX machines. [#83](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/83)
