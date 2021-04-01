@@ -1,22 +1,14 @@
-import {
-  getOptions
-} from 'loader-utils';
+import { getOptions } from 'loader-utils';
 
 import validateOptions from 'schema-utils';
 
-import {
-  loader
-} from 'webpack';
+import { loader } from 'webpack';
 
-import {
-  getSkyuxConfig
-} from '../../../../shared/skyux-config-utils';
+import { getSkyuxConfig } from '../../../../shared/skyux-config-utils';
 
 const schema = require('./schema.json');
 
-export default function startupConfigLoader(
-  this: loader.LoaderContext
-) {
+export default function startupConfigLoader(this: loader.LoaderContext) {
   const skyuxConfig = getSkyuxConfig();
 
   const options = getOptions(this);

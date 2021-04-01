@@ -1,13 +1,8 @@
-import {
-  SkyuxConfig
-} from '../../shared/skyux-config';
+import { SkyuxConfig } from '../../shared/skyux-config';
 
-import {
-  SkyuxKarmaBuilderOptions
-} from './karma-options';
+import { SkyuxKarmaBuilderOptions } from './karma-options';
 
 export abstract class SkyuxKarmaConfigAdapter {
-
   /**
    * Options applied to the Angular CLI builder.
    */
@@ -17,5 +12,4 @@ export abstract class SkyuxKarmaConfigAdapter {
    * The contents of the project's skyuxconfig.json file.
    */
   public static skyuxConfig: SkyuxConfig;
-
 }

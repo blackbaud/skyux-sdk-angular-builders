@@ -1,19 +1,12 @@
 import mock from 'mock-require';
 
-import {
-  SkyuxConfigHost
-} from '../../../../shared/skyux-config';
+import { SkyuxConfigHost } from '../../../../shared/skyux-config';
 
-import {
-  SkyuxHostAssetType
-} from '../../host-asset-type';
+import { SkyuxHostAssetType } from '../../host-asset-type';
 
-import {
-  SkyuxCreateHostUrlConfig
-} from './create-host-url-config';
+import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
 
 describe('create host url', () => {
-
   let hostUrl: string;
   let baseHref: string;
   let defaultHostConfig: SkyuxCreateHostUrlConfig;
@@ -34,7 +27,12 @@ describe('create host url', () => {
   });
 
   function decode(url: string): SkyuxCreateHostUrlConfig {
-    return JSON.parse(Buffer.from(decodeURIComponent(url.split('_cfg=')[1]), 'base64').toString());
+    return JSON.parse(
+      Buffer.from(
+        decodeURIComponent(url.split('_cfg=')[1]),
+        'base64'
+      ).toString()
+    );
   }
 
   it('should open the SKY UX Host URL with Host config', () => {
@@ -64,7 +62,7 @@ describe('create host url', () => {
       },
       frameOptions: {
         none: true
-      },
+      }
     };
 
     defaultHostConfig.host = hostConfig;
@@ -118,9 +116,11 @@ describe('create host url', () => {
 
     const externals = {
       js: {
-        before: [{
-          url: 'foo.js'
-        }]
+        before: [
+          {
+            url: 'foo.js'
+          }
+        ]
       }
     };
 
@@ -146,5 +146,4 @@ describe('create host url', () => {
       }
     });
   });
-
 });

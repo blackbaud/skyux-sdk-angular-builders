@@ -1,0 +1,8 @@
+# Ignore artifacts:
+.github
+.nyc_output
+builders-test-app
+coverage
+dist
+node_modules
+package-lock.json

@@ -2,13 +2,9 @@ import fs from 'fs-extra';
 
 import webpack from 'webpack';
 
-import {
-  SkyuxAppAssets
-} from '../../app-assets';
+import { SkyuxAppAssets } from '../../app-assets';
 
-import {
-  modifyScriptContents
-} from '../../webpack-utils';
+import { modifyScriptContents } from '../../webpack-utils';
 
 const PLUGIN_NAME = 'skyux-asset-urls-plugin';
 
@@ -31,29 +27,26 @@ function regexEscape(value: string): string {
  * @see https://github.com/angular/angular-cli/issues/16544#issuecomment-571245469
  */
 export class SkyuxAppAssetsPlugin {
-
-  constructor(
-    private config: SkyuxAppAssetsPluginConfig
-  ) { }
+  constructor(private config: SkyuxAppAssetsPluginConfig) {}
 
   public apply(compiler: webpack.Compiler): void {
-    compiler.hooks.emit.tap(
-      PLUGIN_NAME,
-      (compilation) => {
-        this.replaceAssetPaths(compilation);
-        this.writeHashedAssets(compilation);
-      }
-    );
+    compiler.hooks.emit.tap(PLUGIN_NAME, (compilation) => {
+      this.replaceAssetPaths(compilation);
+      this.writeHashedAssets(compilation);
+    });
   }
 
   /**
    * Replaces unhashed asset file names found within compiled scripts
    * with the hashed file names.
    */
-  private replaceAssetPaths(compilation: webpack.compilation.Compilation): void {
+  private replaceAssetPaths(
+    compilation: webpack.compilation.Compilation
+  ): void {
     modifyScriptContents(compilation, (content) => {
-      for (const [relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
-
+      for (const [relativeUrl, asset] of Object.entries(
+        this.config.assetsMap
+      )) {
         // Replace HTML attributes.
         content = content.replace(
           new RegExp(regexEscape(`"${relativeUrl}"`), 'gi'),
@@ -63,10 +56,11 @@ export class SkyuxAppAssetsPlugin {
         // Replace CSS background image URLs.
         // (Angular flattens all asset paths in CSS, so just search for the file name.)
         const replacement = `url(${asset.hashedUrl})`;
-        content = content.replace(
-          new RegExp(regexEscape(`url(/${relativeUrl})`), 'g'),
-          replacement
-        )
+        content = content
+          .replace(
+            new RegExp(regexEscape(`url(/${relativeUrl})`), 'g'),
+            replacement
+          )
           // Account for quoted URLs.
           .replace(
             new RegExp(regexEscape(`url(\\"/${relativeUrl}\\")`), 'g'),
@@ -82,7 +76,9 @@ export class SkyuxAppAssetsPlugin {
    * Create duplicates of all files found in the `src/assets` folder,
    * using hashed file names.
    */
-  private writeHashedAssets(compilation: webpack.compilation.Compilation): void {
+  private writeHashedAssets(
+    compilation: webpack.compilation.Compilation
+  ): void {
     for (const [_relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
       const contents = fs.readFileSync(asset.absolutePath);
       compilation.assets[asset.hashedFileName] = {
@@ -92,5 +88,4 @@ export class SkyuxAppAssetsPlugin {
       };
     }
   }
-
 }
