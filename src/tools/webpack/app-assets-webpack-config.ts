@@ -20,13 +20,24 @@ function createAppAssetsMap(assetsBaseUrl: string): SkyuxAppAssets {
   const assetsMap: SkyuxAppAssets = {};
 
   // Find all asset file paths.
-  const filePaths = glob.sync('src/assets/**/*', { nodir: true });
+  const filePaths = glob.sync(path.join(process.cwd(), 'src/assets/**/*'), {
+    nodir: true
+  });
 
   // Create a hashed version of each path.
   filePaths.forEach((filePath) => {
     const baseUrl = ensureTrailingSlash(assetsBaseUrl);
-    const relativePath = filePath.replace(path.join(process.cwd(), 'src/'), '');
-    const parsed = path.parse(relativePath);
+
+    const relativeUrl = filePath.replace(
+      path
+        .join(process.cwd(), 'src/')
+        // Glob always returns file paths with a forward-slash separator.
+        // Replace Windows' backward slashes before running the replacement.
+        .replace(/\\/g, '/'),
+      ''
+    );
+
+    const parsed = path.parse(relativeUrl);
 
     /**
      * Create a hash from the file path.
@@ -38,7 +49,6 @@ function createAppAssetsMap(assetsBaseUrl: string): SkyuxAppAssets {
     });
 
     const hashedFileName = `${parsed.name}.${hash}${parsed.ext}`;
-    const relativeUrl = `${relativePath.replace(/\\/g, '/')}`;
 
     assetsMap[relativeUrl] = {
       absolutePath: filePath,

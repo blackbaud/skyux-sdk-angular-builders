@@ -1,3 +1,7 @@
+# 4.0.0-alpha.29 (2021-04-01)
+
+- Fixed the application assets service to format file paths correctly for OSX machines. [#83](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/83)
+
 # 4.0.0-alpha.28 (2021-04-01)
 
 - Fixed the application assets service to format file paths correctly for Windows machines. [#80](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/80)
