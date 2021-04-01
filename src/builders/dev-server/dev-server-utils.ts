@@ -1,16 +1,17 @@
-import { getCertPath } from '../../shared/cert-utils';
+import {
+  getCertPath
+} from '../../shared/cert-utils';
 
-import { SkyuxDevServerBuilderOptions } from './dev-server-options';
+import {
+  SkyuxDevServerBuilderOptions
+} from './dev-server-options';
 
-export function getLocalUrlFromOptions(
-  options: SkyuxDevServerBuilderOptions
-): string {
+export function getLocalUrlFromOptions(options: SkyuxDevServerBuilderOptions): string {
   return `https://${options.host}:${options.port}/`;
 }
 
-export function applySkyuxDevServerOptions(
-  options: SkyuxDevServerBuilderOptions
-): void {
+export function applySkyuxDevServerOptions(options: SkyuxDevServerBuilderOptions): void {
+
   options.host = options.host || 'localhost';
   options.port = options.port || 4200;
 

@@ -1,14 +1,23 @@
 import mock from 'mock-require';
 
-import { take } from 'rxjs/operators';
+import {
+  take
+} from 'rxjs/operators';
 
-import { SkyuxHostAssetType } from '../../host-asset-type';
+import {
+  SkyuxHostAssetType
+} from '../../host-asset-type';
 
-import { SkyuxOpenHostUrlPluginConfig } from './open-host-url-config';
+import {
+  SkyuxOpenHostUrlPluginConfig
+} from './open-host-url-config';
 
-import { SkyuxOpenHostUrlPlugin } from './open-host-url.plugin';
+import {
+  SkyuxOpenHostUrlPlugin
+} from './open-host-url.plugin';
 
 describe('open host url webpack plugin', () => {
+
   let createSpy: jasmine.Spy;
   let openSpy: jasmine.Spy;
   let mockCompiler: any;
@@ -50,22 +59,16 @@ describe('open host url webpack plugin', () => {
     mock.stopAll();
   });
 
-  function getPlugin(
-    options: Partial<SkyuxOpenHostUrlPluginConfig> = {}
-  ): SkyuxOpenHostUrlPlugin {
-    const SkyuxOpenHostUrlPlugin = mock.reRequire('./open-host-url.plugin')
-      .SkyuxOpenHostUrlPlugin;
+  function getPlugin(options: Partial<SkyuxOpenHostUrlPluginConfig> = {}): SkyuxOpenHostUrlPlugin {
+    const SkyuxOpenHostUrlPlugin = mock.reRequire('./open-host-url.plugin').SkyuxOpenHostUrlPlugin;
 
-    const plugin = new SkyuxOpenHostUrlPlugin({
-      ...{
-        host: {
-          url: hostUrl
-        },
-        localUrl,
-        baseHref: 'my-project'
+    const plugin = new SkyuxOpenHostUrlPlugin({...{
+      host: {
+        url: hostUrl
       },
-      ...options
-    });
+      localUrl,
+      baseHref: 'my-project'
+    }, ...options});
 
     return plugin;
   }
@@ -89,11 +92,9 @@ describe('open host url webpack plugin', () => {
   it('should open host URL with `externals`', () => {
     const externals = {
       js: {
-        before: [
-          {
-            url: 'foo.js'
-          }
-        ]
+        before: [{
+          url: 'foo.js'
+        }]
       }
     };
 
@@ -235,10 +236,7 @@ describe('open host url webpack plugin', () => {
   it('should only open the URL once', () => {
     const plugin = getPlugin();
 
-    mockCompiler.hooks.done.tap = (
-      _pluginName: string,
-      callback: (stats: any) => void
-    ) => {
+    mockCompiler.hooks.done.tap = (_pluginName: string, callback: (stats: any) => void) => {
       callback({
         toJson() {
           return mockStats;
@@ -279,4 +277,5 @@ describe('open host url webpack plugin', () => {
     const url = await plugin.$hostUrl.pipe(take(1)).toPromise();
     expect(url).toEqual('foobar.com?cfg=baz');
   });
+
 });

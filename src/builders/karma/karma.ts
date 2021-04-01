@@ -4,22 +4,33 @@ import {
   createBuilder
 } from '@angular-devkit/architect';
 
-import { executeKarmaBuilder } from '@angular-devkit/build-angular';
+import {
+  executeKarmaBuilder
+} from '@angular-devkit/build-angular';
 
 import path from 'path';
 
-import { Observable } from 'rxjs';
+import {
+  Observable
+} from 'rxjs';
 
-import { getSkyuxConfig } from '../../shared/skyux-config-utils';
+import {
+  getSkyuxConfig
+} from '../../shared/skyux-config-utils';
 
-import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
+import {
+  SkyuxKarmaConfigAdapter
+} from './karma-config-adapter';
 
-import { SkyuxKarmaBuilderOptions } from './karma-options';
+import {
+  SkyuxKarmaBuilderOptions
+} from './karma-options';
 
 function executeSkyuxKarmaBuilder(
   options: SkyuxKarmaBuilderOptions,
   context: BuilderContext
 ): Observable<BuilderOutput> {
+
   options.karmaConfig = path.join(__dirname, 'karma.default.conf.js');
 
   // Enforce code coverage for CI platforms.
@@ -31,7 +42,10 @@ function executeSkyuxKarmaBuilder(
   SkyuxKarmaConfigAdapter.builderOptions = options;
   SkyuxKarmaConfigAdapter.skyuxConfig = getSkyuxConfig();
 
-  return executeKarmaBuilder(options, context);
+  return executeKarmaBuilder(
+    options,
+    context
+  );
 }
 
 export default createBuilder<SkyuxKarmaBuilderOptions>(

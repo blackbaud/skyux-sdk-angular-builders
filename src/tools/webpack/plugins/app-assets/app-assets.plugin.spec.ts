@@ -1,18 +1,25 @@
 import mock from 'mock-require';
 
-import { ConcatSource } from 'webpack-sources';
+import {
+  ConcatSource
+} from 'webpack-sources';
 
 describe('Asset URLs plugin', () => {
+
   let mockWebpackAssets: {
     [_: string]: {
       source: () => string;
-    };
+    }
   };
 
   let mockCompiler: any;
 
   let assetsToUpdate: {
-    [filePath: string]: (asset: { source: () => string }) => ConcatSource;
+    [filePath: string]: (
+      asset: {
+        source: () => string;
+      }
+    ) => ConcatSource;
   };
 
   beforeEach(() => {
@@ -37,7 +44,7 @@ describe('Asset URLs plugin', () => {
         assetsToUpdate[filePath] = cb;
       }
     };
-
+    
     mockCompiler = {
       hooks: {
         emit: {
@@ -56,14 +63,15 @@ describe('Asset URLs plugin', () => {
 
   // Simulate Webpack calling the source callback.
   function getAssetContent(fileName: string): string {
-    return assetsToUpdate[fileName](mockWebpackAssets[fileName]).source();
+    return assetsToUpdate[fileName](
+      mockWebpackAssets[fileName]
+    ).source();
   }
 
   it('should replace asset paths with hard URLs', () => {
     setupTest({
       'foo.js': {
-        source: () =>
-          '["assets/foo.gif"], background-image: url(\\"/assets/foo.gif\\"), background-image: url(/assets/foo.gif)'
+        source: () => '["assets/foo.gif"], background-image: url(\\"/assets/foo.gif\\"), background-image: url(/assets/foo.gif)'
       }
     });
 
@@ -104,4 +112,5 @@ describe('Asset URLs plugin', () => {
 
     expect(typeof mockWebpackAssets['foo.HASH.gif'].source).toEqual('function');
   });
+
 });

@@ -1,19 +1,32 @@
-import { BuilderContext, createBuilder } from '@angular-devkit/architect';
+import {
+  BuilderContext,
+  createBuilder
+} from '@angular-devkit/architect';
 
 import {
   DevServerBuilderOutput,
   executeDevServerBuilder
 } from '@angular-devkit/build-angular';
 
-import { Observable } from 'rxjs';
+import {
+  Observable
+} from 'rxjs';
 
-import { getSkyuxConfig } from '../../shared/skyux-config-utils';
+import {
+  getSkyuxConfig
+} from '../../shared/skyux-config-utils';
 
-import { SkyuxDevServerBuilderOptions } from './dev-server-options';
+import {
+  SkyuxDevServerBuilderOptions
+} from './dev-server-options';
 
-import { applySkyuxDevServerOptions } from './dev-server-utils';
+import {
+  applySkyuxDevServerOptions
+} from './dev-server-utils';
 
-import { getDevServerTransforms } from './dev-server-transforms';
+import {
+  getDevServerTransforms
+} from './dev-server-transforms';
 
 function executeSkyuxDevServerBuilder(
   options: SkyuxDevServerBuilderOptions,
@@ -30,7 +43,6 @@ function executeSkyuxDevServerBuilder(
   );
 }
 
-export default createBuilder<
-  SkyuxDevServerBuilderOptions,
-  DevServerBuilderOutput
->(executeSkyuxDevServerBuilder);
+export default createBuilder<SkyuxDevServerBuilderOptions, DevServerBuilderOutput>(
+  executeSkyuxDevServerBuilder
+);

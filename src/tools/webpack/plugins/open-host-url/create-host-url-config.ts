@@ -3,12 +3,15 @@ import {
   SkyuxConfigHost
 } from '../../../../shared/skyux-config';
 
-import { SkyuxHostAsset } from '../../host-asset';
+import {
+  SkyuxHostAsset
+} from '../../host-asset';
 
 /**
  * Configuration parameter `_cfg` that is encoded as part of the SKY UX Host URL.
  */
 export interface SkyuxCreateHostUrlConfig {
+
   externals?: SkyuxConfigAppExternals;
 
   host?: SkyuxConfigHost;
@@ -33,4 +36,5 @@ export interface SkyuxCreateHostUrlConfig {
    * An array of CSS file names to inject into Host's index.html file.
    */
   stylesheets?: SkyuxHostAsset[];
+
 }

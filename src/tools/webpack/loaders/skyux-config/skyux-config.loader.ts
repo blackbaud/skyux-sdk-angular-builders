@@ -1,4 +1,6 @@
-import { getSkyuxConfig } from '../../../../shared/skyux-config-utils';
+import {
+  getSkyuxConfig
+} from '../../../../shared/skyux-config-utils';
 
 export default function skyuxConfigLoader() {
   const skyuxConfig = getSkyuxConfig();

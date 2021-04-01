@@ -2,9 +2,12 @@ import karma from 'karma';
 
 import mock from 'mock-require';
 
-import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
+import {
+  SkyuxKarmaConfigAdapter
+} from './karma-config-adapter';
 
 describe('karma.default.conf.ts', () => {
+
   let calledKarmaConfig: any;
   let mockKarmaConfigUtil: karma.Config;
   let mockPlatformConfig: (conf: karma.Config) => void;
@@ -23,6 +26,7 @@ describe('karma.default.conf.ts', () => {
   //#endregion
 
   beforeEach(() => {
+
     calledKarmaConfig = {};
 
     mockKarmaConfigUtil = {
@@ -70,33 +74,25 @@ describe('karma.default.conf.ts', () => {
   });
 
   it('should set default code coverage thresholds', () => {
-    const config: (conf: karma.Config) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    const config: (conf: karma.Config) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
     verifyCoverageThresholdPercent(0);
   });
 
   it('should set "standard" code coverage thresholds', () => {
-    SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold =
-      'standard';
+    SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold = 'standard';
 
-    const config: (conf: karma.Config) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    const config: (conf: karma.Config) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
     verifyCoverageThresholdPercent(80);
   });
 
   it('should set "strict" code coverage thresholds', () => {
-    SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold =
-      'strict';
+    SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold = 'strict';
 
-    const config: (conf: karma.Config) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    const config: (conf: karma.Config) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
     verifyCoverageThresholdPercent(100);
@@ -117,11 +113,10 @@ describe('karma.default.conf.ts', () => {
       });
     };
 
-    const config: (conf: karma.Config) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    const config: (conf: karma.Config) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
     expect(calledKarmaConfig.singleRun).toEqual(true);
   });
+
 });

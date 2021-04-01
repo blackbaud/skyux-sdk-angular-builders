@@ -22,7 +22,7 @@ function copyFilesToDist() {
     ['src/schematics/ng-add/files']
   ];
 
-  pathsToCopy.forEach((pathArr) => {
+  pathsToCopy.forEach(pathArr => {
     const sourcePath = path.join(...pathArr);
     const distPath = path.join('dist', ...pathArr);
     if (fs.existsSync(sourcePath)) {
@@ -39,23 +39,19 @@ function copyFilesToDist() {
 function mergeBuilderSchemas() {
   const schemaConfigs = [
     {
-      baseSchemaPath:
-        './node_modules/@angular-devkit/build-angular/src/browser/schema.json',
+      baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/browser/schema.json',
       schemaPath: './dist/src/builders/browser/schema.ext.json'
     },
     {
-      baseSchemaPath:
-        './node_modules/@angular-devkit/build-angular/src/dev-server/schema.json',
+      baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/dev-server/schema.json',
       schemaPath: './dist/src/builders/dev-server/schema.ext.json'
     },
     {
-      baseSchemaPath:
-        './node_modules/@angular-devkit/build-angular/src/karma/schema.json',
+      baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/karma/schema.json',
       schemaPath: './dist/src/builders/karma/schema.ext.json'
     },
     {
-      baseSchemaPath:
-        './node_modules/@angular-devkit/build-angular/src/protractor/schema.json',
+      baseSchemaPath: './node_modules/@angular-devkit/build-angular/src/protractor/schema.json',
       schemaPath: './dist/src/builders/protractor/schema.ext.json'
     }
   ];
@@ -65,11 +61,7 @@ function mergeBuilderSchemas() {
     const baseSchemaJson = fs.readJsonSync(path.resolve(config.baseSchemaPath));
 
     const newJson = Object.assign({}, baseSchemaJson, schemaJson);
-    newJson.properties = Object.assign(
-      {},
-      baseSchemaJson.properties,
-      schemaJson.properties || {}
-    );
+    newJson.properties = Object.assign({}, baseSchemaJson.properties, schemaJson.properties || {});
 
     fs.writeJsonSync(config.schemaPath, newJson, {
       encoding: 'utf8',
@@ -83,10 +75,7 @@ function mergeBuilderSchemas() {
 function copyDistToNodeModules() {
   fs.copySync(
     path.join(process.cwd(), 'dist'),
-    path.join(
-      __dirname,
-      `../${TEST_APP_DIR}/node_modules/@skyux-sdk/angular-builders`
-    )
+    path.join(__dirname, `../${TEST_APP_DIR}/node_modules/@skyux-sdk/angular-builders`)
   );
 
   console.log(`Successfully copied 'dist' to '${TEST_APP_DIR}/node_modules'.`);

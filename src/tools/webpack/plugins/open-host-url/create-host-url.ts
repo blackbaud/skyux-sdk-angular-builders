@@ -1,6 +1,10 @@
-import { ensureTrailingSlash } from '../../../../shared/url-utils';
+import {
+  ensureTrailingSlash
+} from '../../../../shared/url-utils';
 
-import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
+import {
+  SkyuxCreateHostUrlConfig
+} from './create-host-url-config';
 
 /**
  * Creates the SKY UX Host URL.
@@ -8,7 +12,7 @@ import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
  * @param baseHref The URL-friendly base HREF where the project will be served.
  * @param config Configuration that will be sent to the host server.
  */
-export function createHostUrl(
+ export function createHostUrl(
   baseUrl: string,
   baseHref: string,
   config: SkyuxCreateHostUrlConfig

@@ -1,6 +1,8 @@
 import mock from 'mock-require';
 
-import { SkyuxConfig } from '../shared/skyux-config';
+import {
+  SkyuxConfig
+} from '../shared/skyux-config';
 
 describe('skyux config utils', () => {
   let fileExists: boolean;
