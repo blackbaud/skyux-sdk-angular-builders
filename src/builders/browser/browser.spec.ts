@@ -1,11 +1,12 @@
-import { SkyuxAppAssetsPlugin } from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
-import { SkyuxSaveHostMetadataPlugin } from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
-import { SkyuxBrowserBuilderOptions } from './browser-options';
 import * as angularArchitect from '@angular-devkit/architect';
 import * as buildAngular from '@angular-devkit/build-angular';
 import mock from 'mock-require';
 import { of } from 'rxjs';
 import webpack from 'webpack';
+
+import { SkyuxAppAssetsPlugin } from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
+import { SkyuxSaveHostMetadataPlugin } from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
+import { SkyuxBrowserBuilderOptions } from './browser-options';
 
 class MockWebpackPlugin {
   public apply() {}

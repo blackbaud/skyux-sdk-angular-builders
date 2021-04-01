@@ -1,8 +1,9 @@
+import mock from 'mock-require';
+import { take } from 'rxjs/operators';
+
 import { SkyuxHostAssetType } from '../../host-asset-type';
 import { SkyuxOpenHostUrlPluginConfig } from './open-host-url-config';
 import { SkyuxOpenHostUrlPlugin } from './open-host-url.plugin';
-import mock from 'mock-require';
-import { take } from 'rxjs/operators';
 
 describe('open host url webpack plugin', () => {
   let createSpy: jasmine.Spy;

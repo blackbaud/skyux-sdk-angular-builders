@@ -1,7 +1,8 @@
-import { getCiPlatformProtractorConfig } from '../../shared/ci-platform-utils';
-import { getProtractorEnvironmentConfig } from '../../shared/protractor-environment-utils';
 import mergeWith from 'lodash.mergewith';
 import { Config as ProtractorConfig } from 'protractor';
+
+import { getCiPlatformProtractorConfig } from '../../shared/ci-platform-utils';
+import { getProtractorEnvironmentConfig } from '../../shared/protractor-environment-utils';
 
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts

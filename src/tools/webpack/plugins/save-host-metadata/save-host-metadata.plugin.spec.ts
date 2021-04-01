@@ -1,6 +1,8 @@
-import { SkyuxSaveHostMetadataPlugin } from './save-host-metadata.plugin';
-import mock from 'mock-require';
 import path from 'path';
+
+import mock from 'mock-require';
+
+import { SkyuxSaveHostMetadataPlugin } from './save-host-metadata.plugin';
 
 describe('save metadata webpack plugin', () => {
   let writeJsonSpy: jasmine.Spy;

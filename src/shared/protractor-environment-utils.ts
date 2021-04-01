@@ -1,5 +1,6 @@
-import { SkyuxProtractorBuilderEnvironmentConfig } from './protractor-builder-environment-config';
 import merge from 'lodash.merge';
+
+import { SkyuxProtractorBuilderEnvironmentConfig } from './protractor-builder-environment-config';
 
 const environmentVariableName = 'SKYUX_PROTRACTOR_BUILDER_ENVIRONMENT_CONFIG';
 

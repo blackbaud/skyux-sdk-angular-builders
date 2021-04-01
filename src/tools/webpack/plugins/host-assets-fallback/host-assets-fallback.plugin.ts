@@ -1,3 +1,5 @@
+import { Compiler } from 'webpack';
+
 import {
   getFallbackTestCssRule,
   getFallbackTestVariable
@@ -6,7 +8,6 @@ import {
   modifyScriptContents,
   modifyStylesheetContents
 } from '../../webpack-utils';
-import { Compiler } from 'webpack';
 
 const PLUGIN_NAME = 'skyux-host-assets-fallback-plugin';
 

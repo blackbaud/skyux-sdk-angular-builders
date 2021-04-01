@@ -1,6 +1,7 @@
-import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
 import karma from 'karma';
 import mock from 'mock-require';
+
+import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
 
 describe('karma.default.conf.ts', () => {
   let calledKarmaConfig: any;

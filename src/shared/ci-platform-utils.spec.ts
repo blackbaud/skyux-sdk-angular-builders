@@ -1,6 +1,7 @@
+import path from 'path';
+
 import karma from 'karma';
 import mock from 'mock-require';
-import path from 'path';
 
 describe('ci platform utils', () => {
   let globSyncSpy: jasmine.Spy;

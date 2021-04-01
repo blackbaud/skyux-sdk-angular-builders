@@ -1,6 +1,7 @@
-import { SkyuxConfig } from './skyux-config';
 import fs from 'fs-extra';
 import merge from 'lodash.merge';
+
+import { SkyuxConfig } from './skyux-config';
 
 const DEFAULTS: SkyuxConfig = {
   host: {

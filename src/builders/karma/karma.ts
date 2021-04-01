@@ -1,14 +1,16 @@
-import { getSkyuxConfig } from '../../shared/skyux-config-utils';
-import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
-import { SkyuxKarmaBuilderOptions } from './karma-options';
+import path from 'path';
+
 import {
   BuilderContext,
   BuilderOutput,
   createBuilder
 } from '@angular-devkit/architect';
 import { executeKarmaBuilder } from '@angular-devkit/build-angular';
-import path from 'path';
 import { Observable } from 'rxjs';
+
+import { getSkyuxConfig } from '../../shared/skyux-config-utils';
+import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
+import { SkyuxKarmaBuilderOptions } from './karma-options';
 
 function executeSkyuxKarmaBuilder(
   options: SkyuxKarmaBuilderOptions,

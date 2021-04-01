@@ -1,3 +1,8 @@
+import { BuilderContext } from '@angular-devkit/architect';
+import { ExecutionTransformer } from '@angular-devkit/build-angular';
+import { take } from 'rxjs/operators';
+import { Configuration as WebpackConfig } from 'webpack';
+
 import { SkyuxConfig } from '../../shared/skyux-config';
 import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';
 import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
@@ -6,10 +11,6 @@ import { applySkyuxConfigWebpackConfig } from '../../tools/webpack/skyux-config-
 import { applyStartupConfigWebpackConfig } from '../../tools/webpack/startup-config';
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 import { getLocalUrlFromOptions } from './dev-server-utils';
-import { BuilderContext } from '@angular-devkit/architect';
-import { ExecutionTransformer } from '@angular-devkit/build-angular';
-import { take } from 'rxjs/operators';
-import { Configuration as WebpackConfig } from 'webpack';
 
 /**
  * Allows adjustments to the default Angular "dev-server" webpack config.

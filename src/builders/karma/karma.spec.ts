@@ -1,9 +1,11 @@
-import { SkyuxKarmaBuilderOptions } from './karma-options';
+import path from 'path';
+
 import * as angularArchitect from '@angular-devkit/architect';
 import * as buildAngular from '@angular-devkit/build-angular';
 import mock from 'mock-require';
-import path from 'path';
 import { of } from 'rxjs';
+
+import { SkyuxKarmaBuilderOptions } from './karma-options';
 
 describe('karma builder', () => {
   let createBuilderSpy: jasmine.Spy;

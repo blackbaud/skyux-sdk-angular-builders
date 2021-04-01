@@ -1,12 +1,14 @@
+import path from 'path';
+
+import * as angularArchitect from '@angular-devkit/architect';
+import * as buildAngular from '@angular-devkit/build-angular';
+import mock from 'mock-require';
+
 import {
   clearProtractorEnvironmentConfig,
   getProtractorEnvironmentConfig
 } from '../../shared/protractor-environment-utils';
 import { SkyuxProtractorBuilderOptions } from './protractor-options';
-import * as angularArchitect from '@angular-devkit/architect';
-import * as buildAngular from '@angular-devkit/build-angular';
-import mock from 'mock-require';
-import path from 'path';
 
 describe('protractor builder', () => {
   let createBuilderSpy: jasmine.Spy;

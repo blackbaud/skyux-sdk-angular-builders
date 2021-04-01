@@ -1,5 +1,6 @@
-import { SkyuxConfig } from '../../../../shared/skyux-config';
 import mock from 'mock-require';
+
+import { SkyuxConfig } from '../../../../shared/skyux-config';
 
 describe('startup config loader', () => {
   function mockGetSkyuxConfig(testSkyuxConfig: SkyuxConfig): void {

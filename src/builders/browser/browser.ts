@@ -1,5 +1,3 @@
-import { SkyuxBrowserBuilderOptions } from './browser-options';
-import { getBrowserTransforms } from './browser-transforms';
 import {
   BuilderContext,
   BuilderOutput,
@@ -8,6 +6,9 @@ import {
 import { executeBrowserBuilder } from '@angular-devkit/build-angular';
 import { JsonObject } from '@angular-devkit/core';
 import { Observable } from 'rxjs';
+
+import { SkyuxBrowserBuilderOptions } from './browser-options';
+import { getBrowserTransforms } from './browser-transforms';
 
 function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,

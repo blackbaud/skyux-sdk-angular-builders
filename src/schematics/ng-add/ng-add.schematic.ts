@@ -1,3 +1,24 @@
+import { OutputHashing } from '@angular-devkit/build-angular';
+import { normalize, workspaces } from '@angular-devkit/core';
+import {
+  MergeStrategy,
+  Rule,
+  SchematicContext,
+  SchematicsException,
+  Tree,
+  apply,
+  applyTemplates,
+  forEach,
+  mergeWith,
+  move,
+  url
+} from '@angular-devkit/schematics';
+import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
+import {
+  NodeDependencyType,
+  addPackageJsonDependency
+} from '@schematics/angular/utility/dependencies';
+
 import { SkyuxDevServerBuilderOptions } from '../../builders/dev-server/dev-server-options';
 import { SkyuxConfig } from '../../shared/skyux-config';
 import {
@@ -5,26 +26,6 @@ import {
   createHost
 } from '../utils/schematics-utils';
 import { SkyuxNgAddOptions } from './schema';
-import { OutputHashing } from '@angular-devkit/build-angular';
-import { normalize, workspaces } from '@angular-devkit/core';
-import {
-  apply,
-  applyTemplates,
-  forEach,
-  MergeStrategy,
-  mergeWith,
-  move,
-  Rule,
-  SchematicContext,
-  SchematicsException,
-  Tree,
-  url
-} from '@angular-devkit/schematics';
-import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import {
-  addPackageJsonDependency,
-  NodeDependencyType
-} from '@schematics/angular/utility/dependencies';
 
 async function readJson(host: workspaces.WorkspaceHost, filePath: string) {
   const contents = await host.readFile(filePath);

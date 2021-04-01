@@ -1,7 +1,8 @@
+import mock from 'mock-require';
+
 import { SkyuxConfigHost } from '../../../../shared/skyux-config';
 import { SkyuxHostAssetType } from '../../host-asset-type';
 import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
-import mock from 'mock-require';
 
 describe('create host url', () => {
   let hostUrl: string;
