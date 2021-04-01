@@ -1,11 +1,9 @@
 export interface SkyuxAppAssets {
-
   /**
    * The relative URL to the file found in the source code.
    * e.g., `src="assets/foo.jpg"`
    */
   [relativeUrl: string]: {
-
     /**
      * The absolute system path to the source file. This will be used to read the file's contents.
      */
@@ -20,7 +18,5 @@ export interface SkyuxAppAssets {
      * The hashed name of the file to emit with Webpack.
      */
     hashedFileName: string;
-
   };
-
 }

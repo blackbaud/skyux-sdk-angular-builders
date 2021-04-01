@@ -1,9 +1,6 @@
-import {
-  SkyuxHostAssetType
-} from './host-asset-type';
+import { SkyuxHostAssetType } from './host-asset-type';
 
 export interface SkyuxHostAsset {
-
   /**
    * The name of the global "fallback" variable to test if the JavaScript file has loaded.
    * @see: https://docs.microsoft.com/en-us/aspnet/core/mvc/views/tag-helpers/built-in/script-tag-helper
@@ -35,5 +32,4 @@ export interface SkyuxHostAsset {
    * The type of asset.
    */
   type: SkyuxHostAssetType;
-
 }

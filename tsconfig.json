@@ -19,9 +19,7 @@
     "sourceMap": true,
     "strict": true,
     "strictNullChecks": true,
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/@types"],
     "outDir": "./dist"
   },
   "include": [
@@ -31,9 +29,7 @@
     "src/builders/karma/karma.default.conf.ts",
     "src/builders/protractor/protractor.default.conf.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ],
+  "exclude": ["node_modules"],
   "compileOnSave": false,
   "buildOnSave": false
 }

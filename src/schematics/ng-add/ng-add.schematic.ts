@@ -1,11 +1,6 @@
-import {
-  OutputHashing
-} from '@angular-devkit/build-angular';
+import { OutputHashing } from '@angular-devkit/build-angular';
 
-import {
-  normalize,
-  workspaces
-} from '@angular-devkit/core';
+import { normalize, workspaces } from '@angular-devkit/core';
 
 import {
   apply,
@@ -21,36 +16,25 @@ import {
   url
 } from '@angular-devkit/schematics';
 
-import {
-  NodePackageInstallTask
-} from '@angular-devkit/schematics/tasks';
+import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 
 import {
   addPackageJsonDependency,
   NodeDependencyType
 } from '@schematics/angular/utility/dependencies';
 
-import {
-  SkyuxDevServerBuilderOptions
-} from '../../builders/dev-server/dev-server-options';
+import { SkyuxDevServerBuilderOptions } from '../../builders/dev-server/dev-server-options';
 
-import {
-  SkyuxConfig
-} from '../../shared/skyux-config';
+import { SkyuxConfig } from '../../shared/skyux-config';
 
 import {
   addModuleImportToRootModule,
   createHost
 } from '../utils/schematics-utils';
 
-import {
-  SkyuxNgAddOptions
-} from './schema';
+import { SkyuxNgAddOptions } from './schema';
 
-async function readJson(
-  host: workspaces.WorkspaceHost,
-  filePath: string
-) {
+async function readJson(host: workspaces.WorkspaceHost, filePath: string) {
   const contents = await host.readFile(filePath);
   return JSON.parse(contents);
 }
@@ -133,9 +117,7 @@ async function modifyAngularJson(
       testTarget.options!.codeCoverage = true;
 
       // Exclude our generated files from the consumers' code coverage.
-      testTarget.options!.codeCoverageExclude = [
-        'src/app/__skyux/**/*'
-      ];
+      testTarget.options!.codeCoverageExclude = ['src/app/__skyux/**/*'];
     } else {
       throw new SchematicsException(
         `Expected node projects/${project}/architect/test in angular.json!`
@@ -144,46 +126,65 @@ async function modifyAngularJson(
   }
 
   // Add theme stylesheets.
-  const angularStylesheets = architectConfig.build.options.styles.filter((stylesheet: string) => !stylesheet.startsWith('@skyux/theme'));
+  const angularStylesheets = architectConfig.build.options.styles.filter(
+    (stylesheet: string) => !stylesheet.startsWith('@skyux/theme')
+  );
   const themeStylesheets = await getThemeStylesheets(host);
-  architectConfig.build.options.styles = themeStylesheets.concat(angularStylesheets);
+  architectConfig.build.options.styles = themeStylesheets.concat(
+    angularStylesheets
+  );
 
-  await host.writeFile('angular.json', JSON.stringify(angularJson, undefined, 2) + '\n');
+  await host.writeFile(
+    'angular.json',
+    JSON.stringify(angularJson, undefined, 2) + '\n'
+  );
 }
 
 async function modifyKarmaConfig(
   host: workspaces.WorkspaceHost,
   projectRoot: string
 ): Promise<void> {
-  await host.writeFile(`${projectRoot}/karma.conf.js`, `// DO NOT MODIFY
+  await host.writeFile(
+    `${projectRoot}/karma.conf.js`,
+    `// DO NOT MODIFY
 // This file is handled by the '@skyux-sdk/angular-builders' library.
 module.exports = function (config) {
   config.set({});
 };
-`);
+`
+  );
 }
 
 async function modifyProtractorConfig(
   host: workspaces.WorkspaceHost,
   projectRoot: string
 ): Promise<void> {
-  await host.writeFile(`${projectRoot}/e2e/protractor.conf.js`, `// DO NOT MODIFY
+  await host.writeFile(
+    `${projectRoot}/e2e/protractor.conf.js`,
+    `// DO NOT MODIFY
 // This file is handled by the '@skyux-sdk/angular-builders' library.
 exports.config = {};
-`);
+`
+  );
 }
 
 async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
   const tsConfigContents = await host.readFile('tsconfig.json');
   // JavaScript has difficulty parsing JSON with comments.
-  const banner = '/* To learn more about this file see: https://angular.io/config/tsconfig. */\n';
+  const banner =
+    '/* To learn more about this file see: https://angular.io/config/tsconfig. */\n';
   const tsConfig = JSON.parse(tsConfigContents.replace(banner, ''));
   tsConfig.compilerOptions.resolveJsonModule = true;
   tsConfig.compilerOptions.esModuleInterop = true;
-  await host.writeFile('tsconfig.json', banner + JSON.stringify(tsConfig, undefined, 2));
+  await host.writeFile(
+    'tsconfig.json',
+    banner + JSON.stringify(tsConfig, undefined, 2)
+  );
 }
 
-async function modifyAppComponentTemplate(host: workspaces.WorkspaceHost): Promise<void> {
+async function modifyAppComponentTemplate(
+  host: workspaces.WorkspaceHost
+): Promise<void> {
   const templatePath = 'src/app/app.component.html';
 
   let templateHtml = await host.readFile(templatePath);
@@ -206,8 +207,8 @@ async function modifyAppComponentTemplate(host: workspaces.WorkspaceHost): Promi
  * Fixes an Angular CLI issue with merge strategies.
  * @see https://github.com/angular/angular-cli/issues/11337#issuecomment-516543220
  */
- function overwriteIfExists(tree: Tree): Rule {
-  return forEach(fileEntry => {
+function overwriteIfExists(tree: Tree): Rule {
+  return forEach((fileEntry) => {
     if (tree.exists(fileEntry.path)) {
       tree.overwrite(fileEntry.path, fileEntry.content);
       return null;
@@ -218,13 +219,24 @@ async function modifyAppComponentTemplate(host: workspaces.WorkspaceHost): Promi
 
 function createSkyuxConfigIfNotExists(tree: Tree) {
   if (!tree.exists('skyuxconfig.json')) {
-    tree.create('skyuxconfig.json', JSON.stringify({
-      $schema: './node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json'
-    }, undefined, 2));
+    tree.create(
+      'skyuxconfig.json',
+      JSON.stringify(
+        {
+          $schema:
+            './node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json'
+        },
+        undefined,
+        2
+      )
+    );
   }
 }
 
-function createAppFiles(tree: Tree, project: workspaces.ProjectDefinition): Rule {
+function createAppFiles(
+  tree: Tree,
+  project: workspaces.ProjectDefinition
+): Rule {
   addModuleImportToRootModule(
     tree,
     'SkyuxModule.forRoot()',
@@ -246,14 +258,13 @@ async function setupLibraries(
   workspace: workspaces.WorkspaceDefinition
 ): Promise<void> {
   // Modify the karma configs for all libraries.
-  workspace.projects.forEach(async project => {
+  workspace.projects.forEach(async (project) => {
     await modifyKarmaConfig(host, project.root);
   });
 }
 
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
   return async (tree: Tree, context: SchematicContext) => {
-
     const host = createHost(tree);
     const { workspace } = await workspaces.readWorkspace('/', host);
 

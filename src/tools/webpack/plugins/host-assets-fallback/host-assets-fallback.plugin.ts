@@ -1,6 +1,4 @@
-import {
-  Compiler
-} from 'webpack';
+import { Compiler } from 'webpack';
 
 import {
   getFallbackTestCssRule,
@@ -20,11 +18,11 @@ const PLUGIN_NAME = 'skyux-host-assets-fallback-plugin';
 export class SkyuxHostAssetsFallbackPlugin {
   public apply(compiler: Compiler): void {
     compiler.hooks.emit.tap(PLUGIN_NAME, (compilation) => {
-
       // Add a fallback variable to the bottom of the JS source files.
       modifyScriptContents(
         compilation,
-        (content, file) => `${content}\nvar ${getFallbackTestVariable(file)} = true;`
+        (content, file) =>
+          `${content}\nvar ${getFallbackTestVariable(file)} = true;`
       );
 
       // Add a fallback CSS rule to the bottom of each style sheet.
