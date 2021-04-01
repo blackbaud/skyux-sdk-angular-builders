@@ -18,7 +18,7 @@
     "coverage": "nyc npm run test",
     "lint": "tslint --project tsconfig.json",
     "start": "npm run clean && tsc-watch -p tsconfig.json --onSuccess \"npm run postbuild\"",
-    "test": "npm run lint && ts-node --project tsconfig.test.json ./node_modules/.bin/jasmine --config=jasmine.json"
+    "test": "npm run lint && ts-node --project tsconfig.test.json node_modules/jasmine/bin/jasmine.js --config=jasmine.json"
   },
   "peerDependencies": {
     "@angular-devkit/build-angular": "^0.1102.6"

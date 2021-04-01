@@ -2,6 +2,8 @@ import karma from 'karma';
 
 import mock from 'mock-require';
 
+import path from 'path';
+
 describe('ci platform utils', () => {
 
   let globSyncSpy: jasmine.Spy;
@@ -40,7 +42,7 @@ describe('ci platform utils', () => {
     });
 
     expect(globSyncSpy.calls.mostRecent().args[0]).toContain(
-      'node_modules/**/@skyux-sdk/pipeline-settings/platforms/ado/protractor/protractor.angular-cli.conf.js'
+      path.join('node_modules/**/@skyux-sdk/pipeline-settings/platforms/ado/protractor/protractor.angular-cli.conf.js')
     );
   });
 
@@ -58,7 +60,7 @@ describe('ci platform utils', () => {
     expect(result).toBe(contents);
 
     expect(globSyncSpy.calls.mostRecent().args[0]).toContain(
-      'node_modules/**/@skyux-sdk/pipeline-settings/platforms/gh-actions/karma/karma.angular-cli.conf.js'
+      path.join('node_modules/**/@skyux-sdk/pipeline-settings/platforms/gh-actions/karma/karma.angular-cli.conf.js')
     );
   });
 
