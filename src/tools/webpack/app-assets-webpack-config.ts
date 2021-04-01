@@ -28,7 +28,7 @@ function createAppAssetsMap(assetsBaseUrl: string): SkyuxAppAssets {
 
   // Find all asset file paths.
   const filePaths = glob.sync(
-    path.join(process.cwd(), 'src/assets/**/*'),
+    'src/assets/**/*',
     { nodir: true }
   );
 

@@ -1,6 +1,6 @@
 {
   "name": "@skyux-sdk/angular-builders",
-  "version": "4.0.0-alpha.27",
+  "version": "4.0.0-alpha.28",
   "repository": {
     "url": "https://github.com/blackbaud/skyux-sdk-angular-builders"
   },
@@ -19,7 +19,7 @@
     "lint": "tslint --project tsconfig.json",
     "format-all": "npx prettier --write .",
     "start": "npm run clean && tsc-watch -p tsconfig.json --onSuccess \"npm run postbuild\"",
-    "test": "npm run lint && ts-node --project tsconfig.test.json ./node_modules/.bin/jasmine --config=jasmine.json"
+    "test": "npm run lint && ts-node --project tsconfig.test.json node_modules/jasmine/bin/jasmine.js --config=jasmine.json"
   },
   "peerDependencies": {
     "@angular-devkit/build-angular": "^0.1102.6"

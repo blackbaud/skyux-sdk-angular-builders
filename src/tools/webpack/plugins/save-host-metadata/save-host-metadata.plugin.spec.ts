@@ -1,5 +1,7 @@
 import mock from 'mock-require';
 
+import path from 'path';
+
 import {
   SkyuxSaveHostMetadataPlugin
 } from './save-host-metadata.plugin';
@@ -20,7 +22,7 @@ describe('save metadata webpack plugin', () => {
   afterEach(() => {
     mock.stopAll();
   });
-  
+
   function setupTest(mockChunks: any[]): void {
     const mockStats = {
       toJson: () => {
@@ -30,7 +32,7 @@ describe('save metadata webpack plugin', () => {
         };
       }
     };
-    
+
     mockCompiler = {
       hooks: {
         done: {
@@ -72,7 +74,7 @@ describe('save metadata webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(writeJsonSpy).toHaveBeenCalledWith(
-      'dist/metadata.json',
+      path.join('dist/metadata.json'),
       [
         {
           name: 'main.js',

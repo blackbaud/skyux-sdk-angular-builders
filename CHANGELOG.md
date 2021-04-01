@@ -1,3 +1,7 @@
+# 4.0.0-alpha.28 (2021-04-01)
+
+- Fixed the application assets service to format file paths correctly for Windows machines. [#80](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/80)
+
 # 4.0.0-alpha.27 (2021-03-31)
 
 - Added the `SkyAppOmnibarTitleService`. [#77](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/77)
