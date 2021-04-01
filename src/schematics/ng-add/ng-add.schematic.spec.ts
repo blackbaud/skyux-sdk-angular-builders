@@ -1,11 +1,9 @@
+import { createTestApp, generateTestLibrary } from '../testing/scaffold';
 import {
   SchematicTestRunner,
   UnitTestTree
 } from '@angular-devkit/schematics/testing';
-
 import path from 'path';
-
-import { createTestApp, generateTestLibrary } from '../testing/scaffold';
 
 const COLLECTION_PATH = path.resolve(__dirname, '../../../collection.json');
 

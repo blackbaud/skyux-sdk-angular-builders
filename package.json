@@ -39,6 +39,7 @@
     "@angular/compiler-cli": "11.2.7",
     "@istanbuljs/nyc-config-typescript": "1.0.1",
     "@schematics/angular": "11.2.6",
+    "@trivago/prettier-plugin-sort-imports": "2.0.2",
     "@types/fs-extra": "9.0.8",
     "@types/jasmine": "3.6.9",
     "@types/karma": "5.0.1",

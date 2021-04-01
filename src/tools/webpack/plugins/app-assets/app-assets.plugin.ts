@@ -1,10 +1,7 @@
-import fs from 'fs-extra';
-
-import webpack from 'webpack';
-
 import { SkyuxAppAssets } from '../../app-assets';
-
 import { modifyScriptContents } from '../../webpack-utils';
+import fs from 'fs-extra';
+import webpack from 'webpack';
 
 const PLUGIN_NAME = 'skyux-asset-urls-plugin';
 

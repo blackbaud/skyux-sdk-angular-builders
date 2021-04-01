@@ -1,14 +1,9 @@
-import { ExecutionTransformer } from '@angular-devkit/build-angular';
-
-import { Configuration as WebpackConfig } from 'webpack';
-
-import { SkyuxHostAssetsFallbackPlugin } from '../../tools/webpack/plugins/host-assets-fallback/host-assets-fallback.plugin';
-
-import { SkyuxSaveHostMetadataPlugin } from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
-
 import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';
-
+import { SkyuxHostAssetsFallbackPlugin } from '../../tools/webpack/plugins/host-assets-fallback/host-assets-fallback.plugin';
+import { SkyuxSaveHostMetadataPlugin } from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
 import { SkyuxBrowserBuilderOptions } from './browser-options';
+import { ExecutionTransformer } from '@angular-devkit/build-angular';
+import { Configuration as WebpackConfig } from 'webpack';
 
 /**
  * Allows adjustments to the default Angular "browser" webpack config.

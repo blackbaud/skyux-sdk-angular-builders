@@ -1,17 +1,12 @@
-import mock from 'mock-require';
-
-import { Subject } from 'rxjs';
-
-import { take } from 'rxjs/operators';
-
 import {
   clearProtractorEnvironmentConfig,
   getProtractorEnvironmentConfig
 } from '../../../../shared/protractor-environment-utils';
-
 import { SkyuxProtractorPluginConfig } from './protractor-plugin-config';
-
 import { SkyuxProtractorPlugin } from './protractor.plugin';
+import mock from 'mock-require';
+import { Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 describe('protractor webpack plugin', () => {
   let mockCompiler: any;

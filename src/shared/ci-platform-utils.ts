@@ -1,12 +1,8 @@
-import glob from 'glob';
-
-import karma from 'karma';
-
-import path from 'path';
-
-import { Config as ProtractorConfig } from 'protractor';
-
 import { SkyuxCIPlatform } from './ci-platform';
+import glob from 'glob';
+import karma from 'karma';
+import path from 'path';
+import { Config as ProtractorConfig } from 'protractor';
 
 /**
  * Returns the testing framework configuration intended for a specific continuous integration (CI) platform.

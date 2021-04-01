@@ -1,16 +1,10 @@
-import open from 'open';
-
-import { BehaviorSubject, Observable } from 'rxjs';
-
-import { Compiler } from 'webpack';
-
 import { getHostAssets } from '../../host-asset-utils';
-
 import { createHostUrl } from './create-host-url';
-
 import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
-
 import { SkyuxOpenHostUrlPluginConfig } from './open-host-url-config';
+import open from 'open';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Compiler } from 'webpack';
 
 const PLUGIN_NAME = 'open-skyux-host-plugin';
 

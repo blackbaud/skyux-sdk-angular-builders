@@ -1,16 +1,10 @@
-import glob from 'glob';
-
-import hasha from 'hasha';
-
-import path from 'path';
-
-import webpack from 'webpack';
-
 import { ensureTrailingSlash } from '../../shared/url-utils';
-
-import { SkyuxAppAssetsPlugin } from './plugins/app-assets/app-assets.plugin';
-
 import { SkyuxAppAssets } from './app-assets';
+import { SkyuxAppAssetsPlugin } from './plugins/app-assets/app-assets.plugin';
+import glob from 'glob';
+import hasha from 'hasha';
+import path from 'path';
+import webpack from 'webpack';
 
 /**
  * Creates an object which maps relative asset paths to absolute URLs with hashed file names.

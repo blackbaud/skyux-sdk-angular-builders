@@ -1,10 +1,7 @@
-import mock from 'mock-require';
-
-import { Config as ProtractorConfig } from 'protractor';
-
 import { applyProtractorEnvironmentConfig } from '../../shared/protractor-environment-utils';
-
 import { SkyuxProtractorBuilderOptions } from './protractor-options';
+import mock from 'mock-require';
+import { Config as ProtractorConfig } from 'protractor';
 
 describe('protractor.default.conf', () => {
   let mockPlatformConfig: ProtractorConfig | undefined;

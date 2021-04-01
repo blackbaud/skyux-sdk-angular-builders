@@ -1,10 +1,7 @@
-import { getOptions } from 'loader-utils';
-
-import validateOptions from 'schema-utils';
-
-import { loader } from 'webpack';
-
 import { getSkyuxConfig } from '../../../../shared/skyux-config-utils';
+import { getOptions } from 'loader-utils';
+import validateOptions from 'schema-utils';
+import { loader } from 'webpack';
 
 const schema = require('./schema.json');
 

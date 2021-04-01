@@ -1,10 +1,7 @@
-import fs from 'fs-extra';
-
-import path from 'path';
-
-import { Compiler } from 'webpack';
-
 import { getHostAssets } from '../../host-asset-utils';
+import fs from 'fs-extra';
+import path from 'path';
+import { Compiler } from 'webpack';
 
 const PLUGIN_NAME = 'skyux-save-host-metadata-plugin';
 
