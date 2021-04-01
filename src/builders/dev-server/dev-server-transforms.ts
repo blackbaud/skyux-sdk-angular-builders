@@ -1,50 +1,26 @@
-import {
-  BuilderContext
-} from '@angular-devkit/architect';
+import { BuilderContext } from '@angular-devkit/architect';
 
-import {
-  ExecutionTransformer
-} from '@angular-devkit/build-angular';
+import { ExecutionTransformer } from '@angular-devkit/build-angular';
 
-import {
-  Configuration as WebpackConfig
-} from 'webpack';
+import { Configuration as WebpackConfig } from 'webpack';
 
-import {
-  take
-} from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 
-import {
-  SkyuxConfig
-} from '../../shared/skyux-config';
+import { SkyuxConfig } from '../../shared/skyux-config';
 
-import {
-  SkyuxOpenHostUrlPlugin
-} from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
+import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
 
-import {
-  SkyuxProtractorPlugin
-} from '../../tools/webpack/plugins/protractor/protractor.plugin';
+import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
 
-import {
-  applyAppAssetsWebpackConfig
-} from '../../tools/webpack/app-assets-webpack-config';
+import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';
 
-import {
-  applySkyuxConfigWebpackConfig
-} from '../../tools/webpack/skyux-config-webpack-config';
+import { applySkyuxConfigWebpackConfig } from '../../tools/webpack/skyux-config-webpack-config';
 
-import {
-  applyStartupConfigWebpackConfig
-} from '../../tools/webpack/startup-config';
+import { applyStartupConfigWebpackConfig } from '../../tools/webpack/startup-config';
 
-import {
-  SkyuxDevServerBuilderOptions
-} from './dev-server-options';
+import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 
-import {
-  getLocalUrlFromOptions
-} from './dev-server-utils';
+import { getLocalUrlFromOptions } from './dev-server-utils';
 
 /**
  * Allows adjustments to the default Angular "dev-server" webpack config.
@@ -57,7 +33,6 @@ function getDevServerWepbackConfigTransformer(
   skyuxConfig: SkyuxConfig
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
-
     const localUrl = getLocalUrlFromOptions(options);
 
     webpackConfig.plugins = webpackConfig.plugins || [];
@@ -70,18 +45,13 @@ function getDevServerWepbackConfigTransformer(
       baseHref: context.target!.project!
     });
 
-    webpackConfig.plugins.push(
-      openHostUrlPlugin
-    );
+    webpackConfig.plugins.push(openHostUrlPlugin);
 
     /**
      * If we're running e2e tests, add the Protractor Webpack plugin.
      */
     const configurationName = context.target!.configuration;
-    if (
-      configurationName === 'e2e' ||
-      configurationName === 'e2eProduction'
-    ) {
+    if (configurationName === 'e2e' || configurationName === 'e2eProduction') {
       webpackConfig.plugins.push(
         new SkyuxProtractorPlugin({
           hostUrlFactory: () => {
@@ -105,6 +75,10 @@ export function getDevServerTransforms(
   skyuxConfig: SkyuxConfig
 ) {
   return {
-    webpackConfiguration: getDevServerWepbackConfigTransformer(options, context, skyuxConfig)
+    webpackConfiguration: getDevServerWepbackConfigTransformer(
+      options,
+      context,
+      skyuxConfig
+    )
   };
 }

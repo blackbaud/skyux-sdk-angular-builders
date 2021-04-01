@@ -1,3 +1,3 @@
 export interface SkyuxProtractorPluginConfig {
-  hostUrlFactory: () => Promise<string>
+  hostUrlFactory: () => Promise<string>;
 }

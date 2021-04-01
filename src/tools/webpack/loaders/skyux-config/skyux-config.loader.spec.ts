@@ -1,7 +1,6 @@
 import mock from 'mock-require';
 
 describe('skyux config loader', () => {
-
   beforeEach(() => {
     mock('../../../../shared/skyux-config-utils', {
       getSkyuxConfig() {
@@ -25,5 +24,4 @@ describe('skyux config loader', () => {
 
     expect(result).toEqual('{"host":{"url":"https://foo.blackbaud.com"}}');
   });
-
 });
