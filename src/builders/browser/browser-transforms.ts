@@ -1,3 +1,5 @@
+import { BuilderContext } from '@angular-devkit/architect';
+
 import { ExecutionTransformer } from '@angular-devkit/build-angular';
 
 import { Configuration as WebpackConfig } from 'webpack';
@@ -8,6 +10,10 @@ import { SkyuxSaveHostMetadataPlugin } from '../../tools/webpack/plugins/save-ho
 
 import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';
 
+import { applySkyuxConfigWebpackConfig } from '../../tools/webpack/skyux-config-webpack-config';
+
+import { applyStartupConfigWebpackConfig } from '../../tools/webpack/startup-config';
+
 import { SkyuxBrowserBuilderOptions } from './browser-options';
 
 /**
@@ -16,7 +22,8 @@ import { SkyuxBrowserBuilderOptions } from './browser-options';
  * @param context The context of the builder execution.
  */
 function getBrowserWepbackConfigTransformer(
-  options: SkyuxBrowserBuilderOptions
+  options: SkyuxBrowserBuilderOptions,
+  context: BuilderContext
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
     webpackConfig.plugins = webpackConfig.plugins || [];
@@ -27,13 +34,18 @@ function getBrowserWepbackConfigTransformer(
     );
 
     applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl);
+    applySkyuxConfigWebpackConfig(webpackConfig);
+    applyStartupConfigWebpackConfig(webpackConfig, context.target!.project!);
 
     return webpackConfig;
   };
 }
 
-export function getBrowserTransforms(options: SkyuxBrowserBuilderOptions) {
+export function getBrowserTransforms(
+  options: SkyuxBrowserBuilderOptions,
+  context: BuilderContext
+) {
   return {
-    webpackConfiguration: getBrowserWepbackConfigTransformer(options)
+    webpackConfiguration: getBrowserWepbackConfigTransformer(options, context)
   };
 }
