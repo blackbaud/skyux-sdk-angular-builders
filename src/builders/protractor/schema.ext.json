@@ -4,7 +4,10 @@
     "skyuxCiPlatform": {
       "type": "string",
       "description": "The name of the continuous integration platform that will run the tests.",
-      "enum": ["ado", "gh-actions"]
+      "enum": [
+        "ado",
+        "gh-actions"
+      ]
     },
     "skyuxHeadless": {
       "type": "boolean",

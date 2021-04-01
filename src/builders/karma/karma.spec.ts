@@ -6,11 +6,16 @@ import mock from 'mock-require';
 
 import path from 'path';
 
-import { of } from 'rxjs';
+import {
+  of
+} from 'rxjs';
 
-import { SkyuxKarmaBuilderOptions } from './karma-options';
+import {
+  SkyuxKarmaBuilderOptions
+} from './karma-options';
 
 describe('karma builder', () => {
+
   let createBuilderSpy: jasmine.Spy;
   let executeKarmaBuilderSpy: jasmine.Spy;
   let options: SkyuxKarmaBuilderOptions;
@@ -22,31 +27,25 @@ describe('karma builder', () => {
       tsConfig: 'tsconfig.json'
     };
 
-    createBuilderSpy = jasmine
-      .createSpy('createBuilder')
-      .and.callFake((cb: any) =>
-        cb(options, {
-          target: {
-            project: 'foo'
-          }
-        })
-      );
+    createBuilderSpy = jasmine.createSpy('createBuilder').and
+      .callFake((cb: any) => cb(options, {
+        target: {
+          project: 'foo'
+        }
+      }));
 
-    executeKarmaBuilderSpy = jasmine
-      .createSpy('executeKarmaBuilder')
-      .and.callFake((_options: any, _context: any, _transforms: any) => {
+    executeKarmaBuilderSpy = jasmine.createSpy('executeKarmaBuilder').and
+      .callFake((_options: any, _context: any, _transforms: any) => {
         return of({
           success: true
         });
       });
 
-    spyOnProperty(angularArchitect, 'createBuilder', 'get').and.returnValue(
-      createBuilderSpy
-    );
+    spyOnProperty(angularArchitect, 'createBuilder', 'get').and
+      .returnValue(createBuilderSpy);
 
-    spyOnProperty(buildAngular, 'executeKarmaBuilder', 'get').and.returnValue(
-      executeKarmaBuilderSpy
-    );
+    spyOnProperty(buildAngular, 'executeKarmaBuilder', 'get').and
+      .returnValue(executeKarmaBuilderSpy);
 
     mock('../../shared/skyux-config-utils', {
       getSkyuxConfig() {
@@ -64,7 +63,7 @@ describe('karma builder', () => {
   });
 
   it('should overwrite Angular karma config with defaults', async () => {
-    await mock.reRequire('./karma');
+    await (mock.reRequire('./karma'));
 
     expect(options).toEqual({
       karmaConfig: path.resolve(__dirname, 'karma.default.conf.js'),
@@ -76,7 +75,7 @@ describe('karma builder', () => {
   it('should add specific options for CI platforms', async () => {
     options.skyuxCiPlatform = 'ado';
 
-    await mock.reRequire('./karma');
+    await (mock.reRequire('./karma'));
 
     expect(options).toEqual({
       codeCoverage: true,
@@ -87,4 +86,5 @@ describe('karma builder', () => {
       watch: false
     });
   });
+
 });

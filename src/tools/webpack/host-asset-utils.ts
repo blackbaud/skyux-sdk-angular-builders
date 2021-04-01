@@ -1,10 +1,19 @@
-import { Stats } from 'webpack';
+import {
+  Stats
+} from 'webpack';
 
-import { dasherize, underscore } from '../../shared/string-utils';
+import {
+  dasherize,
+  underscore
+} from '../../shared/string-utils';
 
-import { SkyuxHostAsset } from './host-asset';
+import {
+  SkyuxHostAsset
+} from './host-asset';
 
-import { SkyuxHostAssetType } from './host-asset-type';
+import {
+  SkyuxHostAssetType
+} from './host-asset-type';
 
 const FALLBACK_CSS_PROPERTY = 'visibility';
 const FALLBACK_CSS_VALUE = 'hidden';
@@ -14,9 +23,7 @@ function getFallbackCssClassName(fileName: string): string {
 }
 
 export function getFallbackTestCssRule(name: string): string {
-  return `.${getFallbackCssClassName(
-    name
-  )} {${FALLBACK_CSS_PROPERTY}:${FALLBACK_CSS_VALUE};}`;
+  return `.${getFallbackCssClassName(name)} {${FALLBACK_CSS_PROPERTY}:${FALLBACK_CSS_VALUE};}`;
 }
 
 export function getFallbackTestVariable(name: string): string {
@@ -44,10 +51,11 @@ export function getHostAssets(
 
   const chunks = stats?.chunks;
   if (chunks) {
+
     // Get style sheets.
     chunks
-      .filter((chunk) => isCss(chunk.files[0]))
-      .forEach((chunk) => {
+      .filter(chunk => isCss(chunk.files[0]))
+      .forEach(chunk => {
         const fileName = chunk.files[0];
         const stylesheet: SkyuxHostAsset = {
           name: fileName,
@@ -67,14 +75,12 @@ export function getHostAssets(
 
     // Get scripts.
     chunks
-      .filter((chunk) => {
+      .filter(chunk => {
         // Only include primary and lazy-loaded scripts.
-        return (
-          isJavaScript(chunk.files[0]) &&
-          (chunk.initial || config?.includeLazyloadedChunks)
-        );
+        return isJavaScript(chunk.files[0]) &&
+          (chunk.initial || config?.includeLazyloadedChunks);
       })
-      .forEach((chunk) => {
+      .forEach(chunk => {
         const script: SkyuxHostAsset = {
           name: chunk.files[0],
           type: SkyuxHostAssetType.Script

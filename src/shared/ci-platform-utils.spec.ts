@@ -3,6 +3,7 @@ import karma from 'karma';
 import mock from 'mock-require';
 
 describe('ci platform utils', () => {
+
   let globSyncSpy: jasmine.Spy;
 
   beforeEach(() => {
@@ -20,11 +21,11 @@ describe('ci platform utils', () => {
   });
 
   it('should return Protractor config', () => {
-    const { getCiPlatformProtractorConfig } = mock.reRequire(
-      './ci-platform-utils'
-    );
+    const { getCiPlatformProtractorConfig } = mock.reRequire('./ci-platform-utils');
 
-    globSyncSpy.and.returnValue(['valid-config-file.js']);
+    globSyncSpy.and.returnValue([
+      'valid-config-file.js'
+    ]);
 
     const contents = {
       config: {
@@ -46,7 +47,9 @@ describe('ci platform utils', () => {
   it('should return Karma config', () => {
     const { getCiPlatformKarmaConfig } = mock.reRequire('./ci-platform-utils');
 
-    globSyncSpy.and.returnValue(['valid-config-file.js']);
+    globSyncSpy.and.returnValue([
+      'valid-config-file.js'
+    ]);
 
     const contents = (_conf: karma.Config) => {};
     mock('valid-config-file.js', contents);
@@ -60,22 +63,15 @@ describe('ci platform utils', () => {
   });
 
   it('should handle invalid platform config keys', () => {
-    const { getCiPlatformProtractorConfig } = mock.reRequire(
-      './ci-platform-utils'
-    );
+    const { getCiPlatformProtractorConfig } = mock.reRequire('./ci-platform-utils');
 
     globSyncSpy.and.returnValue([]);
     const warnSpy = spyOn(console, 'warn');
 
     const result = getCiPlatformProtractorConfig('invalid');
 
-    expect(result).toBe(
-      undefined,
-      'Expected config file path to be undefined.'
-    );
+    expect(result).toBe(undefined, 'Expected config file path to be undefined.');
 
-    expect(warnSpy.calls.mostRecent().args[0]).toContain(
-      'Platform configuration not found for key'
-    );
+    expect(warnSpy.calls.mostRecent().args[0]).toContain('Platform configuration not found for key');
   });
 });

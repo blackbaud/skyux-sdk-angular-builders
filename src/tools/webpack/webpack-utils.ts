@@ -2,7 +2,9 @@ import path from 'path';
 
 import webpack from 'webpack';
 
-import { ConcatSource } from 'webpack-sources';
+import {
+  ConcatSource
+} from 'webpack-sources';
 
 type AssetSourceCallback = (content: string, filePath: string) => string;
 
@@ -15,8 +17,10 @@ function modifyChunkContents(
 
   for (const filePath of filePaths) {
     if (path.parse(filePath).ext === fileExtension) {
-      compilation.updateAsset(filePath, (old) => {
-        return new ConcatSource(callback(old.source(), filePath));
+      compilation.updateAsset(filePath, old => {
+        return new ConcatSource(
+          callback(old.source(), filePath)
+        );
       });
     }
   }
@@ -35,7 +39,7 @@ export function modifyScriptContents(
 /**
  * Allows a Webpack plugin to modify the contents of all emitted CSS assets.
  */
-export function modifyStylesheetContents(
+ export function modifyStylesheetContents(
   compilation: webpack.compilation.Compilation,
   callback: AssetSourceCallback
 ): void {

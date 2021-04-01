@@ -4,21 +4,35 @@ import {
   createBuilder
 } from '@angular-devkit/architect';
 
-import { executeBrowserBuilder } from '@angular-devkit/build-angular';
+import {
+  executeBrowserBuilder
+} from '@angular-devkit/build-angular';
 
-import { JsonObject } from '@angular-devkit/core';
+import {
+  JsonObject
+} from '@angular-devkit/core';
 
-import { Observable } from 'rxjs';
+import {
+  Observable
+} from 'rxjs';
 
-import { SkyuxBrowserBuilderOptions } from './browser-options';
+import {
+  SkyuxBrowserBuilderOptions
+} from './browser-options';
 
-import { getBrowserTransforms } from './browser-transforms';
+import {
+  getBrowserTransforms
+} from './browser-transforms';
 
 function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext
 ): Observable<BuilderOutput> {
-  return executeBrowserBuilder(options, context, getBrowserTransforms(options));
+  return executeBrowserBuilder(
+    options,
+    context,
+    getBrowserTransforms(options)
+  );
 }
 
 export default createBuilder<JsonObject & SkyuxBrowserBuilderOptions>(

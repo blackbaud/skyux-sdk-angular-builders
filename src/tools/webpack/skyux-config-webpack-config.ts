@@ -9,10 +9,7 @@ export function applySkyuxConfigWebpackConfig(
     enforce: 'pre',
     test: /(\/|\\)__skyux(\/|\\)processed-skyuxconfig\.json$/,
     use: {
-      loader: path.resolve(
-        __dirname,
-        './loaders/skyux-config/skyux-config.loader'
-      )
+      loader: path.resolve(__dirname, './loaders/skyux-config/skyux-config.loader')
     }
   });
 }

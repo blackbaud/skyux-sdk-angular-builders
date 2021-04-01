@@ -1,18 +1,25 @@
-import { ProtractorBuilderOptions } from '@angular-devkit/build-angular';
+import {
+  ProtractorBuilderOptions
+} from '@angular-devkit/build-angular';
 
-import { JsonObject } from '@angular-devkit/core';
+import {
+  JsonObject
+} from '@angular-devkit/core';
 
-import { SkyuxCIPlatform } from '../../shared/ci-platform';
+import {
+  SkyuxCIPlatform
+} from '../../shared/ci-platform';
 
-export type SkyuxProtractorBuilderOptions = ProtractorBuilderOptions &
-  JsonObject & {
-    /**
-     * The name of the continuous integration platform that will run the tests.
-     */
-    skyuxCiPlatform?: SkyuxCIPlatform;
+export type SkyuxProtractorBuilderOptions = ProtractorBuilderOptions & JsonObject & {
 
-    /**
-     * Specifies if the test browser should be run in "headless" mode.
-     */
-    skyuxHeadless?: boolean;
-  };
+  /**
+   * The name of the continuous integration platform that will run the tests.
+   */
+  skyuxCiPlatform?: SkyuxCIPlatform;
+
+  /**
+   * Specifies if the test browser should be run in "headless" mode.
+   */
+  skyuxHeadless?: boolean;
+
+};

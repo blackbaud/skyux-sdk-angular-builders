@@ -4,27 +4,42 @@ import * as buildAngular from '@angular-devkit/build-angular';
 
 import mock from 'mock-require';
 
-import { homedir } from 'os';
+import {
+  homedir
+} from 'os';
 
-import { of } from 'rxjs';
+import {
+  of
+} from 'rxjs';
 
 import webpack from 'webpack';
 
-import { SkyuxConfig } from '../../shared/skyux-config';
+import {
+  SkyuxConfig
+} from '../../shared/skyux-config';
 
-import { SkyuxAppAssetsPlugin } from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
+import {
+  SkyuxAppAssetsPlugin
+} from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
 
-import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
+import {
+  SkyuxProtractorPlugin
+} from '../../tools/webpack/plugins/protractor/protractor.plugin';
 
-import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
+import {
+  SkyuxOpenHostUrlPlugin
+} from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
 
-import { SkyuxDevServerBuilderOptions } from './dev-server-options';
+import {
+  SkyuxDevServerBuilderOptions
+} from './dev-server-options';
 
 class MockWebpackPlugin {
-  public apply() {}
+  public apply() { }
 }
 
 describe('dev-server builder', () => {
+
   let createBuilderSpy: jasmine.Spy;
   let executDevServerBuilderSpy: jasmine.Spy;
   let defaultOptions: SkyuxDevServerBuilderOptions;
@@ -49,30 +64,22 @@ describe('dev-server builder', () => {
       }
     };
 
-    createBuilderSpy = jasmine
-      .createSpy('createBuilder')
-      .and.callFake((cb: any) => cb(defaultOptions, mockContext));
+    createBuilderSpy = jasmine.createSpy('createBuilder').and
+      .callFake((cb: any) => cb(defaultOptions, mockContext));
 
-    executDevServerBuilderSpy = jasmine
-      .createSpy('executeDevServerBuilder')
-      .and.callFake((_options: any, _context: any, transforms: any) => {
-        actualWebpackConfig = transforms.webpackConfiguration(
-          defaultWebpackConfig
-        );
+    executDevServerBuilderSpy = jasmine.createSpy('executeDevServerBuilder').and
+      .callFake((_options: any, _context: any, transforms: any) => {
+        actualWebpackConfig = transforms.webpackConfiguration(defaultWebpackConfig);
         return of({
           success: true
         });
       });
 
-    spyOnProperty(angularArchitect, 'createBuilder', 'get').and.returnValue(
-      createBuilderSpy
-    );
+    spyOnProperty(angularArchitect, 'createBuilder', 'get').and
+      .returnValue(createBuilderSpy);
 
-    spyOnProperty(
-      buildAngular,
-      'executeDevServerBuilder',
-      'get'
-    ).and.returnValue(executDevServerBuilderSpy);
+    spyOnProperty(buildAngular, 'executeDevServerBuilder', 'get').and
+      .returnValue(executDevServerBuilderSpy);
 
     mock('glob', {
       sync: () => ['foo.jpg']
@@ -103,13 +110,14 @@ describe('dev-server builder', () => {
   }
 
   describe('configuration', () => {
+
     it('should set defaults', async () => {
-      await mock.reRequire('./dev-server');
+      await (mock.reRequire('./dev-server'));
 
       const actualOptions = getActualOptions();
 
       expect(actualOptions).toEqual({
-        allowedHosts: ['.blackbaud.com'],
+        allowedHosts: [ '.blackbaud.com' ],
         browserTarget: 'foo:build',
         deployUrl: 'https://localhost:4200/',
         host: 'localhost',
@@ -123,23 +131,23 @@ describe('dev-server builder', () => {
         sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
       });
     });
+
   });
 
   describe('webpack config', () => {
+
     function getOpenHostUrlPlugin(): SkyuxOpenHostUrlPlugin {
-      return actualWebpackConfig.plugins?.find(
-        (p) => p instanceof SkyuxOpenHostUrlPlugin
-      ) as SkyuxOpenHostUrlPlugin;
+      return actualWebpackConfig.plugins?.find(p =>
+        p instanceof SkyuxOpenHostUrlPlugin) as SkyuxOpenHostUrlPlugin;
     }
 
     function getProtractorPlugin(): SkyuxProtractorPlugin {
-      return actualWebpackConfig.plugins?.find(
-        (p) => p instanceof SkyuxProtractorPlugin
-      ) as SkyuxProtractorPlugin;
+      return actualWebpackConfig.plugins?.find(p =>
+        p instanceof SkyuxProtractorPlugin) as SkyuxProtractorPlugin;
     }
 
     it('should add `SkyuxOpenHostUrlPlugin` to webpack plugins', async () => {
-      await mock.reRequire('./dev-server');
+      await (mock.reRequire('./dev-server'));
       const plugin = getOpenHostUrlPlugin();
       expect(plugin).toBeDefined();
     });
@@ -147,11 +155,9 @@ describe('dev-server builder', () => {
     it('should pass `externals` to `SkyuxOpenHostUrlPlugin` if defined', async () => {
       const externals = {
         js: {
-          before: [
-            {
-              url: 'foo.js'
-            }
-          ]
+          before: [{
+            url: 'foo.js'
+          }]
         }
       };
 
@@ -159,7 +165,7 @@ describe('dev-server builder', () => {
         externals
       };
 
-      await mock.reRequire('./dev-server');
+      await (mock.reRequire('./dev-server'));
 
       const plugin = getOpenHostUrlPlugin();
 
@@ -167,27 +173,27 @@ describe('dev-server builder', () => {
     });
 
     it('should add `SkyuxAppAssetsPlugin` to webpack plugins', async () => {
-      await mock.reRequire('./dev-server');
+      await (mock.reRequire('./dev-server'));
 
-      const plugin = actualWebpackConfig.plugins?.find(
-        (p) => p instanceof SkyuxAppAssetsPlugin
-      );
+      const plugin = actualWebpackConfig.plugins?.find(p => p instanceof SkyuxAppAssetsPlugin);
 
       expect(plugin).toBeDefined();
     });
 
     it('should not affect other plugins', async () => {
       defaultWebpackConfig = {
-        plugins: [new MockWebpackPlugin()]
+        plugins: [
+          new MockWebpackPlugin()
+        ]
       };
 
-      await mock.reRequire('./dev-server');
+      await (mock.reRequire('./dev-server'));
 
       expect(actualWebpackConfig.plugins?.length).toEqual(3);
     });
 
     it('should add `SkyuxProtractorPlugin` when running e2e', async () => {
-      await mock.reRequire('./dev-server');
+      await (mock.reRequire('./dev-server'));
 
       let plugin = getProtractorPlugin();
 
@@ -197,7 +203,7 @@ describe('dev-server builder', () => {
 
       mockContext.target.configuration = 'e2e';
 
-      await mock.reRequire('./dev-server');
+      await (mock.reRequire('./dev-server'));
 
       plugin = getProtractorPlugin();
 
@@ -207,7 +213,7 @@ describe('dev-server builder', () => {
 
       mockContext.target.configuration = 'e2eProduction';
 
-      await mock.reRequire('./dev-server');
+      await (mock.reRequire('./dev-server'));
 
       plugin = getProtractorPlugin();
 
@@ -219,7 +225,7 @@ describe('dev-server builder', () => {
     it('should pass Host URL to `SkyuxProtractorPlugin`', async () => {
       mockContext.target.configuration = 'e2e';
 
-      await mock.reRequire('./dev-server');
+      await (mock.reRequire('./dev-server'));
 
       const protractorPlugin = getProtractorPlugin();
       const hostUrlPlugin = getOpenHostUrlPlugin();
@@ -228,5 +234,7 @@ describe('dev-server builder', () => {
       const url = await protractorPlugin['config'].hostUrlFactory();
       expect(url).toEqual('https://foo.bar.com');
     });
+
   });
+
 });

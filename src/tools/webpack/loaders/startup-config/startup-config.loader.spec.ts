@@ -1,6 +1,8 @@
 import mock from 'mock-require';
 
-import { SkyuxConfig } from '../../../../shared/skyux-config';
+import {
+  SkyuxConfig
+} from '../../../../shared/skyux-config';
 
 describe('startup config loader', () => {
   function mockGetSkyuxConfig(testSkyuxConfig: SkyuxConfig): void {
@@ -70,4 +72,5 @@ describe('startup config loader', () => {
       baseHref: '/bar/'
     });
   });
+
 });
