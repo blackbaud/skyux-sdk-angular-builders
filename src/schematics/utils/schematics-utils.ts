@@ -1,22 +1,12 @@
-import {
-  virtualFs,
-  workspaces
-} from '@angular-devkit/core';
+import { virtualFs, workspaces } from '@angular-devkit/core';
 
-import {
-  SchematicsException,
-  Tree
-} from '@angular-devkit/schematics';
+import { SchematicsException, Tree } from '@angular-devkit/schematics';
 
 import * as ts from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 
-import {
-  addImportToModule
-} from '@schematics/angular/utility/ast-utils';
+import { addImportToModule } from '@schematics/angular/utility/ast-utils';
 
-import {
-  InsertChange
-} from '@schematics/angular/utility/change';
+import { InsertChange } from '@schematics/angular/utility/change';
 
 /**
  * Imports a class into the main app module.
@@ -32,7 +22,12 @@ export function addModuleImportToRootModule(
 ): void {
   const modulePath = 'src/app/app.module.ts';
   const sourceText = tree.read(modulePath)!.toString();
-  const source = ts.createSourceFile(modulePath, sourceText, ts.ScriptTarget.Latest, true);
+  const source = ts.createSourceFile(
+    modulePath,
+    sourceText,
+    ts.ScriptTarget.Latest,
+    true
+  );
   const changes = addImportToModule(
     source,
     modulePath,
@@ -57,7 +52,6 @@ export function addModuleImportToRootModule(
  */
 export function createHost(tree: Tree): workspaces.WorkspaceHost {
   return {
-
     /* istanbul ignore next */
     async readFile(path: string): Promise<string> {
       const data = tree.read(path);
@@ -81,6 +75,5 @@ export function createHost(tree: Tree): workspaces.WorkspaceHost {
     async isFile(path: string): Promise<boolean> {
       return tree.exists(path);
     }
-
   };
 }

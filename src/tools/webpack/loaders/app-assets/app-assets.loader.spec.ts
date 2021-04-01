@@ -1,7 +1,6 @@
 import mock from 'mock-require';
 
 describe('app assets loader', () => {
-
   afterEach(() => {
     mock.stopAll();
   });
@@ -16,5 +15,4 @@ describe('app assets loader', () => {
 
     expect(result).toEqual('{"foo.jpg": "images/foo.jpg"}');
   });
-
 });

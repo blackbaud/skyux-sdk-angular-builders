@@ -1,4 +1,5 @@
 # @skyux-sdk/angular-builders
+
 [![npm](https://img.shields.io/npm/v/@skyux-sdk/angular-builders.svg)](https://www.npmjs.com/package/@skyux-sdk/angular-builders)
 [![Build](https://github.com/blackbaud/skyux-sdk-angular-builders/actions/workflows/build.yml/badge.svg)](https://github.com/blackbaud/skyux-sdk-angular-builders/actions/workflows/build.yml)
 [![coverage](https://codecov.io/gh/blackbaud/skyux-sdk-angular-builders/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/blackbaud/skyux-sdk-angular-builders/branch/master)
@@ -15,6 +16,7 @@ ng add @skyux-sdk/angular-builders
 
 - Run `npm start` for local development; changes are transpiled automatically after each file is saved.
 - Change directory to `/builders-test-app` and run:
+
 ```
 npm install
 npm run dev-setup

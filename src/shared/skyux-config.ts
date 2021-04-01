@@ -63,7 +63,7 @@ export interface SkyuxConfigAppExternals {
       url: string;
       integrity?: string;
     }[];
-  },
+  };
   js?: {
     before?: {
       url: string;
@@ -75,7 +75,7 @@ export interface SkyuxConfigAppExternals {
       integrity?: string;
       head?: boolean;
     }[];
-  }
+  };
 }
 
 export interface SkyuxConfigHostBBCheckout {
@@ -102,7 +102,9 @@ export interface SkyuxConfigHostFrameOptionsOthers {
 export interface SkyuxConfigHost {
   bbCheckout?: SkyuxConfigHostBBCheckout;
 
-  frameOptions?: SkyuxConfigHostFrameOptionsNone | SkyuxConfigHostFrameOptionsOthers;
+  frameOptions?:
+    | SkyuxConfigHostFrameOptionsNone
+    | SkyuxConfigHostFrameOptionsOthers;
 
   url: string;
 }
