@@ -1,17 +1,18 @@
+import { BuilderContext } from '@angular-devkit/architect';
 import { getCertPath } from '../../shared/cert-utils';
-
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 
-export function getLocalUrlFromOptions(
+export function getLocalHostUrl(
   options: SkyuxDevServerBuilderOptions,
-  projectName: string
+  context: BuilderContext
 ): string {
-  return `https://${options.host}:${options.port}/${projectName}/`;
+  const baseHref = context.target!.project!;
+  return `https://${options.host}:${options.port}/${baseHref}/`;
 }
 
 export function applySkyuxDevServerOptions(
   options: SkyuxDevServerBuilderOptions,
-  projectName: string
+  context: BuilderContext
 ): void {
   options.host = options.host || 'localhost';
   options.port = options.port || 4200;
@@ -21,7 +22,8 @@ export function applySkyuxDevServerOptions(
   options.sslCert = getCertPath('skyux-server.crt');
   options.sslKey = getCertPath('skyux-server.key');
 
-  const localUrl = getLocalUrlFromOptions(options, projectName);
+  const localUrl = getLocalHostUrl(options, context);
+  const baseHref = context.target!.project!;
 
   // Point live-reloading back to localhost.
   options.publicHost = localUrl;
@@ -29,7 +31,7 @@ export function applySkyuxDevServerOptions(
 
   // Point lazy-loaded modules to the localhost URL.
   options.deployUrl = localUrl;
-  options.servePath = `/${projectName}`;
+  options.servePath = `/${baseHref}`;
 
   // Disable Angular CLI's opening behavior since the Host URL Webpack plugin
   // handles launching the browser.
