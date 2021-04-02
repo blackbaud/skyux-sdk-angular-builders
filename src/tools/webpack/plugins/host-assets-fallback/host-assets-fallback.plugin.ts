@@ -22,7 +22,7 @@ export class SkyuxHostAssetsFallbackPlugin {
       modifyScriptContents(
         compilation,
         (content, file) =>
-          `${content}\nvar ${getFallbackTestVariable(file)} = true;`
+          `${content}\nwindow.${getFallbackTestVariable(file)} = true;`
       );
 
       // Add a fallback CSS rule to the bottom of each style sheet.
