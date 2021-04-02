@@ -67,7 +67,7 @@ describe('host assets fallback webpack plugin', () => {
 
     const content = getAssetContent('main.js');
     expect(content).toEqual(
-      '[main content here]\nvar SKY_PAGES_READY_MAIN_JS = true;'
+      '[main content here]\nwindow.SKY_PAGES_READY_MAIN_JS = true;'
     );
   });
 
