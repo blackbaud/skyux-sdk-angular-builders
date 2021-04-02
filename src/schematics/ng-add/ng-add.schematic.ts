@@ -48,9 +48,7 @@ async function readJson(
 async function getThemeStylesheets(
   host: workspaces.WorkspaceHost
 ): Promise<string[]> {
-  const themeStylesheets = [
-    '@skyux/theme/css/sky.css'
-  ];
+  const themeStylesheets = ['@skyux/theme/css/sky.css'];
 
   const skyuxConfig: SkyuxConfig = await readJson(
     host,
@@ -75,10 +73,7 @@ async function modifyAngularJson(
   options: SkyuxNgAddOptions
 ): Promise<void> {
   const projectName = options.project;
-  const angularJson = await readJson(
-    host,
-    'angular.json'
-  );
+  const angularJson = await readJson(host, 'angular.json');
 
   const architectConfig =
     angularJson.projects[projectName].architect;
@@ -133,8 +128,7 @@ async function modifyAngularJson(
   // Setup karma builder for all projects.
   for (const project in angularJson.projects) {
     const testTarget =
-      angularJson.projects[project].architect
-        .test;
+      angularJson.projects[project].architect.test;
     if (testTarget) {
       testTarget.builder =
         '@skyux-sdk/angular-builders:karma';
@@ -156,17 +150,14 @@ async function modifyAngularJson(
     (stylesheet: string) =>
       !stylesheet.startsWith('@skyux/theme')
   );
-  const themeStylesheets = await getThemeStylesheets(
-    host
-  );
+  const themeStylesheets = await getThemeStylesheets(host);
   architectConfig.build.options.styles = themeStylesheets.concat(
     angularStylesheets
   );
 
   await host.writeFile(
     'angular.json',
-    JSON.stringify(angularJson, undefined, 2) +
-      '\n'
+    JSON.stringify(angularJson, undefined, 2) + '\n'
   );
 }
 
@@ -214,39 +205,28 @@ async function modifyTsConfig(
   tsConfig.compilerOptions.esModuleInterop = true;
   await host.writeFile(
     'tsconfig.json',
-    banner +
-      JSON.stringify(tsConfig, undefined, 2)
+    banner + JSON.stringify(tsConfig, undefined, 2)
   );
 }
 
 async function modifyAppComponentTemplate(
   host: workspaces.WorkspaceHost
 ): Promise<void> {
-  const templatePath =
-    'src/app/app.component.html';
+  const templatePath = 'src/app/app.component.html';
 
-  let templateHtml = await host.readFile(
-    templatePath
-  );
+  let templateHtml = await host.readFile(templatePath);
 
-  if (
-    templateHtml.indexOf('</skyux-app-shell>') < 0
-  ) {
+  if (templateHtml.indexOf('</skyux-app-shell>') < 0) {
     // Indent all non-blank lines by 2 spaces and wrap the contents in the shell component
     // with a trailing newline.
     templateHtml = `<!-- SKY UX SHELL SUPPORT - DO NOT REMOVE -->
 <!-- Enables omnibar, help, and other shell components configured in skyuxconfig.json. -->
 <skyux-app-shell>
-  ${templateHtml
-    .trim()
-    .replace(/\n(?!(\n|$))/g, '\n  ')}
+  ${templateHtml.trim().replace(/\n(?!(\n|$))/g, '\n  ')}
 </skyux-app-shell>
 `;
 
-    await host.writeFile(
-      templatePath,
-      templateHtml
-    );
+    await host.writeFile(templatePath, templateHtml);
   }
 }
 
@@ -257,19 +237,14 @@ async function modifyAppComponentTemplate(
 function overwriteIfExists(tree: Tree): Rule {
   return forEach((fileEntry) => {
     if (tree.exists(fileEntry.path)) {
-      tree.overwrite(
-        fileEntry.path,
-        fileEntry.content
-      );
+      tree.overwrite(fileEntry.path, fileEntry.content);
       return null;
     }
     return fileEntry;
   });
 }
 
-function createSkyuxConfigIfNotExists(
-  tree: Tree
-) {
+function createSkyuxConfigIfNotExists(tree: Tree) {
   if (!tree.exists('skyuxconfig.json')) {
     tree.create(
       'skyuxconfig.json',
@@ -302,10 +277,7 @@ function createAppFiles(
     overwriteIfExists(tree)
   ]);
 
-  return mergeWith(
-    templateSource,
-    MergeStrategy.Overwrite
-  );
+  return mergeWith(templateSource, MergeStrategy.Overwrite);
 }
 
 async function setupLibraries(
@@ -318,36 +290,27 @@ async function setupLibraries(
   });
 }
 
-export function ngAdd(
-  options: SkyuxNgAddOptions
-): Rule {
-  return async (
-    tree: Tree,
-    context: SchematicContext
-  ) => {
+export function ngAdd(options: SkyuxNgAddOptions): Rule {
+  return async (tree: Tree, context: SchematicContext) => {
     const host = createHost(tree);
-    const {
-      workspace
-    } = await workspaces.readWorkspace('/', host);
+    const { workspace } = await workspaces.readWorkspace(
+      '/',
+      host
+    );
 
     if (!options.project) {
       options.project = workspace.extensions
         .defaultProject as string;
     }
 
-    const project = workspace.projects.get(
-      options.project
-    );
+    const project = workspace.projects.get(options.project);
     if (!project) {
       throw new SchematicsException(
         `The "${options.project}" project is not defined in angular.json. Provide a valid project name.`
       );
     }
 
-    if (
-      project.extensions.projectType !==
-      'application'
-    ) {
+    if (project.extensions.projectType !== 'application') {
       throw new SchematicsException(
         `You are attempting to add this builder to a library project, but it is designed to be added only to the primary application.`
       );
@@ -357,10 +320,7 @@ export function ngAdd(
     await modifyAngularJson(host, options);
     await modifyTsConfig(host);
     await modifyKarmaConfig(host, project.root);
-    await modifyProtractorConfig(
-      host,
-      project.root
-    );
+    await modifyProtractorConfig(host, project.root);
     await modifyAppComponentTemplate(host);
     await setupLibraries(host, workspace);
 

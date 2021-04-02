@@ -42,22 +42,15 @@ describe('ng-add.schematic', () => {
       .toPromise();
   }
 
-  function getAngularJson(
-    app: UnitTestTree
-  ): any {
-    return JSON.parse(
-      app.readContent('angular.json')
-    );
+  function getAngularJson(app: UnitTestTree): any {
+    return JSON.parse(app.readContent('angular.json'));
   }
 
   function writeAngularJson(
     app: UnitTestTree,
     content: any
   ) {
-    app.overwrite(
-      'angular.json',
-      JSON.stringify(content)
-    );
+    app.overwrite('angular.json', JSON.stringify(content));
   }
 
   it('should run the NodePackageInstallTask', async () => {
@@ -148,29 +141,17 @@ describe('ng-add.schematic', () => {
 
     const angularJson = getAngularJson(app);
     expect(
-      angularJson.projects.foobar.architect.build
-        .builder
-    ).toEqual(
-      '@skyux-sdk/angular-builders:browser'
-    );
+      angularJson.projects.foobar.architect.build.builder
+    ).toEqual('@skyux-sdk/angular-builders:browser');
     expect(
-      angularJson.projects.foobar.architect.serve
-        .builder
-    ).toEqual(
-      '@skyux-sdk/angular-builders:dev-server'
-    );
+      angularJson.projects.foobar.architect.serve.builder
+    ).toEqual('@skyux-sdk/angular-builders:dev-server');
     expect(
-      angularJson.projects.foobar.architect.test
-        .builder
-    ).toEqual(
-      '@skyux-sdk/angular-builders:karma'
-    );
+      angularJson.projects.foobar.architect.test.builder
+    ).toEqual('@skyux-sdk/angular-builders:karma');
     expect(
-      angularJson.projects.foobar.architect.e2e
-        .builder
-    ).toEqual(
-      '@skyux-sdk/angular-builders:protractor'
-    );
+      angularJson.projects.foobar.architect.e2e.builder
+    ).toEqual('@skyux-sdk/angular-builders:protractor');
   });
 
   it('should add packages to package.json', async () => {
@@ -196,10 +177,7 @@ describe('ng-add.schematic', () => {
 
   it('should add packages to package.json files without dependency sections', async () => {
     // Create an empty package.json file.
-    app.overwrite(
-      'package.json',
-      JSON.stringify({})
-    );
+    app.overwrite('package.json', JSON.stringify({}));
 
     await runSchematic(app, {
       project: 'foobar'
@@ -208,12 +186,8 @@ describe('ng-add.schematic', () => {
     const packageJson = JSON.parse(
       app.readContent('package.json')
     );
-    expect(
-      packageJson.dependencies
-    ).toBeDefined();
-    expect(
-      packageJson.devDependencies
-    ).toBeDefined();
+    expect(packageJson.dependencies).toBeDefined();
+    expect(packageJson.devDependencies).toBeDefined();
   });
 
   it('should generate an empty skyuxconfig.json file', async () => {
@@ -267,8 +241,8 @@ describe('ng-add.schematic', () => {
 
     const angularJson = getAngularJson(app);
     expect(
-      angularJson.projects['foobar'].architect
-        .build.options.styles
+      angularJson.projects['foobar'].architect.build.options
+        .styles
     ).toEqual([
       '@skyux/theme/css/sky.css',
       '@skyux/theme/css/themes/modern/styles.css',
@@ -277,17 +251,12 @@ describe('ng-add.schematic', () => {
   });
 
   it('should overwrite SkyuxModule if it exists', async () => {
-    app.create(
-      'src/app/__skyux/skyux.module.ts',
-      'foobar'
-    );
+    app.create('src/app/__skyux/skyux.module.ts', 'foobar');
     await runSchematic(app, {
       project: 'foobar'
     });
     expect(
-      app.readContent(
-        'src/app/__skyux/skyux.module.ts'
-      )
+      app.readContent('src/app/__skyux/skyux.module.ts')
     ).not.toEqual('foobar');
   });
 
@@ -350,8 +319,7 @@ describe('ng-add.schematic', () => {
     it("should throw an error if specified project doesn't include an `architect.serve` property", async () => {
       // Create an incorrectly formatted project config.
       const angularJson = getAngularJson(app);
-      delete angularJson.projects.foobar.architect
-        .serve;
+      delete angularJson.projects.foobar.architect.serve;
       writeAngularJson(app, angularJson);
 
       await expectAsync(
@@ -368,8 +336,7 @@ describe('ng-add.schematic', () => {
     it("should throw an error if specified project doesn't include an `architect.build` property", async () => {
       // Create an incorrectly formatted project config.
       const angularJson = getAngularJson(app);
-      delete angularJson.projects.foobar.architect
-        .build;
+      delete angularJson.projects.foobar.architect.build;
       writeAngularJson(app, angularJson);
 
       await expectAsync(
@@ -388,9 +355,8 @@ describe('ng-add.schematic', () => {
 
       const angularJson = getAngularJson(app);
       expect(
-        angularJson.projects.foobar.architect
-          .build.configurations.production
-          .outputHashing
+        angularJson.projects.foobar.architect.build
+          .configurations.production.outputHashing
       ).toEqual('bundles');
     });
   });
@@ -399,8 +365,7 @@ describe('ng-add.schematic', () => {
     it("should throw an error if specified project doesn't include an `architect.test` property", async () => {
       // Create an incorrectly formatted project config.
       const angularJson = getAngularJson(app);
-      delete angularJson.projects.foobar.architect
-        .test;
+      delete angularJson.projects.foobar.architect.test;
       writeAngularJson(app, angularJson);
 
       await expectAsync(
@@ -457,12 +422,11 @@ describe('ng-add.schematic', () => {
 
       const angularJson = getAngularJson(library);
       const options =
-        angularJson.projects.foolib.architect.test
-          .options;
+        angularJson.projects.foolib.architect.test.options;
       expect(options.codeCoverage).toEqual(true);
-      expect(
-        options.codeCoverageExclude
-      ).toEqual(['src/app/__skyux/**/*']);
+      expect(options.codeCoverageExclude).toEqual([
+        'src/app/__skyux/**/*'
+      ]);
     });
   });
 
@@ -470,8 +434,7 @@ describe('ng-add.schematic', () => {
     it("should throw an error if specified project doesn't include an `architect.e2e` property", async () => {
       // Create an incorrectly formatted project config.
       const angularJson = getAngularJson(app);
-      delete angularJson.projects.foobar.architect
-        .e2e;
+      delete angularJson.projects.foobar.architect.e2e;
       writeAngularJson(app, angularJson);
 
       await expectAsync(
@@ -502,8 +465,8 @@ describe('ng-add.schematic', () => {
       const angularJson = getAngularJson(app);
 
       expect(
-        angularJson.projects.foobar.architect
-          .serve.configurations.e2e
+        angularJson.projects.foobar.architect.serve
+          .configurations.e2e
       ).toEqual({
         browserTarget: 'foobar:build',
         open: false,
@@ -511,8 +474,8 @@ describe('ng-add.schematic', () => {
       });
 
       expect(
-        angularJson.projects.foobar.architect
-          .serve.configurations.e2eProduction
+        angularJson.projects.foobar.architect.serve
+          .configurations.e2eProduction
       ).toEqual({
         browserTarget: 'foobar:build:production',
         open: false,
@@ -520,13 +483,12 @@ describe('ng-add.schematic', () => {
       });
 
       expect(
-        angularJson.projects.foobar.architect.e2e
-          .options.devServerTarget
+        angularJson.projects.foobar.architect.e2e.options
+          .devServerTarget
       ).toEqual('foobar:serve:e2e');
       expect(
         angularJson.projects.foobar.architect.e2e
-          .configurations.production
-          .devServerTarget
+          .configurations.production.devServerTarget
       ).toEqual('foobar:serve:e2eProduction');
     });
   });

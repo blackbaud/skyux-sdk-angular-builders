@@ -26,10 +26,7 @@ function executeSkyuxProtractorBuilder(
     builderOptions: options
   });
 
-  return executeProtractorBuilder(
-    options,
-    context
-  );
+  return executeProtractorBuilder(options, context);
 }
 
 export default createBuilder<SkyuxProtractorBuilderOptions>(

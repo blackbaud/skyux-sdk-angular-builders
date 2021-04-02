@@ -26,9 +26,7 @@ describe('ci platform utils', () => {
       getCiPlatformProtractorConfig
     } = mock.reRequire('./ci-platform-utils');
 
-    globSyncSpy.and.returnValue([
-      'valid-config-file.js'
-    ]);
+    globSyncSpy.and.returnValue(['valid-config-file.js']);
 
     const contents = {
       config: {
@@ -37,9 +35,7 @@ describe('ci platform utils', () => {
     };
     mock('valid-config-file.js', contents);
 
-    const result = getCiPlatformProtractorConfig(
-      'ado'
-    );
+    const result = getCiPlatformProtractorConfig('ado');
     expect(result).toEqual({
       foo: 'bar'
     });
@@ -54,20 +50,16 @@ describe('ci platform utils', () => {
   });
 
   it('should return Karma config', () => {
-    const {
-      getCiPlatformKarmaConfig
-    } = mock.reRequire('./ci-platform-utils');
+    const { getCiPlatformKarmaConfig } = mock.reRequire(
+      './ci-platform-utils'
+    );
 
-    globSyncSpy.and.returnValue([
-      'valid-config-file.js'
-    ]);
+    globSyncSpy.and.returnValue(['valid-config-file.js']);
 
     const contents = (_conf: karma.Config) => {};
     mock('valid-config-file.js', contents);
 
-    const result = getCiPlatformKarmaConfig(
-      'gh-actions'
-    );
+    const result = getCiPlatformKarmaConfig('gh-actions');
     expect(result).toBe(contents);
 
     expect(
@@ -87,18 +79,14 @@ describe('ci platform utils', () => {
     globSyncSpy.and.returnValue([]);
     const warnSpy = spyOn(console, 'warn');
 
-    const result = getCiPlatformProtractorConfig(
-      'invalid'
-    );
+    const result = getCiPlatformProtractorConfig('invalid');
 
     expect(result).toBe(
       undefined,
       'Expected config file path to be undefined.'
     );
 
-    expect(
-      warnSpy.calls.mostRecent().args[0]
-    ).toContain(
+    expect(warnSpy.calls.mostRecent().args[0]).toContain(
       'Platform configuration not found for key'
     );
   });

@@ -7,9 +7,7 @@ import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
 describe('karma.default.conf.ts', () => {
   let calledKarmaConfig: any;
   let mockKarmaConfigUtil: karma.Config;
-  let mockPlatformConfig: (
-    conf: karma.Config
-  ) => void;
+  let mockPlatformConfig: (conf: karma.Config) => void;
 
   //#region helpers
 
@@ -17,8 +15,7 @@ describe('karma.default.conf.ts', () => {
     threshold: number
   ): void {
     expect(
-      calledKarmaConfig.coverageReporter.check
-        .global
+      calledKarmaConfig.coverageReporter.check.global
     ).toEqual({
       branches: threshold,
       functions: threshold,
@@ -62,14 +59,10 @@ describe('karma.default.conf.ts', () => {
     spyOn(console, 'log');
 
     mock('../../shared/ci-platform-utils', {
-      getCiPlatformKarmaConfig: () =>
-        mockPlatformConfig
+      getCiPlatformKarmaConfig: () => mockPlatformConfig
     });
 
-    mock(
-      '@angular-devkit/build-angular/plugins/karma',
-      {}
-    );
+    mock('@angular-devkit/build-angular/plugins/karma', {});
     mock('karma-chrome-launcher', {});
     mock('karma-coverage', {});
     mock('karma-jasmine', {});
@@ -83,9 +76,7 @@ describe('karma.default.conf.ts', () => {
   it('should set default code coverage thresholds', () => {
     const config: (
       conf: karma.Config
-    ) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    ) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
     verifyCoverageThresholdPercent(0);
@@ -97,9 +88,7 @@ describe('karma.default.conf.ts', () => {
 
     const config: (
       conf: karma.Config
-    ) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    ) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
     verifyCoverageThresholdPercent(80);
@@ -111,22 +100,16 @@ describe('karma.default.conf.ts', () => {
 
     const config: (
       conf: karma.Config
-    ) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    ) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
     verifyCoverageThresholdPercent(100);
   });
 
   it('should run tests with Chrome browser by default', () => {
-    const config = mock.reRequire(
-      './karma.default.conf'
-    );
+    const config = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
-    expect(calledKarmaConfig.browsers).toEqual([
-      'Chrome'
-    ]);
+    expect(calledKarmaConfig.browsers).toEqual(['Chrome']);
   });
 
   it('should apply platform config overrides', () => {
@@ -141,13 +124,9 @@ describe('karma.default.conf.ts', () => {
 
     const config: (
       conf: karma.Config
-    ) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    ) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
-    expect(calledKarmaConfig.singleRun).toEqual(
-      true
-    );
+    expect(calledKarmaConfig.singleRun).toEqual(true);
   });
 });

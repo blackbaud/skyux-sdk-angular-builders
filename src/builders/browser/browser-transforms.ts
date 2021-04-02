@@ -28,8 +28,7 @@ function getBrowserWepbackConfigTransformer(
   return (webpackConfig) => {
     const projectName = context.target!.project!;
 
-    webpackConfig.plugins =
-      webpackConfig.plugins || [];
+    webpackConfig.plugins = webpackConfig.plugins || [];
 
     webpackConfig.plugins.push(
       new SkyuxHostAssetsFallbackPlugin(),

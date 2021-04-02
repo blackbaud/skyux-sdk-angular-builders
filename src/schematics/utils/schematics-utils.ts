@@ -27,9 +27,7 @@ export function addModuleImportToRootModule(
   importPath: string
 ): void {
   const modulePath = 'src/app/app.module.ts';
-  const sourceText = tree
-    .read(modulePath)!
-    .toString();
+  const sourceText = tree.read(modulePath)!.toString();
   const source = ts.createSourceFile(
     modulePath,
     sourceText,
@@ -47,10 +45,7 @@ export function addModuleImportToRootModule(
   for (const change of changes) {
     /* istanbul ignore else */
     if (change instanceof InsertChange) {
-      recorder.insertLeft(
-        change.pos,
-        change.toAdd
-      );
+      recorder.insertLeft(change.pos, change.toAdd);
     }
   }
 
@@ -66,14 +61,10 @@ export function createHost(
 ): workspaces.WorkspaceHost {
   return {
     /* istanbul ignore next */
-    async readFile(
-      path: string
-    ): Promise<string> {
+    async readFile(path: string): Promise<string> {
       const data = tree.read(path);
       if (!data) {
-        throw new SchematicsException(
-          'File not found.'
-        );
+        throw new SchematicsException('File not found.');
       }
       return virtualFs.fileBufferToString(data);
     },
@@ -87,9 +78,7 @@ export function createHost(
     },
 
     /* istanbul ignore next */
-    async isDirectory(
-      path: string
-    ): Promise<boolean> {
+    async isDirectory(path: string): Promise<boolean> {
       return (
         !tree.exists(path) &&
         tree.getDir(path).subfiles.length > 0

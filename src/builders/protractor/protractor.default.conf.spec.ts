@@ -7,9 +7,7 @@ import { applyProtractorEnvironmentConfig } from '../../shared/protractor-enviro
 import { SkyuxProtractorBuilderOptions } from './protractor-options';
 
 describe('protractor.default.conf', () => {
-  let mockPlatformConfig:
-    | ProtractorConfig
-    | undefined;
+  let mockPlatformConfig: ProtractorConfig | undefined;
 
   beforeEach(() => {
     setBuilderOptions({});
@@ -37,9 +35,8 @@ describe('protractor.default.conf', () => {
   }
 
   it('should allow setting the test browser to "headless" mode', () => {
-    let config = mock.reRequire(
-      './protractor.default.conf'
-    ).config;
+    let config = mock.reRequire('./protractor.default.conf')
+      .config;
 
     expect(
       config.capabilities.chromeOptions.args.indexOf(
@@ -51,9 +48,8 @@ describe('protractor.default.conf', () => {
       skyuxHeadless: true
     });
 
-    config = mock.reRequire(
-      './protractor.default.conf'
-    ).config;
+    config = mock.reRequire('./protractor.default.conf')
+      .config;
 
     expect(
       config.capabilities.chromeOptions.args.indexOf(
@@ -83,13 +79,11 @@ describe('protractor.default.conf', () => {
       './protractor.default.conf'
     ).config;
 
-    expect(config.capabilities.browserName).toBe(
-      'firefox'
-    );
+    expect(config.capabilities.browserName).toBe('firefox');
     expect(config.onPrepare()).toEqual('foobar');
-    expect(
-      config.capabilities.chromeOptions.args
-    ).toEqual(['--foobar']);
+    expect(config.capabilities.chromeOptions.args).toEqual([
+      '--foobar'
+    ]);
   });
 
   it('should handle undefined CI platform overrides', () => {
@@ -103,8 +97,6 @@ describe('protractor.default.conf', () => {
       './protractor.default.conf'
     ).config;
 
-    expect(config.capabilities.browserName).toBe(
-      'chrome'
-    );
+    expect(config.capabilities.browserName).toBe('chrome');
   });
 });

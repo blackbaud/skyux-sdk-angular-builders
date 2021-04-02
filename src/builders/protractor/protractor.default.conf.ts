@@ -18,10 +18,7 @@ function mergeConfigs(
   defaults: ProtractorConfig,
   overrides: ProtractorConfig
 ): ProtractorConfig {
-  return mergeWith<
-    ProtractorConfig,
-    ProtractorConfig
-  >(
+  return mergeWith<ProtractorConfig, ProtractorConfig>(
     defaults,
     overrides,
     (defaultValue, overrideValue) => {
@@ -78,8 +75,7 @@ function getConfig(): ProtractorConfig {
       jasmine.getEnv().addReporter(
         new SpecReporter({
           spec: {
-            displayStacktrace:
-              StacktraceOption.PRETTY
+            displayStacktrace: StacktraceOption.PRETTY
           }
         })
       );
@@ -99,10 +95,7 @@ function getConfig(): ProtractorConfig {
     const overrides = getCiPlatformProtractorConfig(
       builderOptions.skyuxCiPlatform
     );
-    config = mergeConfigs(
-      config,
-      overrides || {}
-    );
+    config = mergeConfigs(config, overrides || {});
   } else {
     console.log(
       '[SKY UX] A specific CI platform configuration was not requested. ' +

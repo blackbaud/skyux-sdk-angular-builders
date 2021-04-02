@@ -26,9 +26,7 @@ describe('create host url', () => {
     mock.stopAll();
   });
 
-  function decode(
-    url: string
-  ): SkyuxCreateHostUrlConfig {
+  function decode(url: string): SkyuxCreateHostUrlConfig {
     return JSON.parse(
       Buffer.from(
         decodeURIComponent(url.split('_cfg=')[1]),
@@ -83,9 +81,7 @@ describe('create host url', () => {
       defaultHostConfig
     );
 
-    expect(decode(actualUrl).host).toEqual(
-      hostConfig
-    );
+    expect(decode(actualUrl).host).toEqual(hostConfig);
   });
 
   it('should send scripts and style sheets to SKY UX Host', () => {
@@ -156,9 +152,7 @@ describe('create host url', () => {
       defaultHostConfig
     );
 
-    expect(decode(actualUrl).externals).toEqual(
-      externals
-    );
+    expect(decode(actualUrl).externals).toEqual(externals);
   });
 
   it('should handle empty scripts', () => {

@@ -91,12 +91,10 @@ module.exports = (config: karma.Config): void => {
 
   // Apply platform config overrides.
   if (
-    SkyuxKarmaConfigAdapter.builderOptions
-      .skyuxCiPlatform
+    SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform
   ) {
     const platformConfig = getCiPlatformKarmaConfig(
-      SkyuxKarmaConfigAdapter.builderOptions
-        .skyuxCiPlatform
+      SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform
     );
     /* istanbul ignore else */
     if (platformConfig) {

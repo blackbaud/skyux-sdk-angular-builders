@@ -17,9 +17,7 @@ describe('open host url webpack plugin', () => {
   let localUrl: string;
 
   beforeEach(() => {
-    createSpy = jasmine.createSpy(
-      'createHostUrl'
-    );
+    createSpy = jasmine.createSpy('createHostUrl');
     openSpy = jasmine.createSpy('open');
 
     mockStats = undefined;
@@ -114,8 +112,7 @@ describe('open host url webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(
-      createSpy.calls.mostRecent().args[2]
-        .externals
+      createSpy.calls.mostRecent().args[2].externals
     ).toEqual(externals);
   });
 
@@ -300,9 +297,7 @@ describe('open host url webpack plugin', () => {
   });
 
   it('should provide a public observable for the generated Host URL', async () => {
-    createSpy.and.returnValue(
-      'foobar.com?cfg=baz'
-    );
+    createSpy.and.returnValue('foobar.com?cfg=baz');
 
     const plugin = getPlugin();
     plugin.apply(mockCompiler);

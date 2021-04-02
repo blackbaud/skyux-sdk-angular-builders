@@ -14,14 +14,10 @@ function modifyChunkContents(
   compilation: webpack.compilation.Compilation,
   callback: AssetSourceCallback
 ): void {
-  const filePaths = Object.keys(
-    compilation.assets
-  );
+  const filePaths = Object.keys(compilation.assets);
 
   for (const filePath of filePaths) {
-    if (
-      path.parse(filePath).ext === fileExtension
-    ) {
+    if (path.parse(filePath).ext === fileExtension) {
       compilation.updateAsset(filePath, (old) => {
         return new ConcatSource(
           callback(old.source(), filePath)
@@ -38,11 +34,7 @@ export function modifyScriptContents(
   compilation: webpack.compilation.Compilation,
   callback: AssetSourceCallback
 ): void {
-  modifyChunkContents(
-    '.js',
-    compilation,
-    callback
-  );
+  modifyChunkContents('.js', compilation, callback);
 }
 
 /**
@@ -52,9 +44,5 @@ export function modifyStylesheetContents(
   compilation: webpack.compilation.Compilation,
   callback: AssetSourceCallback
 ): void {
-  modifyChunkContents(
-    '.css',
-    compilation,
-    callback
-  );
+  modifyChunkContents('.css', compilation, callback);
 }

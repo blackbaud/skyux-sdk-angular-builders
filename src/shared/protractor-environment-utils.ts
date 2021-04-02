@@ -23,9 +23,9 @@ export function applyProtractorEnvironmentConfig(
   const env = getProtractorEnvironmentConfig();
   const merged = merge(env, value);
 
-  process.env[
-    environmentVariableName
-  ] = JSON.stringify(merged);
+  process.env[environmentVariableName] = JSON.stringify(
+    merged
+  );
 }
 
 export function clearProtractorEnvironmentConfig(): void {

@@ -29,11 +29,7 @@ function executeSkyuxDevServerBuilder(
   return executeDevServerBuilder(
     options,
     context,
-    getDevServerTransforms(
-      options,
-      context,
-      skyuxConfig
-    )
+    getDevServerTransforms(options, context, skyuxConfig)
   );
 }
 

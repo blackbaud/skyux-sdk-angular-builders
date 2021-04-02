@@ -69,8 +69,7 @@ describe('protractor webpack plugin', () => {
 
     hookDone.pipe(take(1)).subscribe(() => {
       expect(
-        getProtractorEnvironmentConfig()
-          ?.skyuxHostUrl
+        getProtractorEnvironmentConfig()?.skyuxHostUrl
       ).toEqual('https://foo.blackbaud.com/');
       done();
     });

@@ -1,3 +1,1 @@
-export type SkyuxCIPlatform =
-  | 'ado'
-  | 'gh-actions';
+export type SkyuxCIPlatform = 'ado' | 'gh-actions';

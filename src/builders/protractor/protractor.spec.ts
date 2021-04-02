@@ -81,8 +81,8 @@ describe('protractor builder', () => {
     options.skyuxHeadless = true;
     await mock.reRequire('./protractor');
     expect(
-      getProtractorEnvironmentConfig()
-        ?.builderOptions?.skyuxHeadless
+      getProtractorEnvironmentConfig()?.builderOptions
+        ?.skyuxHeadless
     ).toBeTrue();
   });
 });

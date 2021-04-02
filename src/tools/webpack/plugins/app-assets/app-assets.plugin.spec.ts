@@ -56,9 +56,7 @@ describe('Asset URLs plugin', () => {
             for (const fileName of Object.keys(
               mockCompilation.assets
             )) {
-              mockCompilation.assets[
-                fileName
-              ].source();
+              mockCompilation.assets[fileName].source();
             }
           }
         }
@@ -67,9 +65,7 @@ describe('Asset URLs plugin', () => {
   }
 
   // Simulate Webpack calling the source callback.
-  function getAssetContent(
-    fileName: string
-  ): string {
+  function getAssetContent(fileName: string): string {
     return assetsToUpdate[fileName](
       mockWebpackAssets[fileName]
     ).source();
@@ -83,15 +79,14 @@ describe('Asset URLs plugin', () => {
       }
     });
 
-    const {
-      SkyuxAppAssetsPlugin
-    } = mock.reRequire('./app-assets.plugin');
+    const { SkyuxAppAssetsPlugin } = mock.reRequire(
+      './app-assets.plugin'
+    );
     const plugin = new SkyuxAppAssetsPlugin({
       assetsMap: {
         'assets/foo.gif': {
           absolutePath: '',
-          hashedUrl:
-            'https://foobar.com/foo.HASH.gif',
+          hashedUrl: 'https://foobar.com/foo.HASH.gif',
           hashedFileName: 'foo.HASH.gif'
         }
       }
@@ -99,9 +94,7 @@ describe('Asset URLs plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    const actualContent = getAssetContent(
-      'foo.js'
-    );
+    const actualContent = getAssetContent('foo.js');
     expect(actualContent).toBe(
       '["https://foobar.com/foo.HASH.gif"], background-image: url(https://foobar.com/foo.HASH.gif), background-image: url(https://foobar.com/foo.HASH.gif)'
     );
@@ -110,9 +103,9 @@ describe('Asset URLs plugin', () => {
   it('should create hashed file names for all assets', () => {
     setupTest({});
 
-    const {
-      SkyuxAppAssetsPlugin
-    } = mock.reRequire('./app-assets.plugin');
+    const { SkyuxAppAssetsPlugin } = mock.reRequire(
+      './app-assets.plugin'
+    );
     const plugin = new SkyuxAppAssetsPlugin({
       assetsMap: {
         'assets/foo.gif': {
@@ -127,9 +120,7 @@ describe('Asset URLs plugin', () => {
     plugin.apply(mockCompiler);
 
     expect(
-      typeof mockWebpackAssets[
-        'assets/foo.HASH.gif'
-      ].source
+      typeof mockWebpackAssets['assets/foo.HASH.gif'].source
     ).toEqual('function');
   });
 });

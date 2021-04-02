@@ -55,15 +55,11 @@ describe('host assets fallback webpack plugin', () => {
     const SkyuxHostAssetsFallbackPlugin = mock.reRequire(
       './host-assets-fallback.plugin'
     ).SkyuxHostAssetsFallbackPlugin;
-    return new SkyuxHostAssetsFallbackPlugin(
-      'my-project'
-    );
+    return new SkyuxHostAssetsFallbackPlugin('my-project');
   }
 
   // Simulate Webpack calling the source callback.
-  function getAssetContent(
-    fileName: string
-  ): string {
+  function getAssetContent(fileName: string): string {
     return assetsToUpdate[fileName](
       mockAssets[fileName]
     ).source();

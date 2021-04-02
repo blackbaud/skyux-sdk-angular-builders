@@ -32,9 +32,7 @@ function createAppAssetsMap(
 
   // Create a hashed version of each path.
   filePaths.forEach((filePath) => {
-    const baseUrl = ensureTrailingSlash(
-      assetsBaseUrl
-    );
+    const baseUrl = ensureTrailingSlash(assetsBaseUrl);
 
     // Get the asset's URL, relative to the src directory.
     const relativeUrl = filePath.replace(
@@ -85,13 +83,11 @@ export function applyAppAssetsWebpackConfig(
   const processedAssetsMap: {
     [_: string]: string;
   } = {};
-  for (const [
-    relativeUrl,
-    asset
-  ] of Object.entries(assetsMap)) {
-    processedAssetsMap[
-      relativeUrl.replace('assets/', '')
-    ] = asset.hashedUrl;
+  for (const [relativeUrl, asset] of Object.entries(
+    assetsMap
+  )) {
+    processedAssetsMap[relativeUrl.replace('assets/', '')] =
+      asset.hashedUrl;
   }
 
   webpackConfig.module = webpackConfig.module || {

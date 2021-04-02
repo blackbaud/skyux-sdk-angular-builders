@@ -50,11 +50,7 @@ describe('browser builder', () => {
     executeBrowserBuilderSpy = jasmine
       .createSpy('executeBrowserBuilder')
       .and.callFake(
-        (
-          _options: any,
-          _context: any,
-          transforms: any
-        ) => {
+        (_options: any, _context: any, transforms: any) => {
           actualWebpackConfig = transforms.webpackConfiguration(
             defaultWebpackConfig
           );
@@ -93,8 +89,7 @@ describe('browser builder', () => {
     await mock.reRequire('./browser');
 
     const plugin = actualWebpackConfig.plugins?.find(
-      (p) =>
-        p instanceof SkyuxSaveHostMetadataPlugin
+      (p) => p instanceof SkyuxSaveHostMetadataPlugin
     );
 
     expect(plugin).toBeDefined();
@@ -128,8 +123,8 @@ describe('browser builder', () => {
     defaultOptions.deployUrl = 'https://foo.com';
     await mock.reRequire('./browser');
     expect(
-      executeBrowserBuilderSpy.calls.mostRecent()
-        .args[0].deployUrl
+      executeBrowserBuilderSpy.calls.mostRecent().args[0]
+        .deployUrl
     ).toEqual('https://foo.com/');
   });
 });

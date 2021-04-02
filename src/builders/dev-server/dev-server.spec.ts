@@ -58,11 +58,7 @@ describe('dev-server builder', () => {
     executDevServerBuilderSpy = jasmine
       .createSpy('executeDevServerBuilder')
       .and.callFake(
-        (
-          _options: any,
-          _context: any,
-          transforms: any
-        ) => {
+        (_options: any, _context: any, transforms: any) => {
           actualWebpackConfig = transforms.webpackConfiguration(
             defaultWebpackConfig
           );
@@ -174,9 +170,7 @@ describe('dev-server builder', () => {
 
       const plugin = getOpenHostUrlPlugin();
 
-      expect(plugin['config'].externals).toEqual(
-        externals
-      );
+      expect(plugin['config'].externals).toEqual(externals);
     });
 
     it('should add `SkyuxAppAssetsPlugin` to webpack plugins', async () => {
@@ -196,9 +190,9 @@ describe('dev-server builder', () => {
 
       await mock.reRequire('./dev-server');
 
-      expect(
-        actualWebpackConfig.plugins?.length
-      ).toEqual(3);
+      expect(actualWebpackConfig.plugins?.length).toEqual(
+        3
+      );
     });
 
     it('should add `SkyuxProtractorPlugin` when running e2e', async () => {
@@ -220,8 +214,7 @@ describe('dev-server builder', () => {
         'Expected the plugin to be added for `ng e2e`.'
       );
 
-      mockContext.target.configuration =
-        'e2eProduction';
+      mockContext.target.configuration = 'e2eProduction';
 
       await mock.reRequire('./dev-server');
 

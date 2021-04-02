@@ -9,9 +9,7 @@ describe('save metadata webpack plugin', () => {
   let mockCompiler: any;
 
   beforeEach(() => {
-    writeJsonSpy = jasmine.createSpy(
-      'writeJsonSync'
-    );
+    writeJsonSpy = jasmine.createSpy('writeJsonSync');
 
     mock('fs-extra', {
       writeJsonSync: writeJsonSpy
@@ -54,8 +52,7 @@ describe('save metadata webpack plugin', () => {
     const plugin = new SkyuxSaveHostMetadataPlugin(
       'my-project',
       {
-        hostUrl:
-          'https://host.nxt.blackbaud.com/',
+        hostUrl: 'https://host.nxt.blackbaud.com/',
         localUrl: 'https://localhost:4200/'
       }
     );

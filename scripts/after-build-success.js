@@ -6,8 +6,7 @@ const argv = minimist(process.argv.slice(2));
 
 // Pass `--test-app-directory=my-dir` to change the testing application directory.
 const TEST_APP_DIR =
-  argv['test-app-directory'] ||
-  'builders-test-app';
+  argv['test-app-directory'] || 'builders-test-app';
 const TEST_DIST = `${TEST_APP_DIR}/.skyux-sdk-angular-builders-dist`;
 
 function cleanDist() {
@@ -26,10 +25,7 @@ function copyFilesToDist() {
 
   pathsToCopy.forEach((pathArr) => {
     const sourcePath = path.join(...pathArr);
-    const distPath = path.join(
-      'dist',
-      ...pathArr
-    );
+    const distPath = path.join('dist', ...pathArr);
     if (fs.existsSync(sourcePath)) {
       fs.copySync(sourcePath, distPath);
       console.log(
@@ -95,9 +91,7 @@ function mergeBuilderSchemas() {
       spaces: 2
     });
 
-    console.log(
-      `Successfully merged ${config.schemaPath}`
-    );
+    console.log(`Successfully merged ${config.schemaPath}`);
   });
 }
 
