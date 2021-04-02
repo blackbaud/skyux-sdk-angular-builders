@@ -1,3 +1,8 @@
+# 4.0.0-alpha.32 (2021-04-02)
+
+- Fixed the app assets service to supply the correct base HREF for asset URLs. [#86](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/86)
+- Fixed the fallback test variable for ES5 script chunks. [#88](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/88)
+
 # 4.0.0-alpha.31 (2021-04-02)
 
 - Added `SkyThemeService` to the `SkyuxModule` providers. [#87](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/87)
