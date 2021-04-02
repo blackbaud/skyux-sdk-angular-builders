@@ -1,3 +1,7 @@
+# 4.0.0-alpha.31 (2021-04-02)
+
+- Added `SkyThemeService` to the `SkyuxModule` providers. [#87](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/87)
+
 # 4.0.0-alpha.30 (2021-04-01)
 
 - Fixed the `browser` builder to run skyux and startup configurations. [#84](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/84)
