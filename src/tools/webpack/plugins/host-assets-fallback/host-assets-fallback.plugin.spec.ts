@@ -14,7 +14,9 @@ describe('host assets fallback webpack plugin', () => {
   let mockCompiler: any;
 
   let assetsToUpdate: {
-    [filePath: string]: (asset: { source: () => string }) => ConcatSource;
+    [filePath: string]: (asset: {
+      source: () => string;
+    }) => ConcatSource;
   };
 
   afterEach(() => {
@@ -27,7 +29,10 @@ describe('host assets fallback webpack plugin', () => {
 
     const mockCompilation = {
       assets,
-      updateAsset: (filePath: string, cb: () => ConcatSource) => {
+      updateAsset: (
+        filePath: string,
+        cb: () => ConcatSource
+      ) => {
         assetsToUpdate[filePath] = cb;
       }
     };
@@ -35,7 +40,10 @@ describe('host assets fallback webpack plugin', () => {
     mockCompiler = {
       hooks: {
         emit: {
-          tap(_pluginName: string, callback: (compilation: any) => void) {
+          tap(
+            _pluginName: string,
+            callback: (compilation: any) => void
+          ) {
             callback(mockCompilation);
           }
         }
@@ -47,12 +55,18 @@ describe('host assets fallback webpack plugin', () => {
     const SkyuxHostAssetsFallbackPlugin = mock.reRequire(
       './host-assets-fallback.plugin'
     ).SkyuxHostAssetsFallbackPlugin;
-    return new SkyuxHostAssetsFallbackPlugin('my-project');
+    return new SkyuxHostAssetsFallbackPlugin(
+      'my-project'
+    );
   }
 
   // Simulate Webpack calling the source callback.
-  function getAssetContent(fileName: string): string {
-    return assetsToUpdate[fileName](mockAssets[fileName]).source();
+  function getAssetContent(
+    fileName: string
+  ): string {
+    return assetsToUpdate[fileName](
+      mockAssets[fileName]
+    ).source();
   }
 
   it("should add a fallback variable to the end of a JavaScript file's source", () => {

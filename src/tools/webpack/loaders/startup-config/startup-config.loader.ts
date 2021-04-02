@@ -8,7 +8,9 @@ import { getSkyuxConfig } from '../../../../shared/skyux-config-utils';
 
 const schema = require('./schema.json');
 
-export default function startupConfigLoader(this: loader.LoaderContext) {
+export default function startupConfigLoader(
+  this: loader.LoaderContext
+) {
   const skyuxConfig = getSkyuxConfig();
 
   const options = getOptions(this);

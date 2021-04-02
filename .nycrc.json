@@ -8,6 +8,9 @@
   "statements": 100,
   "extension": ".ts",
   "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.spec.ts", "**/testing/**"],
+  "exclude": [
+    "src/**/*.spec.ts",
+    "**/testing/**"
+  ],
   "reporter": ["text", "html", "json"]
 }

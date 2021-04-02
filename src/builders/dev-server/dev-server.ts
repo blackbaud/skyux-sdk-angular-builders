@@ -1,4 +1,7 @@
-import { BuilderContext, createBuilder } from '@angular-devkit/architect';
+import {
+  BuilderContext,
+  createBuilder
+} from '@angular-devkit/architect';
 
 import {
   DevServerBuilderOutput,
@@ -26,7 +29,11 @@ function executeSkyuxDevServerBuilder(
   return executeDevServerBuilder(
     options,
     context,
-    getDevServerTransforms(options, context, skyuxConfig)
+    getDevServerTransforms(
+      options,
+      context,
+      skyuxConfig
+    )
   );
 }
 

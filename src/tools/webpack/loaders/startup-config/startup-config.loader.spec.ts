@@ -3,12 +3,17 @@ import mock from 'mock-require';
 import { SkyuxConfig } from '../../../../shared/skyux-config';
 
 describe('startup config loader', () => {
-  function mockGetSkyuxConfig(testSkyuxConfig: SkyuxConfig): void {
-    mock('../../../../shared/skyux-config-utils', {
-      getSkyuxConfig() {
-        return testSkyuxConfig;
+  function mockGetSkyuxConfig(
+    testSkyuxConfig: SkyuxConfig
+  ): void {
+    mock(
+      '../../../../shared/skyux-config-utils',
+      {
+        getSkyuxConfig() {
+          return testSkyuxConfig;
+        }
       }
-    });
+    );
   }
 
   afterEach(() => {
@@ -31,7 +36,9 @@ describe('startup config loader', () => {
       omnibar: {}
     });
 
-    const loader = mock.reRequire('./startup-config.loader').default;
+    const loader = mock.reRequire(
+      './startup-config.loader'
+    ).default;
 
     const result = loader.apply({
       query: {
@@ -58,7 +65,9 @@ describe('startup config loader', () => {
       }
     });
 
-    const loader = mock.reRequire('./startup-config.loader').default;
+    const loader = mock.reRequire(
+      './startup-config.loader'
+    ).default;
 
     const result = loader.apply({
       query: {

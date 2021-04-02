@@ -17,7 +17,10 @@ export function getSkyuxConfig(): SkyuxConfig {
     );
   }
 
-  const skyuxConfig = merge<SkyuxConfig, SkyuxConfig>(
+  const skyuxConfig = merge<
+    SkyuxConfig,
+    SkyuxConfig
+  >(
     DEFAULTS,
     fs.readJsonSync('skyuxconfig.json')
   );

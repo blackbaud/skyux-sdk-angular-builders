@@ -5,7 +5,9 @@ const minimist = require('minimist');
 const argv = minimist(process.argv.slice(2));
 
 // Pass `--test-app-directory=my-dir` to change the testing application directory.
-const TEST_APP_DIR = argv['test-app-directory'] || 'builders-test-app';
+const TEST_APP_DIR =
+  argv['test-app-directory'] ||
+  'builders-test-app';
 const TEST_DIST = `${TEST_APP_DIR}/.skyux-sdk-angular-builders-dist`;
 
 function cleanDist() {
@@ -24,10 +26,15 @@ function copyFilesToDist() {
 
   pathsToCopy.forEach((pathArr) => {
     const sourcePath = path.join(...pathArr);
-    const distPath = path.join('dist', ...pathArr);
+    const distPath = path.join(
+      'dist',
+      ...pathArr
+    );
     if (fs.existsSync(sourcePath)) {
       fs.copySync(sourcePath, distPath);
-      console.log(`Successfully copied ${sourcePath} to ${distPath}`);
+      console.log(
+        `Successfully copied ${sourcePath} to ${distPath}`
+      );
     } else {
       throw `File not found: ${sourcePath}`;
     }
@@ -41,30 +48,42 @@ function mergeBuilderSchemas() {
     {
       baseSchemaPath:
         './node_modules/@angular-devkit/build-angular/src/browser/schema.json',
-      schemaPath: './dist/src/builders/browser/schema.ext.json'
+      schemaPath:
+        './dist/src/builders/browser/schema.ext.json'
     },
     {
       baseSchemaPath:
         './node_modules/@angular-devkit/build-angular/src/dev-server/schema.json',
-      schemaPath: './dist/src/builders/dev-server/schema.ext.json'
+      schemaPath:
+        './dist/src/builders/dev-server/schema.ext.json'
     },
     {
       baseSchemaPath:
         './node_modules/@angular-devkit/build-angular/src/karma/schema.json',
-      schemaPath: './dist/src/builders/karma/schema.ext.json'
+      schemaPath:
+        './dist/src/builders/karma/schema.ext.json'
     },
     {
       baseSchemaPath:
         './node_modules/@angular-devkit/build-angular/src/protractor/schema.json',
-      schemaPath: './dist/src/builders/protractor/schema.ext.json'
+      schemaPath:
+        './dist/src/builders/protractor/schema.ext.json'
     }
   ];
 
   schemaConfigs.forEach((config) => {
-    const schemaJson = fs.readJsonSync(path.resolve(config.schemaPath));
-    const baseSchemaJson = fs.readJsonSync(path.resolve(config.baseSchemaPath));
+    const schemaJson = fs.readJsonSync(
+      path.resolve(config.schemaPath)
+    );
+    const baseSchemaJson = fs.readJsonSync(
+      path.resolve(config.baseSchemaPath)
+    );
 
-    const newJson = Object.assign({}, baseSchemaJson, schemaJson);
+    const newJson = Object.assign(
+      {},
+      baseSchemaJson,
+      schemaJson
+    );
     newJson.properties = Object.assign(
       {},
       baseSchemaJson.properties,
@@ -76,7 +95,9 @@ function mergeBuilderSchemas() {
       spaces: 2
     });
 
-    console.log(`Successfully merged ${config.schemaPath}`);
+    console.log(
+      `Successfully merged ${config.schemaPath}`
+    );
   });
 }
 
@@ -89,7 +110,9 @@ function copyDistToNodeModules() {
     )
   );
 
-  console.log(`Successfully copied 'dist' to '${TEST_APP_DIR}/node_modules'.`);
+  console.log(
+    `Successfully copied 'dist' to '${TEST_APP_DIR}/node_modules'.`
+  );
 }
 
 cleanDist();

@@ -26,7 +26,9 @@ describe('create host url', () => {
     mock.stopAll();
   });
 
-  function decode(url: string): SkyuxCreateHostUrlConfig {
+  function decode(
+    url: string
+  ): SkyuxCreateHostUrlConfig {
     return JSON.parse(
       Buffer.from(
         decodeURIComponent(url.split('_cfg=')[1]),
@@ -36,9 +38,15 @@ describe('create host url', () => {
   }
 
   it('should open the SKY UX Host URL with Host config', () => {
-    const { createHostUrl } = mock.reRequire('./create-host-url');
+    const { createHostUrl } = mock.reRequire(
+      './create-host-url'
+    );
 
-    const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
+    const actualUrl = createHostUrl(
+      hostUrl,
+      baseHref,
+      defaultHostConfig
+    );
 
     expect(actualUrl).toEqual(
       'https://host.nxt.blackbaud.com/my-project/?local=true&_cfg=eyJsb2NhbFVybCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAvIiwiaG9zdCI6eyJ1cmwiOiJodHRwczovL2hvc3Qubnh0LmJsYWNrYmF1ZC5jb20vIn19'
@@ -53,7 +61,9 @@ describe('create host url', () => {
   });
 
   it('should send bbCheckout and frameOptions to Host', () => {
-    const { createHostUrl } = mock.reRequire('./create-host-url');
+    const { createHostUrl } = mock.reRequire(
+      './create-host-url'
+    );
 
     const hostConfig: SkyuxConfigHost = {
       url: 'https://foo.blackbaud.com/',
@@ -67,13 +77,21 @@ describe('create host url', () => {
 
     defaultHostConfig.host = hostConfig;
 
-    const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
+    const actualUrl = createHostUrl(
+      hostUrl,
+      baseHref,
+      defaultHostConfig
+    );
 
-    expect(decode(actualUrl).host).toEqual(hostConfig);
+    expect(decode(actualUrl).host).toEqual(
+      hostConfig
+    );
   });
 
   it('should send scripts and style sheets to SKY UX Host', () => {
-    const { createHostUrl } = mock.reRequire('./create-host-url');
+    const { createHostUrl } = mock.reRequire(
+      './create-host-url'
+    );
 
     defaultHostConfig.scripts = [
       {
@@ -89,7 +107,11 @@ describe('create host url', () => {
       }
     ];
 
-    const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
+    const actualUrl = createHostUrl(
+      hostUrl,
+      baseHref,
+      defaultHostConfig
+    );
 
     expect(decode(actualUrl)).toEqual({
       localUrl: 'https://localhost:4200/',
@@ -112,7 +134,9 @@ describe('create host url', () => {
   });
 
   it('should send `externals` to SKY UX Host', () => {
-    const { createHostUrl } = mock.reRequire('./create-host-url');
+    const { createHostUrl } = mock.reRequire(
+      './create-host-url'
+    );
 
     const externals = {
       js: {
@@ -126,17 +150,29 @@ describe('create host url', () => {
 
     defaultHostConfig.externals = externals;
 
-    const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
+    const actualUrl = createHostUrl(
+      hostUrl,
+      baseHref,
+      defaultHostConfig
+    );
 
-    expect(decode(actualUrl).externals).toEqual(externals);
+    expect(decode(actualUrl).externals).toEqual(
+      externals
+    );
   });
 
   it('should handle empty scripts', () => {
-    const { createHostUrl } = mock.reRequire('./create-host-url');
+    const { createHostUrl } = mock.reRequire(
+      './create-host-url'
+    );
 
     defaultHostConfig.scripts = [];
 
-    const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
+    const actualUrl = createHostUrl(
+      hostUrl,
+      baseHref,
+      defaultHostConfig
+    );
 
     expect(decode(actualUrl)).toEqual({
       localUrl: 'https://localhost:4200/',

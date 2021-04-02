@@ -2,15 +2,18 @@ import mock from 'mock-require';
 
 describe('skyux config loader', () => {
   beforeEach(() => {
-    mock('../../../../shared/skyux-config-utils', {
-      getSkyuxConfig() {
-        return {
-          host: {
-            url: 'https://foo.blackbaud.com'
-          }
-        };
+    mock(
+      '../../../../shared/skyux-config-utils',
+      {
+        getSkyuxConfig() {
+          return {
+            host: {
+              url: 'https://foo.blackbaud.com'
+            }
+          };
+        }
       }
-    });
+    );
   });
 
   afterEach(() => {
@@ -18,10 +21,14 @@ describe('skyux config loader', () => {
   });
 
   it('should replace processed-skyuxconfig.json contents', () => {
-    const loader = mock.reRequire('./skyux-config.loader').default;
+    const loader = mock.reRequire(
+      './skyux-config.loader'
+    ).default;
 
     const result = loader.apply();
 
-    expect(result).toEqual('{"host":{"url":"https://foo.blackbaud.com"}}');
+    expect(result).toEqual(
+      '{"host":{"url":"https://foo.blackbaud.com"}}'
+    );
   });
 });

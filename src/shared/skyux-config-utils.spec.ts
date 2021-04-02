@@ -25,7 +25,9 @@ describe('skyux config utils', () => {
   });
 
   it('should return defaults', () => {
-    const util = mock.reRequire('./skyux-config-utils');
+    const util = mock.reRequire(
+      './skyux-config-utils'
+    );
     expect(util.getSkyuxConfig()).toEqual({
       host: {
         url: 'https://host.nxt.blackbaud.com'
@@ -34,14 +36,17 @@ describe('skyux config utils', () => {
   });
 
   it('should throw error if host URL contains trailing slash', () => {
-    const invalidUrl = 'https://foo.blackbaud.com/';
+    const invalidUrl =
+      'https://foo.blackbaud.com/';
 
     mockSkyuxConfig = {
       host: {
         url: invalidUrl
       }
     };
-    const util = mock.reRequire('./skyux-config-utils');
+    const util = mock.reRequire(
+      './skyux-config-utils'
+    );
     expect(() => {
       util.getSkyuxConfig();
     }).toThrowError(
@@ -51,7 +56,9 @@ describe('skyux config utils', () => {
 
   it('should throw an error if skyuxconfig.json does not exist', () => {
     fileExists = false;
-    const util = mock.reRequire('./skyux-config-utils');
+    const util = mock.reRequire(
+      './skyux-config-utils'
+    );
     expect(util.getSkyuxConfig).toThrowError(
       '[@skyux-sdk/angular-builders] A skyuxconfig.json file was not found at the project root. Did you run `ng add @skyux-sdk/angular-builders`?'
     );

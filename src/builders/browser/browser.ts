@@ -20,7 +20,9 @@ function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext
 ): Observable<BuilderOutput> {
-  options.deployUrl = ensureTrailingSlash(options.deployUrl || '');
+  options.deployUrl = ensureTrailingSlash(
+    options.deployUrl || ''
+  );
 
   return executeBrowserBuilder(
     options,
@@ -29,6 +31,6 @@ function executeSkyuxBrowserBuilder(
   );
 }
 
-export default createBuilder<JsonObject & SkyuxBrowserBuilderOptions>(
-  executeSkyuxBrowserBuilder
-);
+export default createBuilder<
+  JsonObject & SkyuxBrowserBuilderOptions
+>(executeSkyuxBrowserBuilder);

@@ -1,7 +1,10 @@
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
-const { SpecReporter, StacktraceOption } = require('jasmine-spec-reporter');
+const {
+  SpecReporter,
+  StacktraceOption
+} = require('jasmine-spec-reporter');
 
 import mergeWith from 'lodash.mergewith';
 
@@ -15,7 +18,10 @@ function mergeConfigs(
   defaults: ProtractorConfig,
   overrides: ProtractorConfig
 ): ProtractorConfig {
-  return mergeWith<ProtractorConfig, ProtractorConfig>(
+  return mergeWith<
+    ProtractorConfig,
+    ProtractorConfig
+  >(
     defaults,
     overrides,
     (defaultValue, overrideValue) => {
@@ -39,7 +45,12 @@ function getConfig(): ProtractorConfig {
   // The default Protractor configuration provided by Angular CLI.
   let config: ProtractorConfig = {
     allScriptsTimeout: 11000,
-    specs: [require('path').join(process.cwd(), './e2e/src/**/*.e2e-spec.ts')],
+    specs: [
+      require('path').join(
+        process.cwd(),
+        './e2e/src/**/*.e2e-spec.ts'
+      )
+    ],
     capabilities: {
       browserName: 'chrome',
       chromeOptions: {
@@ -59,12 +70,16 @@ function getConfig(): ProtractorConfig {
     /* istanbul ignore next */
     onPrepare() {
       require('ts-node').register({
-        project: require('path').join(process.cwd(), './e2e/tsconfig.json')
+        project: require('path').join(
+          process.cwd(),
+          './e2e/tsconfig.json'
+        )
       });
       jasmine.getEnv().addReporter(
         new SpecReporter({
           spec: {
-            displayStacktrace: StacktraceOption.PRETTY
+            displayStacktrace:
+              StacktraceOption.PRETTY
           }
         })
       );
@@ -84,7 +99,10 @@ function getConfig(): ProtractorConfig {
     const overrides = getCiPlatformProtractorConfig(
       builderOptions.skyuxCiPlatform
     );
-    config = mergeConfigs(config, overrides || {});
+    config = mergeConfigs(
+      config,
+      overrides || {}
+    );
   } else {
     console.log(
       '[SKY UX] A specific CI platform configuration was not requested. ' +

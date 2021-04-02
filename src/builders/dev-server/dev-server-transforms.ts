@@ -33,11 +33,15 @@ function getDevServerWepbackConfigTransformer(
   skyuxConfig: SkyuxConfig
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
-    const configurationName = context.target!.configuration;
+    const configurationName = context.target!
+      .configuration;
     const isE2e =
-      configurationName === 'e2e' || configurationName === 'e2eProduction';
+      configurationName === 'e2e' ||
+      configurationName === 'e2eProduction';
 
-    let localUrl = getLocalUrlFromOptions(options);
+    let localUrl = getLocalUrlFromOptions(
+      options
+    );
     const baseHref = context.target!.project!;
 
     const assetsBaseUrl = localUrl;
@@ -54,15 +58,18 @@ function getDevServerWepbackConfigTransformer(
       localUrl += baseHref;
     }
 
-    webpackConfig.plugins = webpackConfig.plugins || [];
+    webpackConfig.plugins =
+      webpackConfig.plugins || [];
 
-    const openHostUrlPlugin = new SkyuxOpenHostUrlPlugin({
-      externals: skyuxConfig.app?.externals,
-      host: skyuxConfig.host,
-      localUrl,
-      open: options.skyuxOpen!,
-      baseHref
-    });
+    const openHostUrlPlugin = new SkyuxOpenHostUrlPlugin(
+      {
+        externals: skyuxConfig.app?.externals,
+        host: skyuxConfig.host,
+        localUrl,
+        open: options.skyuxOpen!,
+        baseHref
+      }
+    );
 
     webpackConfig.plugins.push(openHostUrlPlugin);
 
@@ -73,15 +80,24 @@ function getDevServerWepbackConfigTransformer(
       webpackConfig.plugins.push(
         new SkyuxProtractorPlugin({
           hostUrlFactory: () => {
-            return openHostUrlPlugin.$hostUrl.pipe(take(1)).toPromise();
+            return openHostUrlPlugin.$hostUrl
+              .pipe(take(1))
+              .toPromise();
           }
         })
       );
     }
 
-    applyAppAssetsWebpackConfig(webpackConfig, assetsBaseUrl, assetsBaseHref);
+    applyAppAssetsWebpackConfig(
+      webpackConfig,
+      assetsBaseUrl,
+      assetsBaseHref
+    );
     applySkyuxConfigWebpackConfig(webpackConfig);
-    applyStartupConfigWebpackConfig(webpackConfig, baseHref);
+    applyStartupConfigWebpackConfig(
+      webpackConfig,
+      baseHref
+    );
 
     return webpackConfig;
   };

@@ -1,6 +1,9 @@
 import { Stats } from 'webpack';
 
-import { dasherize, underscore } from '../../shared/string-utils';
+import {
+  dasherize,
+  underscore
+} from '../../shared/string-utils';
 
 import { SkyuxHostAsset } from './host-asset';
 
@@ -9,18 +12,26 @@ import { SkyuxHostAssetType } from './host-asset-type';
 const FALLBACK_CSS_PROPERTY = 'visibility';
 const FALLBACK_CSS_VALUE = 'hidden';
 
-function getFallbackCssClassName(fileName: string): string {
+function getFallbackCssClassName(
+  fileName: string
+): string {
   return `sky-pages-ready-${dasherize(fileName)}`;
 }
 
-export function getFallbackTestCssRule(name: string): string {
+export function getFallbackTestCssRule(
+  name: string
+): string {
   return `.${getFallbackCssClassName(
     name
   )} {${FALLBACK_CSS_PROPERTY}:${FALLBACK_CSS_VALUE};}`;
 }
 
-export function getFallbackTestVariable(name: string): string {
-  return `SKY_PAGES_READY_${underscore(name).toUpperCase()}`;
+export function getFallbackTestVariable(
+  name: string
+): string {
+  return `SKY_PAGES_READY_${underscore(
+    name
+  ).toUpperCase()}`;
 }
 
 /**
@@ -39,8 +50,10 @@ export function getHostAssets(
   const scripts: SkyuxHostAsset[] = [];
   const stylesheets: SkyuxHostAsset[] = [];
 
-  const isJavaScript = (filepath: string) => /\.js$/.test(filepath);
-  const isCss = (filepath: string) => /\.css$/.test(filepath);
+  const isJavaScript = (filepath: string) =>
+    /\.js$/.test(filepath);
+  const isCss = (filepath: string) =>
+    /\.css$/.test(filepath);
 
   const chunks = stats?.chunks;
   if (chunks) {
@@ -56,7 +69,9 @@ export function getHostAssets(
 
         if (config?.includeFallback) {
           stylesheet.fallbackStylesheet = {
-            class: getFallbackCssClassName(fileName),
+            class: getFallbackCssClassName(
+              fileName
+            ),
             property: FALLBACK_CSS_PROPERTY,
             value: FALLBACK_CSS_VALUE
           };
@@ -71,7 +86,8 @@ export function getHostAssets(
         // Only include primary and lazy-loaded scripts.
         return (
           isJavaScript(chunk.files[0]) &&
-          (chunk.initial || config?.includeLazyloadedChunks)
+          (chunk.initial ||
+            config?.includeLazyloadedChunks)
         );
       })
       .forEach((chunk) => {
@@ -81,7 +97,9 @@ export function getHostAssets(
         };
 
         if (config?.includeFallback) {
-          script.fallback = getFallbackTestVariable(script.name);
+          script.fallback = getFallbackTestVariable(
+            script.name
+          );
         }
 
         if (config?.includeLazyloadedChunks) {
@@ -89,7 +107,9 @@ export function getHostAssets(
         }
 
         // Polyfills (and in consequence, `zone.js`) need to be loaded first during AoT builds.
-        if (script.name.indexOf('polyfill') > -1) {
+        if (
+          script.name.indexOf('polyfill') > -1
+        ) {
           scripts.unshift(script);
         } else {
           scripts.push(script);

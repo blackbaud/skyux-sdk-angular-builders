@@ -49,22 +49,32 @@ describe('browser builder', () => {
 
     executeBrowserBuilderSpy = jasmine
       .createSpy('executeBrowserBuilder')
-      .and.callFake((_options: any, _context: any, transforms: any) => {
-        actualWebpackConfig = transforms.webpackConfiguration(
-          defaultWebpackConfig
-        );
-        return of({
-          success: true
-        });
-      });
+      .and.callFake(
+        (
+          _options: any,
+          _context: any,
+          transforms: any
+        ) => {
+          actualWebpackConfig = transforms.webpackConfiguration(
+            defaultWebpackConfig
+          );
+          return of({
+            success: true
+          });
+        }
+      );
 
-    spyOnProperty(angularArchitect, 'createBuilder', 'get').and.returnValue(
-      createBuilderSpy
-    );
+    spyOnProperty(
+      angularArchitect,
+      'createBuilder',
+      'get'
+    ).and.returnValue(createBuilderSpy);
 
-    spyOnProperty(buildAngular, 'executeBrowserBuilder', 'get').and.returnValue(
-      executeBrowserBuilderSpy
-    );
+    spyOnProperty(
+      buildAngular,
+      'executeBrowserBuilder',
+      'get'
+    ).and.returnValue(executeBrowserBuilderSpy);
 
     mock('glob', {
       sync: () => ['foo.jpg']
@@ -83,7 +93,8 @@ describe('browser builder', () => {
     await mock.reRequire('./browser');
 
     const plugin = actualWebpackConfig.plugins?.find(
-      (p) => p instanceof SkyuxSaveHostMetadataPlugin
+      (p) =>
+        p instanceof SkyuxSaveHostMetadataPlugin
     );
 
     expect(plugin).toBeDefined();
@@ -117,7 +128,8 @@ describe('browser builder', () => {
     defaultOptions.deployUrl = 'https://foo.com';
     await mock.reRequire('./browser');
     expect(
-      executeBrowserBuilderSpy.calls.mostRecent().args[0].deployUrl
+      executeBrowserBuilderSpy.calls.mostRecent()
+        .args[0].deployUrl
     ).toEqual('https://foo.com/');
   });
 });

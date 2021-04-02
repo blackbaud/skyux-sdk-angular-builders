@@ -17,13 +17,19 @@ function executeSkyuxProtractorBuilder(
   context: BuilderContext
 ): Promise<BuilderOutput> {
   options.skyuxHeadless = !!options.skyuxHeadless;
-  options.protractorConfig = path.join(__dirname, 'protractor.default.conf.js');
+  options.protractorConfig = path.join(
+    __dirname,
+    'protractor.default.conf.js'
+  );
 
   applyProtractorEnvironmentConfig({
     builderOptions: options
   });
 
-  return executeProtractorBuilder(options, context);
+  return executeProtractorBuilder(
+    options,
+    context
+  );
 }
 
 export default createBuilder<SkyuxProtractorBuilderOptions>(

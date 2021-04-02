@@ -44,15 +44,19 @@ function getCiPlatformConfig(
 export function getCiPlatformKarmaConfig(
   platform: SkyuxCIPlatform
 ): ((conf: karma.Config) => void) | undefined {
-  return getCiPlatformConfig('karma', platform) as
-    | ((conf: karma.Config) => void)
-    | undefined;
+  return getCiPlatformConfig(
+    'karma',
+    platform
+  ) as ((conf: karma.Config) => void) | undefined;
 }
 
 export function getCiPlatformProtractorConfig(
   platform: SkyuxCIPlatform
 ): ProtractorConfig | undefined {
-  return (getCiPlatformConfig('protractor', platform) as {
+  return (getCiPlatformConfig(
+    'protractor',
+    platform
+  ) as {
     config?: ProtractorConfig;
   })?.config;
 }

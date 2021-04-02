@@ -23,13 +23,18 @@ function createAppAssetsMap(
   const assetsMap: SkyuxAppAssets = {};
 
   // Find all asset file paths.
-  const filePaths = glob.sync(path.join(process.cwd(), 'src/assets/**/*'), {
-    nodir: true
-  });
+  const filePaths = glob.sync(
+    path.join(process.cwd(), 'src/assets/**/*'),
+    {
+      nodir: true
+    }
+  );
 
   // Create a hashed version of each path.
   filePaths.forEach((filePath) => {
-    const baseUrl = ensureTrailingSlash(assetsBaseUrl);
+    const baseUrl = ensureTrailingSlash(
+      assetsBaseUrl
+    );
 
     // Get the asset's URL, relative to the src directory.
     const relativeUrl = filePath.replace(
@@ -73,10 +78,20 @@ export function applyAppAssetsWebpackConfig(
   assetsBaseUrl: string,
   baseHref: string
 ): void {
-  const assetsMap = createAppAssetsMap(assetsBaseUrl, baseHref);
-  const processedAssetsMap: { [_: string]: string } = {};
-  for (const [relativeUrl, asset] of Object.entries(assetsMap)) {
-    processedAssetsMap[relativeUrl.replace('assets/', '')] = asset.hashedUrl;
+  const assetsMap = createAppAssetsMap(
+    assetsBaseUrl,
+    baseHref
+  );
+  const processedAssetsMap: {
+    [_: string]: string;
+  } = {};
+  for (const [
+    relativeUrl,
+    asset
+  ] of Object.entries(assetsMap)) {
+    processedAssetsMap[
+      relativeUrl.replace('assets/', '')
+    ] = asset.hashedUrl;
   }
 
   webpackConfig.module = webpackConfig.module || {
@@ -87,9 +102,14 @@ export function applyAppAssetsWebpackConfig(
     enforce: 'pre',
     test: /(\/|\\)__skyux(\/|\\)app-assets-map\.json$/,
     use: {
-      loader: path.resolve(__dirname, './loaders/app-assets/app-assets.loader'),
+      loader: path.resolve(
+        __dirname,
+        './loaders/app-assets/app-assets.loader'
+      ),
       options: {
-        assetsMapStringified: JSON.stringify(processedAssetsMap)
+        assetsMapStringified: JSON.stringify(
+          processedAssetsMap
+        )
       }
     }
   });

@@ -120,7 +120,10 @@ export interface SkyuxConfig {
 
   auth?: boolean;
 
-  codeCoverageThreshold?: 'none' | 'standard' | 'strict';
+  codeCoverageThreshold?:
+    | 'none'
+    | 'standard'
+    | 'strict';
 
   help?: {};
 

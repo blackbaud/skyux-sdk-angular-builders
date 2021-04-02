@@ -28,16 +28,24 @@ function getBrowserWepbackConfigTransformer(
   return (webpackConfig) => {
     const projectName = context.target!.project!;
 
-    webpackConfig.plugins = webpackConfig.plugins || [];
+    webpackConfig.plugins =
+      webpackConfig.plugins || [];
 
     webpackConfig.plugins.push(
       new SkyuxHostAssetsFallbackPlugin(),
       new SkyuxSaveHostMetadataPlugin()
     );
 
-    applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl!, projectName);
+    applyAppAssetsWebpackConfig(
+      webpackConfig,
+      options.deployUrl!,
+      projectName
+    );
     applySkyuxConfigWebpackConfig(webpackConfig);
-    applyStartupConfigWebpackConfig(webpackConfig, projectName);
+    applyStartupConfigWebpackConfig(
+      webpackConfig,
+      projectName
+    );
 
     return webpackConfig;
   };
@@ -48,6 +56,9 @@ export function getBrowserTransforms(
   context: BuilderContext
 ) {
   return {
-    webpackConfiguration: getBrowserWepbackConfigTransformer(options, context)
+    webpackConfiguration: getBrowserWepbackConfigTransformer(
+      options,
+      context
+    )
   };
 }

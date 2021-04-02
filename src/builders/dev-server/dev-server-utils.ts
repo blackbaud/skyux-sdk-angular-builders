@@ -19,10 +19,16 @@ export function applySkyuxDevServerOptions(
 
   // Enforce HTTPS.
   options.ssl = true;
-  options.sslCert = getCertPath('skyux-server.crt');
-  options.sslKey = getCertPath('skyux-server.key');
+  options.sslCert = getCertPath(
+    'skyux-server.crt'
+  );
+  options.sslKey = getCertPath(
+    'skyux-server.key'
+  );
 
-  const localUrl = getLocalUrlFromOptions(options);
+  const localUrl = getLocalUrlFromOptions(
+    options
+  );
   const baseHref = context.target!.project!;
 
   // Point live-reloading back to localhost.
@@ -45,8 +51,12 @@ export function applySkyuxDevServerOptions(
 
   // During e2e tests, Angular serves all assets from the root,
   // so we'll need to remove our baseHref from the serve path.
-  const configurationName = context.target!.configuration;
-  if (configurationName === 'e2e' || configurationName === 'e2eProduction') {
+  const configurationName = context.target!
+    .configuration;
+  if (
+    configurationName === 'e2e' ||
+    configurationName === 'e2eProduction'
+  ) {
     options.servePath = '/';
     options.deployUrl = localUrl;
   }

@@ -16,7 +16,9 @@ export function createHostUrl(
   // We need to URL-encode the config so that characters such as '+'
   // are properly represented.
   const configEncoded = encodeURIComponent(
-    Buffer.from(JSON.stringify(config)).toString('base64')
+    Buffer.from(JSON.stringify(config)).toString(
+      'base64'
+    )
   );
 
   baseUrl = ensureTrailingSlash(baseUrl);
