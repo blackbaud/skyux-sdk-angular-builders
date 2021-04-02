@@ -21,7 +21,11 @@ function executeSkyuxDevServerBuilder(
 ): Observable<DevServerBuilderOutput> {
   const skyuxConfig = getSkyuxConfig();
 
-  applySkyuxDevServerOptions(options);
+  const projectName = context.target!.project!;
+  applySkyuxDevServerOptions(options, projectName);
+
+  // const projectName = context.target!.project!;
+  // options.deployUrl = options.deployUrl + projectName;
 
   return executeDevServerBuilder(
     options,

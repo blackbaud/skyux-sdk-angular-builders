@@ -33,7 +33,8 @@ function getDevServerWepbackConfigTransformer(
   skyuxConfig: SkyuxConfig
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
-    const localUrl = getLocalUrlFromOptions(options);
+    const projectName = context.target!.project!;
+    const localUrl = getLocalUrlFromOptions(options, projectName);
 
     webpackConfig.plugins = webpackConfig.plugins || [];
 
@@ -42,7 +43,7 @@ function getDevServerWepbackConfigTransformer(
       host: skyuxConfig.host,
       localUrl,
       open: options.skyuxOpen!,
-      baseHref: context.target!.project!
+      baseHref: projectName
     });
 
     webpackConfig.plugins.push(openHostUrlPlugin);
@@ -61,9 +62,9 @@ function getDevServerWepbackConfigTransformer(
       );
     }
 
-    applyAppAssetsWebpackConfig(webpackConfig, localUrl);
+    applyAppAssetsWebpackConfig(webpackConfig, localUrl, projectName);
     applySkyuxConfigWebpackConfig(webpackConfig);
-    applyStartupConfigWebpackConfig(webpackConfig, context.target!.project!);
+    applyStartupConfigWebpackConfig(webpackConfig, projectName);
 
     return webpackConfig;
   };

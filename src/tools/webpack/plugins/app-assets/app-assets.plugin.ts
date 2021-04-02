@@ -2,7 +2,7 @@ import fs from 'fs-extra';
 
 import webpack from 'webpack';
 
-import { SkyuxAppAssets } from '../../app-assets';
+import { SkyuxAppAssets } from '../../../../shared/app-assets';
 
 import { modifyScriptContents } from '../../webpack-utils';
 
@@ -54,7 +54,7 @@ export class SkyuxAppAssetsPlugin {
         );
 
         // Replace CSS background image URLs.
-        // (Angular flattens all asset paths in CSS, so just search for the file name.)
+        // (Angular moves all asset files to the root directory, so just search for the file name.)
         const replacement = `url(${asset.hashedUrl})`;
         content = content
           .replace(
@@ -81,7 +81,7 @@ export class SkyuxAppAssetsPlugin {
   ): void {
     for (const [_relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
       const contents = fs.readFileSync(asset.absolutePath);
-      compilation.assets[asset.hashedFileName] = {
+      compilation.assets[asset.hashedRelativeUrl] = {
         source() {
           return contents;
         }
