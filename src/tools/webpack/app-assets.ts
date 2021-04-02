@@ -15,8 +15,8 @@ export interface SkyuxAppAssets {
     hashedUrl: string;
 
     /**
-     * The hashed name of the file to emit with Webpack.
+     * The hashed relative URL to emit with Webpack.
      */
-    hashedFileName: string;
+    hashedRelativeUrl: string;
   };
 }

@@ -16,7 +16,10 @@ import { SkyuxAppAssets } from './app-assets';
  * Creates an object which maps relative asset paths to absolute URLs with hashed file names.
  * @param assetBaseUrl The base URL where the assets are served.
  */
-function createAppAssetsMap(assetsBaseUrl: string): SkyuxAppAssets {
+function createAppAssetsMap(
+  assetsBaseUrl: string,
+  baseHref: string
+): SkyuxAppAssets {
   const assetsMap: SkyuxAppAssets = {};
 
   // Find all asset file paths.
@@ -28,6 +31,7 @@ function createAppAssetsMap(assetsBaseUrl: string): SkyuxAppAssets {
   filePaths.forEach((filePath) => {
     const baseUrl = ensureTrailingSlash(assetsBaseUrl);
 
+    // Get the asset's URL, relative to the src directory.
     const relativeUrl = filePath.replace(
       path
         .join(process.cwd(), 'src/')
@@ -36,8 +40,6 @@ function createAppAssetsMap(assetsBaseUrl: string): SkyuxAppAssets {
         .replace(/\\/g, '/'),
       ''
     );
-
-    const parsed = path.parse(relativeUrl);
 
     /**
      * Create a hash from the file path.
@@ -48,12 +50,18 @@ function createAppAssetsMap(assetsBaseUrl: string): SkyuxAppAssets {
       algorithm: 'md5'
     });
 
-    const hashedFileName = `${parsed.name}.${hash}${parsed.ext}`;
+    if (baseHref) {
+      baseHref = ensureTrailingSlash(baseHref);
+    }
+
+    const parsed = path.parse(relativeUrl);
+    const hashedRelativeUrl = `${parsed.dir}/${parsed.name}.${hash}${parsed.ext}`;
+    const hashedUrl = `${baseUrl}${baseHref}${hashedRelativeUrl}`;
 
     assetsMap[relativeUrl] = {
       absolutePath: filePath,
-      hashedUrl: `${baseUrl}${hashedFileName}`,
-      hashedFileName
+      hashedUrl,
+      hashedRelativeUrl
     };
   });
 
@@ -62,9 +70,10 @@ function createAppAssetsMap(assetsBaseUrl: string): SkyuxAppAssets {
 
 export function applyAppAssetsWebpackConfig(
   webpackConfig: webpack.Configuration,
-  assetsBaseUrl: string = ''
+  assetsBaseUrl: string,
+  baseHref: string
 ): void {
-  const assetsMap = createAppAssetsMap(assetsBaseUrl);
+  const assetsMap = createAppAssetsMap(assetsBaseUrl, baseHref);
   const processedAssetsMap: { [_: string]: string } = {};
   for (const [relativeUrl, asset] of Object.entries(assetsMap)) {
     processedAssetsMap[relativeUrl.replace('assets/', '')] = asset.hashedUrl;

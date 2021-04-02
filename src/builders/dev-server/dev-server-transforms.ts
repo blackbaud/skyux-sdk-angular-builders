@@ -33,7 +33,26 @@ function getDevServerWepbackConfigTransformer(
   skyuxConfig: SkyuxConfig
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
-    const localUrl = getLocalUrlFromOptions(options);
+    const configurationName = context.target!.configuration;
+    const isE2e =
+      configurationName === 'e2e' || configurationName === 'e2eProduction';
+
+    let localUrl = getLocalUrlFromOptions(options);
+    const baseHref = context.target!.project!;
+
+    const assetsBaseUrl = localUrl;
+    let assetsBaseHref: string;
+    if (isE2e) {
+      // The assets URL is built by combining the base assets URL above with
+      // the app's root directory (or baseHref), but in e2e tests the assets files
+      // are served directly from the root. We'll need to remove the baseHref from the URL
+      // so that asset URLs are built relative to the root rather than
+      // the app's root directory.
+      assetsBaseHref = '';
+    } else {
+      assetsBaseHref = baseHref;
+      localUrl += baseHref;
+    }
 
     webpackConfig.plugins = webpackConfig.plugins || [];
 
@@ -42,7 +61,7 @@ function getDevServerWepbackConfigTransformer(
       host: skyuxConfig.host,
       localUrl,
       open: options.skyuxOpen!,
-      baseHref: context.target!.project!
+      baseHref
     });
 
     webpackConfig.plugins.push(openHostUrlPlugin);
@@ -50,8 +69,7 @@ function getDevServerWepbackConfigTransformer(
     /**
      * If we're running e2e tests, add the Protractor Webpack plugin.
      */
-    const configurationName = context.target!.configuration;
-    if (configurationName === 'e2e' || configurationName === 'e2eProduction') {
+    if (isE2e) {
       webpackConfig.plugins.push(
         new SkyuxProtractorPlugin({
           hostUrlFactory: () => {
@@ -61,9 +79,9 @@ function getDevServerWepbackConfigTransformer(
       );
     }
 
-    applyAppAssetsWebpackConfig(webpackConfig, localUrl);
+    applyAppAssetsWebpackConfig(webpackConfig, assetsBaseUrl, assetsBaseHref);
     applySkyuxConfigWebpackConfig(webpackConfig);
-    applyStartupConfigWebpackConfig(webpackConfig, context.target!.project!);
+    applyStartupConfigWebpackConfig(webpackConfig, baseHref);
 
     return webpackConfig;
   };

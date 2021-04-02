@@ -26,6 +26,8 @@ function getBrowserWepbackConfigTransformer(
   context: BuilderContext
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
+    const projectName = context.target!.project!;
+
     webpackConfig.plugins = webpackConfig.plugins || [];
 
     webpackConfig.plugins.push(
@@ -33,9 +35,9 @@ function getBrowserWepbackConfigTransformer(
       new SkyuxSaveHostMetadataPlugin()
     );
 
-    applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl);
+    applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl!, projectName);
     applySkyuxConfigWebpackConfig(webpackConfig);
-    applyStartupConfigWebpackConfig(webpackConfig, context.target!.project!);
+    applyStartupConfigWebpackConfig(webpackConfig, projectName);
 
     return webpackConfig;
   };
