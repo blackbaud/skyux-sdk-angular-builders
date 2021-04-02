@@ -20,7 +20,7 @@ import { applyStartupConfigWebpackConfig } from '../../tools/webpack/startup-con
 
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 
-import { getLocalHostUrl } from './dev-server-utils';
+import { getLocalUrlFromOptions } from './dev-server-utils';
 
 /**
  * Allows adjustments to the default Angular "dev-server" webpack config.
@@ -33,7 +33,7 @@ function getDevServerWepbackConfigTransformer(
   skyuxConfig: SkyuxConfig
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
-    const localUrl = getLocalHostUrl(options, context);
+    const localUrl = getLocalUrlFromOptions(options);
     const projectName = context.target!.project!;
 
     webpackConfig.plugins = webpackConfig.plugins || [];

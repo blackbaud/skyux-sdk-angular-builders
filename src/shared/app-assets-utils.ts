@@ -10,7 +10,7 @@ import path from 'path';
  */
 export function createAppAssetsMap(
   assetsBaseUrl: string,
-  _baseHref: string
+  baseHref: string
 ): SkyuxAppAssets {
   const assetsMap: SkyuxAppAssets = {};
 
@@ -44,7 +44,7 @@ export function createAppAssetsMap(
 
     const parsed = path.parse(relativeUrl);
     const hashedRelativeUrl = `${parsed.dir}/${parsed.name}.${hash}${parsed.ext}`;
-    const hashedUrl = `${baseUrl}${hashedRelativeUrl}`;
+    const hashedUrl = `${baseUrl}${baseHref}/${hashedRelativeUrl}`;
 
     assetsMap[relativeUrl] = {
       absolutePath: filePath,
