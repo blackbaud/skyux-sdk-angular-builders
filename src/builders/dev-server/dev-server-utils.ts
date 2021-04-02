@@ -42,4 +42,13 @@ export function applySkyuxDevServerOptions(
   if (options.skyuxOpen === undefined) {
     options.skyuxOpen = true;
   }
+
+  // Setup e2e-specific options.
+  // Angular serves all assets from the root, so we'll need to
+  // remove our baseHref from the serve path.
+  const configurationName = context.target!.configuration;
+  if (configurationName === 'e2e' || configurationName === 'e2eProduction') {
+    options.servePath = '/';
+    options.deployUrl = localUrl;
+  }
 }

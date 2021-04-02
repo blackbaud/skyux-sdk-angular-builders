@@ -50,9 +50,13 @@ function createAppAssetsMap(
       algorithm: 'md5'
     });
 
+    if (baseHref) {
+      baseHref = ensureTrailingSlash(baseHref);
+    }
+
     const parsed = path.parse(relativeUrl);
     const hashedRelativeUrl = `${parsed.dir}/${parsed.name}.${hash}${parsed.ext}`;
-    const hashedUrl = `${baseUrl}${baseHref}/${hashedRelativeUrl}`;
+    const hashedUrl = `${baseUrl}${baseHref}${hashedRelativeUrl}`;
 
     assetsMap[relativeUrl] = {
       absolutePath: filePath,

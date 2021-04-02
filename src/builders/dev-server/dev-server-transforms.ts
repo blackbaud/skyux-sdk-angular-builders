@@ -33,8 +33,26 @@ function getDevServerWepbackConfigTransformer(
   skyuxConfig: SkyuxConfig
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
-    const localUrl = getLocalUrlFromOptions(options);
+    const configurationName = context.target!.configuration;
+    const isE2e =
+      configurationName === 'e2e' || configurationName === 'e2eProduction';
+
     const projectName = context.target!.project!;
+    const assetsBaseUrl = options.deployUrl || '';
+
+    let localUrl = getLocalUrlFromOptions(options);
+    let baseHref: string;
+    if (isE2e) {
+      // The assets URL is built by combining the base assets URL above with
+      // the app's root directory (or baseHref), but in e2e tests the assets files
+      // are served directly from the root. We'll need to remove the baseHref from the URL
+      // so that asset URLs are built relative to the root rather than
+      // the app's root directory.
+      baseHref = '';
+    } else {
+      baseHref = projectName;
+      localUrl += baseHref;
+    }
 
     webpackConfig.plugins = webpackConfig.plugins || [];
 
@@ -51,8 +69,7 @@ function getDevServerWepbackConfigTransformer(
     /**
      * If we're running e2e tests, add the Protractor Webpack plugin.
      */
-    const configurationName = context.target!.configuration;
-    if (configurationName === 'e2e' || configurationName === 'e2eProduction') {
+    if (isE2e) {
       webpackConfig.plugins.push(
         new SkyuxProtractorPlugin({
           hostUrlFactory: () => {
@@ -62,7 +79,7 @@ function getDevServerWepbackConfigTransformer(
       );
     }
 
-    applyAppAssetsWebpackConfig(webpackConfig, localUrl, projectName);
+    applyAppAssetsWebpackConfig(webpackConfig, assetsBaseUrl, baseHref);
     applySkyuxConfigWebpackConfig(webpackConfig);
     applyStartupConfigWebpackConfig(webpackConfig, projectName);
 
