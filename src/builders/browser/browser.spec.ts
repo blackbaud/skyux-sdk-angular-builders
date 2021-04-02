@@ -112,4 +112,12 @@ describe('browser builder', () => {
 
     expect(plugin).toBeDefined();
   });
+
+  it('should ensure the deployUrl ends with a forward slash', async () => {
+    defaultOptions.deployUrl = 'https://foo.com';
+    await mock.reRequire('./browser');
+    expect(
+      executeBrowserBuilderSpy.calls.mostRecent().args[0].deployUrl
+    ).toEqual('https://foo.com/');
+  });
 });

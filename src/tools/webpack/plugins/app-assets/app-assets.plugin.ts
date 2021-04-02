@@ -54,7 +54,7 @@ export class SkyuxAppAssetsPlugin {
         );
 
         // Replace CSS background image URLs.
-        // (Angular moves all asset files to the root directory, so just search for the file name.)
+        // (Angular moves all CSS asset files to the root directory, so just search for the file name.)
         const replacement = `url(${asset.hashedUrl})`;
         content = content
           .replace(

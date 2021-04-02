@@ -1,7 +1,10 @@
-import { createAppAssetsMap } from '../../shared/app-assets-utils';
-import { SkyuxAppAssetsPlugin } from './plugins/app-assets/app-assets.plugin';
 import path from 'path';
+
 import webpack from 'webpack';
+
+import { createAppAssetsMap } from '../../shared/app-assets-utils';
+
+import { SkyuxAppAssetsPlugin } from './plugins/app-assets/app-assets.plugin';
 
 export function applyAppAssetsWebpackConfig(
   webpackConfig: webpack.Configuration,

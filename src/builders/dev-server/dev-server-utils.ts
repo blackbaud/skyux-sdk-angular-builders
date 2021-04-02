@@ -1,5 +1,7 @@
 import { BuilderContext } from '@angular-devkit/architect';
+
 import { getCertPath } from '../../shared/cert-utils';
+
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 
 export function getLocalUrlFromOptions(
