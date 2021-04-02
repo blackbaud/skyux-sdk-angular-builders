@@ -19,8 +19,6 @@ export function createAppAssetsMap(
     nodir: true
   });
 
-  console.log('Asset files:', filePaths);
-
   // Create a hashed version of each path.
   filePaths.forEach((filePath) => {
     const baseUrl = ensureTrailingSlash(assetsBaseUrl);
@@ -54,8 +52,6 @@ export function createAppAssetsMap(
       hashedRelativeUrl
     };
   });
-
-  console.log(assetsMap);
 
   return assetsMap;
 }

@@ -94,14 +94,16 @@ describe('Asset URLs plugin', () => {
       assetsMap: {
         'assets/foo.gif': {
           absolutePath: '',
-          hashedUrl: 'https://foobar.com/foo.HASH.gif',
-          hashedFileName: 'foo.HASH.gif'
+          hashedUrl: 'https://foobar.com/foo/assets/foo.HASH.gif',
+          hashedRelativeUrl: 'assets/foo.HASH.gif'
         }
       }
     });
 
     plugin.apply(mockCompiler);
 
-    expect(typeof mockWebpackAssets['foo.HASH.gif'].source).toEqual('function');
+    expect(typeof mockWebpackAssets['assets/foo.HASH.gif'].source).toEqual(
+      'function'
+    );
   });
 });
