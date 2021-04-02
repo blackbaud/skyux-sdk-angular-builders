@@ -30,7 +30,8 @@ import {
 } from '@skyux/core';
 
 import {
-  SkyThemeModule
+  SkyThemeModule,
+  SkyThemeService
 } from '@skyux/theme';
 
 import skyuxConfigJson from './processed-skyuxconfig.json';
@@ -77,6 +78,7 @@ export class SkyuxModule {
       ngModule: SkyuxModule,
       providers: [
         SkyAppWindowRef,
+        SkyThemeService,
         {
           provide: SkyAppAssetsService,
           useClass: SkyAppAssetsImplService
