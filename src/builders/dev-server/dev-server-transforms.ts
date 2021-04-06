@@ -1,25 +1,16 @@
 import { BuilderContext } from '@angular-devkit/architect';
-
 import { ExecutionTransformer } from '@angular-devkit/build-angular';
 
+import { take } from 'rxjs/operators';
 import { Configuration as WebpackConfig } from 'webpack';
 
-import { take } from 'rxjs/operators';
-
 import { SkyuxConfig } from '../../shared/skyux-config';
-
-import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
-
-import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
-
 import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';
-
+import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
+import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
 import { applySkyuxConfigWebpackConfig } from '../../tools/webpack/skyux-config-webpack-config';
-
 import { applyStartupConfigWebpackConfig } from '../../tools/webpack/startup-config';
-
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
-
 import { getLocalUrlFromOptions } from './dev-server-utils';
 
 /**
@@ -35,7 +26,8 @@ function getDevServerWepbackConfigTransformer(
   return (webpackConfig) => {
     const configurationName = context.target!.configuration;
     const isE2e =
-      configurationName === 'e2e' || configurationName === 'e2eProduction';
+      configurationName === 'e2e' ||
+      configurationName === 'e2eProduction';
 
     let localUrl = getLocalUrlFromOptions(options);
     const baseHref = context.target!.project!;
@@ -73,15 +65,24 @@ function getDevServerWepbackConfigTransformer(
       webpackConfig.plugins.push(
         new SkyuxProtractorPlugin({
           hostUrlFactory: () => {
-            return openHostUrlPlugin.$hostUrl.pipe(take(1)).toPromise();
+            return openHostUrlPlugin.$hostUrl
+              .pipe(take(1))
+              .toPromise();
           }
         })
       );
     }
 
-    applyAppAssetsWebpackConfig(webpackConfig, assetsBaseUrl, assetsBaseHref);
+    applyAppAssetsWebpackConfig(
+      webpackConfig,
+      assetsBaseUrl,
+      assetsBaseHref
+    );
     applySkyuxConfigWebpackConfig(webpackConfig);
-    applyStartupConfigWebpackConfig(webpackConfig, baseHref);
+    applyStartupConfigWebpackConfig(
+      webpackConfig,
+      baseHref
+    );
 
     return webpackConfig;
   };

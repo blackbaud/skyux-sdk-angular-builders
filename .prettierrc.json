@@ -1,4 +1,7 @@
 {
   "singleQuote": true,
-  "trailingComma": "none"
+  "trailingComma": "none",
+  "printWidth": 60,
+  "importOrder": ["^@(.*)$", "^\\w(.*)$", "^[./]"],
+  "importOrderSeparation": true
 }

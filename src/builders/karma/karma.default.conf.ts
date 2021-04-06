@@ -1,9 +1,7 @@
 import karma from 'karma';
 
 import { getCiPlatformKarmaConfig } from '../../shared/ci-platform-utils';
-
 import { SkyuxCodeCoverageThreshold } from './code-coverage-threshold';
-
 import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
 
 function getCodeCoverageThresholdPercent(
@@ -24,8 +22,10 @@ function getCodeCoverageThresholdPercent(
 
 module.exports = (config: karma.Config): void => {
   const codeCoverageThresholdPercent = getCodeCoverageThresholdPercent(
-    SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold ||
-      SkyuxKarmaConfigAdapter.skyuxConfig.codeCoverageThreshold
+    SkyuxKarmaConfigAdapter.builderOptions
+      .skyuxCodeCoverageThreshold ||
+      SkyuxKarmaConfigAdapter.skyuxConfig
+        .codeCoverageThreshold
   );
 
   console.log(
@@ -35,7 +35,10 @@ module.exports = (config: karma.Config): void => {
   // The default Karma configuration provided by Angular CLI.
   config.set({
     basePath: '',
-    frameworks: ['jasmine', '@angular-devkit/build-angular'],
+    frameworks: [
+      'jasmine',
+      '@angular-devkit/build-angular'
+    ],
     plugins: [
       require('karma-jasmine'),
       require('karma-chrome-launcher'),
@@ -56,9 +59,15 @@ module.exports = (config: karma.Config): void => {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(process.cwd(), './coverage'),
+      dir: require('path').join(
+        process.cwd(),
+        './coverage'
+      ),
       subdir: '.',
-      reporters: [{ type: 'html' }, { type: 'text-summary' }],
+      reporters: [
+        { type: 'html' },
+        { type: 'text-summary' }
+      ],
       check: {
         global: {
           branches: codeCoverageThresholdPercent,
@@ -79,7 +88,9 @@ module.exports = (config: karma.Config): void => {
   } as karma.ConfigOptions);
 
   // Apply platform config overrides.
-  if (SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform) {
+  if (
+    SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform
+  ) {
     const platformConfig = getCiPlatformKarmaConfig(
       SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform
     );

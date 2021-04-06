@@ -1,10 +1,11 @@
 import path from 'path';
-
 import webpack from 'webpack';
-
 import { ConcatSource } from 'webpack-sources';
 
-type AssetSourceCallback = (content: string, filePath: string) => string;
+type AssetSourceCallback = (
+  content: string,
+  filePath: string
+) => string;
 
 function modifyChunkContents(
   fileExtension: '.css' | '.js',
@@ -16,7 +17,9 @@ function modifyChunkContents(
   for (const filePath of filePaths) {
     if (path.parse(filePath).ext === fileExtension) {
       compilation.updateAsset(filePath, (old) => {
-        return new ConcatSource(callback(old.source(), filePath));
+        return new ConcatSource(
+          callback(old.source(), filePath)
+        );
       });
     }
   }

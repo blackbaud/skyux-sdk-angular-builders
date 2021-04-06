@@ -1,9 +1,7 @@
 import { KarmaBuilderOptions } from '@angular-devkit/build-angular';
-
 import { json } from '@angular-devkit/core';
 
 import { SkyuxCIPlatform } from '../../shared/ci-platform';
-
 import { SkyuxCodeCoverageThreshold } from './code-coverage-threshold';
 
 export type SkyuxKarmaBuilderOptions = KarmaBuilderOptions &

@@ -1,16 +1,11 @@
 import glob from 'glob';
-
 import hasha from 'hasha';
-
 import path from 'path';
-
 import webpack from 'webpack';
 
 import { ensureTrailingSlash } from '../../shared/url-utils';
-
-import { SkyuxAppAssetsPlugin } from './plugins/app-assets/app-assets.plugin';
-
 import { SkyuxAppAssets } from './app-assets';
+import { SkyuxAppAssetsPlugin } from './plugins/app-assets/app-assets.plugin';
 
 /**
  * Creates an object which maps relative asset paths to absolute URLs with hashed file names.
@@ -23,9 +18,12 @@ function createAppAssetsMap(
   const assetsMap: SkyuxAppAssets = {};
 
   // Find all asset file paths.
-  const filePaths = glob.sync(path.join(process.cwd(), 'src/assets/**/*'), {
-    nodir: true
-  });
+  const filePaths = glob.sync(
+    path.join(process.cwd(), 'src/assets/**/*'),
+    {
+      nodir: true
+    }
+  );
 
   // Create a hashed version of each path.
   filePaths.forEach((filePath) => {
@@ -73,10 +71,16 @@ export function applyAppAssetsWebpackConfig(
   assetsBaseUrl: string,
   baseHref: string
 ): void {
-  const assetsMap = createAppAssetsMap(assetsBaseUrl, baseHref);
+  const assetsMap = createAppAssetsMap(
+    assetsBaseUrl,
+    baseHref
+  );
   const processedAssetsMap: { [_: string]: string } = {};
-  for (const [relativeUrl, asset] of Object.entries(assetsMap)) {
-    processedAssetsMap[relativeUrl.replace('assets/', '')] = asset.hashedUrl;
+  for (const [relativeUrl, asset] of Object.entries(
+    assetsMap
+  )) {
+    processedAssetsMap[relativeUrl.replace('assets/', '')] =
+      asset.hashedUrl;
   }
 
   webpackConfig.module = webpackConfig.module || {
@@ -87,9 +91,14 @@ export function applyAppAssetsWebpackConfig(
     enforce: 'pre',
     test: /(\/|\\)__skyux(\/|\\)app-assets-map\.json$/,
     use: {
-      loader: path.resolve(__dirname, './loaders/app-assets/app-assets.loader'),
+      loader: path.resolve(
+        __dirname,
+        './loaders/app-assets/app-assets.loader'
+      ),
       options: {
-        assetsMapStringified: JSON.stringify(processedAssetsMap)
+        assetsMapStringified: JSON.stringify(
+          processedAssetsMap
+        )
       }
     }
   });

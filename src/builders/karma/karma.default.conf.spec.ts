@@ -1,5 +1,4 @@
 import karma from 'karma';
-
 import mock from 'mock-require';
 
 import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
@@ -11,8 +10,12 @@ describe('karma.default.conf.ts', () => {
 
   //#region helpers
 
-  function verifyCoverageThresholdPercent(threshold: number): void {
-    expect(calledKarmaConfig.coverageReporter.check.global).toEqual({
+  function verifyCoverageThresholdPercent(
+    threshold: number
+  ): void {
+    expect(
+      calledKarmaConfig.coverageReporter.check.global
+    ).toEqual({
       branches: threshold,
       functions: threshold,
       lines: threshold,
@@ -70,9 +73,9 @@ describe('karma.default.conf.ts', () => {
   });
 
   it('should set default code coverage thresholds', () => {
-    const config: (conf: karma.Config) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    const config: (
+      conf: karma.Config
+    ) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
     verifyCoverageThresholdPercent(0);
@@ -82,9 +85,9 @@ describe('karma.default.conf.ts', () => {
     SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold =
       'standard';
 
-    const config: (conf: karma.Config) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    const config: (
+      conf: karma.Config
+    ) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
     verifyCoverageThresholdPercent(80);
@@ -94,9 +97,9 @@ describe('karma.default.conf.ts', () => {
     SkyuxKarmaConfigAdapter.builderOptions.skyuxCodeCoverageThreshold =
       'strict';
 
-    const config: (conf: karma.Config) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    const config: (
+      conf: karma.Config
+    ) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
     verifyCoverageThresholdPercent(100);
@@ -109,7 +112,8 @@ describe('karma.default.conf.ts', () => {
   });
 
   it('should apply platform config overrides', () => {
-    SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform = 'ado';
+    SkyuxKarmaConfigAdapter.builderOptions.skyuxCiPlatform =
+      'ado';
 
     mockPlatformConfig = (conf: karma.Config) => {
       conf.set({
@@ -117,9 +121,9 @@ describe('karma.default.conf.ts', () => {
       });
     };
 
-    const config: (conf: karma.Config) => void = mock.reRequire(
-      './karma.default.conf'
-    );
+    const config: (
+      conf: karma.Config
+    ) => void = mock.reRequire('./karma.default.conf');
     config(mockKarmaConfigUtil);
 
     expect(calledKarmaConfig.singleRun).toEqual(true);

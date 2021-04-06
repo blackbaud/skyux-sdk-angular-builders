@@ -1,23 +1,15 @@
 import * as angularArchitect from '@angular-devkit/architect';
-
 import * as buildAngular from '@angular-devkit/build-angular';
 
 import mock from 'mock-require';
-
 import { homedir } from 'os';
-
 import { of } from 'rxjs';
-
 import webpack from 'webpack';
 
 import { SkyuxConfig } from '../../shared/skyux-config';
-
 import { SkyuxAppAssetsPlugin } from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
-
-import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
-
 import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
-
+import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 
 class MockWebpackPlugin {
@@ -51,22 +43,28 @@ describe('dev-server builder', () => {
 
     createBuilderSpy = jasmine
       .createSpy('createBuilder')
-      .and.callFake((cb: any) => cb(defaultOptions, mockContext));
+      .and.callFake((cb: any) =>
+        cb(defaultOptions, mockContext)
+      );
 
     executDevServerBuilderSpy = jasmine
       .createSpy('executeDevServerBuilder')
-      .and.callFake((_options: any, _context: any, transforms: any) => {
-        actualWebpackConfig = transforms.webpackConfiguration(
-          defaultWebpackConfig
-        );
-        return of({
-          success: true
-        });
-      });
+      .and.callFake(
+        (_options: any, _context: any, transforms: any) => {
+          actualWebpackConfig = transforms.webpackConfiguration(
+            defaultWebpackConfig
+          );
+          return of({
+            success: true
+          });
+        }
+      );
 
-    spyOnProperty(angularArchitect, 'createBuilder', 'get').and.returnValue(
-      createBuilderSpy
-    );
+    spyOnProperty(
+      angularArchitect,
+      'createBuilder',
+      'get'
+    ).and.returnValue(createBuilderSpy);
 
     spyOnProperty(
       buildAngular,
@@ -99,7 +97,8 @@ describe('dev-server builder', () => {
   });
 
   function getActualOptions(): SkyuxDevServerBuilderOptions {
-    return executDevServerBuilderSpy.calls.mostRecent().args[0];
+    return executDevServerBuilderSpy.calls.mostRecent()
+      .args[0];
   }
 
   describe('configuration', () => {
@@ -183,7 +182,9 @@ describe('dev-server builder', () => {
 
       await mock.reRequire('./dev-server');
 
-      expect(actualWebpackConfig.plugins?.length).toEqual(3);
+      expect(actualWebpackConfig.plugins?.length).toEqual(
+        3
+      );
     });
 
     it('should add `SkyuxProtractorPlugin` when running e2e', async () => {
@@ -223,9 +224,13 @@ describe('dev-server builder', () => {
 
       const protractorPlugin = getProtractorPlugin();
       const hostUrlPlugin = getOpenHostUrlPlugin();
-      hostUrlPlugin['_$hostUrl'].next('https://foo.bar.com');
+      hostUrlPlugin['_$hostUrl'].next(
+        'https://foo.bar.com'
+      );
 
-      const url = await protractorPlugin['config'].hostUrlFactory();
+      const url = await protractorPlugin[
+        'config'
+      ].hostUrlFactory();
       expect(url).toEqual('https://foo.bar.com');
     });
   });

@@ -1,7 +1,6 @@
 import { BuilderContext } from '@angular-devkit/architect';
 
 import { getCertPath } from '../../shared/cert-utils';
-
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 
 export function getLocalUrlFromOptions(
@@ -46,7 +45,10 @@ export function applySkyuxDevServerOptions(
   // During e2e tests, Angular serves all assets from the root,
   // so we'll need to remove our baseHref from the serve path.
   const configurationName = context.target!.configuration;
-  if (configurationName === 'e2e' || configurationName === 'e2eProduction') {
+  if (
+    configurationName === 'e2e' ||
+    configurationName === 'e2eProduction'
+  ) {
     options.servePath = '/';
     options.deployUrl = localUrl;
   }

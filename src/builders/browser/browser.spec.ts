@@ -1,17 +1,12 @@
 import * as angularArchitect from '@angular-devkit/architect';
-
 import * as buildAngular from '@angular-devkit/build-angular';
 
 import mock from 'mock-require';
-
 import { of } from 'rxjs';
-
 import webpack from 'webpack';
 
 import { SkyuxAppAssetsPlugin } from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
-
 import { SkyuxSaveHostMetadataPlugin } from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
-
 import { SkyuxBrowserBuilderOptions } from './browser-options';
 
 class MockWebpackPlugin {
@@ -49,22 +44,28 @@ describe('browser builder', () => {
 
     executeBrowserBuilderSpy = jasmine
       .createSpy('executeBrowserBuilder')
-      .and.callFake((_options: any, _context: any, transforms: any) => {
-        actualWebpackConfig = transforms.webpackConfiguration(
-          defaultWebpackConfig
-        );
-        return of({
-          success: true
-        });
-      });
+      .and.callFake(
+        (_options: any, _context: any, transforms: any) => {
+          actualWebpackConfig = transforms.webpackConfiguration(
+            defaultWebpackConfig
+          );
+          return of({
+            success: true
+          });
+        }
+      );
 
-    spyOnProperty(angularArchitect, 'createBuilder', 'get').and.returnValue(
-      createBuilderSpy
-    );
+    spyOnProperty(
+      angularArchitect,
+      'createBuilder',
+      'get'
+    ).and.returnValue(createBuilderSpy);
 
-    spyOnProperty(buildAngular, 'executeBrowserBuilder', 'get').and.returnValue(
-      executeBrowserBuilderSpy
-    );
+    spyOnProperty(
+      buildAngular,
+      'executeBrowserBuilder',
+      'get'
+    ).and.returnValue(executeBrowserBuilderSpy);
 
     mock('glob', {
       sync: () => ['foo.jpg']
@@ -117,7 +118,8 @@ describe('browser builder', () => {
     defaultOptions.deployUrl = 'https://foo.com';
     await mock.reRequire('./browser');
     expect(
-      executeBrowserBuilderSpy.calls.mostRecent().args[0].deployUrl
+      executeBrowserBuilderSpy.calls.mostRecent().args[0]
+        .deployUrl
     ).toEqual('https://foo.com/');
   });
 });

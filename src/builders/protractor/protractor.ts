@@ -3,13 +3,11 @@ import {
   BuilderOutput,
   createBuilder
 } from '@angular-devkit/architect';
-
 import { executeProtractorBuilder } from '@angular-devkit/build-angular';
 
 import path from 'path';
 
 import { applyProtractorEnvironmentConfig } from '../../shared/protractor-environment-utils';
-
 import { SkyuxProtractorBuilderOptions } from './protractor-options';
 
 function executeSkyuxProtractorBuilder(
@@ -17,7 +15,10 @@ function executeSkyuxProtractorBuilder(
   context: BuilderContext
 ): Promise<BuilderOutput> {
   options.skyuxHeadless = !!options.skyuxHeadless;
-  options.protractorConfig = path.join(__dirname, 'protractor.default.conf.js');
+  options.protractorConfig = path.join(
+    __dirname,
+    'protractor.default.conf.js'
+  );
 
   applyProtractorEnvironmentConfig({
     builderOptions: options

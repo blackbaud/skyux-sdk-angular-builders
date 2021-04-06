@@ -1,9 +1,7 @@
 import fs from 'fs-extra';
-
 import webpack from 'webpack';
 
 import { SkyuxAppAssets } from '../../app-assets';
-
 import { modifyScriptContents } from '../../webpack-utils';
 
 const PLUGIN_NAME = 'skyux-asset-urls-plugin';
@@ -57,12 +55,18 @@ export class SkyuxAppAssetsPlugin {
         const replacement = `url(${asset.hashedUrl})`;
         content = content
           .replace(
-            new RegExp(regexEscape(`url(/${relativeUrl})`), 'g'),
+            new RegExp(
+              regexEscape(`url(/${relativeUrl})`),
+              'g'
+            ),
             replacement
           )
           // Account for quoted URLs.
           .replace(
-            new RegExp(regexEscape(`url(\\"/${relativeUrl}\\")`), 'g'),
+            new RegExp(
+              regexEscape(`url(\\"/${relativeUrl}\\")`),
+              'g'
+            ),
             replacement
           );
       }
@@ -78,7 +82,9 @@ export class SkyuxAppAssetsPlugin {
   private writeHashedAssets(
     compilation: webpack.compilation.Compilation
   ): void {
-    for (const [_relativeUrl, asset] of Object.entries(this.config.assetsMap)) {
+    for (const [_relativeUrl, asset] of Object.entries(
+      this.config.assetsMap
+    )) {
       const contents = fs.readFileSync(asset.absolutePath);
       compilation.assets[asset.hashedRelativeUrl] = {
         source() {
