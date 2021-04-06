@@ -33,8 +33,6 @@ export async function serveBuildResults(
 
   const metadata = fs.readJsonSync(path.resolve(rootDir, 'metadata.json'));
 
-  console.log('metadata:', metadata);
-
   openHostUrl({
     assets: {
       scripts: metadata.filter(
@@ -47,7 +45,7 @@ export async function serveBuildResults(
     baseHref: projectName,
     externals: skyuxConfig.app?.externals,
     host: skyuxConfig.host,
-    localUrl: `https://localhost:${port}`
+    localUrl: `https://localhost:${port}/${projectName}`
   });
 
   return new Promise((resolve) => {

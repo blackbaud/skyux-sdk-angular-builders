@@ -6,19 +6,19 @@ import fs from 'fs-extra';
 
 import https from 'https';
 
-import path from 'path';
+// import path from 'path';
 
 import { SkyuxServerConfig } from './server-config';
 
-function createApp(rootPath: string, baseHref: string) {
+function createApp(distPath: string, baseHref: string) {
   const app = express();
 
   app.use(cors());
-  app.use(express.static(rootPath));
+  app.use(express.static(distPath));
 
-  const rootDir = path.basename(rootPath);
-  console.log(`Mapping server requests from ${rootDir} to ${baseHref}`);
-  app.use(rootDir, express.static(baseHref));
+  // const rootDir = path.basename(distPath);
+  console.log(`Mapping server requests from ${baseHref} to ${distPath}`);
+  app.use(`/${baseHref}/`, express.static(distPath));
 
   return app;
 }
