@@ -13,13 +13,12 @@ import { SkyuxConfig } from '../../shared/skyux-config';
 import { SkyuxBrowserBuilderOptions } from './browser-options';
 
 export async function serveBuildResults(
-  _options: SkyuxBrowserBuilderOptions,
+  options: SkyuxBrowserBuilderOptions,
   context: BuilderContext,
   skyuxConfig: SkyuxConfig
 ): Promise<void> {
-  /*istanbul ignore next line*/
   const projectName = context.target?.project!;
-  const rootDir = path.resolve(process.cwd(), `dist/${projectName}`);
+  const rootDir = path.join(process.cwd(), options.outputPath);
   const port = 4200;
 
   await createServer({
@@ -30,7 +29,7 @@ export async function serveBuildResults(
     sslKey: getCertPath('skyux-server.key')
   });
 
-  const metadata = fs.readJsonSync(path.resolve(rootDir, 'metadata.json'));
+  const metadata = fs.readJsonSync(path.join(rootDir, 'metadata.json'));
 
   const url = createHostUrl(skyuxConfig.host.url, projectName, {
     externals: skyuxConfig.app?.externals,
