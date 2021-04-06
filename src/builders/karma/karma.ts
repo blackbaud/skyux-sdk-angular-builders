@@ -16,10 +16,7 @@ function executeSkyuxKarmaBuilder(
   options: SkyuxKarmaBuilderOptions,
   context: BuilderContext
 ): Observable<BuilderOutput> {
-  options.karmaConfig = path.join(
-    __dirname,
-    'karma.default.conf.js'
-  );
+  options.karmaConfig = path.join(__dirname, 'karma.default.conf.js');
 
   // Enforce code coverage for CI platforms.
   if (options.skyuxCiPlatform) {

@@ -26,8 +26,7 @@ function getDevServerWepbackConfigTransformer(
   return (webpackConfig) => {
     const configurationName = context.target!.configuration;
     const isE2e =
-      configurationName === 'e2e' ||
-      configurationName === 'e2eProduction';
+      configurationName === 'e2e' || configurationName === 'e2eProduction';
 
     let localUrl = getLocalUrlFromOptions(options);
     const baseHref = context.target!.project!;
@@ -65,24 +64,15 @@ function getDevServerWepbackConfigTransformer(
       webpackConfig.plugins.push(
         new SkyuxProtractorPlugin({
           hostUrlFactory: () => {
-            return openHostUrlPlugin.$hostUrl
-              .pipe(take(1))
-              .toPromise();
+            return openHostUrlPlugin.$hostUrl.pipe(take(1)).toPromise();
           }
         })
       );
     }
 
-    applyAppAssetsWebpackConfig(
-      webpackConfig,
-      assetsBaseUrl,
-      assetsBaseHref
-    );
+    applyAppAssetsWebpackConfig(webpackConfig, assetsBaseUrl, assetsBaseHref);
     applySkyuxConfigWebpackConfig(webpackConfig);
-    applyStartupConfigWebpackConfig(
-      webpackConfig,
-      baseHref
-    );
+    applyStartupConfigWebpackConfig(webpackConfig, baseHref);
 
     return webpackConfig;
   };

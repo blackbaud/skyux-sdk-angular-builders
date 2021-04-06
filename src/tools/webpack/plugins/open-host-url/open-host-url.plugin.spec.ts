@@ -22,10 +22,7 @@ describe('open host url webpack plugin', () => {
     mockCompiler = {
       hooks: {
         done: {
-          tap(
-            _pluginName: string,
-            callback: (stats: any) => void
-          ) {
+          tap(_pluginName: string, callback: (stats: any) => void) {
             callback({
               toJson: () => mockStats
             });
@@ -53,9 +50,8 @@ describe('open host url webpack plugin', () => {
   function getPlugin(
     options: Partial<SkyuxOpenHostUrlPluginConfig> = {}
   ): SkyuxOpenHostUrlPlugin {
-    const SkyuxOpenHostUrlPlugin = mock.reRequire(
-      './open-host-url.plugin'
-    ).SkyuxOpenHostUrlPlugin;
+    const SkyuxOpenHostUrlPlugin = mock.reRequire('./open-host-url.plugin')
+      .SkyuxOpenHostUrlPlugin;
 
     const plugin = new SkyuxOpenHostUrlPlugin({
       ...{
@@ -76,19 +72,15 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(createSpy).toHaveBeenCalledWith(
-      hostUrl,
-      'my-project',
-      {
-        host: {
-          url: 'https://host.nxt.blackbaud.com/'
-        },
-        localUrl: 'https://localhost:4200/',
-        rootElementTagName: 'app-root',
-        scripts: [],
-        stylesheets: []
-      }
-    );
+    expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
+      localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
+      scripts: [],
+      stylesheets: []
+    });
   });
 
   it('should open host URL with `externals`', () => {
@@ -108,9 +100,7 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(
-      createSpy.calls.mostRecent().args[2].externals
-    ).toEqual(externals);
+    expect(createSpy.calls.mostRecent().args[2].externals).toEqual(externals);
   });
 
   it('should send scripts to SKY UX Host', () => {
@@ -124,33 +114,27 @@ describe('open host url webpack plugin', () => {
         },
         {
           initial: false,
-          files: [
-            'default~app-module~app-module~mo~0d131e23.js'
-          ]
+          files: ['default~app-module~app-module~mo~0d131e23.js']
         }
       ]
     };
 
     plugin.apply(mockCompiler);
 
-    expect(createSpy).toHaveBeenCalledWith(
-      hostUrl,
-      'my-project',
-      {
-        host: {
-          url: 'https://host.nxt.blackbaud.com/'
-        },
-        localUrl: 'https://localhost:4200/',
-        rootElementTagName: 'app-root',
-        scripts: [
-          {
-            name: 'main.js',
-            type: SkyuxHostAssetType.Script
-          }
-        ],
-        stylesheets: []
-      }
-    );
+    expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
+      localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
+      scripts: [
+        {
+          name: 'main.js',
+          type: SkyuxHostAssetType.Script
+        }
+      ],
+      stylesheets: []
+    });
   });
 
   it('should only send javascript and css files', () => {
@@ -174,29 +158,25 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(createSpy).toHaveBeenCalledWith(
-      hostUrl,
-      'my-project',
-      {
-        host: {
-          url: 'https://host.nxt.blackbaud.com/'
-        },
-        localUrl: 'https://localhost:4200/',
-        rootElementTagName: 'app-root',
-        scripts: [
-          {
-            name: 'main.js',
-            type: SkyuxHostAssetType.Script
-          }
-        ],
-        stylesheets: [
-          {
-            name: 'styles.css',
-            type: SkyuxHostAssetType.Stylesheet
-          }
-        ]
-      }
-    );
+    expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
+      localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
+      scripts: [
+        {
+          name: 'main.js',
+          type: SkyuxHostAssetType.Script
+        }
+      ],
+      stylesheets: [
+        {
+          name: 'styles.css',
+          type: SkyuxHostAssetType.Stylesheet
+        }
+      ]
+    });
   });
 
   it('should load the polyfills script first', () => {
@@ -217,9 +197,7 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(
-      createSpy.calls.mostRecent().args[2].scripts
-    ).toEqual([
+    expect(createSpy.calls.mostRecent().args[2].scripts).toEqual([
       {
         name: 'polyfills.js',
         type: SkyuxHostAssetType.Script
@@ -240,19 +218,15 @@ describe('open host url webpack plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(createSpy).toHaveBeenCalledWith(
-      hostUrl,
-      'my-project',
-      {
-        host: {
-          url: 'https://host.nxt.blackbaud.com/'
-        },
-        localUrl: 'https://localhost:4200/',
-        rootElementTagName: 'app-root',
-        scripts: [],
-        stylesheets: []
-      }
-    );
+    expect(createSpy).toHaveBeenCalledWith(hostUrl, 'my-project', {
+      host: {
+        url: 'https://host.nxt.blackbaud.com/'
+      },
+      localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
+      scripts: [],
+      stylesheets: []
+    });
   });
 
   it('should only open the URL once', () => {
@@ -299,9 +273,7 @@ describe('open host url webpack plugin', () => {
     const plugin = getPlugin();
     plugin.apply(mockCompiler);
 
-    const url = await plugin.$hostUrl
-      .pipe(take(1))
-      .toPromise();
+    const url = await plugin.$hostUrl.pipe(take(1)).toPromise();
     expect(url).toEqual('foobar.com?cfg=baz');
   });
 });

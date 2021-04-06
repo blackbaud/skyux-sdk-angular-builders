@@ -1,4 +1,1 @@
-export type SkyuxCodeCoverageThreshold =
-  | 'none'
-  | 'standard'
-  | 'strict';
+export type SkyuxCodeCoverageThreshold = 'none' | 'standard' | 'strict';

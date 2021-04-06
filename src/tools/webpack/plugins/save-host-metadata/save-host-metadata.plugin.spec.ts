@@ -32,10 +32,7 @@ describe('save metadata webpack plugin', () => {
     mockCompiler = {
       hooks: {
         done: {
-          tap(
-            _pluginName: string,
-            callback: (stats: any) => void
-          ) {
+          tap(_pluginName: string, callback: (stats: any) => void) {
             callback(mockStats);
           }
         }
@@ -48,13 +45,10 @@ describe('save metadata webpack plugin', () => {
       './save-host-metadata.plugin'
     ).SkyuxSaveHostMetadataPlugin;
 
-    const plugin = new SkyuxSaveHostMetadataPlugin(
-      'my-project',
-      {
-        hostUrl: 'https://host.nxt.blackbaud.com/',
-        localUrl: 'https://localhost:4200/'
-      }
-    );
+    const plugin = new SkyuxSaveHostMetadataPlugin('my-project', {
+      hostUrl: 'https://host.nxt.blackbaud.com/',
+      localUrl: 'https://localhost:4200/'
+    });
 
     return plugin;
   }
@@ -67,9 +61,7 @@ describe('save metadata webpack plugin', () => {
       },
       {
         initial: false,
-        files: [
-          'default~app-module~app-module~mo~0d131e23.js'
-        ]
+        files: ['default~app-module~app-module~mo~0d131e23.js']
       },
       {
         files: ['styles.css']
@@ -89,8 +81,7 @@ describe('save metadata webpack plugin', () => {
           type: 'script'
         },
         {
-          name:
-            'default~app-module~app-module~mo~0d131e23.js',
+          name: 'default~app-module~app-module~mo~0d131e23.js',
           initial: false,
           fallback:
             'SKY_PAGES_READY_DEFAULT_APP_MODULE_APP_MODULE_MO_0D131E23_JS',

@@ -32,23 +32,15 @@ describe('protractor builder', () => {
 
     executeProtractorBuilder = jasmine
       .createSpy('executeProtractorBuilder')
-      .and.callFake(
-        (
-          _options: any,
-          _context: any,
-          _transforms: any
-        ) => {
-          return Promise.resolve({
-            success: true
-          });
-        }
-      );
+      .and.callFake((_options: any, _context: any, _transforms: any) => {
+        return Promise.resolve({
+          success: true
+        });
+      });
 
-    spyOnProperty(
-      angularArchitect,
-      'createBuilder',
-      'get'
-    ).and.returnValue(createBuilderSpy);
+    spyOnProperty(angularArchitect, 'createBuilder', 'get').and.returnValue(
+      createBuilderSpy
+    );
 
     spyOnProperty(
       buildAngular,
@@ -66,10 +58,7 @@ describe('protractor builder', () => {
     await mock.reRequire('./protractor');
 
     expect(options).toEqual({
-      protractorConfig: path.resolve(
-        __dirname,
-        'protractor.default.conf.js'
-      ),
+      protractorConfig: path.resolve(__dirname, 'protractor.default.conf.js'),
       skyuxHeadless: false
     });
   });
@@ -78,8 +67,7 @@ describe('protractor builder', () => {
     options.skyuxHeadless = true;
     await mock.reRequire('./protractor');
     expect(
-      getProtractorEnvironmentConfig()?.builderOptions
-        ?.skyuxHeadless
+      getProtractorEnvironmentConfig()?.builderOptions?.skyuxHeadless
     ).toBeTrue();
   });
 });

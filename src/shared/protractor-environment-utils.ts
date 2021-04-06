@@ -2,13 +2,10 @@ import merge from 'lodash.merge';
 
 import { SkyuxProtractorBuilderEnvironmentConfig } from './protractor-builder-environment-config';
 
-const environmentVariableName =
-  'SKYUX_PROTRACTOR_BUILDER_ENVIRONMENT_CONFIG';
+const environmentVariableName = 'SKYUX_PROTRACTOR_BUILDER_ENVIRONMENT_CONFIG';
 
 export function getProtractorEnvironmentConfig(): SkyuxProtractorBuilderEnvironmentConfig {
-  return JSON.parse(
-    process.env[environmentVariableName] || '{}'
-  );
+  return JSON.parse(process.env[environmentVariableName] || '{}');
 }
 
 /**
@@ -23,9 +20,7 @@ export function applyProtractorEnvironmentConfig(
   const env = getProtractorEnvironmentConfig();
   const merged = merge(env, value);
 
-  process.env[environmentVariableName] = JSON.stringify(
-    merged
-  );
+  process.env[environmentVariableName] = JSON.stringify(merged);
 }
 
 export function clearProtractorEnvironmentConfig(): void {

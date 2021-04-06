@@ -11,9 +11,7 @@ describe('Asset URLs plugin', () => {
   let mockCompiler: any;
 
   let assetsToUpdate: {
-    [filePath: string]: (asset: {
-      source: () => string;
-    }) => ConcatSource;
+    [filePath: string]: (asset: { source: () => string }) => ConcatSource;
   };
 
   beforeEach(() => {
@@ -34,10 +32,7 @@ describe('Asset URLs plugin', () => {
 
     const mockCompilation = {
       assets,
-      updateAsset: (
-        filePath: string,
-        cb: () => ConcatSource
-      ) => {
+      updateAsset: (filePath: string, cb: () => ConcatSource) => {
         assetsToUpdate[filePath] = cb;
       }
     };
@@ -45,16 +40,11 @@ describe('Asset URLs plugin', () => {
     mockCompiler = {
       hooks: {
         emit: {
-          tap(
-            _pluginName: string,
-            callback: (compilation: any) => void
-          ) {
+          tap(_pluginName: string, callback: (compilation: any) => void) {
             callback(mockCompilation);
 
             // Simulate Webpack emitting all assets.
-            for (const fileName of Object.keys(
-              mockCompilation.assets
-            )) {
+            for (const fileName of Object.keys(mockCompilation.assets)) {
               mockCompilation.assets[fileName].source();
             }
           }
@@ -65,9 +55,7 @@ describe('Asset URLs plugin', () => {
 
   // Simulate Webpack calling the source callback.
   function getAssetContent(fileName: string): string {
-    return assetsToUpdate[fileName](
-      mockWebpackAssets[fileName]
-    ).source();
+    return assetsToUpdate[fileName](mockWebpackAssets[fileName]).source();
   }
 
   it('should replace asset paths with hard URLs', () => {
@@ -78,9 +66,7 @@ describe('Asset URLs plugin', () => {
       }
     });
 
-    const { SkyuxAppAssetsPlugin } = mock.reRequire(
-      './app-assets.plugin'
-    );
+    const { SkyuxAppAssetsPlugin } = mock.reRequire('./app-assets.plugin');
     const plugin = new SkyuxAppAssetsPlugin({
       assetsMap: {
         'assets/foo.gif': {
@@ -102,15 +88,12 @@ describe('Asset URLs plugin', () => {
   it('should create hashed file names for all assets', () => {
     setupTest({});
 
-    const { SkyuxAppAssetsPlugin } = mock.reRequire(
-      './app-assets.plugin'
-    );
+    const { SkyuxAppAssetsPlugin } = mock.reRequire('./app-assets.plugin');
     const plugin = new SkyuxAppAssetsPlugin({
       assetsMap: {
         'assets/foo.gif': {
           absolutePath: '',
-          hashedUrl:
-            'https://foobar.com/foo/assets/foo.HASH.gif',
+          hashedUrl: 'https://foobar.com/foo/assets/foo.HASH.gif',
           hashedRelativeUrl: 'assets/foo.HASH.gif'
         }
       }
@@ -118,8 +101,8 @@ describe('Asset URLs plugin', () => {
 
     plugin.apply(mockCompiler);
 
-    expect(
-      typeof mockWebpackAssets['assets/foo.HASH.gif'].source
-    ).toEqual('function');
+    expect(typeof mockWebpackAssets['assets/foo.HASH.gif'].source).toEqual(
+      'function'
+    );
   });
 });

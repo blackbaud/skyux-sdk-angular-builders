@@ -1,11 +1,5 @@
-import {
-  virtualFs,
-  workspaces
-} from '@angular-devkit/core';
-import {
-  SchematicsException,
-  Tree
-} from '@angular-devkit/schematics';
+import { virtualFs, workspaces } from '@angular-devkit/core';
+import { SchematicsException, Tree } from '@angular-devkit/schematics';
 import * as ts from '@schematics/angular/third_party/github.com/Microsoft/TypeScript/lib/typescript';
 import { addImportToModule } from '@schematics/angular/utility/ast-utils';
 import { InsertChange } from '@schematics/angular/utility/change';
@@ -52,9 +46,7 @@ export function addModuleImportToRootModule(
  * Creates a workspace host.
  * Taken from: https://angular.io/guide/schematics-for-libraries#get-the-project-configuration
  */
-export function createHost(
-  tree: Tree
-): workspaces.WorkspaceHost {
+export function createHost(tree: Tree): workspaces.WorkspaceHost {
   return {
     /* istanbul ignore next */
     async readFile(path: string): Promise<string> {
@@ -66,19 +58,13 @@ export function createHost(
     },
 
     /* istanbul ignore next */
-    async writeFile(
-      path: string,
-      data: string
-    ): Promise<void> {
+    async writeFile(path: string, data: string): Promise<void> {
       return tree.overwrite(path, data);
     },
 
     /* istanbul ignore next */
     async isDirectory(path: string): Promise<boolean> {
-      return (
-        !tree.exists(path) &&
-        tree.getDir(path).subfiles.length > 0
-      );
+      return !tree.exists(path) && tree.getDir(path).subfiles.length > 0;
     },
 
     /* istanbul ignore next */

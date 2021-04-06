@@ -19,10 +19,7 @@ describe('protractor webpack plugin', () => {
     mockCompiler = {
       hooks: {
         done: {
-          async tapPromise(
-            _pluginName: string,
-            callback: () => void
-          ) {
+          async tapPromise(_pluginName: string, callback: () => void) {
             await callback();
             hookDone.next();
           }
@@ -40,16 +37,13 @@ describe('protractor webpack plugin', () => {
   function getPlugin(
     options: Partial<SkyuxProtractorPluginConfig> = {}
   ): SkyuxProtractorPlugin {
-    const SkyuxProtractorPlugin = mock.reRequire(
-      './protractor.plugin'
-    ).SkyuxProtractorPlugin;
+    const SkyuxProtractorPlugin = mock.reRequire('./protractor.plugin')
+      .SkyuxProtractorPlugin;
 
     const plugin = new SkyuxProtractorPlugin({
       ...{
         hostUrlFactory() {
-          return Promise.resolve(
-            'https://foo.blackbaud.com/'
-          );
+          return Promise.resolve('https://foo.blackbaud.com/');
         }
       },
       ...options
@@ -64,9 +58,9 @@ describe('protractor webpack plugin', () => {
     plugin.apply(mockCompiler);
 
     hookDone.pipe(take(1)).subscribe(() => {
-      expect(
-        getProtractorEnvironmentConfig()?.skyuxHostUrl
-      ).toEqual('https://foo.blackbaud.com/');
+      expect(getProtractorEnvironmentConfig()?.skyuxHostUrl).toEqual(
+        'https://foo.blackbaud.com/'
+      );
       done();
     });
   });

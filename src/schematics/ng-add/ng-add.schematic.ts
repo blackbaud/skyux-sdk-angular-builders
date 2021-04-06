@@ -1,8 +1,5 @@
 import { OutputHashing } from '@angular-devkit/build-angular';
-import {
-  normalize,
-  workspaces
-} from '@angular-devkit/core';
+import { normalize, workspaces } from '@angular-devkit/core';
 import {
   apply,
   applyTemplates,
@@ -30,10 +27,7 @@ import {
 } from '../utils/schematics-utils';
 import { SkyuxNgAddOptions } from './schema';
 
-async function readJson(
-  host: workspaces.WorkspaceHost,
-  filePath: string
-) {
+async function readJson(host: workspaces.WorkspaceHost, filePath: string) {
   const contents = await host.readFile(filePath);
   return JSON.parse(contents);
 }
@@ -43,17 +37,11 @@ async function getThemeStylesheets(
 ): Promise<string[]> {
   const themeStylesheets = ['@skyux/theme/css/sky.css'];
 
-  const skyuxConfig: SkyuxConfig = await readJson(
-    host,
-    'skyuxconfig.json'
-  );
+  const skyuxConfig: SkyuxConfig = await readJson(host, 'skyuxconfig.json');
   if (skyuxConfig.app?.theming?.supportedThemes) {
-    for (const theme of skyuxConfig.app.theming
-      .supportedThemes) {
+    for (const theme of skyuxConfig.app.theming.supportedThemes) {
       if (theme !== 'default') {
-        themeStylesheets.push(
-          `@skyux/theme/css/themes/${theme}/styles.css`
-        );
+        themeStylesheets.push(`@skyux/theme/css/themes/${theme}/styles.css`);
       }
     }
   }
@@ -68,8 +56,7 @@ async function modifyAngularJson(
   const projectName = options.project;
   const angularJson = await readJson(host, 'angular.json');
 
-  const architectConfig =
-    angularJson.projects[projectName].architect;
+  const architectConfig = angularJson.projects[projectName].architect;
   if (!architectConfig) {
     throw new SchematicsException(
       `Expected node projects/${projectName}/architect in angular.json!`
@@ -77,8 +64,7 @@ async function modifyAngularJson(
   }
 
   if (architectConfig.build) {
-    architectConfig.build.builder =
-      '@skyux-sdk/angular-builders:browser';
+    architectConfig.build.builder = '@skyux-sdk/angular-builders:browser';
     // Configure Angular to only hash bundled JavaScript files.
     // Our builder will handle hashing the file names found in `src/assets`.
     architectConfig.build.configurations!.production!.outputHashing! = OutputHashing.Bundles;
@@ -89,8 +75,7 @@ async function modifyAngularJson(
   }
 
   if (architectConfig.serve) {
-    architectConfig.serve.builder =
-      '@skyux-sdk/angular-builders:dev-server';
+    architectConfig.serve.builder = '@skyux-sdk/angular-builders:dev-server';
   } else {
     throw new SchematicsException(
       `Expected node projects/${projectName}/architect/serve in angular.json!`
@@ -98,8 +83,7 @@ async function modifyAngularJson(
   }
 
   if (architectConfig.e2e) {
-    architectConfig.e2e.builder =
-      '@skyux-sdk/angular-builders:protractor';
+    architectConfig.e2e.builder = '@skyux-sdk/angular-builders:protractor';
     architectConfig.e2e.options!.devServerTarget = `${projectName}:serve:e2e`;
     architectConfig.e2e.configurations!.production!.devServerTarget = `${projectName}:serve:e2eProduction`;
     architectConfig.serve.configurations!.e2e = {
@@ -120,17 +104,13 @@ async function modifyAngularJson(
 
   // Setup karma builder for all projects.
   for (const project in angularJson.projects) {
-    const testTarget =
-      angularJson.projects[project].architect.test;
+    const testTarget = angularJson.projects[project].architect.test;
     if (testTarget) {
-      testTarget.builder =
-        '@skyux-sdk/angular-builders:karma';
+      testTarget.builder = '@skyux-sdk/angular-builders:karma';
       testTarget.options!.codeCoverage = true;
 
       // Exclude our generated files from the consumers' code coverage.
-      testTarget.options!.codeCoverageExclude = [
-        'src/app/__skyux/**/*'
-      ];
+      testTarget.options!.codeCoverageExclude = ['src/app/__skyux/**/*'];
     } else {
       throw new SchematicsException(
         `Expected node projects/${project}/architect/test in angular.json!`
@@ -140,8 +120,7 @@ async function modifyAngularJson(
 
   // Add theme stylesheets.
   const angularStylesheets = architectConfig.build.options.styles.filter(
-    (stylesheet: string) =>
-      !stylesheet.startsWith('@skyux/theme')
+    (stylesheet: string) => !stylesheet.startsWith('@skyux/theme')
   );
   const themeStylesheets = await getThemeStylesheets(host);
   architectConfig.build.options.styles = themeStylesheets.concat(
@@ -182,18 +161,12 @@ exports.config = {};
   );
 }
 
-async function modifyTsConfig(
-  host: workspaces.WorkspaceHost
-): Promise<void> {
-  const tsConfigContents = await host.readFile(
-    'tsconfig.json'
-  );
+async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
+  const tsConfigContents = await host.readFile('tsconfig.json');
   // JavaScript has difficulty parsing JSON with comments.
   const banner =
     '/* To learn more about this file see: https://angular.io/config/tsconfig. */\n';
-  const tsConfig = JSON.parse(
-    tsConfigContents.replace(banner, '')
-  );
+  const tsConfig = JSON.parse(tsConfigContents.replace(banner, ''));
   tsConfig.compilerOptions.resolveJsonModule = true;
   tsConfig.compilerOptions.esModuleInterop = true;
   await host.writeFile(
@@ -286,14 +259,10 @@ async function setupLibraries(
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
   return async (tree: Tree, context: SchematicContext) => {
     const host = createHost(tree);
-    const { workspace } = await workspaces.readWorkspace(
-      '/',
-      host
-    );
+    const { workspace } = await workspaces.readWorkspace('/', host);
 
     if (!options.project) {
-      options.project = workspace.extensions
-        .defaultProject as string;
+      options.project = workspace.extensions.defaultProject as string;
     }
 
     const project = workspace.projects.get(options.project);

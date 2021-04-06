@@ -18,13 +18,10 @@ describe('skyux config loader', () => {
   });
 
   it('should replace processed-skyuxconfig.json contents', () => {
-    const loader = mock.reRequire('./skyux-config.loader')
-      .default;
+    const loader = mock.reRequire('./skyux-config.loader').default;
 
     const result = loader.apply();
 
-    expect(result).toEqual(
-      '{"host":{"url":"https://foo.blackbaud.com"}}'
-    );
+    expect(result).toEqual('{"host":{"url":"https://foo.blackbaud.com"}}');
   });
 });

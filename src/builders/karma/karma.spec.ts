@@ -31,29 +31,19 @@ describe('karma builder', () => {
 
     executeKarmaBuilderSpy = jasmine
       .createSpy('executeKarmaBuilder')
-      .and.callFake(
-        (
-          _options: any,
-          _context: any,
-          _transforms: any
-        ) => {
-          return of({
-            success: true
-          });
-        }
-      );
+      .and.callFake((_options: any, _context: any, _transforms: any) => {
+        return of({
+          success: true
+        });
+      });
 
-    spyOnProperty(
-      angularArchitect,
-      'createBuilder',
-      'get'
-    ).and.returnValue(createBuilderSpy);
+    spyOnProperty(angularArchitect, 'createBuilder', 'get').and.returnValue(
+      createBuilderSpy
+    );
 
-    spyOnProperty(
-      buildAngular,
-      'executeKarmaBuilder',
-      'get'
-    ).and.returnValue(executeKarmaBuilderSpy);
+    spyOnProperty(buildAngular, 'executeKarmaBuilder', 'get').and.returnValue(
+      executeKarmaBuilderSpy
+    );
 
     mock('../../shared/skyux-config-utils', {
       getSkyuxConfig() {
@@ -74,10 +64,7 @@ describe('karma builder', () => {
     await mock.reRequire('./karma');
 
     expect(options).toEqual({
-      karmaConfig: path.resolve(
-        __dirname,
-        'karma.default.conf.js'
-      ),
+      karmaConfig: path.resolve(__dirname, 'karma.default.conf.js'),
       main: 'main.ts',
       tsConfig: 'tsconfig.json'
     });
@@ -90,10 +77,7 @@ describe('karma builder', () => {
 
     expect(options).toEqual({
       codeCoverage: true,
-      karmaConfig: path.resolve(
-        __dirname,
-        'karma.default.conf.js'
-      ),
+      karmaConfig: path.resolve(__dirname, 'karma.default.conf.js'),
       main: 'main.ts',
       skyuxCiPlatform: 'ado',
       tsConfig: 'tsconfig.json',

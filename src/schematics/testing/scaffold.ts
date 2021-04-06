@@ -17,15 +17,11 @@ export async function createTestApp(
   workspaceTree: UnitTestTree;
 }> {
   const workspaceTree = await runner
-    .runExternalSchematicAsync(
-      '@schematics/angular',
-      'workspace',
-      {
-        name: 'workspace',
-        version: '11.0.0',
-        newProjectRoot: 'projects'
-      }
-    )
+    .runExternalSchematicAsync('@schematics/angular', 'workspace', {
+      name: 'workspace',
+      version: '11.0.0',
+      newProjectRoot: 'projects'
+    })
     .toPromise();
 
   const appTree = await runner

@@ -19,9 +19,7 @@ export class SkyuxOpenHostUrlPlugin {
 
   private _$hostUrl = new BehaviorSubject<string>('');
 
-  constructor(
-    private config: SkyuxOpenHostUrlPluginConfig
-  ) {}
+  constructor(private config: SkyuxOpenHostUrlPluginConfig) {}
 
   public apply(compiler: Compiler): void {
     let opened = false;

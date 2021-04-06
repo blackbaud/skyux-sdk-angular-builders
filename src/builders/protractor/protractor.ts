@@ -15,10 +15,7 @@ function executeSkyuxProtractorBuilder(
   context: BuilderContext
 ): Promise<BuilderOutput> {
   options.skyuxHeadless = !!options.skyuxHeadless;
-  options.protractorConfig = path.join(
-    __dirname,
-    'protractor.default.conf.js'
-  );
+  options.protractorConfig = path.join(__dirname, 'protractor.default.conf.js');
 
   applyProtractorEnvironmentConfig({
     builderOptions: options

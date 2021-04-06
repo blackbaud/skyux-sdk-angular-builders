@@ -15,8 +15,7 @@ describe('protractor.default.conf', () => {
     spyOn(console, 'log');
 
     mock('../../shared/ci-platform-utils', {
-      getCiPlatformProtractorConfig: () =>
-        mockPlatformConfig
+      getCiPlatformProtractorConfig: () => mockPlatformConfig
     });
   });
 
@@ -33,26 +32,20 @@ describe('protractor.default.conf', () => {
   }
 
   it('should allow setting the test browser to "headless" mode', () => {
-    let config = mock.reRequire('./protractor.default.conf')
-      .config;
+    let config = mock.reRequire('./protractor.default.conf').config;
 
     expect(
-      config.capabilities.chromeOptions.args.indexOf(
-        '--headless'
-      ) === -1
+      config.capabilities.chromeOptions.args.indexOf('--headless') === -1
     ).toBeTrue();
 
     setBuilderOptions({
       skyuxHeadless: true
     });
 
-    config = mock.reRequire('./protractor.default.conf')
-      .config;
+    config = mock.reRequire('./protractor.default.conf').config;
 
     expect(
-      config.capabilities.chromeOptions.args.indexOf(
-        '--headless'
-      ) === -1
+      config.capabilities.chromeOptions.args.indexOf('--headless') === -1
     ).toBeFalse();
   });
 
@@ -73,15 +66,11 @@ describe('protractor.default.conf', () => {
       skyuxCiPlatform: 'ado'
     });
 
-    const config = mock.reRequire(
-      './protractor.default.conf'
-    ).config;
+    const config = mock.reRequire('./protractor.default.conf').config;
 
     expect(config.capabilities.browserName).toBe('firefox');
     expect(config.onPrepare()).toEqual('foobar');
-    expect(config.capabilities.chromeOptions.args).toEqual([
-      '--foobar'
-    ]);
+    expect(config.capabilities.chromeOptions.args).toEqual(['--foobar']);
   });
 
   it('should handle undefined CI platform overrides', () => {
@@ -91,9 +80,7 @@ describe('protractor.default.conf', () => {
       skyuxCiPlatform: 'ado'
     });
 
-    const config = mock.reRequire(
-      './protractor.default.conf'
-    ).config;
+    const config = mock.reRequire('./protractor.default.conf').config;
 
     expect(config.capabilities.browserName).toBe('chrome');
   });

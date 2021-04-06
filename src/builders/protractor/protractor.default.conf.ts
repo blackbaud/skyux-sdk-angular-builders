@@ -7,10 +7,7 @@ import { getProtractorEnvironmentConfig } from '../../shared/protractor-environm
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
-const {
-  SpecReporter,
-  StacktraceOption
-} = require('jasmine-spec-reporter');
+const { SpecReporter, StacktraceOption } = require('jasmine-spec-reporter');
 
 function mergeConfigs(
   defaults: ProtractorConfig,
@@ -40,12 +37,7 @@ function getConfig(): ProtractorConfig {
   // The default Protractor configuration provided by Angular CLI.
   let config: ProtractorConfig = {
     allScriptsTimeout: 11000,
-    specs: [
-      require('path').join(
-        process.cwd(),
-        './e2e/src/**/*.e2e-spec.ts'
-      )
-    ],
+    specs: [require('path').join(process.cwd(), './e2e/src/**/*.e2e-spec.ts')],
     capabilities: {
       browserName: 'chrome',
       chromeOptions: {
@@ -65,10 +57,7 @@ function getConfig(): ProtractorConfig {
     /* istanbul ignore next */
     onPrepare() {
       require('ts-node').register({
-        project: require('path').join(
-          process.cwd(),
-          './e2e/tsconfig.json'
-        )
+        project: require('path').join(process.cwd(), './e2e/tsconfig.json')
       });
       jasmine.getEnv().addReporter(
         new SpecReporter({
