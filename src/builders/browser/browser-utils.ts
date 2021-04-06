@@ -5,13 +5,12 @@ import fs from 'fs-extra';
 import path from 'path';
 
 import { getCertPath } from '../../shared/cert-utils';
+import { SkyuxHostAsset } from '../../shared/host-asset';
+import { SkyuxHostAssetType } from '../../shared/host-asset-type';
 import { openHostUrl } from '../../shared/host-utils';
 import { createServer } from '../../shared/server';
-
-import { SkyuxBrowserBuilderOptions } from './browser-options';
 import { SkyuxConfig } from '../../shared/skyux-config';
-import { SkyuxHostAssetType } from '../../shared/host-asset-type';
-import { SkyuxHostAsset } from '../../shared/host-asset';
+import { SkyuxBrowserBuilderOptions } from './browser-options';
 
 export async function serveBuildResults(
   _options: SkyuxBrowserBuilderOptions,
