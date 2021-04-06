@@ -28,11 +28,6 @@ function getBrowserWepbackConfigTransformer(
   return (webpackConfig) => {
     const projectName = context.target!.project!;
 
-    const baseHref = `${projectName}/`;
-    if (!options.deployUrl?.endsWith(baseHref)) {
-      options.deployUrl += baseHref;
-    }
-
     webpackConfig.plugins = webpackConfig.plugins || [];
 
     webpackConfig.plugins.push(

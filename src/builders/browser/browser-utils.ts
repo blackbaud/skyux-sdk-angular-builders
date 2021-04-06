@@ -10,19 +10,40 @@ import { SkyuxHostAssetType } from '../../shared/host-asset-type';
 import { createHostUrl, openHostUrl } from '../../shared/host-utils';
 import { createServer } from '../../shared/server';
 import { SkyuxConfig } from '../../shared/skyux-config';
+import { ensureTrailingSlash } from '../../shared/url-utils';
+
 import { SkyuxBrowserBuilderOptions } from './browser-options';
+
+export function applySkyuxBrowserOptions(
+  options: SkyuxBrowserBuilderOptions,
+  context: BuilderContext,
+  port?: number
+): void {
+  const projectName = context.target!.project!;
+  const baseHref = `${projectName}/`;
+
+  options.deployUrl = options.deployUrl || '';
+  if (options.skyuxServe && !options.deployUrl) {
+    options.deployUrl = `https://localhost:${port}/`;
+  }
+
+  options.deployUrl = ensureTrailingSlash(options.deployUrl);
+  if (!options.deployUrl?.endsWith(baseHref)) {
+    options.deployUrl += baseHref;
+  }
+}
 
 export async function serveBuildResults(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext,
-  skyuxConfig: SkyuxConfig
+  skyuxConfig: SkyuxConfig,
+  port: number
 ): Promise<void> {
-  const projectName = context.target?.project!;
+  const baseHref = context.target?.project!;
   const rootDir = path.join(process.cwd(), options.outputPath);
-  const port = 4200;
 
   await createServer({
-    baseHref: projectName,
+    baseHref,
     port,
     rootDir,
     sslCert: getCertPath('skyux-server.crt'),
@@ -31,10 +52,10 @@ export async function serveBuildResults(
 
   const metadata = fs.readJsonSync(path.join(rootDir, 'metadata.json'));
 
-  const url = createHostUrl(skyuxConfig.host.url, projectName, {
+  const url = createHostUrl(skyuxConfig.host.url, baseHref, {
     externals: skyuxConfig.app?.externals,
     host: skyuxConfig.host,
-    localUrl: `https://localhost:${port}/${projectName}`,
+    localUrl: `https://localhost:${port}/${baseHref}/`,
     rootElementTagName: 'app-root',
     scripts: metadata.filter(
       (x: SkyuxHostAsset) => x.type === SkyuxHostAssetType.Script

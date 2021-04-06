@@ -36,7 +36,9 @@ export function createServer(config: SkyuxServerConfig): Promise<void> {
 
     await server.listen(config.port);
 
-    console.log(`Serving local files on https://localhost:${config.port}/.`);
+    console.log(
+      `Serving local files on https://localhost:${config.port}/${config.baseHref}.`
+    );
 
     process.on('exit', () => {
       server.close();

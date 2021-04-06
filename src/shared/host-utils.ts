@@ -1,6 +1,7 @@
 import open from 'open';
-import { ensureTrailingSlash } from './url-utils';
+
 import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
+import { ensureTrailingSlash } from './url-utils';
 
 /**
  * Creates the SKY UX Host URL.
