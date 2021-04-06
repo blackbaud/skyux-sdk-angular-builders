@@ -1,14 +1,9 @@
-import open from 'open';
-
 import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Compiler } from 'webpack';
+import { openHostUrl } from '../../../../shared/host-utils';
 
 import { getHostAssets } from '../../host-asset-utils';
-
-import { createHostUrl } from './create-host-url';
-
-import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
 
 import { SkyuxOpenHostUrlPluginConfig } from './open-host-url-config';
 
@@ -33,33 +28,15 @@ export class SkyuxOpenHostUrlPlugin {
       if (!opened) {
         const assets = getHostAssets(webpackStats.toJson());
 
-        const hostUrlConfig: SkyuxCreateHostUrlConfig = {
+        const url = openHostUrl({
+          assets,
+          baseHref: this.config.baseHref,
+          externals: this.config.externals,
           host: this.config.host,
-          localUrl: this.config.localUrl,
-          rootElementTagName: 'app-root',
-          scripts: assets.scripts,
-          stylesheets: assets.stylesheets
-        };
-
-        if (this.config.externals) {
-          hostUrlConfig.externals = this.config.externals;
-        }
-
-        const url = createHostUrl(
-          this.config.host.url,
-          this.config.baseHref,
-          hostUrlConfig
-        );
+          localUrl: this.config.localUrl
+        });
 
         this._$hostUrl.next(url);
-
-        console.log(
-          `\n\n==================\n SKY UX Host URL:\n==================\n\n${url}\n\n`
-        );
-
-        if (this.config.open) {
-          open(url);
-        }
 
         opened = true;
       }

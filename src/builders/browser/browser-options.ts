@@ -1,3 +1,5 @@
 import { BrowserBuilderOptions } from '@angular-devkit/build-angular';
 
-export type SkyuxBrowserBuilderOptions = BrowserBuilderOptions & {};
+export type SkyuxBrowserBuilderOptions = BrowserBuilderOptions & {
+  skyuxServe?: boolean;
+};

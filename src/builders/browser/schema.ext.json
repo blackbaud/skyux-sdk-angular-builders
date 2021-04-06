@@ -1,4 +1,9 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "properties": {}
+  "properties": {
+    "skyuxServe": {
+      "description": "Specifies if the build results should be served locally.",
+      "type": "boolean"
+    }
+  }
 }

@@ -8,25 +8,36 @@ import { executeBrowserBuilder } from '@angular-devkit/build-angular';
 
 import { JsonObject } from '@angular-devkit/core';
 
-import { Observable } from 'rxjs';
-
 import { ensureTrailingSlash } from '../../shared/url-utils';
 
 import { SkyuxBrowserBuilderOptions } from './browser-options';
 
-import { getBrowserTransforms } from './browser-transforms';
+import { serveBuildResults } from './browser-utils';
 
-function executeSkyuxBrowserBuilder(
+import { getBrowserTransforms } from './browser-transforms';
+import { getSkyuxConfig } from '../../shared/skyux-config-utils';
+
+async function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext
-): Observable<BuilderOutput> {
-  options.deployUrl = ensureTrailingSlash(options.deployUrl || '');
+): Promise<BuilderOutput> {
+  const skyuxConfig = getSkyuxConfig();
 
-  return executeBrowserBuilder(
+  options.deployUrl = ensureTrailingSlash(
+    options.deployUrl || `https://localhost:4200/${context.target?.project!}`
+  );
+
+  const result = await executeBrowserBuilder(
     options,
     context,
     getBrowserTransforms(options, context)
-  );
+  ).toPromise();
+
+  if (options.skyuxServe) {
+    await serveBuildResults(options, context, skyuxConfig);
+  }
+
+  return result;
 }
 
 export default createBuilder<JsonObject & SkyuxBrowserBuilderOptions>(

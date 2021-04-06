@@ -1,9 +1,6 @@
-import {
-  SkyuxConfigAppExternals,
-  SkyuxConfigHost
-} from '../../../../shared/skyux-config';
+import { SkyuxConfigAppExternals, SkyuxConfigHost } from './skyux-config';
 
-import { SkyuxHostAsset } from '../../host-asset';
+import { SkyuxHostAsset } from './host-asset';
 
 /**
  * Configuration parameter `_cfg` that is encoded as part of the SKY UX Host URL.
