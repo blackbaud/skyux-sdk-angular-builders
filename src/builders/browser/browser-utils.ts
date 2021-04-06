@@ -7,7 +7,7 @@ import path from 'path';
 import { getCertPath } from '../../shared/cert-utils';
 import { SkyuxHostAsset } from '../../shared/host-asset';
 import { SkyuxHostAssetType } from '../../shared/host-asset-type';
-import { openHostUrl } from '../../shared/host-utils';
+import { createHostUrl, openHostUrl } from '../../shared/host-utils';
 import { createServer } from '../../shared/server';
 import { SkyuxConfig } from '../../shared/skyux-config';
 import { SkyuxBrowserBuilderOptions } from './browser-options';
@@ -32,20 +32,20 @@ export async function serveBuildResults(
 
   const metadata = fs.readJsonSync(path.resolve(rootDir, 'metadata.json'));
 
-  openHostUrl({
-    assets: {
-      scripts: metadata.filter(
-        (x: SkyuxHostAsset) => x.type === SkyuxHostAssetType.Script
-      ),
-      stylesheets: metadata.filter(
-        (x: SkyuxHostAsset) => x.type === SkyuxHostAssetType.Stylesheet
-      )
-    },
-    baseHref: projectName,
+  const url = createHostUrl(skyuxConfig.host.url, projectName, {
     externals: skyuxConfig.app?.externals,
     host: skyuxConfig.host,
-    localUrl: `https://localhost:${port}/${projectName}`
+    localUrl: `https://localhost:${port}/${projectName}`,
+    rootElementTagName: 'app-root',
+    scripts: metadata.filter(
+      (x: SkyuxHostAsset) => x.type === SkyuxHostAssetType.Script
+    ),
+    stylesheets: metadata.filter(
+      (x: SkyuxHostAsset) => x.type === SkyuxHostAssetType.Stylesheet
+    )
   });
+
+  openHostUrl(url);
 
   return new Promise((resolve) => {
     process.on('SIGINT', () => {

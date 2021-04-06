@@ -24,7 +24,7 @@ async function executeSkyuxBrowserBuilder(
   const skyuxConfig = getSkyuxConfig();
 
   options.deployUrl = ensureTrailingSlash(
-    options.deployUrl || `https://localhost:4200`
+    options.deployUrl || options.skyuxServe ? `https://localhost:4200` : ''
   );
 
   const result = await executeBrowserBuilder(
