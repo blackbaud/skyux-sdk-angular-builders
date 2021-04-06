@@ -36,18 +36,23 @@ export function getHostAssets(
   scripts: SkyuxHostAsset[];
   stylesheets: SkyuxHostAsset[];
 } {
-  const scripts: SkyuxHostAsset[] = [];
-  const stylesheets: SkyuxHostAsset[] = [];
+  let scripts: SkyuxHostAsset[] = [];
+  let stylesheets: SkyuxHostAsset[] = [];
 
   const isJavaScript = (filepath: string) => /\.js$/.test(filepath);
   const isCss = (filepath: string) => /\.css$/.test(filepath);
 
   const chunks = stats?.chunks;
   if (chunks) {
+    chunks.forEach((chunk) => {
+      const name = chunk.files[0];
+      console.log(name);
+    });
+
     // Get style sheets.
-    chunks
+    stylesheets = chunks
       .filter((chunk) => isCss(chunk.files[0]))
-      .forEach((chunk) => {
+      .map((chunk) => {
         const fileName = chunk.files[0];
         const stylesheet: SkyuxHostAsset = {
           name: fileName,
@@ -62,11 +67,11 @@ export function getHostAssets(
           };
         }
 
-        stylesheets.push(stylesheet);
+        return stylesheet;
       });
 
     // Get scripts.
-    chunks
+    scripts = chunks
       .filter((chunk) => {
         // Only include primary and lazy-loaded scripts.
         return (
@@ -74,10 +79,13 @@ export function getHostAssets(
           (chunk.initial || config?.includeLazyloadedChunks)
         );
       })
-      .forEach((chunk) => {
+      .map((chunk) => {
+        const name = chunk.files[0];
         const script: SkyuxHostAsset = {
-          name: chunk.files[0],
-          type: SkyuxHostAssetType.Script
+          name,
+          type: name.includes('-es2015')
+            ? SkyuxHostAssetType.Module
+            : SkyuxHostAssetType.Script
         };
 
         if (config?.includeFallback) {
@@ -88,17 +96,36 @@ export function getHostAssets(
           script.initial = !!chunk.initial;
         }
 
-        // Polyfills (and in consequence, `zone.js`) need to be loaded first during AoT builds.
-        if (script.name.indexOf('polyfill') > -1) {
-          scripts.unshift(script);
-        } else {
-          scripts.push(script);
-        }
+        return script;
+
+        // // Polyfills (and in consequence, `zone.js`) need to be loaded first during AoT builds.
+        // if (script.name.indexOf('polyfill') > -1) {
+        //   scripts.unshift(script);
+        // } else {
+        //   scripts.push(script);
+        // }
       });
   }
 
+  const sortedScripts: SkyuxHostAsset[] = [];
+  const remaining: SkyuxHostAsset[] = [];
+
+  const order = ['runtime', 'polyfills', 'main'];
+  order.forEach((key) => {
+    scripts.forEach((script) => {
+      if (script.name.startsWith(key)) {
+        sortedScripts.push(script);
+      } else {
+        remaining.push(script);
+      }
+    });
+  });
+
+  console.log('Sorted scripts:', sortedScripts);
+  console.log('Remaining:', remaining);
+
   return {
-    scripts,
+    scripts: sortedScripts.concat(remaining),
     stylesheets
   };
 }

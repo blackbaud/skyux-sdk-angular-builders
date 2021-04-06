@@ -1,4 +1,7 @@
 {
   "$schema": "./node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json",
-  "codeCoverageThreshold": "strict"
+  "codeCoverageThreshold": "strict",
+  "host": {
+    "url": "https://localhost:5234"
+  }
 }
