@@ -23,8 +23,6 @@ function createHostUrl(
 
   baseUrl = ensureTrailingSlash(baseUrl);
 
-  console.log('Host config:', config);
-
   return `${baseUrl}${baseHref}/?local=true&_cfg=${configEncoded}`;
 }
 
