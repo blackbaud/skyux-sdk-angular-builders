@@ -113,11 +113,19 @@ describe('browser builder', () => {
     expect(plugin).toBeDefined();
   });
 
-  it('should ensure the deployUrl ends with a forward slash', async () => {
+  it('should ensure the deployUrl ends with the baseHref and a forward slash', async () => {
     defaultOptions.deployUrl = 'https://foo.com';
     await mock.reRequire('./browser');
     expect(
       executeBrowserBuilderSpy.calls.mostRecent().args[0].deployUrl
-    ).toEqual('https://foo.com/');
+    ).toEqual('https://foo.com/foo/');
+  });
+
+  it("should only add the baseHref if it's not already included", async () => {
+    defaultOptions.deployUrl = 'https://foo.com/foo/';
+    await mock.reRequire('./browser');
+    expect(
+      executeBrowserBuilderSpy.calls.mostRecent().args[0].deployUrl
+    ).toEqual('https://foo.com/foo/');
   });
 });
