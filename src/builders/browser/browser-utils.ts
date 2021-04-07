@@ -36,17 +36,17 @@ export async function serveBuildResults(
   port: number
 ): Promise<void> {
   const baseHref = getBaseHref(context);
-  const rootDir = path.join(process.cwd(), options.outputPath);
+  const distPath = path.join(process.cwd(), options.outputPath);
 
-  await createServer({
-    baseHref,
+  const server = createServer({
+    distPath,
     port,
-    rootDir,
+    rootPath: baseHref,
     sslCert: getCertPath('skyux-server.crt'),
     sslKey: getCertPath('skyux-server.key')
   });
 
-  const metadata = fs.readJsonSync(path.join(rootDir, 'metadata.json'));
+  const metadata = fs.readJsonSync(path.join(distPath, 'metadata.json'));
 
   const url = createHostUrl(skyuxConfig.host.url, baseHref, {
     externals: skyuxConfig.app?.externals,
@@ -61,10 +61,18 @@ export async function serveBuildResults(
     )
   });
 
+  await server.start();
+
   openHostUrl(url);
 
   return new Promise((resolve) => {
+    process.on('exit', () => {
+      server.stop();
+      resolve();
+    });
+
     process.on('SIGINT', () => {
+      server.stop();
       resolve();
     });
   });

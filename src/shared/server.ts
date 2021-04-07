@@ -1,46 +1,61 @@
 import cors from 'cors';
 import express from 'express';
 import fs from 'fs-extra';
+import { RequestListener } from 'http';
 import https from 'https';
 
 import { SkyuxServerConfig } from './server-config';
 
-function createApp(distPath: string, baseHref: string) {
-  const app = express();
+class SkyuxServer {
+  private server: https.Server;
 
-  app.use(cors());
-  app.use(express.static(distPath));
+  constructor(private config: SkyuxServerConfig) {
+    const app = this.createApp();
+    this.server = this.createServer(app);
+  }
 
-  console.log(`Mapping server requests from '${baseHref}' to '${distPath}'`);
-  app.use(baseHref, express.static(distPath));
+  public start(): Promise<void> {
+    return new Promise(async (resolve, reject) => {
+      this.server.on('error', (err) => {
+        reject(err);
+      });
 
-  return app;
+      console.log(
+        `Serving local files on https://localhost:${this.config.port}/.`
+      );
+
+      await this.server.listen(this.config.port);
+
+      resolve();
+    });
+  }
+
+  public stop(): void {
+    this.server.close();
+  }
+
+  private createApp() {
+    const distPath = this.config.distPath;
+    const rootPath = this.config.rootPath;
+    const app = express();
+
+    app.use(cors());
+    app.use(rootPath, express.static(distPath));
+
+    return app;
+  }
+
+  private createServer(app: RequestListener): https.Server {
+    return https.createServer(
+      {
+        cert: fs.readFileSync(this.config.sslCert),
+        key: fs.readFileSync(this.config.sslKey)
+      },
+      app
+    );
+  }
 }
 
-export function createServer(config: SkyuxServerConfig): Promise<void> {
-  const app = createApp(config.rootDir, config.baseHref);
-
-  const server = https.createServer(
-    {
-      cert: fs.readFileSync(config.sslCert),
-      key: fs.readFileSync(config.sslKey)
-    },
-    app
-  );
-
-  return new Promise(async (resolve, reject) => {
-    server.on('error', reject);
-
-    await server.listen(config.port);
-
-    console.log(
-      `Serving local files on https://localhost:${config.port}${config.baseHref}.`
-    );
-
-    process.on('exit', () => {
-      server.close();
-    });
-
-    resolve();
-  });
+export function createServer(config: SkyuxServerConfig): SkyuxServer {
+  return new SkyuxServer(config);
 }
