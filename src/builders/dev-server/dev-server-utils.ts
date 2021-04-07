@@ -1,6 +1,8 @@
 import { BuilderContext } from '@angular-devkit/architect';
 
 import { getCertPath } from '../../shared/cert-utils';
+import { getBaseHref } from '../../shared/host-utils';
+import { ensureBaseHref } from '../../shared/url-utils';
 
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 
@@ -23,15 +25,15 @@ export function applySkyuxDevServerOptions(
   options.sslKey = getCertPath('skyux-server.key');
 
   const localUrl = getLocalUrlFromOptions(options);
-  const baseHref = context.target!.project!;
+  const baseHref = getBaseHref(context);
 
   // Point live-reloading back to localhost.
-  options.publicHost = `${localUrl}${baseHref}/`;
+  options.publicHost = ensureBaseHref(localUrl, baseHref);
   options.allowedHosts = ['.blackbaud.com'];
 
   // Point lazy-loaded modules to the localhost URL.
-  options.deployUrl = `${localUrl}${baseHref}/`;
-  options.servePath = `/${baseHref}`;
+  options.deployUrl = ensureBaseHref(localUrl, baseHref);
+  options.servePath = baseHref;
 
   // Disable Angular CLI's opening behavior since the Host URL Webpack plugin
   // handles launching the browser.

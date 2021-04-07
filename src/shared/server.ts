@@ -11,8 +11,8 @@ function createApp(distPath: string, baseHref: string) {
   app.use(cors());
   app.use(express.static(distPath));
 
-  console.log(`Mapping server requests from ${baseHref} to ${distPath}`);
-  app.use(`/${baseHref}/`, express.static(distPath));
+  console.log(`Mapping server requests from '${baseHref}' to '${distPath}'`);
+  app.use(baseHref, express.static(distPath));
 
   return app;
 }
@@ -34,7 +34,7 @@ export function createServer(config: SkyuxServerConfig): Promise<void> {
     await server.listen(config.port);
 
     console.log(
-      `Serving local files on https://localhost:${config.port}/${config.baseHref}.`
+      `Serving local files on https://localhost:${config.port}${config.baseHref}.`
     );
 
     process.on('exit', () => {

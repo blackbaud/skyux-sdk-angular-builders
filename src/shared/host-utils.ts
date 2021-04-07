@@ -1,7 +1,9 @@
+import { BuilderContext } from '@angular-devkit/architect';
+
 import open from 'open';
 
 import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
-import { ensureTrailingSlash } from './url-utils';
+import { ensureBaseHref, ensureTrailingSlash } from './url-utils';
 
 /**
  * Creates the SKY UX Host URL.
@@ -20,9 +22,9 @@ export function createHostUrl(
     Buffer.from(JSON.stringify(config)).toString('base64')
   );
 
-  baseUrl = ensureTrailingSlash(baseUrl);
+  baseUrl = ensureBaseHref(ensureTrailingSlash(baseUrl), baseHref);
 
-  return `${baseUrl}${baseHref}/?local=true&_cfg=${configEncoded}`;
+  return `${baseUrl}?local=true&_cfg=${configEncoded}`;
 }
 
 export function openHostUrl(url: string): void {
@@ -31,4 +33,8 @@ export function openHostUrl(url: string): void {
   );
 
   open(url);
+}
+
+export function getBaseHref(context: BuilderContext): string {
+  return `/${context.target!.project!}/`;
 }

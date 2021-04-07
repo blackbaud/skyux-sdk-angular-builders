@@ -13,33 +13,31 @@ import { SkyuxBrowserBuilderOptions } from './browser-options';
 import { getBrowserTransforms } from './browser-transforms';
 import { applySkyuxBrowserOptions, serveBuildResults } from './browser-utils';
 
-function runBuild(
-  options: SkyuxBrowserBuilderOptions,
-  context: BuilderContext
-): Promise<BuilderOutput> {
-  return executeBrowserBuilder(
-    options,
-    context,
-    getBrowserTransforms(options, context)
-  ).toPromise();
-}
-
 async function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext
 ): Promise<BuilderOutput> {
   const skyuxConfig = getSkyuxConfig();
 
+  let port = 4200;
   if (options.skyuxServe) {
-    const port = await getAvailablePort();
-    applySkyuxBrowserOptions(options, context, port);
-    const result = await runBuild(options, context);
-    await serveBuildResults(options, context, skyuxConfig, port);
-    return result;
+    port = await getAvailablePort({ preferredPort: 4200 });
+    options.deployUrl = `https://localhost:${port}/`;
   }
 
   applySkyuxBrowserOptions(options, context);
-  return runBuild(options, context);
+
+  const result = await executeBrowserBuilder(
+    options,
+    context,
+    getBrowserTransforms(options, context)
+  ).toPromise();
+
+  if (options.skyuxServe && result.success) {
+    await serveBuildResults(options, context, skyuxConfig, port);
+  }
+
+  return result;
 }
 
 export default createBuilder<JsonObject & SkyuxBrowserBuilderOptions>(
