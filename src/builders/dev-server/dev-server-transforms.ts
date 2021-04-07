@@ -4,12 +4,14 @@ import { ExecutionTransformer } from '@angular-devkit/build-angular';
 import { take } from 'rxjs/operators';
 import { Configuration as WebpackConfig } from 'webpack';
 
+import { getBaseHref } from '../../shared/context-utils';
 import { SkyuxConfig } from '../../shared/skyux-config';
+import { ensureBaseHref } from '../../shared/url-utils';
 import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';
 import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
 import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
 import { applySkyuxConfigWebpackConfig } from '../../tools/webpack/skyux-config-webpack-config';
-import { applyStartupConfigWebpackConfig } from '../../tools/webpack/startup-config';
+import { applyStartupConfigWebpackConfig } from '../../tools/webpack/startup-config-webpack-config';
 
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 import { getLocalUrlFromOptions } from './dev-server-utils';
@@ -30,7 +32,7 @@ function getDevServerWepbackConfigTransformer(
       configurationName === 'e2e' || configurationName === 'e2eProduction';
 
     let localUrl = getLocalUrlFromOptions(options);
-    const baseHref = context.target!.project!;
+    const baseHref = getBaseHref(context);
 
     let assetsBaseUrl: string;
     if (isE2e) {
@@ -41,7 +43,7 @@ function getDevServerWepbackConfigTransformer(
       // the app's root directory.
       assetsBaseUrl = localUrl;
     } else {
-      localUrl += baseHref;
+      localUrl = ensureBaseHref(localUrl, baseHref);
       assetsBaseUrl = localUrl;
     }
 
