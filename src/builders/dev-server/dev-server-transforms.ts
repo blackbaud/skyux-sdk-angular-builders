@@ -31,18 +31,17 @@ function getDevServerWepbackConfigTransformer(
     let localUrl = getLocalUrlFromOptions(options);
     const baseHref = context.target!.project!;
 
-    const assetsBaseUrl = localUrl;
-    let assetsBaseHref: string;
+    let assetsBaseUrl: string;
     if (isE2e) {
       // The assets URL is built by combining the base assets URL above with
       // the app's root directory (or baseHref), but in e2e tests the assets files
       // are served directly from the root. We'll need to remove the baseHref from the URL
       // so that asset URLs are built relative to the root rather than
       // the app's root directory.
-      assetsBaseHref = '';
+      assetsBaseUrl = localUrl;
     } else {
-      assetsBaseHref = baseHref;
       localUrl += baseHref;
+      assetsBaseUrl = localUrl;
     }
 
     webpackConfig.plugins = webpackConfig.plugins || [];
@@ -70,7 +69,7 @@ function getDevServerWepbackConfigTransformer(
       );
     }
 
-    applyAppAssetsWebpackConfig(webpackConfig, assetsBaseUrl, assetsBaseHref);
+    applyAppAssetsWebpackConfig(webpackConfig, assetsBaseUrl);
     applySkyuxConfigWebpackConfig(webpackConfig);
     applyStartupConfigWebpackConfig(webpackConfig, baseHref);
 

@@ -29,7 +29,7 @@ function getBrowserWepbackConfigTransformer(
       new SkyuxSaveHostMetadataPlugin()
     );
 
-    applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl!, projectName);
+    applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl!);
     applySkyuxConfigWebpackConfig(webpackConfig);
     applyStartupConfigWebpackConfig(webpackConfig, projectName);
 
