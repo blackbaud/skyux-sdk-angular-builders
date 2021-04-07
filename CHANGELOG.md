@@ -1,3 +1,7 @@
+# 4.0.0-alpha.33 (2021-04-07)
+
+- Fixed lazy-loaded script URLs to include the base HREF. [#91](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/91)
+
 # 4.0.0-alpha.32 (2021-04-02)
 
 - Fixed the app assets service to supply the correct base HREF for asset URLs. [#86](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/86)
