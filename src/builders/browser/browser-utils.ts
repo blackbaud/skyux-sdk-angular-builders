@@ -1,6 +1,7 @@
 import { BuilderContext } from '@angular-devkit/architect';
 
-import { ensureTrailingSlash } from '../../shared/url-utils';
+import { getBaseHref } from '../../shared/context-utils';
+import { ensureBaseHref, ensureTrailingSlash } from '../../shared/url-utils';
 
 import { SkyuxBrowserBuilderOptions } from './browser-options';
 
@@ -8,13 +9,10 @@ export function applySkyuxBrowserOptions(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext
 ): void {
-  const projectName = context.target!.project!;
-  const baseHref = `/${projectName}/`;
+  const baseHref = getBaseHref(context);
 
-  let deployUrl = ensureTrailingSlash(options.deployUrl || '');
-  if (!deployUrl.endsWith(baseHref)) {
-    deployUrl = deployUrl.substr(0, deployUrl.length - 1) + baseHref;
-  }
-
+  let deployUrl = options.deployUrl || '';
+  deployUrl = ensureTrailingSlash(deployUrl);
+  deployUrl = ensureBaseHref(deployUrl, baseHref);
   options.deployUrl = deployUrl;
 }

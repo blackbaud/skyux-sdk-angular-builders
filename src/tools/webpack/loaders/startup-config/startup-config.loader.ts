@@ -16,7 +16,7 @@ export default function startupConfigLoader(this: loader.LoaderContext) {
 
   return JSON.stringify({
     auth: skyuxConfig.auth,
-    baseHref: `/${options.projectName}/`,
+    baseHref: options.baseHref,
     help: skyuxConfig.help,
     omnibar: skyuxConfig.omnibar,
     theming: skyuxConfig.app?.theming

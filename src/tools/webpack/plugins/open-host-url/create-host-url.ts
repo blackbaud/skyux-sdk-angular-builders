@@ -1,4 +1,7 @@
-import { ensureTrailingSlash } from '../../../../shared/url-utils';
+import {
+  ensureBaseHref,
+  ensureTrailingSlash
+} from '../../../../shared/url-utils';
 
 import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
 
@@ -19,7 +22,7 @@ export function createHostUrl(
     Buffer.from(JSON.stringify(config)).toString('base64')
   );
 
-  baseUrl = ensureTrailingSlash(baseUrl);
+  baseUrl = ensureBaseHref(ensureTrailingSlash(baseUrl), baseHref);
 
-  return `${baseUrl}${baseHref}/?local=true&_cfg=${configEncoded}`;
+  return `${baseUrl}?local=true&_cfg=${configEncoded}`;
 }

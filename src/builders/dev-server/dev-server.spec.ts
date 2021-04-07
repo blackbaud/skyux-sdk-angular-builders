@@ -109,7 +109,7 @@ describe('dev-server builder', () => {
         open: false,
         port: 4200,
         publicHost: 'https://localhost:4200/foo/',
-        servePath: '/foo',
+        servePath: '/foo/',
         skyuxOpen: true,
         ssl: true,
         sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
