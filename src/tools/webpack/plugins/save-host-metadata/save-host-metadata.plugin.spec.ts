@@ -1,5 +1,4 @@
 import mock from 'mock-require';
-
 import path from 'path';
 
 import { SkyuxSaveHostMetadataPlugin } from './save-host-metadata.plugin';

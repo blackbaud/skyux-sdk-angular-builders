@@ -1,5 +1,4 @@
 import mock from 'mock-require';
-
 import { Config as ProtractorConfig } from 'protractor';
 
 import { applyProtractorEnvironmentConfig } from '../../shared/protractor-environment-utils';

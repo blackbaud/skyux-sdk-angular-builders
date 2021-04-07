@@ -1,5 +1,4 @@
 import mock from 'mock-require';
-
 import { ConcatSource } from 'webpack-sources';
 
 import { SkyuxHostAssetsFallbackPlugin } from './host-assets-fallback.plugin';

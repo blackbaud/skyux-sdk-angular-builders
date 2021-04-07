@@ -1,5 +1,4 @@
 import { BuilderContext, createBuilder } from '@angular-devkit/architect';
-
 import {
   DevServerBuilderOutput,
   executeDevServerBuilder
@@ -10,10 +9,8 @@ import { Observable } from 'rxjs';
 import { getSkyuxConfig } from '../../shared/skyux-config-utils';
 
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
-
-import { applySkyuxDevServerOptions } from './dev-server-utils';
-
 import { getDevServerTransforms } from './dev-server-transforms';
+import { applySkyuxDevServerOptions } from './dev-server-utils';
 
 function executeSkyuxDevServerBuilder(
   options: SkyuxDevServerBuilderOptions,

@@ -3,17 +3,13 @@ import {
   BuilderOutput,
   createBuilder
 } from '@angular-devkit/architect';
-
 import { executeBrowserBuilder } from '@angular-devkit/build-angular';
-
 import { JsonObject } from '@angular-devkit/core';
 
 import { Observable } from 'rxjs';
 
 import { SkyuxBrowserBuilderOptions } from './browser-options';
-
 import { getBrowserTransforms } from './browser-transforms';
-
 import { applySkyuxBrowserOptions } from './browser-utils';
 
 function executeSkyuxBrowserBuilder(

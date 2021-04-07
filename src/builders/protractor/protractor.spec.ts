@@ -1,9 +1,7 @@
 import * as angularArchitect from '@angular-devkit/architect';
-
 import * as buildAngular from '@angular-devkit/build-angular';
 
 import mock from 'mock-require';
-
 import path from 'path';
 
 import {

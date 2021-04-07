@@ -1,7 +1,5 @@
 import mock from 'mock-require';
-
 import { Subject } from 'rxjs';
-
 import { take } from 'rxjs/operators';
 
 import {
@@ -10,7 +8,6 @@ import {
 } from '../../../../shared/protractor-environment-utils';
 
 import { SkyuxProtractorPluginConfig } from './protractor-plugin-config';
-
 import { SkyuxProtractorPlugin } from './protractor.plugin';
 
 describe('protractor webpack plugin', () => {
