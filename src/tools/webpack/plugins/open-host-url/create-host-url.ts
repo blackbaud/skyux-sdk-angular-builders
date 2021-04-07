@@ -1,4 +1,5 @@
 import { ensureTrailingSlash } from '../../../../shared/url-utils';
+
 import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
 
 /**

@@ -8,6 +8,7 @@ import {
   clearProtractorEnvironmentConfig,
   getProtractorEnvironmentConfig
 } from '../../shared/protractor-environment-utils';
+
 import { SkyuxProtractorBuilderOptions } from './protractor-options';
 
 describe('protractor builder', () => {

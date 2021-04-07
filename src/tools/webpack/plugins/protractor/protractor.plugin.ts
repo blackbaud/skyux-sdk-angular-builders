@@ -1,6 +1,7 @@
 import { Compiler } from 'webpack';
 
 import { applyProtractorEnvironmentConfig } from '../../../../shared/protractor-environment-utils';
+
 import { SkyuxProtractorPluginConfig } from './protractor-plugin-config';
 
 const PLUGIN_NAME = 'skyux-protractor-plugin';

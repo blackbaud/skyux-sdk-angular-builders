@@ -25,6 +25,7 @@ import {
   addModuleImportToRootModule,
   createHost
 } from '../utils/schematics-utils';
+
 import { SkyuxNgAddOptions } from './schema';
 
 async function readJson(host: workspaces.WorkspaceHost, filePath: string) {

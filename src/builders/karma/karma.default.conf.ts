@@ -1,6 +1,7 @@
 import karma from 'karma';
 
 import { getCiPlatformKarmaConfig } from '../../shared/ci-platform-utils';
+
 import { SkyuxCodeCoverageThreshold } from './code-coverage-threshold';
 import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
 

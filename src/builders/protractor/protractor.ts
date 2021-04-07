@@ -8,6 +8,7 @@ import { executeProtractorBuilder } from '@angular-devkit/build-angular';
 import path from 'path';
 
 import { applyProtractorEnvironmentConfig } from '../../shared/protractor-environment-utils';
+
 import { SkyuxProtractorBuilderOptions } from './protractor-options';
 
 function executeSkyuxProtractorBuilder(

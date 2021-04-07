@@ -7,6 +7,7 @@ import webpack from 'webpack';
 
 import { SkyuxAppAssetsPlugin } from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
 import { SkyuxSaveHostMetadataPlugin } from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
+
 import { SkyuxBrowserBuilderOptions } from './browser-options';
 
 class MockWebpackPlugin {

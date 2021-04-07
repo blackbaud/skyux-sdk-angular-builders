@@ -4,6 +4,7 @@ import path from 'path';
 import webpack from 'webpack';
 
 import { ensureTrailingSlash } from '../../shared/url-utils';
+
 import { SkyuxAppAssets } from './app-assets';
 import { SkyuxAppAssetsPlugin } from './plugins/app-assets/app-assets.plugin';
 

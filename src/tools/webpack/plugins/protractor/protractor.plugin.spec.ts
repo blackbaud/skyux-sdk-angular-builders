@@ -6,6 +6,7 @@ import {
   clearProtractorEnvironmentConfig,
   getProtractorEnvironmentConfig
 } from '../../../../shared/protractor-environment-utils';
+
 import { SkyuxProtractorPluginConfig } from './protractor-plugin-config';
 import { SkyuxProtractorPlugin } from './protractor.plugin';
 

@@ -2,6 +2,7 @@ import mock from 'mock-require';
 import { take } from 'rxjs/operators';
 
 import { SkyuxHostAssetType } from '../../host-asset-type';
+
 import { SkyuxOpenHostUrlPluginConfig } from './open-host-url-config';
 import { SkyuxOpenHostUrlPlugin } from './open-host-url.plugin';
 

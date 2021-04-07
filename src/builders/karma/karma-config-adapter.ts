@@ -1,4 +1,5 @@
 import { SkyuxConfig } from '../../shared/skyux-config';
+
 import { SkyuxKarmaBuilderOptions } from './karma-options';
 
 export abstract class SkyuxKarmaConfigAdapter {
