@@ -11,11 +11,11 @@ import {
   getBaseHref,
   openHostUrl
 } from '../../shared/host-utils';
-import { createServer } from '../../shared/server';
 import { SkyuxConfig } from '../../shared/skyux-config';
 import { ensureBaseHref, ensureTrailingSlash } from '../../shared/url-utils';
 
 import { SkyuxBrowserBuilderOptions } from './browser-options';
+import { createServer } from './server';
 
 export function applySkyuxBrowserOptions(
   options: SkyuxBrowserBuilderOptions,
