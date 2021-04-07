@@ -1,5 +1,4 @@
 import karma from 'karma';
-
 import mock from 'mock-require';
 
 import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';

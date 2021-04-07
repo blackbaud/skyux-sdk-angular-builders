@@ -3,9 +3,7 @@ import {
   BuilderOutput,
   createBuilder
 } from '@angular-devkit/architect';
-
 import { executeBrowserBuilder } from '@angular-devkit/build-angular';
-
 import { JsonObject } from '@angular-devkit/core';
 
 import { getSkyuxConfig } from '../../shared/skyux-config-utils';

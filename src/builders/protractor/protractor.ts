@@ -3,7 +3,6 @@ import {
   BuilderOutput,
   createBuilder
 } from '@angular-devkit/architect';
-
 import { executeProtractorBuilder } from '@angular-devkit/build-angular';
 
 import path from 'path';

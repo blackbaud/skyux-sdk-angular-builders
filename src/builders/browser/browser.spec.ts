@@ -1,15 +1,11 @@
 import * as angularArchitect from '@angular-devkit/architect';
-
 import * as buildAngular from '@angular-devkit/build-angular';
 
 import mock from 'mock-require';
-
 import { of } from 'rxjs';
-
 import webpack from 'webpack';
 
 import { SkyuxAppAssetsPlugin } from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
-
 import { SkyuxSaveHostMetadataPlugin } from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
 
 import { SkyuxBrowserBuilderOptions } from './browser-options';
@@ -113,11 +109,19 @@ describe('browser builder', () => {
     expect(plugin).toBeDefined();
   });
 
-  it('should ensure the deployUrl ends with a forward slash', async () => {
+  it('should ensure the deployUrl ends with the baseHref and a forward slash', async () => {
     defaultOptions.deployUrl = 'https://foo.com';
     await mock.reRequire('./browser');
     expect(
       executeBrowserBuilderSpy.calls.mostRecent().args[0].deployUrl
-    ).toEqual('https://foo.com/');
+    ).toEqual('https://foo.com/foo/');
+  });
+
+  it("should only add the baseHref if it's not already included", async () => {
+    defaultOptions.deployUrl = 'https://foo.com/foo/';
+    await mock.reRequire('./browser');
+    expect(
+      executeBrowserBuilderSpy.calls.mostRecent().args[0].deployUrl
+    ).toEqual('https://foo.com/foo/');
   });
 });

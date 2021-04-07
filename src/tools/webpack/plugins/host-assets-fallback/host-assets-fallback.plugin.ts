@@ -4,7 +4,6 @@ import {
   getFallbackTestCssRule,
   getFallbackTestVariable
 } from '../../host-asset-utils';
-
 import {
   modifyScriptContents,
   modifyStylesheetContents

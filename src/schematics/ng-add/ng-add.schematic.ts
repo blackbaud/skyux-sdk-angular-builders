@@ -1,7 +1,5 @@
 import { OutputHashing } from '@angular-devkit/build-angular';
-
 import { normalize, workspaces } from '@angular-devkit/core';
-
 import {
   apply,
   applyTemplates,
@@ -15,18 +13,14 @@ import {
   Tree,
   url
 } from '@angular-devkit/schematics';
-
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-
 import {
   addPackageJsonDependency,
   NodeDependencyType
 } from '@schematics/angular/utility/dependencies';
 
 import { SkyuxDevServerBuilderOptions } from '../../builders/dev-server/dev-server-options';
-
 import { SkyuxConfig } from '../../shared/skyux-config';
-
 import {
   addModuleImportToRootModule,
   createHost

@@ -1,7 +1,5 @@
 import fs from 'fs-extra';
-
 import path from 'path';
-
 import { Compiler } from 'webpack';
 
 import { getHostAssets } from '../../host-asset-utils';
