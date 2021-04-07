@@ -16,6 +16,7 @@ class MockWebpackPlugin {
 
 describe('browser builder', () => {
   let createBuilderSpy: jasmine.Spy;
+  let createServerSpy: jasmine.Spy;
   let executeBrowserBuilderSpy: jasmine.Spy;
   let defaultOptions: SkyuxBrowserBuilderOptions;
   let defaultWebpackConfig: webpack.Configuration;
@@ -54,6 +55,8 @@ describe('browser builder', () => {
         });
       });
 
+    createServerSpy = jasmine.createSpy('createServer');
+
     spyOnProperty(angularArchitect, 'createBuilder', 'get').and.returnValue(
       createBuilderSpy
     );
@@ -68,6 +71,22 @@ describe('browser builder', () => {
 
     mock('hasha', {
       fromFileSync: () => 'MOCK_HASH'
+    });
+
+    mock('./server', {
+      createServer: createServerSpy
+    });
+
+    mock('fs-extra', {
+      existsSync(filePath: string): boolean {
+        if (filePath.endsWith('skyuxconfig.json')) {
+          return true;
+        }
+        return false;
+      },
+      readJsonSync() {
+        return {};
+      }
     });
   });
 

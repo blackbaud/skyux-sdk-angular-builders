@@ -1,10 +1,10 @@
 import mock from 'mock-require';
 
-import { SkyuxCreateHostUrlConfig } from '../../../../shared/create-host-url-config';
-import { SkyuxHostAssetType } from '../../../../shared/host-asset-type';
-import { SkyuxConfigHost } from '../../../../shared/skyux-config';
+import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
+import { SkyuxHostAssetType } from './host-asset-type';
+import { SkyuxConfigHost } from './skyux-config';
 
-describe('create host url', () => {
+describe('host utils', () => {
   let hostUrl: string;
   let baseHref: string;
   let defaultHostConfig: SkyuxCreateHostUrlConfig;
@@ -33,8 +33,8 @@ describe('create host url', () => {
     );
   }
 
-  it('should open the SKY UX Host URL with Host config', () => {
-    const { createHostUrl } = mock.reRequire('./create-host-url');
+  it('should create a SKY UX Host URL with Host config', () => {
+    const { createHostUrl } = mock.reRequire('./host-utils');
 
     const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
 
@@ -51,7 +51,7 @@ describe('create host url', () => {
   });
 
   it('should send bbCheckout and frameOptions to Host', () => {
-    const { createHostUrl } = mock.reRequire('./create-host-url');
+    const { createHostUrl } = mock.reRequire('./host-utils');
 
     const hostConfig: SkyuxConfigHost = {
       url: 'https://foo.blackbaud.com/',
@@ -71,7 +71,7 @@ describe('create host url', () => {
   });
 
   it('should send scripts and style sheets to SKY UX Host', () => {
-    const { createHostUrl } = mock.reRequire('./create-host-url');
+    const { createHostUrl } = mock.reRequire('./host-utils');
 
     defaultHostConfig.scripts = [
       {
@@ -110,7 +110,7 @@ describe('create host url', () => {
   });
 
   it('should send `externals` to SKY UX Host', () => {
-    const { createHostUrl } = mock.reRequire('./create-host-url');
+    const { createHostUrl } = mock.reRequire('./host-utils');
 
     const externals = {
       js: {
@@ -130,7 +130,7 @@ describe('create host url', () => {
   });
 
   it('should handle empty scripts', () => {
-    const { createHostUrl } = mock.reRequire('./create-host-url');
+    const { createHostUrl } = mock.reRequire('./host-utils');
 
     defaultHostConfig.scripts = [];
 
