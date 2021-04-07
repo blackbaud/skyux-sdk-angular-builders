@@ -12,7 +12,7 @@ describe('create host url', () => {
 
   beforeEach(() => {
     hostUrl = 'https://host.nxt.blackbaud.com/';
-    baseHref = 'my-project';
+    baseHref = '/my-project/';
     defaultHostConfig = {
       localUrl: 'https://localhost:4200/',
       host: {

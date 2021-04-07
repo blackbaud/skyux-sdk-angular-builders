@@ -13,7 +13,7 @@ export async function getAvailablePort(config?: {
 }
 
 /**
- * Ensures the URL ends with the supplied base HREF.
+ * Ensures the URL ends with the supplied base href.
  */
 export function ensureBaseHref(url: string, baseHref: string): string {
   if (url.endsWith(baseHref)) {
