@@ -8,11 +8,11 @@ import { getBaseHref } from '../../shared/context-utils';
 import { SkyuxHostAsset } from '../../shared/host-asset';
 import { SkyuxHostAssetType } from '../../shared/host-asset-type';
 import { createHostUrl, openHostUrl } from '../../shared/host-utils';
+import { createServer } from '../../shared/server-utils';
 import { SkyuxConfig } from '../../shared/skyux-config';
 import { ensureBaseHref, ensureTrailingSlash } from '../../shared/url-utils';
 
 import { SkyuxBrowserBuilderOptions } from './browser-options';
-import { createServer } from './server';
 
 export function applySkyuxBrowserOptions(
   options: SkyuxBrowserBuilderOptions,

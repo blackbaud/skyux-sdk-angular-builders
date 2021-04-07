@@ -6,8 +6,8 @@ import {
 import { executeBrowserBuilder } from '@angular-devkit/build-angular';
 import { JsonObject } from '@angular-devkit/core';
 
+import { getAvailablePort } from '../../shared/server-utils';
 import { getSkyuxConfig } from '../../shared/skyux-config-utils';
-import { getAvailablePort } from '../../shared/url-utils';
 
 import { SkyuxBrowserBuilderOptions } from './browser-options';
 import { getBrowserTransforms } from './browser-transforms';

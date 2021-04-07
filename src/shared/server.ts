@@ -6,7 +6,7 @@ import https from 'https';
 
 import { SkyuxServerConfig } from './server-config';
 
-class SkyuxServer {
+export class SkyuxServer {
   private server: https.Server;
 
   constructor(private config: SkyuxServerConfig) {
@@ -54,8 +54,4 @@ class SkyuxServer {
       app
     );
   }
-}
-
-export function createServer(config: SkyuxServerConfig): SkyuxServer {
-  return new SkyuxServer(config);
 }

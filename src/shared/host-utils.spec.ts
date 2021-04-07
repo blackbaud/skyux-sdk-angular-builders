@@ -8,6 +8,7 @@ describe('host utils', () => {
   let hostUrl: string;
   let baseHref: string;
   let defaultHostConfig: SkyuxCreateHostUrlConfig;
+  let openSpy: jasmine.Spy;
 
   beforeEach(() => {
     hostUrl = 'https://host.nxt.blackbaud.com/';
@@ -18,6 +19,10 @@ describe('host utils', () => {
         url: hostUrl
       }
     };
+
+    openSpy = jasmine.createSpy('open');
+
+    mock('open', openSpy);
   });
 
   afterEach(() => {
@@ -143,5 +148,12 @@ describe('host utils', () => {
         url: 'https://host.nxt.blackbaud.com/'
       }
     });
+  });
+
+  it('should open a host URL', () => {
+    spyOn(console, 'log');
+    const { openHostUrl } = mock.reRequire('./host-utils');
+    openHostUrl('https://foobar.com/');
+    expect(openSpy).toHaveBeenCalledWith('https://foobar.com/');
   });
 });
