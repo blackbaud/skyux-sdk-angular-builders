@@ -3,7 +3,7 @@ import { ExecutionTransformer } from '@angular-devkit/build-angular';
 
 import { Configuration as WebpackConfig } from 'webpack';
 
-import { getBaseHref } from '../../shared/host-utils';
+import { getBaseHref } from '../../shared/context-utils';
 import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';
 import { SkyuxHostAssetsFallbackPlugin } from '../../tools/webpack/plugins/host-assets-fallback/host-assets-fallback.plugin';
 import { SkyuxSaveHostMetadataPlugin } from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';

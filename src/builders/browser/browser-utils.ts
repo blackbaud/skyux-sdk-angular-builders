@@ -4,13 +4,10 @@ import fs from 'fs-extra';
 import path from 'path';
 
 import { getCertPath } from '../../shared/cert-utils';
+import { getBaseHref } from '../../shared/context-utils';
 import { SkyuxHostAsset } from '../../shared/host-asset';
 import { SkyuxHostAssetType } from '../../shared/host-asset-type';
-import {
-  createHostUrl,
-  getBaseHref,
-  openHostUrl
-} from '../../shared/host-utils';
+import { createHostUrl, openHostUrl } from '../../shared/host-utils';
 import { SkyuxConfig } from '../../shared/skyux-config';
 import { ensureBaseHref, ensureTrailingSlash } from '../../shared/url-utils';
 

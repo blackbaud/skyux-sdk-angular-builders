@@ -1,7 +1,7 @@
 import { BuilderContext } from '@angular-devkit/architect';
 
 import { getCertPath } from '../../shared/cert-utils';
-import { getBaseHref } from '../../shared/host-utils';
+import { getBaseHref } from '../../shared/context-utils';
 import { ensureBaseHref } from '../../shared/url-utils';
 
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';

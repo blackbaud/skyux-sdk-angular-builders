@@ -4,7 +4,7 @@ import { ExecutionTransformer } from '@angular-devkit/build-angular';
 import { take } from 'rxjs/operators';
 import { Configuration as WebpackConfig } from 'webpack';
 
-import { getBaseHref } from '../../shared/host-utils';
+import { getBaseHref } from '../../shared/context-utils';
 import { SkyuxConfig } from '../../shared/skyux-config';
 import { ensureBaseHref } from '../../shared/url-utils';
 import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';

@@ -1,5 +1,3 @@
-import { BuilderContext } from '@angular-devkit/architect';
-
 import open from 'open';
 
 import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
@@ -33,8 +31,4 @@ export function openHostUrl(url: string): void {
   );
 
   open(url);
-}
-
-export function getBaseHref(context: BuilderContext): string {
-  return `/${context.target!.project!}/`;
 }
