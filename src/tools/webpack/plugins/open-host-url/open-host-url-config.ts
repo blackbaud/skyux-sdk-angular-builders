@@ -5,7 +5,7 @@ import {
 
 export interface SkyuxOpenHostUrlPluginConfig {
   /**
-   * The unique base HREF of the SPA, e.g. 'my-spa'.
+   * The unique base href of the SPA, e.g. '/my-spa/'.
    */
   baseHref: string;
 
