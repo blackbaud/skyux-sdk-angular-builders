@@ -1,7 +1,6 @@
 import { BuilderContext } from '@angular-devkit/architect';
 
 import fs from 'fs-extra';
-
 import path from 'path';
 
 import { getCertPath } from '../../shared/cert-utils';

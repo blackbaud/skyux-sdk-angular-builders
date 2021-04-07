@@ -1,8 +1,8 @@
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Compiler } from 'webpack';
+
 import { SkyuxCreateHostUrlConfig } from '../../../../shared/create-host-url-config';
 import { createHostUrl, openHostUrl } from '../../../../shared/host-utils';
-
 import { getHostAssets } from '../../host-asset-utils';
 
 import { SkyuxOpenHostUrlPluginConfig } from './open-host-url-config';

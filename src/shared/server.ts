@@ -1,9 +1,6 @@
 import cors from 'cors';
-
 import express from 'express';
-
 import fs from 'fs-extra';
-
 import https from 'https';
 
 import { SkyuxServerConfig } from './server-config';
