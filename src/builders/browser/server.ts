@@ -8,9 +8,9 @@ import { readCert } from '../../shared/cert-utils';
 import { SkyuxServerConfig } from './server-config';
 
 export class SkyuxServer {
-  private server: https.Server | undefined;
-
   private onExitCallbacks: (() => void)[] = [];
+
+  private server: https.Server | undefined;
 
   constructor(config: SkyuxServerConfig) {
     const app = express();

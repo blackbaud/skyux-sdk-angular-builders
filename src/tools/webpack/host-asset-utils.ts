@@ -58,7 +58,7 @@ export function getFallbackTestVariable(name: string): string {
 }
 
 /**
- * Converts scripts and stylesheets found in Webpack stats to host assets.
+ * Returns scripts and style sheet assets from Webpack chunks.
  */
 export function getHostAssets(
   stats: Stats.ToJsonOutput,
