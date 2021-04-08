@@ -66,19 +66,40 @@ export function getHostAssets(
   scripts: SkyuxHostAsset[];
   stylesheets: SkyuxHostAsset[];
 } {
-  let scripts: SkyuxHostAsset[] = [];
-  let stylesheets: SkyuxHostAsset[] = [];
+  const scripts: SkyuxHostAsset[] = [];
+  const stylesheets: SkyuxHostAsset[] = [];
 
   const isJavaScript = (filepath: string) => /\.js$/.test(filepath);
   const isCss = (filepath: string) => /\.css$/.test(filepath);
 
   const chunks = stats?.chunks;
   if (chunks) {
-    // Get style sheets.
-    stylesheets = chunks
-      .filter((chunk) => isCss(chunk.files[0]))
-      .map((chunk) => {
-        const fileName = chunk.files[0];
+    chunks.forEach((chunk) => {
+      const fileName = chunk.files[0];
+
+      if (
+        isJavaScript(fileName) &&
+        (chunk.initial || config?.includeLazyloadedChunks)
+      ) {
+        const script: SkyuxHostAsset = {
+          name: fileName,
+          type: SkyuxHostAssetType.Script
+        };
+
+        if (config?.includeFallback) {
+          script.fallback = getFallbackTestVariable(script.name);
+        }
+
+        if (config?.includeLazyloadedChunks) {
+          script.initial = !!chunk.initial;
+        }
+
+        scripts.push(script);
+        return;
+      }
+
+      // Get style sheets.
+      if (isCss(fileName)) {
         const stylesheet: SkyuxHostAsset = {
           name: fileName,
           type: SkyuxHostAssetType.Stylesheet
@@ -92,34 +113,9 @@ export function getHostAssets(
           };
         }
 
-        return stylesheet;
-      });
-
-    // Get scripts.
-    scripts = chunks
-      .filter((chunk) => {
-        // Only include primary and lazy-loaded scripts.
-        return (
-          isJavaScript(chunk.files[0]) &&
-          (chunk.initial || config?.includeLazyloadedChunks)
-        );
-      })
-      .map((chunk) => {
-        const script: SkyuxHostAsset = {
-          name: chunk.files[0],
-          type: SkyuxHostAssetType.Script
-        };
-
-        if (config?.includeFallback) {
-          script.fallback = getFallbackTestVariable(script.name);
-        }
-
-        if (config?.includeLazyloadedChunks) {
-          script.initial = !!chunk.initial;
-        }
-
-        return script;
-      });
+        stylesheets.push(stylesheet);
+      }
+    });
   }
 
   return {

@@ -102,4 +102,88 @@ describe('save metadata webpack plugin', () => {
       }
     );
   });
+
+  it('should sort assets in a specific order', () => {
+    setupTest([
+      {
+        initial: true,
+        files: ['main.js']
+      },
+      {
+        initial: true,
+        files: ['polyfills.js']
+      },
+      {
+        initial: false,
+        files: ['default~app-module~app-module~mo~0d131e23.js']
+      },
+      {
+        files: ['styles.css']
+      },
+      {
+        initial: true,
+        files: ['vendor.js']
+      },
+      {
+        initial: true,
+        files: ['vendor-es5.js']
+      },
+      {
+        initial: true,
+        files: ['runtime.js']
+      }
+    ]);
+
+    const plugin = getPlugin();
+    plugin.apply(mockCompiler);
+
+    expect(writeJsonSpy.calls.mostRecent().args[1]).toEqual([
+      {
+        initial: true,
+        name: 'runtime.js',
+        fallback: 'SKY_PAGES_READY_RUNTIME_JS',
+        type: 'script'
+      },
+      {
+        initial: true,
+        name: 'polyfills.js',
+        fallback: 'SKY_PAGES_READY_POLYFILLS_JS',
+        type: 'script'
+      },
+      {
+        initial: true,
+        name: 'vendor-es5.js',
+        fallback: 'SKY_PAGES_READY_VENDOR_ES5_JS',
+        type: 'script'
+      },
+      {
+        initial: true,
+        name: 'vendor.js',
+        fallback: 'SKY_PAGES_READY_VENDOR_JS',
+        type: 'script'
+      },
+      {
+        initial: true,
+        name: 'main.js',
+        fallback: 'SKY_PAGES_READY_MAIN_JS',
+        type: 'script'
+      },
+      {
+        initial: false,
+        name: 'default~app-module~app-module~mo~0d131e23.js',
+        fallback:
+          'SKY_PAGES_READY_DEFAULT_APP_MODULE_APP_MODULE_MO_0D131E23_JS',
+        type: 'script'
+      },
+      {
+        name: 'styles.css',
+        type: 'stylesheet',
+        fallbackStylesheet: {
+          class: 'sky-pages-ready-styles-css',
+          property: 'visibility',
+          value: 'hidden'
+        }
+      }
+    ]);
+  });
 });
