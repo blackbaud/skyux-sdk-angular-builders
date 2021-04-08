@@ -8,6 +8,10 @@ import { SkyuxHostAssetType } from './host-asset-type';
 const FALLBACK_CSS_PROPERTY = 'visibility';
 const FALLBACK_CSS_VALUE = 'hidden';
 
+/**
+ * Ensures script assets are ordered according to what Angular recommends.
+ * @see: https://angular.io/guide/deployment#differential-builds
+ */
 function sortScripts(scripts: SkyuxHostAsset[]): SkyuxHostAsset[] {
   const sortedScripts: SkyuxHostAsset[] = [];
   const remaining = [...scripts];
