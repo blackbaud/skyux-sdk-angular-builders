@@ -2,6 +2,8 @@ import * as angularArchitect from '@angular-devkit/architect';
 import * as buildAngular from '@angular-devkit/build-angular';
 
 import mock from 'mock-require';
+import { homedir } from 'os';
+import path from 'path';
 import { of } from 'rxjs';
 import webpack from 'webpack';
 
@@ -14,30 +16,32 @@ class MockWebpackPlugin {
   public apply() {}
 }
 
-describe('browser builder', () => {
+fdescribe('browser builder', () => {
   let createBuilderSpy: jasmine.Spy;
-  let createServerSpy: jasmine.Spy;
   let executeBrowserBuilderSpy: jasmine.Spy;
-  let defaultOptions: SkyuxBrowserBuilderOptions;
+  let mockServerUtils: any;
+
+  let actualBrowserOptions: Partial<SkyuxBrowserBuilderOptions>;
+  let defaultBrowserOptions: SkyuxBrowserBuilderOptions;
   let defaultWebpackConfig: webpack.Configuration;
   let actualWebpackConfig: webpack.Configuration;
 
   beforeEach(() => {
-    defaultOptions = {
+    defaultBrowserOptions = {
       index: '',
       main: '',
       outputPath: '',
       tsConfig: ''
     };
+    actualBrowserOptions = {};
 
     defaultWebpackConfig = {};
-
     actualWebpackConfig = {};
 
     createBuilderSpy = jasmine
       .createSpy('createBuilder')
       .and.callFake((cb: any) =>
-        cb(defaultOptions, {
+        cb(defaultBrowserOptions, {
           target: {
             project: 'foo'
           }
@@ -46,16 +50,35 @@ describe('browser builder', () => {
 
     executeBrowserBuilderSpy = jasmine
       .createSpy('executeBrowserBuilder')
-      .and.callFake((_options: any, _context: any, transforms: any) => {
-        actualWebpackConfig = transforms.webpackConfiguration(
-          defaultWebpackConfig
-        );
-        return of({
-          success: true
-        });
-      });
+      .and.callFake(
+        (
+          options: SkyuxBrowserBuilderOptions,
+          _context: any,
+          transforms: any
+        ) => {
+          actualBrowserOptions = options;
+          actualWebpackConfig = transforms.webpackConfiguration(
+            defaultWebpackConfig
+          );
+          return of({
+            success: true
+          });
+        }
+      );
 
-    createServerSpy = jasmine.createSpy('createServer');
+    mockServerUtils = {
+      createServer: {
+        start() {
+          console.log('START!!!!!');
+          return Promise.resolve();
+        },
+        stop() {}
+      },
+      getAvailablePort() {
+        console.log('GET PORT!');
+        return 4200;
+      }
+    };
 
     spyOnProperty(angularArchitect, 'createBuilder', 'get').and.returnValue(
       createBuilderSpy
@@ -65,6 +88,33 @@ describe('browser builder', () => {
       executeBrowserBuilderSpy
     );
 
+    mock('fs-extra', {
+      existsSync(filePath: string): boolean {
+        if (filePath.endsWith('skyuxconfig.json')) {
+          return true;
+        }
+        return false;
+      },
+      readFileSync() {
+        return 'contents';
+      },
+      readJsonSync(filePath: string) {
+        if (filePath.endsWith('metadata.json')) {
+          return [
+            {
+              name: 'main.js',
+              type: 'script'
+            },
+            {
+              name: 'styles.css',
+              type: 'stylesheet'
+            }
+          ];
+        }
+        return {};
+      }
+    });
+
     mock('glob', {
       sync: () => ['foo.jpg']
     });
@@ -73,29 +123,31 @@ describe('browser builder', () => {
       fromFileSync: () => 'MOCK_HASH'
     });
 
-    mock('./server', {
-      createServer: createServerSpy
-    });
-
-    mock('fs-extra', {
-      existsSync(filePath: string): boolean {
-        if (filePath.endsWith('skyuxconfig.json')) {
-          return true;
-        }
-        return false;
-      },
-      readJsonSync() {
-        return {};
+    mock('portfinder', {
+      getPortPromise() {
+        return Promise.resolve(4200);
       }
     });
+
+    mock('../../shared/host-utils', {
+      createHostUrl() {},
+      openHostUrl() {}
+    });
+
+    mock('../../shared/server-utils', mockServerUtils);
   });
 
   afterEach(() => {
     mock.stopAll();
   });
 
-  it('should add `SkyuxSaveMetadataPlugin` to webpack plugins', async () => {
+  async function runBuilder(): Promise<void> {
     await mock.reRequire('./browser');
+  }
+
+  it('should add `SkyuxSaveMetadataPlugin` to webpack plugins', async () => {
+    await runBuilder();
+    console.log('EXPECT');
 
     const plugin = actualWebpackConfig.plugins?.find(
       (p) => p instanceof SkyuxSaveHostMetadataPlugin
@@ -105,7 +157,8 @@ describe('browser builder', () => {
   });
 
   it('should add `SkyuxAppAssetsPlugin` to webpack plugins', async () => {
-    await mock.reRequire('./browser');
+    await runBuilder();
+    console.log('EXPECT');
 
     const plugin = actualWebpackConfig.plugins?.find(
       (p) => p instanceof SkyuxAppAssetsPlugin
@@ -119,7 +172,8 @@ describe('browser builder', () => {
       plugins: [new MockWebpackPlugin()]
     };
 
-    await mock.reRequire('./browser');
+    await runBuilder();
+    console.log('EXPECT');
 
     const plugin = actualWebpackConfig.plugins?.find(
       (p) => p instanceof MockWebpackPlugin
@@ -129,18 +183,38 @@ describe('browser builder', () => {
   });
 
   it('should ensure the deployUrl ends with the baseHref and a forward slash', async () => {
-    defaultOptions.deployUrl = 'https://foo.com';
-    await mock.reRequire('./browser');
+    defaultBrowserOptions.deployUrl = 'https://foo.com';
+    await runBuilder();
+    console.log('EXPECT');
     expect(
       executeBrowserBuilderSpy.calls.mostRecent().args[0].deployUrl
     ).toEqual('https://foo.com/foo/');
   });
 
-  it("should only add the baseHref if it's not already included", async () => {
-    defaultOptions.deployUrl = 'https://foo.com/foo/';
-    await mock.reRequire('./browser');
+  fit("should only add the baseHref if it's not already included", async () => {
+    defaultBrowserOptions.deployUrl = 'https://foo.com/foo/';
+    await runBuilder();
+    console.log('EXPECT');
     expect(
       executeBrowserBuilderSpy.calls.mostRecent().args[0].deployUrl
     ).toEqual('https://foo.com/foo/');
+  });
+
+  fit('should serve build results', async () => {
+    defaultBrowserOptions.skyuxServe = true;
+    defaultBrowserOptions.outputPath = 'dist/foobar';
+    const createServerSpy = spyOn(mockServerUtils, 'createServer');
+    await runBuilder();
+    console.log('EXPECT', createServerSpy.calls.all());
+    expect(createServerSpy).toHaveBeenCalledWith({
+      distPath: path.join(process.cwd(), 'dist/foobar'),
+      port: 4200,
+      rootPath: '/foo/',
+      sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
+      sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
+    });
+    expect(actualBrowserOptions.deployUrl).toEqual(
+      'https://localhost:4200/foo/'
+    );
   });
 });

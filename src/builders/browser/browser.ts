@@ -6,12 +6,13 @@ import {
 import { executeBrowserBuilder } from '@angular-devkit/build-angular';
 import { JsonObject } from '@angular-devkit/core';
 
-import { getAvailablePort } from '../../shared/server-utils';
 import { getSkyuxConfig } from '../../shared/skyux-config-utils';
 
 import { SkyuxBrowserBuilderOptions } from './browser-options';
 import { getBrowserTransforms } from './browser-transforms';
-import { applySkyuxBrowserOptions, serveBuildResults } from './browser-utils';
+import { applySkyuxBrowserOptions } from './browser-utils';
+import { serveBuildResults } from './serve-build-results';
+import { getAvailablePort } from './server-utils';
 
 async function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
@@ -36,6 +37,8 @@ async function executeSkyuxBrowserBuilder(
   if (options.skyuxServe && result.success) {
     await serveBuildResults(options, context, skyuxConfig, port);
   }
+
+  console.log('Done with build.', result);
 
   return result;
 }

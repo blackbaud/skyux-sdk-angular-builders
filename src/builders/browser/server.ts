@@ -6,8 +6,11 @@ import https from 'https';
 
 import { SkyuxServerConfig } from './server-config';
 
+/**
+ * Serves `ng build` artifacts for local development.
+ */
 export class SkyuxServer {
-  private server: https.Server;
+  private server: https.Server | undefined;
 
   constructor(private config: SkyuxServerConfig) {
     const app = this.createApp();
@@ -16,7 +19,7 @@ export class SkyuxServer {
 
   public start(): Promise<void> {
     return new Promise(async (resolve, reject) => {
-      this.server.on('error', (err) => {
+      this.server?.on('error', (err) => {
         reject(err);
       });
 
@@ -24,14 +27,18 @@ export class SkyuxServer {
         `Serving local files on https://localhost:${this.config.port}/.`
       );
 
-      await this.server.listen(this.config.port);
+      await this.server?.listen(this.config.port);
 
       resolve();
     });
   }
 
   public stop(): void {
-    this.server.close();
+    if (this.server) {
+      console.log('Server stopped.');
+      this.server.close();
+      this.server = undefined;
+    }
   }
 
   private createApp() {
