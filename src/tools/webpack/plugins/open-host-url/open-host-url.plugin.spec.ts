@@ -1,7 +1,7 @@
 import mock from 'mock-require';
 import { take } from 'rxjs/operators';
 
-import { SkyuxHostAssetType } from '../../host-asset-type';
+import { SkyuxHostAssetType } from '../../../../shared/host-asset-type';
 
 import { SkyuxOpenHostUrlPluginConfig } from './open-host-url-config';
 import { SkyuxOpenHostUrlPlugin } from './open-host-url.plugin';
@@ -37,7 +37,7 @@ describe('open host url webpack plugin', () => {
 
     spyOn(console, 'log');
 
-    mock('./create-host-url', {
+    mock('../../../../shared/create-host-url', {
       createHostUrl: createSpy
     });
 

@@ -33,15 +33,14 @@ describe('browser builder', () => {
 
     actualWebpackConfig = {};
 
-    createBuilderSpy = jasmine
-      .createSpy('createBuilder')
-      .and.callFake((cb: any) =>
-        cb(defaultOptions, {
+    createBuilderSpy = jasmine.createSpy('createBuilder').and.callFake(
+      async (cb: any) =>
+        await cb(defaultOptions, {
           target: {
             project: 'foo'
           }
         })
-      );
+    );
 
     executeBrowserBuilderSpy = jasmine
       .createSpy('executeBrowserBuilder')
@@ -68,6 +67,16 @@ describe('browser builder', () => {
 
     mock('hasha', {
       fromFileSync: () => 'MOCK_HASH'
+    });
+
+    mock('../../shared/skyux-config-utils', {
+      getSkyuxConfig() {
+        return {
+          host: {
+            url: 'https://foo.com/'
+          }
+        };
+      }
     });
   });
 

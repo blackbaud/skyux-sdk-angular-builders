@@ -1,9 +1,7 @@
-import {
-  ensureBaseHref,
-  ensureTrailingSlash
-} from '../../../../shared/url-utils';
+import open from 'open';
 
 import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
+import { ensureBaseHref, ensureTrailingSlash } from './url-utils';
 
 /**
  * Creates the SKY UX Host URL.
@@ -25,4 +23,13 @@ export function createHostUrl(
   baseUrl = ensureBaseHref(ensureTrailingSlash(baseUrl), baseHref);
 
   return `${baseUrl}?local=true&_cfg=${configEncoded}`;
+}
+
+export function openHostUrl(
+  baseUrl: string,
+  baseHref: string,
+  config: SkyuxCreateHostUrlConfig
+): void {
+  const url = createHostUrl(baseUrl, baseHref, config);
+  open(url);
 }
