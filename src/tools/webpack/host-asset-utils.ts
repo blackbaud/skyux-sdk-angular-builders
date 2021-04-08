@@ -40,6 +40,7 @@ function sortScripts(scripts: SkyuxHostAsset[]): SkyuxHostAsset[] {
     });
   }
 
+  // Add any remaining scripts and return the result.
   return sortedScripts.concat(remaining.filter((x) => x));
 }
 
