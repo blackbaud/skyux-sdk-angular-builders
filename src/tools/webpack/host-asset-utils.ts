@@ -8,6 +8,37 @@ import { SkyuxHostAssetType } from './host-asset-type';
 const FALLBACK_CSS_PROPERTY = 'visibility';
 const FALLBACK_CSS_VALUE = 'hidden';
 
+function sortScripts(scripts: SkyuxHostAsset[]): SkyuxHostAsset[] {
+  const sortedScripts: SkyuxHostAsset[] = [];
+  const remaining = [...scripts];
+
+  const order = [
+    'runtime-es2015.',
+    'runtime-es5.',
+    'runtime.',
+    'polyfills-es2015.',
+    'polyfills-es5.',
+    'polyfills.',
+    'vendor-es2015.',
+    'vendor-es5.',
+    'vendor.',
+    'main-es2015.',
+    'main-es5.',
+    'main.'
+  ];
+
+  for (const key of order) {
+    scripts.forEach((script, i) => {
+      if (script.name.startsWith(key)) {
+        sortedScripts.push(script);
+        delete remaining[i];
+      }
+    });
+  }
+
+  return sortedScripts.concat(remaining.filter((x) => x));
+}
+
 function getFallbackCssClassName(fileName: string): string {
   return `sky-pages-ready-${dasherize(fileName)}`;
 }
@@ -43,11 +74,6 @@ export function getHostAssets(
 
   const chunks = stats?.chunks;
   if (chunks) {
-    chunks.forEach((chunk) => {
-      const name = chunk.files[0];
-      console.log(name);
-    });
-
     // Get style sheets.
     stylesheets = chunks
       .filter((chunk) => isCss(chunk.files[0]))
@@ -79,12 +105,9 @@ export function getHostAssets(
         );
       })
       .map((chunk) => {
-        const name = chunk.files[0];
         const script: SkyuxHostAsset = {
-          name,
-          type: name.includes('-es2015')
-            ? SkyuxHostAssetType.Module
-            : SkyuxHostAssetType.Script
+          name: chunk.files[0],
+          type: SkyuxHostAssetType.Script
         };
 
         if (config?.includeFallback) {
@@ -96,35 +119,11 @@ export function getHostAssets(
         }
 
         return script;
-
-        // // Polyfills (and in consequence, `zone.js`) need to be loaded first during AoT builds.
-        // if (script.name.indexOf('polyfill') > -1) {
-        //   scripts.unshift(script);
-        // } else {
-        //   scripts.push(script);
-        // }
       });
   }
 
-  const sortedScripts: SkyuxHostAsset[] = [];
-  const remaining: SkyuxHostAsset[] = [];
-
-  const order = ['runtime', 'polyfills', 'main'];
-  order.forEach((key) => {
-    scripts.forEach((script) => {
-      if (script.name.startsWith(key)) {
-        sortedScripts.push(script);
-      } else {
-        remaining.push(script);
-      }
-    });
-  });
-
-  console.log('Sorted scripts:', sortedScripts);
-  console.log('Remaining:', remaining);
-
   return {
-    scripts: sortedScripts.concat(remaining),
+    scripts: sortScripts(scripts),
     stylesheets
   };
 }
