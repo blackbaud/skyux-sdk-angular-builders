@@ -170,6 +170,10 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
   const tsConfig = JSON.parse(tsConfigContents.replace(banner, ''));
   tsConfig.compilerOptions.resolveJsonModule = true;
   tsConfig.compilerOptions.esModuleInterop = true;
+
+  // Enforce the ES5 target until we can drop support for IE 11.
+  tsConfig.compilerOptions.target = 'es5';
+
   await host.writeFile(
     'tsconfig.json',
     banner + JSON.stringify(tsConfig, undefined, 2)

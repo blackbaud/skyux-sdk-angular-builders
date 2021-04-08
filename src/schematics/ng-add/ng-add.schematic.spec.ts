@@ -273,6 +273,28 @@ describe('ng-add.schematic', () => {
     expect(appTemplate).toBe('<skyux-app-shell></skyux-app-shell>');
   });
 
+  it('should adjust settings in tsconfig.json', async () => {
+    app.overwrite('tsconfig.json', '{ "compilerOptions": {} }');
+
+    await runSchematic(app, {
+      project: 'foobar'
+    });
+
+    const tsConfig = app.readContent('tsconfig.json');
+    expect(tsConfig.includes('"target": "es5"')).toBe(
+      true,
+      'Expected `target` to be set to "es5".'
+    );
+    expect(tsConfig.includes('"resolveJsonModule": true')).toBe(
+      true,
+      'Expected `resolveJsonModule` to be set to `true`.'
+    );
+    expect(tsConfig.includes('"esModuleInterop": true')).toBe(
+      true,
+      'Expected `esModuleInterop` to be set to `true`.'
+    );
+  });
+
   describe('serve', () => {
     it("should throw an error if specified project doesn't include an `architect.serve` property", async () => {
       // Create an incorrectly formatted project config.
