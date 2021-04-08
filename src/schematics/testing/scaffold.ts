@@ -1,5 +1,4 @@
 import { Tree } from '@angular-devkit/schematics';
-
 import {
   SchematicTestRunner,
   UnitTestTree

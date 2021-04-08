@@ -35,7 +35,7 @@ describe('startup config loader', () => {
 
     const result = loader.apply({
       query: {
-        projectName: 'bar'
+        baseHref: '/bar/'
       }
     });
 
@@ -62,7 +62,7 @@ describe('startup config loader', () => {
 
     const result = loader.apply({
       query: {
-        projectName: 'bar'
+        baseHref: '/bar/'
       }
     });
 

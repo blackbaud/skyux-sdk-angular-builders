@@ -1,9 +1,6 @@
 import glob from 'glob';
-
 import karma from 'karma';
-
 import path from 'path';
-
 import { Config as ProtractorConfig } from 'protractor';
 
 import { SkyuxCIPlatform } from './ci-platform';

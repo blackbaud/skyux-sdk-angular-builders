@@ -1,25 +1,19 @@
 import { BuilderContext } from '@angular-devkit/architect';
-
 import { ExecutionTransformer } from '@angular-devkit/build-angular';
 
+import { take } from 'rxjs/operators';
 import { Configuration as WebpackConfig } from 'webpack';
 
-import { take } from 'rxjs/operators';
-
+import { getBaseHref } from '../../shared/context-utils';
 import { SkyuxConfig } from '../../shared/skyux-config';
-
-import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
-
-import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
-
+import { ensureBaseHref } from '../../shared/url-utils';
 import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';
-
+import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
+import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
 import { applySkyuxConfigWebpackConfig } from '../../tools/webpack/skyux-config-webpack-config';
-
-import { applyStartupConfigWebpackConfig } from '../../tools/webpack/startup-config';
+import { applyStartupConfigWebpackConfig } from '../../tools/webpack/startup-config-webpack-config';
 
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
-
 import { getLocalUrlFromOptions } from './dev-server-utils';
 
 /**
@@ -38,20 +32,19 @@ function getDevServerWepbackConfigTransformer(
       configurationName === 'e2e' || configurationName === 'e2eProduction';
 
     let localUrl = getLocalUrlFromOptions(options);
-    const baseHref = context.target!.project!;
+    const baseHref = getBaseHref(context);
 
-    const assetsBaseUrl = localUrl;
-    let assetsBaseHref: string;
+    let assetsBaseUrl: string;
     if (isE2e) {
       // The assets URL is built by combining the base assets URL above with
       // the app's root directory (or baseHref), but in e2e tests the assets files
       // are served directly from the root. We'll need to remove the baseHref from the URL
       // so that asset URLs are built relative to the root rather than
       // the app's root directory.
-      assetsBaseHref = '';
+      assetsBaseUrl = localUrl;
     } else {
-      assetsBaseHref = baseHref;
-      localUrl += baseHref;
+      localUrl = ensureBaseHref(localUrl, baseHref);
+      assetsBaseUrl = localUrl;
     }
 
     webpackConfig.plugins = webpackConfig.plugins || [];
@@ -79,7 +72,7 @@ function getDevServerWepbackConfigTransformer(
       );
     }
 
-    applyAppAssetsWebpackConfig(webpackConfig, assetsBaseUrl, assetsBaseHref);
+    applyAppAssetsWebpackConfig(webpackConfig, assetsBaseUrl);
     applySkyuxConfigWebpackConfig(webpackConfig);
     applyStartupConfigWebpackConfig(webpackConfig, baseHref);
 

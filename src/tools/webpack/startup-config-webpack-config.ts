@@ -1,10 +1,9 @@
 import path from 'path';
-
 import webpack from 'webpack';
 
 export function applyStartupConfigWebpackConfig(
   webpackConfig: webpack.Configuration,
-  projectName: string
+  baseHref: string
 ): void {
   webpackConfig.module!.rules.push({
     enforce: 'pre',
@@ -15,7 +14,7 @@ export function applyStartupConfigWebpackConfig(
         './loaders/startup-config/startup-config.loader'
       ),
       options: {
-        projectName
+        baseHref
       }
     }
   });

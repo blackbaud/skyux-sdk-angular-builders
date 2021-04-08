@@ -1,7 +1,5 @@
 import path from 'path';
-
 import webpack from 'webpack';
-
 import { ConcatSource } from 'webpack-sources';
 
 type AssetSourceCallback = (content: string, filePath: string) => string;

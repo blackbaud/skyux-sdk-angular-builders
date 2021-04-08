@@ -2,7 +2,6 @@ import {
   SkyuxConfigAppExternals,
   SkyuxConfigHost
 } from '../../../../shared/skyux-config';
-
 import { SkyuxHostAsset } from '../../host-asset';
 
 /**

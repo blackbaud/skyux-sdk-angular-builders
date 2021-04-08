@@ -1,25 +1,18 @@
 import glob from 'glob';
-
 import hasha from 'hasha';
-
 import path from 'path';
-
 import webpack from 'webpack';
 
 import { ensureTrailingSlash } from '../../shared/url-utils';
 
-import { SkyuxAppAssetsPlugin } from './plugins/app-assets/app-assets.plugin';
-
 import { SkyuxAppAssets } from './app-assets';
+import { SkyuxAppAssetsPlugin } from './plugins/app-assets/app-assets.plugin';
 
 /**
  * Creates an object which maps relative asset paths to absolute URLs with hashed file names.
  * @param assetBaseUrl The base URL where the assets are served.
  */
-function createAppAssetsMap(
-  assetsBaseUrl: string,
-  baseHref: string
-): SkyuxAppAssets {
+function createAppAssetsMap(assetsBaseUrl: string): SkyuxAppAssets {
   const assetsMap: SkyuxAppAssets = {};
 
   // Find all asset file paths.
@@ -50,13 +43,9 @@ function createAppAssetsMap(
       algorithm: 'md5'
     });
 
-    if (baseHref) {
-      baseHref = ensureTrailingSlash(baseHref);
-    }
-
     const parsed = path.parse(relativeUrl);
     const hashedRelativeUrl = `${parsed.dir}/${parsed.name}.${hash}${parsed.ext}`;
-    const hashedUrl = `${baseUrl}${baseHref}${hashedRelativeUrl}`;
+    const hashedUrl = `${baseUrl}${hashedRelativeUrl}`;
 
     assetsMap[relativeUrl] = {
       absolutePath: filePath,
@@ -70,10 +59,9 @@ function createAppAssetsMap(
 
 export function applyAppAssetsWebpackConfig(
   webpackConfig: webpack.Configuration,
-  assetsBaseUrl: string,
-  baseHref: string
+  assetsBaseUrl: string
 ): void {
-  const assetsMap = createAppAssetsMap(assetsBaseUrl, baseHref);
+  const assetsMap = createAppAssetsMap(assetsBaseUrl);
   const processedAssetsMap: { [_: string]: string } = {};
   for (const [relativeUrl, asset] of Object.entries(assetsMap)) {
     processedAssetsMap[relativeUrl.replace('assets/', '')] = asset.hashedUrl;

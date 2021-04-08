@@ -1,5 +1,4 @@
 import { ProtractorBuilderOptions } from '@angular-devkit/build-angular';
-
 import { JsonObject } from '@angular-devkit/core';
 
 import { SkyuxCIPlatform } from '../../shared/ci-platform';

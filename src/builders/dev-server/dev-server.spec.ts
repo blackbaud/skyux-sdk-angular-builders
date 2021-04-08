@@ -1,22 +1,15 @@
 import * as angularArchitect from '@angular-devkit/architect';
-
 import * as buildAngular from '@angular-devkit/build-angular';
 
 import mock from 'mock-require';
-
 import { homedir } from 'os';
-
 import { of } from 'rxjs';
-
 import webpack from 'webpack';
 
 import { SkyuxConfig } from '../../shared/skyux-config';
-
 import { SkyuxAppAssetsPlugin } from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
-
-import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
-
 import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
+import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
 
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 
@@ -116,7 +109,7 @@ describe('dev-server builder', () => {
         open: false,
         port: 4200,
         publicHost: 'https://localhost:4200/foo/',
-        servePath: '/foo',
+        servePath: '/foo/',
         skyuxOpen: true,
         ssl: true,
         sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,

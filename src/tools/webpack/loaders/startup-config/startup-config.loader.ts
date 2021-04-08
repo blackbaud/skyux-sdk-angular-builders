@@ -1,7 +1,5 @@
 import { getOptions } from 'loader-utils';
-
 import validateOptions from 'schema-utils';
-
 import { loader } from 'webpack';
 
 import { getSkyuxConfig } from '../../../../shared/skyux-config-utils';
@@ -18,7 +16,7 @@ export default function startupConfigLoader(this: loader.LoaderContext) {
 
   return JSON.stringify({
     auth: skyuxConfig.auth,
-    baseHref: `/${options.projectName}/`,
+    baseHref: options.baseHref,
     help: skyuxConfig.help,
     omnibar: skyuxConfig.omnibar,
     theming: skyuxConfig.app?.theming

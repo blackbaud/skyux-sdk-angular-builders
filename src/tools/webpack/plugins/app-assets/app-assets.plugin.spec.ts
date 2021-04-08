@@ -1,5 +1,4 @@
 import mock from 'mock-require';
-
 import { ConcatSource } from 'webpack-sources';
 
 describe('Asset URLs plugin', () => {
