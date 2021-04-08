@@ -81,6 +81,7 @@ export function getHostAssets(
     chunks.forEach((chunk) => {
       const fileName = chunk.files[0];
 
+      // Only include primary and lazy-loaded scripts.
       if (
         isJavaScript(fileName) &&
         (chunk.initial || config?.includeLazyloadedChunks)
