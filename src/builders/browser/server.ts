@@ -37,16 +37,16 @@ export class SkyuxServer {
     return port;
   }
 
-  public stop(): void {
+  public onExit(callback: () => void): void {
+    this.onExitCallbacks.push(callback);
+  }
+
+  private stop(): void {
     console.log('Stopping build server...');
     this.server!.close();
     this.server = undefined;
     this.onExitCallbacks.forEach((onExitCallback) => onExitCallback());
     this.onExitCallbacks = [];
     console.log('Server stopped.');
-  }
-
-  public onExit(callback: () => void): void {
-    this.onExitCallbacks.push(callback);
   }
 }

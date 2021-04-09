@@ -2,6 +2,7 @@ import { BuilderContext } from '@angular-devkit/architect';
 
 import { homedir } from 'os';
 import { of } from 'rxjs';
+import { take, delay } from 'rxjs/operators';
 
 import { SkyuxCreateHostUrlConfig } from '../../shared/create-host-url-config';
 import { SkyuxHostAssetType } from '../../shared/host-asset-type';
@@ -57,9 +58,11 @@ describe('browser server', () => {
       (hook: string, callback: () => void) => {
         if (hook === 'exit') {
           // Wait for one lifecycle before executing the exit callback.
-          setTimeout(() => {
-            callback();
-          }, 10);
+          of('')
+            .pipe(delay(10), take(1))
+            .subscribe(() => {
+              callback();
+            });
         }
       }
     );
