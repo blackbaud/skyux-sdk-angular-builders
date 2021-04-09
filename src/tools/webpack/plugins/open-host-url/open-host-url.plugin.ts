@@ -32,7 +32,6 @@ export class SkyuxOpenHostUrlPlugin {
         const hostUrlConfig: SkyuxCreateHostUrlConfig = {
           host: this.config.host,
           localUrl: this.config.localUrl,
-          rootElementTagName: 'app-root',
           scripts: assets.scripts,
           stylesheets: assets.stylesheets
         };

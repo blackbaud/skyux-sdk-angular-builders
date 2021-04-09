@@ -17,6 +17,7 @@ class MockWebpackPlugin {
 describe('browser builder', () => {
   let createBuilderSpy: jasmine.Spy;
   let executeBrowserBuilderSpy: jasmine.Spy;
+  let serveBuildResultsSpy: jasmine.Spy;
   let defaultOptions: SkyuxBrowserBuilderOptions;
   let defaultWebpackConfig: webpack.Configuration;
   let actualWebpackConfig: webpack.Configuration;
@@ -53,6 +54,8 @@ describe('browser builder', () => {
         });
       });
 
+    serveBuildResultsSpy = jasmine.createSpy('serveBuildResults');
+
     spyOnProperty(angularArchitect, 'createBuilder', 'get').and.returnValue(
       createBuilderSpy
     );
@@ -77,6 +80,10 @@ describe('browser builder', () => {
           }
         };
       }
+    });
+
+    mock('./browser-server', {
+      serveBuildResults: serveBuildResultsSpy
     });
   });
 
@@ -132,5 +139,11 @@ describe('browser builder', () => {
     expect(
       executeBrowserBuilderSpy.calls.mostRecent().args[0].deployUrl
     ).toEqual('https://foo.com/foo/');
+  });
+
+  it('should serve build results', async () => {
+    defaultOptions.skyuxServe = true;
+    await mock.reRequire('./browser');
+    expect(serveBuildResultsSpy).toHaveBeenCalled();
   });
 });

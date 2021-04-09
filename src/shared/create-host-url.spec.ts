@@ -39,14 +39,15 @@ describe('create host url', () => {
     const actualUrl = createHostUrl(hostUrl, baseHref, defaultHostConfig);
 
     expect(actualUrl).toEqual(
-      'https://host.nxt.blackbaud.com/my-project/?local=true&_cfg=eyJsb2NhbFVybCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAvIiwiaG9zdCI6eyJ1cmwiOiJodHRwczovL2hvc3Qubnh0LmJsYWNrYmF1ZC5jb20vIn19'
+      'https://host.nxt.blackbaud.com/my-project/?local=true&_cfg=eyJsb2NhbFVybCI6Imh0dHBzOi8vbG9jYWxob3N0OjQyMDAvIiwiaG9zdCI6eyJ1cmwiOiJodHRwczovL2hvc3Qubnh0LmJsYWNrYmF1ZC5jb20vIn0sInJvb3RFbGVtZW50VGFnTmFtZSI6ImFwcC1yb290In0%3D'
     );
 
     expect(decode(actualUrl)).toEqual({
       localUrl: 'https://localhost:4200/',
       host: {
         url: 'https://host.nxt.blackbaud.com/'
-      }
+      },
+      rootElementTagName: 'app-root'
     });
   });
 
@@ -91,6 +92,7 @@ describe('create host url', () => {
 
     expect(decode(actualUrl)).toEqual({
       localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
       scripts: [
         {
           name: 'main.js',
@@ -138,6 +140,7 @@ describe('create host url', () => {
 
     expect(decode(actualUrl)).toEqual({
       localUrl: 'https://localhost:4200/',
+      rootElementTagName: 'app-root',
       scripts: [],
       host: {
         url: 'https://host.nxt.blackbaud.com/'

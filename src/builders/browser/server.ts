@@ -16,34 +16,34 @@ export class SkyuxServer {
     const app = express();
     app.use(cors());
     app.use(config.rootPath, express.static(config.distPath));
-
-    const options = {
-      cert: readCert(config.sslCert),
-      key: readCert(config.sslKey)
-    };
-
-    this.server = https.createServer(options, app);
-    process.on('exit', () => {
-      this.stop();
-    });
+    this.server = https.createServer(
+      {
+        cert: readCert(config.sslCert),
+        key: readCert(config.sslKey)
+      },
+      app
+    );
   }
 
   public async start(): Promise<number> {
     const port = await portfinder.getPortPromise();
+
     console.log(`Serving build results to https://localhost:${port}/`);
-    await this.server?.listen(port);
+
+    await this.server!.listen(port);
+
+    process.on('exit', () => this.stop());
+
     return port;
   }
 
   public stop(): void {
-    if (this.server) {
-      console.log('Stopping build server...');
-      this.server.close();
-      this.server = undefined;
-      this.onExitCallbacks.forEach((onExitCallback) => onExitCallback());
-      this.onExitCallbacks = [];
-      console.log('Server stopped.');
-    }
+    console.log('Stopping build server...');
+    this.server!.close();
+    this.server = undefined;
+    this.onExitCallbacks.forEach((onExitCallback) => onExitCallback());
+    this.onExitCallbacks = [];
+    console.log('Server stopped.');
   }
 
   public onExit(callback: () => void): void {

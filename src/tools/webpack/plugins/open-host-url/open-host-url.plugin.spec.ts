@@ -78,7 +78,6 @@ describe('open host url webpack plugin', () => {
         url: 'https://host.nxt.blackbaud.com/'
       },
       localUrl: 'https://localhost:4200/',
-      rootElementTagName: 'app-root',
       scripts: [],
       stylesheets: []
     });
@@ -127,7 +126,6 @@ describe('open host url webpack plugin', () => {
         url: 'https://host.nxt.blackbaud.com/'
       },
       localUrl: 'https://localhost:4200/',
-      rootElementTagName: 'app-root',
       scripts: [
         {
           name: 'main.js',
@@ -164,7 +162,6 @@ describe('open host url webpack plugin', () => {
         url: 'https://host.nxt.blackbaud.com/'
       },
       localUrl: 'https://localhost:4200/',
-      rootElementTagName: 'app-root',
       scripts: [
         {
           name: 'main.js',
@@ -224,7 +221,6 @@ describe('open host url webpack plugin', () => {
         url: 'https://host.nxt.blackbaud.com/'
       },
       localUrl: 'https://localhost:4200/',
-      rootElementTagName: 'app-root',
       scripts: [],
       stylesheets: []
     });

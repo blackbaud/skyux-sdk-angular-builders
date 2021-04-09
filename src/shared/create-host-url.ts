@@ -12,6 +12,12 @@ export function createHostUrl(
   baseHref: string,
   config: SkyuxCreateHostUrlConfig
 ): string {
+  // Ensure root element tag name is set.
+  /*istanbul ignore else*/
+  if (!config.rootElementTagName) {
+    config.rootElementTagName = 'app-root';
+  }
+
   // We need to URL-encode the config so that characters such as '+'
   // are properly represented.
   const configEncoded = encodeURIComponent(
