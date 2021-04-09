@@ -1,5 +1,4 @@
 import { BuilderContext } from '@angular-devkit/architect';
-import * as buildAngular from '@angular-devkit/build-angular';
 
 import { homedir } from 'os';
 import { of } from 'rxjs';
@@ -49,9 +48,10 @@ describe('browser server', () => {
     executeBrowserBuilderSpy = jasmine
       .createSpy('executeBrowserBuilder')
       .and.returnValue(of({}));
-    spyOnProperty(buildAngular, 'executeBrowserBuilder', 'get').and.returnValue(
-      executeBrowserBuilderSpy
-    );
+
+    mock('@angular-devkit/build-angular', {
+      executeBrowserBuilder: executeBrowserBuilderSpy
+    });
 
     spyOn(process as MockProcess, 'on').and.callFake(
       (hook: string, callback: () => void) => {
@@ -118,6 +118,10 @@ describe('browser server', () => {
 
     mock('portfinder', {
       getPortPromise: () => Promise.resolve(1111)
+    });
+
+    mock('./browser-transforms', {
+      getBrowserTransforms() {}
     });
   });
 
