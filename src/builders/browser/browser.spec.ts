@@ -34,14 +34,15 @@ describe('browser builder', () => {
 
     actualWebpackConfig = {};
 
-    createBuilderSpy = jasmine.createSpy('createBuilder').and.callFake(
-      async (cb: any) =>
-        await cb(defaultOptions, {
+    createBuilderSpy = jasmine
+      .createSpy('createBuilder')
+      .and.callFake((cb: any) =>
+        cb(defaultOptions, {
           target: {
             project: 'foo'
           }
         })
-    );
+      );
 
     executeBrowserBuilderSpy = jasmine
       .createSpy('executeBrowserBuilder')
