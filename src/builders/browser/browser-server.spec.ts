@@ -59,7 +59,7 @@ describe('browser server', () => {
           // Wait for one lifecycle before executing the exit callback.
           setTimeout(() => {
             callback();
-          });
+          }, 10);
         }
       }
     );
