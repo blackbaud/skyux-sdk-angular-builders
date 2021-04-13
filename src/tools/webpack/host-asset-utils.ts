@@ -1,9 +1,8 @@
 import { Stats } from 'webpack';
 
+import { SkyuxHostAsset } from '../../shared/host-asset';
+import { SkyuxHostAssetType } from '../../shared/host-asset-type';
 import { dasherize, underscore } from '../../shared/string-utils';
-
-import { SkyuxHostAsset } from './host-asset';
-import { SkyuxHostAssetType } from './host-asset-type';
 
 const FALLBACK_CSS_PROPERTY = 'visibility';
 const FALLBACK_CSS_VALUE = 'hidden';
