@@ -21,12 +21,14 @@ import {
 } from '@skyux/assets';
 
 import {
-  SkyAppConfigModule
+  SkyAppConfigModule,
+  SkyAppRuntimeConfigParamsProvider
 } from '@skyux/config';
 
 import {
   SkyAppTitleService,
-  SkyAppWindowRef
+  SkyAppWindowRef,
+  SkyViewkeeperHostOptions
 } from '@skyux/core';
 
 import {
@@ -102,6 +104,24 @@ export class SkyuxModule {
             return new SkyAppTitleService(title);
           },
           deps: [Title]
+        },
+        {
+          provide: SkyViewkeeperHostOptions,
+          deps: [
+            SkyuxStartupService,
+            SkyAppRuntimeConfigParamsProvider
+          ],
+          useFactory: (
+            startupSvc: SkyuxStartupService,
+            runtimeParams: SkyAppRuntimeConfigParamsProvider
+          ) => {
+            const omnibarExists = startupSvc.config.omnibar && runtimeParams.params.get('addin') !== '1';
+
+            const hostOptions = new SkyViewkeeperHostOptions();
+            hostOptions.viewportMarginTop = omnibarExists ? 50 : 0;
+
+            return hostOptions;
+          }
         }
       ]
     };
