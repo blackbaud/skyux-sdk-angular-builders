@@ -28,6 +28,7 @@ import {
 import {
   SkyAppTitleService,
   SkyAppWindowRef,
+  SkyUIConfigService,
   SkyViewkeeperHostOptions
 } from '@skyux/core';
 
@@ -35,6 +36,10 @@ import {
   SkyThemeModule,
   SkyThemeService
 } from '@skyux/theme';
+
+import {
+  SkyAppUIConfigService
+} from '@blackbaud-internal/skyux-lib-ui-config-service';
 
 import skyuxConfigJson from './processed-skyuxconfig.json';
 const skyuxConfig: any = skyuxConfigJson;
@@ -105,6 +110,10 @@ export class SkyuxModule {
           },
           deps: [Title]
         },
+        {
+          provide: SkyUIConfigService,
+          useClass: SkyAppUIConfigService
+        }
         {
           provide: SkyViewkeeperHostOptions,
           deps: [
