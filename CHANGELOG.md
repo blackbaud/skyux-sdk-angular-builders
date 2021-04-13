@@ -1,3 +1,11 @@
+# 4.0.0-alpha.34 (2021-04-13)
+
+- Updated the `browser` builder to accept the `--skyux-serve` argument which serves the build results on SKY UX Host (for local testing purposes). [#96](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/96)
+- Updated the `ng add` schematic to automatically setup the viewkeeper service. [#98](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/98)
+- Updated the `browser` builder to enforce a build target of `'es5'` to maintain support for IE 11. [#94](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/94)
+- Updated the `SkyuxOpenHostUrlPlugin` to better handle the order of assets sent to SKY UX Host. [#95](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/95)
+- Added support for `SkyAppAssetsTestService`. [#97](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/97)
+
 # 4.0.0-alpha.33 (2021-04-07)
 
 - Fixed lazy-loaded script URLs to include the base HREF. [#91](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/91)
