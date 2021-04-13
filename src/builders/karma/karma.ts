@@ -12,6 +12,7 @@ import { getSkyuxConfig } from '../../shared/skyux-config-utils';
 
 import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
 import { SkyuxKarmaBuilderOptions } from './karma-options';
+import { getKarmaTransforms } from './karma-transforms';
 
 function executeSkyuxKarmaBuilder(
   options: SkyuxKarmaBuilderOptions,
@@ -28,7 +29,7 @@ function executeSkyuxKarmaBuilder(
   SkyuxKarmaConfigAdapter.builderOptions = options;
   SkyuxKarmaConfigAdapter.skyuxConfig = getSkyuxConfig();
 
-  return executeKarmaBuilder(options, context);
+  return executeKarmaBuilder(options, context, getKarmaTransforms());
 }
 
 export default createBuilder<SkyuxKarmaBuilderOptions>(
