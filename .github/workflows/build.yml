@@ -61,7 +61,7 @@ jobs:
         rm -r node_modules/@skyux-sdk/angular-builders
         mv ../dist node_modules/@skyux-sdk/angular-builders
       env:
-        NODE_AUTH_TOKEN: ${{secrets.BLACKBAUD_NPM_TOKEN}}
+        NODE_AUTH_TOKEN: ${{secrets.ADO_PERSONAL_ACCESS_TOKEN}}
     - name: Run Angular CLI commands
       working-directory: builders-e2e-app
       run: |
