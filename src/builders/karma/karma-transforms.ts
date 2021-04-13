@@ -11,8 +11,11 @@ import { Configuration as WebpackConfig, DefinePlugin } from 'webpack';
 function getKarmaWepbackConfigTransformer(): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
     webpackConfig.plugins = webpackConfig.plugins || [];
+    webpackConfig.module = webpackConfig.module || {
+      rules: []
+    };
 
-    webpackConfig.module?.rules.push({
+    webpackConfig.module.rules.push({
       enforce: 'pre',
       test: /skyux-i18n-testing\.js$/,
       use: {

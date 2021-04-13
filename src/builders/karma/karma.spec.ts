@@ -4,6 +4,7 @@ import * as buildAngular from '@angular-devkit/build-angular';
 import mock from 'mock-require';
 import path from 'path';
 import { of } from 'rxjs';
+import webpack, { DefinePlugin } from 'webpack';
 
 import { SkyuxKarmaBuilderOptions } from './karma-options';
 
@@ -11,6 +12,8 @@ describe('karma builder', () => {
   let createBuilderSpy: jasmine.Spy;
   let executeKarmaBuilderSpy: jasmine.Spy;
   let options: SkyuxKarmaBuilderOptions;
+  let defaultWebpackConfig: webpack.Configuration;
+  let actualWebpackConfig: webpack.Configuration;
 
   beforeEach(() => {
     options = {
@@ -18,6 +21,10 @@ describe('karma builder', () => {
       main: 'main.ts',
       tsConfig: 'tsconfig.json'
     };
+
+    defaultWebpackConfig = {};
+
+    actualWebpackConfig = {};
 
     createBuilderSpy = jasmine
       .createSpy('createBuilder')
@@ -31,7 +38,10 @@ describe('karma builder', () => {
 
     executeKarmaBuilderSpy = jasmine
       .createSpy('executeKarmaBuilder')
-      .and.callFake((_options: any, _context: any, _transforms: any) => {
+      .and.callFake((_options: any, _context: any, transforms: any) => {
+        actualWebpackConfig = transforms.webpackConfiguration(
+          defaultWebpackConfig
+        );
         return of({
           success: true
         });
@@ -82,6 +92,32 @@ describe('karma builder', () => {
       skyuxCiPlatform: 'ado',
       tsConfig: 'tsconfig.json',
       watch: false
+    });
+  });
+
+  describe('webpack config', () => {
+    it('should add a loader to fix `require.context` in skyux-i18n-testing.js', async () => {
+      await mock.reRequire('./karma');
+      expect(actualWebpackConfig.module!.rules).toEqual([
+        {
+          enforce: 'pre',
+          test: /skyux-i18n-testing\.js$/,
+          use: {
+            loader: path.join(
+              process.cwd(),
+              'src/tools/webpack/loaders/fix-require-context/fix-require-context.loader'
+            )
+          }
+        }
+      ]);
+    });
+
+    it('should add the DefinePlugin', async () => {
+      await mock.reRequire('./karma');
+      const plugin = actualWebpackConfig.plugins?.find(
+        (p) => p instanceof DefinePlugin
+      ) as DefinePlugin;
+      expect(plugin).toBeDefined();
     });
   });
 });
