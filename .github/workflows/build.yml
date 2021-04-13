@@ -37,6 +37,9 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: '10'
+        registry-url: https://blackbaud.pkgs.visualstudio.com/_packaging/Blackbaud-npm/npm/registry/
+        scope: '@blackbaud-internal'
+        always-auth: true
     - name: Install dependencies
       run: |
         npm i -g @angular/cli@11 @skyux-sdk/cli
@@ -58,7 +61,6 @@ jobs:
         rm -r node_modules/@skyux-sdk/angular-builders
         mv ../dist node_modules/@skyux-sdk/angular-builders
       env:
-        NPM_CONFIG_USERCONFIG: .npmrc.ci
         NODE_AUTH_TOKEN: ${{secrets.BLACKBAUD_NPM_TOKEN}}
     - name: Run Angular CLI commands
       working-directory: builders-e2e-app
