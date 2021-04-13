@@ -1,7 +1,7 @@
 import mock from 'mock-require';
 import { take } from 'rxjs/operators';
 
-import { SkyuxHostAssetType } from '../../host-asset-type';
+import { SkyuxHostAssetType } from '../../../../shared/host-asset-type';
 
 import { SkyuxOpenHostUrlPluginConfig } from './open-host-url-config';
 import { SkyuxOpenHostUrlPlugin } from './open-host-url.plugin';
@@ -37,7 +37,7 @@ describe('open host url webpack plugin', () => {
 
     spyOn(console, 'log');
 
-    mock('./create-host-url', {
+    mock('../../../../shared/create-host-url', {
       createHostUrl: createSpy
     });
 
@@ -78,7 +78,6 @@ describe('open host url webpack plugin', () => {
         url: 'https://host.nxt.blackbaud.com/'
       },
       localUrl: 'https://localhost:4200/',
-      rootElementTagName: 'app-root',
       scripts: [],
       stylesheets: []
     });
@@ -127,7 +126,6 @@ describe('open host url webpack plugin', () => {
         url: 'https://host.nxt.blackbaud.com/'
       },
       localUrl: 'https://localhost:4200/',
-      rootElementTagName: 'app-root',
       scripts: [
         {
           name: 'main.js',
@@ -164,7 +162,6 @@ describe('open host url webpack plugin', () => {
         url: 'https://host.nxt.blackbaud.com/'
       },
       localUrl: 'https://localhost:4200/',
-      rootElementTagName: 'app-root',
       scripts: [
         {
           name: 'main.js',
@@ -224,7 +221,6 @@ describe('open host url webpack plugin', () => {
         url: 'https://host.nxt.blackbaud.com/'
       },
       localUrl: 'https://localhost:4200/',
-      rootElementTagName: 'app-root',
       scripts: [],
       stylesheets: []
     });

@@ -1,16 +1,13 @@
-import {
-  SkyuxConfigAppExternals,
-  SkyuxConfigHost
-} from '../../../../shared/skyux-config';
-import { SkyuxHostAsset } from '../../host-asset';
+import { SkyuxHostAsset } from './host-asset';
+import { SkyuxConfigAppExternals, SkyuxConfigHost } from './skyux-config';
 
 /**
  * Configuration parameter `_cfg` that is encoded as part of the SKY UX Host URL.
  */
 export interface SkyuxCreateHostUrlConfig {
-  externals?: SkyuxConfigAppExternals;
+  externals?: SkyuxConfigAppExternals | undefined;
 
-  host?: SkyuxConfigHost;
+  host: SkyuxConfigHost;
 
   /**
    * The URL of the localhost server, serving the asset files.

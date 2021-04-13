@@ -1,9 +1,5 @@
-import {
-  ensureBaseHref,
-  ensureTrailingSlash
-} from '../../../../shared/url-utils';
-
 import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
+import { ensureBaseHref, ensureTrailingSlash } from './url-utils';
 
 /**
  * Creates the SKY UX Host URL.
@@ -16,6 +12,12 @@ export function createHostUrl(
   baseHref: string,
   config: SkyuxCreateHostUrlConfig
 ): string {
+  // Ensure root element tag name is set.
+  /*istanbul ignore else*/
+  if (!config.rootElementTagName) {
+    config.rootElementTagName = 'app-root';
+  }
+
   // We need to URL-encode the config so that characters such as '+'
   // are properly represented.
   const configEncoded = encodeURIComponent(

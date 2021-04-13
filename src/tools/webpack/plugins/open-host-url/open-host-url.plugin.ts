@@ -2,10 +2,10 @@ import open from 'open';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Compiler } from 'webpack';
 
+import { createHostUrl } from '../../../../shared/create-host-url';
+import { SkyuxCreateHostUrlConfig } from '../../../../shared/create-host-url-config';
 import { getHostAssets } from '../../host-asset-utils';
 
-import { createHostUrl } from './create-host-url';
-import { SkyuxCreateHostUrlConfig } from './create-host-url-config';
 import { SkyuxOpenHostUrlPluginConfig } from './open-host-url-config';
 
 const PLUGIN_NAME = 'open-skyux-host-plugin';
@@ -32,7 +32,6 @@ export class SkyuxOpenHostUrlPlugin {
         const hostUrlConfig: SkyuxCreateHostUrlConfig = {
           host: this.config.host,
           localUrl: this.config.localUrl,
-          rootElementTagName: 'app-root',
           scripts: assets.scripts,
           stylesheets: assets.stylesheets
         };
