@@ -41,9 +41,6 @@ jobs:
       run: |
         npm i -g @angular/cli@11 @skyux-sdk/cli
         npm ci --ignore-scripts
-      env:
-        NPM_CONFIG_USERCONFIG: .npmrc.ci
-        NODE_AUTH_TOKEN: ${{secrets.BLACKBAUD_NPM_TOKEN}}
     - name: Install SKY UX certificate
       run: |
         skyux certs install
@@ -60,6 +57,9 @@ jobs:
         ng add ./.skyux-sdk-angular-builders-dist
         rm -r node_modules/@skyux-sdk/angular-builders
         mv ../dist node_modules/@skyux-sdk/angular-builders
+      env:
+        NPM_CONFIG_USERCONFIG: .npmrc.ci
+        NODE_AUTH_TOKEN: ${{secrets.BLACKBAUD_NPM_TOKEN}}
     - name: Run Angular CLI commands
       working-directory: builders-e2e-app
       run: |
