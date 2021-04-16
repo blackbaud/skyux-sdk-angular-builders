@@ -37,9 +37,6 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '10'
-      env:
-        NPM_CONFIG_USERCONFIG: '.npmrc-ci'
-        NODE_AUTH_TOKEN: ${{secrets.BLACKBAUD_NPM_TOKEN}}
     - name: Install dependencies
       run: |
         npm i -g @angular/cli@11 @skyux-sdk/cli
@@ -60,6 +57,9 @@ jobs:
         ng add ./.skyux-sdk-angular-builders-dist
         rm -r node_modules/@skyux-sdk/angular-builders
         mv ../dist node_modules/@skyux-sdk/angular-builders
+      env:
+        NPM_CONFIG_USERCONFIG: '.npmrc-ci'
+        NODE_AUTH_TOKEN: ${{secrets.BLACKBAUD_NPM_TOKEN}}
     - name: Run Angular CLI commands
       working-directory: builders-e2e-app
       run: |
