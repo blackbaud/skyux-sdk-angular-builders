@@ -17,6 +17,8 @@ class MockWebpackPlugin {
   public apply() {}
 }
 
+const DEFAULT_PORT = 4200;
+
 describe('dev-server builder', () => {
   let createBuilderSpy: jasmine.Spy;
   let executDevServerBuilderSpy: jasmine.Spy;
@@ -25,10 +27,12 @@ describe('dev-server builder', () => {
   let actualWebpackConfig: webpack.Configuration;
   let mockContext: any;
   let mockSkyuxConfig: SkyuxConfig;
+  let mockPort: number;
 
   beforeEach(() => {
     defaultOptions = {
-      browserTarget: 'foo:build'
+      browserTarget: 'foo:build',
+      port: DEFAULT_PORT
     };
 
     defaultWebpackConfig = {};
@@ -36,6 +40,9 @@ describe('dev-server builder', () => {
     actualWebpackConfig = {};
 
     mockContext = {
+      logger: {
+        info() {}
+      },
       target: {
         project: 'foo',
         configuration: ''
@@ -73,6 +80,11 @@ describe('dev-server builder', () => {
 
     mock('hasha', {
       fromFileSync: () => 'MOCK_HASH'
+    });
+
+    mockPort = DEFAULT_PORT;
+    mock('../../shared/port-finder', {
+      getAvailablePort: () => Promise.resolve(mockPort)
     });
 
     mockSkyuxConfig = {
@@ -115,6 +127,13 @@ describe('dev-server builder', () => {
         sslCert: `${homedir()}/.skyux/certs/skyux-server.crt`,
         sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
       });
+    });
+
+    it('should find a different port if default unavailable', async () => {
+      mockPort = 4201;
+      await mock.reRequire('./dev-server');
+      const actualOptions = getActualOptions();
+      expect(actualOptions.port).toEqual(mockPort);
     });
   });
 
