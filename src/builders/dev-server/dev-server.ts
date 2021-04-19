@@ -16,7 +16,7 @@ function executeSkyuxDevServerBuilder(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
 ): Observable<DevServerBuilderOutput> {
-  const skyuxConfig = getSkyuxConfig();
+  const skyuxConfig = getSkyuxConfig('serve');
 
   applySkyuxDevServerOptions(options, context);
 

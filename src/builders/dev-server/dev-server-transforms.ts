@@ -1,17 +1,16 @@
 import { BuilderContext } from '@angular-devkit/architect';
 import { ExecutionTransformer } from '@angular-devkit/build-angular';
+import { SkyuxConfig } from '@skyux/config';
 
 import { take } from 'rxjs/operators';
 import { Configuration as WebpackConfig } from 'webpack';
 
 import { getBaseHref } from '../../shared/context-utils';
-import { SkyuxConfig } from '../../shared/skyux-config';
 import { ensureBaseHref } from '../../shared/url-utils';
 import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';
 import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
 import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
-import { applySkyuxConfigWebpackConfig } from '../../tools/webpack/skyux-config-webpack-config';
-import { applyStartupConfigWebpackConfig } from '../../tools/webpack/startup-config-webpack-config';
+import { applySkyAppConfigWebpackConfig } from '../../tools/webpack/sky-app-config-webpack-config';
 
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 import { getLocalUrlFromOptions } from './dev-server-utils';
@@ -51,7 +50,7 @@ function getDevServerWepbackConfigTransformer(
 
     const openHostUrlPlugin = new SkyuxOpenHostUrlPlugin({
       externals: skyuxConfig.app?.externals,
-      host: skyuxConfig.host,
+      host: skyuxConfig.host!,
       localUrl,
       open: options.skyuxOpen!,
       baseHref
@@ -73,8 +72,11 @@ function getDevServerWepbackConfigTransformer(
     }
 
     applyAppAssetsWebpackConfig(webpackConfig, assetsBaseUrl);
-    applySkyuxConfigWebpackConfig(webpackConfig);
-    applyStartupConfigWebpackConfig(webpackConfig, baseHref);
+    applySkyAppConfigWebpackConfig(
+      webpackConfig,
+      'serve',
+      context.target!.project!
+    );
 
     return webpackConfig;
   };

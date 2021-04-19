@@ -17,7 +17,7 @@ async function executeSkyuxBrowserBuilder(
   options: SkyuxBrowserBuilderOptions,
   context: BuilderContext
 ): Promise<BuilderOutput> {
-  const skyuxConfig = getSkyuxConfig();
+  const skyuxConfig = getSkyuxConfig('build');
 
   if (options.skyuxServe) {
     return serveBuildResults(options, context, skyuxConfig);

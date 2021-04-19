@@ -1,4 +1,5 @@
 import { BuilderContext } from '@angular-devkit/architect';
+import { SkyuxConfig } from '@skyux/config';
 
 import { homedir } from 'os';
 import { of } from 'rxjs';
@@ -6,7 +7,6 @@ import { take, delay } from 'rxjs/operators';
 
 import { SkyuxCreateHostUrlConfig } from '../../shared/create-host-url-config';
 import { SkyuxHostAssetType } from '../../shared/host-asset-type';
-import { SkyuxConfig } from '../../shared/skyux-config';
 
 import { SkyuxBrowserBuilderOptions } from './browser-options';
 

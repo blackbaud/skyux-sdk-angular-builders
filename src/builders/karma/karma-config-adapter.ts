@@ -1,4 +1,4 @@
-import { SkyuxConfig } from '../../shared/skyux-config';
+import { SkyuxConfig } from '@skyux/config';
 
 import { SkyuxKarmaBuilderOptions } from './karma-options';
 

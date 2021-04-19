@@ -27,7 +27,7 @@ function executeSkyuxKarmaBuilder(
   }
 
   SkyuxKarmaConfigAdapter.builderOptions = options;
-  SkyuxKarmaConfigAdapter.skyuxConfig = getSkyuxConfig();
+  SkyuxKarmaConfigAdapter.skyuxConfig = getSkyuxConfig('test');
 
   return executeKarmaBuilder(options, context, getKarmaTransforms());
 }

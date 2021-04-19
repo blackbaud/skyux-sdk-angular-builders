@@ -21,8 +21,11 @@ import {
 } from '@skyux/assets';
 
 import {
+  RuntimeConfig,
+  SkyAppConfig,
   SkyAppConfigModule,
-  SkyAppRuntimeConfigParamsProvider
+  SkyAppRuntimeConfigParamsProvider,
+  SkyuxConfig
 } from '@skyux/config';
 
 import {
@@ -36,11 +39,11 @@ import {
   SkyThemeService
 } from '@skyux/theme';
 
-import skyuxConfigJson from './processed-skyuxconfig.json';
-const skyuxConfig: any = skyuxConfigJson;
-
-import startupConfigJson from './startupconfig.json';
-const startupConfig: any = startupConfigJson;
+import skyAppConfigJson from './skyappconfig.json';
+const skyAppConfig: {
+  runtime: RuntimeConfig,
+  skyux: SkyuxConfig
+} = skyAppConfigJson as any;
 
 import {
   ShellComponent
@@ -49,10 +52,6 @@ import {
 import {
   SkyAppAssetsImplService
 } from './app-assets-impl.service';
-
-import {
-  SkyuxStartupService
-} from './startup.service';
 
 import {
   SkyAppOmnibarTitleService
@@ -68,8 +67,8 @@ import {
   imports: [
     CommonModule,
     SkyAppConfigModule.forRoot({
-      host: skyuxConfig.host,
-      params: skyuxConfig.params
+      host: skyAppConfig.skyux.host,
+      params: skyAppConfig.skyux.params
     }),
     SkyThemeModule
   ]
@@ -86,18 +85,22 @@ export class SkyuxModule {
           useClass: SkyAppAssetsImplService
         },
         {
-          provide: SkyuxStartupService,
-          useFactory: () => {
-            const svc = new SkyuxStartupService();
-            svc.init(startupConfig);
+          provide: SkyAppConfig,
+          useFactory: (paramsProvider: SkyAppRuntimeConfigParamsProvider) => {
+            const config = new SkyAppConfig();
+            config.runtime = skyAppConfig.runtime;
+            config.skyux = skyAppConfig.skyux;
 
-            return svc;
-          }
+            config.runtime.params = paramsProvider.params;
+
+            return config;
+          },
+          deps: [SkyAppRuntimeConfigParamsProvider]
         },
         {
           provide: SkyAppTitleService,
           useFactory: (title: Title) => {
-            if (startupConfig.omnibar) {
+            if (skyAppConfig.skyux.omnibar) {
               return new SkyAppOmnibarTitleService();
             }
 
@@ -108,14 +111,12 @@ export class SkyuxModule {
         {
           provide: SkyViewkeeperHostOptions,
           deps: [
-            SkyuxStartupService,
             SkyAppRuntimeConfigParamsProvider
           ],
           useFactory: (
-            startupSvc: SkyuxStartupService,
             runtimeParams: SkyAppRuntimeConfigParamsProvider
           ) => {
-            const omnibarExists = startupSvc.config.omnibar && runtimeParams.params.get('addin') !== '1';
+            const omnibarExists = skyAppConfig.skyux.omnibar && runtimeParams.params.get('addin') !== '1';
 
             const hostOptions = new SkyViewkeeperHostOptions();
             hostOptions.viewportMarginTop = omnibarExists ? 50 : 0;

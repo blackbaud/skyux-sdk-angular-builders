@@ -8,6 +8,7 @@ import {
 } from '@skyux/assets';
 
 import {
+  SkyAppConfig,
   SkyAppConfigHost,
   SkyAppParamsConfig,
   SkyAppRuntimeConfigParamsProvider
@@ -30,7 +31,8 @@ export class AppComponent implements OnInit {
     assetService: SkyAppAssetsService,
     hostConfig: SkyAppConfigHost,
     paramsConfig: SkyAppParamsConfig,
-    runtimeParams: SkyAppRuntimeConfigParamsProvider
+    runtimeParams: SkyAppRuntimeConfigParamsProvider,
+    config: SkyAppConfig
   ) {
     console.log('Asset URLs:', assetService.getAllUrls());
     console.log('Host config:', hostConfig);

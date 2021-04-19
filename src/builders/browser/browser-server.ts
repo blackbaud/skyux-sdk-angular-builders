@@ -1,5 +1,6 @@
 import { BuilderContext, BuilderOutput } from '@angular-devkit/architect';
 import { executeBrowserBuilder } from '@angular-devkit/build-angular';
+import { SkyuxConfig } from '@skyux/config';
 
 import fs from 'fs-extra';
 import open from 'open';
@@ -10,7 +11,6 @@ import { getBaseHref } from '../../shared/context-utils';
 import { createHostUrl } from '../../shared/create-host-url';
 import { SkyuxHostAsset } from '../../shared/host-asset';
 import { SkyuxHostAssetType } from '../../shared/host-asset-type';
-import { SkyuxConfig } from '../../shared/skyux-config';
 
 import { SkyuxBrowserBuilderOptions } from './browser-options';
 import { getBrowserTransforms } from './browser-transforms';
@@ -63,8 +63,8 @@ export async function serveBuildResults(
 
   // Open the Host URL.
   const assets = getAssetsFromMetadata(distPath);
-  const url = createHostUrl(skyuxConfig.host.url, getBaseHref(context), {
-    host: skyuxConfig.host,
+  const url = createHostUrl(skyuxConfig.host!.url!, getBaseHref(context), {
+    host: skyuxConfig.host!,
     externals: skyuxConfig.app?.externals,
     localUrl: options.deployUrl,
     scripts: assets.scripts,
