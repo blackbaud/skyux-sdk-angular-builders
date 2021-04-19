@@ -14,6 +14,7 @@ describe('karma builder', () => {
   let options: SkyuxKarmaBuilderOptions;
   let defaultWebpackConfig: webpack.Configuration;
   let actualWebpackConfig: webpack.Configuration;
+  let mockSpecFiles: string[];
 
   beforeEach(() => {
     options = {
@@ -55,6 +56,15 @@ describe('karma builder', () => {
       executeKarmaBuilderSpy
     );
 
+    spyOn(console, 'log');
+
+    mockSpecFiles = ['foo.spec.ts'];
+    mock('glob', {
+      sync() {
+        return mockSpecFiles;
+      }
+    });
+
     mock('../../shared/skyux-config-utils', {
       getSkyuxConfig() {
         return {
@@ -70,8 +80,12 @@ describe('karma builder', () => {
     mock.stopAll();
   });
 
+  async function runBuilder() {
+    return await mock.reRequire('./karma').default;
+  }
+
   it('should overwrite Angular karma config with defaults', async () => {
-    await mock.reRequire('./karma');
+    await runBuilder();
 
     expect(options).toEqual({
       karmaConfig: path.resolve(__dirname, 'karma.default.conf.js'),
@@ -83,7 +97,7 @@ describe('karma builder', () => {
   it('should add specific options for CI platforms', async () => {
     options.skyuxCiPlatform = 'ado';
 
-    await mock.reRequire('./karma');
+    await runBuilder();
 
     expect(options).toEqual({
       codeCoverage: true,
@@ -95,9 +109,16 @@ describe('karma builder', () => {
     });
   });
 
+  it('should abort if no specs', async () => {
+    mockSpecFiles = [];
+    await runBuilder();
+    expect(executeKarmaBuilderSpy).not.toHaveBeenCalled();
+  });
+
   describe('webpack config', () => {
     it('should add a loader to fix `require.context` in skyux-i18n-testing.js', async () => {
-      await mock.reRequire('./karma');
+      await runBuilder();
+
       expect(actualWebpackConfig.module!.rules).toEqual([
         {
           enforce: 'pre',
@@ -113,7 +134,8 @@ describe('karma builder', () => {
     });
 
     it('should add the DefinePlugin', async () => {
-      await mock.reRequire('./karma');
+      await runBuilder();
+
       const plugin = actualWebpackConfig.plugins?.find(
         (p) => p instanceof DefinePlugin
       ) as DefinePlugin;
