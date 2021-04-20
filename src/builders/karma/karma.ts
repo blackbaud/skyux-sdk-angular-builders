@@ -24,7 +24,7 @@ function executeSkyuxKarmaBuilder(
   });
 
   if (specs.length === 0) {
-    console.log('No spec files located. Skipping test command.');
+    context.logger.info('No spec files located. Skipping test command.');
     return of({
       success: true
     });

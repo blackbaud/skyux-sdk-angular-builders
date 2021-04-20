@@ -29,6 +29,9 @@ describe('protractor builder', () => {
         cb(options, {
           target: {
             project: 'foo'
+          },
+          logger: {
+            info() {}
           }
         })
       );
@@ -40,8 +43,6 @@ describe('protractor builder', () => {
           success: true
         });
       });
-
-    spyOn(console, 'log');
 
     spyOnProperty(angularArchitect, 'createBuilder', 'get').and.returnValue(
       createBuilderSpy

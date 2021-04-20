@@ -33,6 +33,9 @@ describe('karma builder', () => {
         cb(options, {
           target: {
             project: 'foo'
+          },
+          logger: {
+            info() {}
           }
         })
       );
@@ -55,8 +58,6 @@ describe('karma builder', () => {
     spyOnProperty(buildAngular, 'executeKarmaBuilder', 'get').and.returnValue(
       executeKarmaBuilderSpy
     );
-
-    spyOn(console, 'log');
 
     mockSpecFiles = ['foo.spec.ts'];
     mock('glob', {

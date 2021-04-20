@@ -22,7 +22,7 @@ async function executeSkyuxProtractorBuilder(
   });
 
   if (specs.length === 0) {
-    console.log('No spec files located. Skipping e2e command.');
+    context.logger.info('No spec files located. Skipping e2e command.');
     return {
       success: true
     };
