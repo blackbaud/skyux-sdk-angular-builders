@@ -11,14 +11,13 @@ async function getVersion() {
 
 export async function updateChromeDriver() {
   const version = await getVersion();
-  console.log(`[skyux] Updating webdriver to version ${version}`);
 
-  const webdriverManagerPath = path.resolve(
-    'node_modules/.bin/webdriver-manager'
-  );
+  console.log(`Updating webdriver to version ${version}`);
+
+  const binaryPath = path.resolve('node_modules/.bin/webdriver-manager');
 
   const result = spawn.sync(
-    webdriverManagerPath,
+    binaryPath,
     [
       'update',
       '--standalone=false',
@@ -32,9 +31,9 @@ export async function updateChromeDriver() {
   );
 
   if (result.error) {
-    console.error('[skyux] Failed to update webdriver.');
+    console.error('Failed to update webdriver.');
     throw result.error;
   }
 
-  console.log('[skyux] Webdriver successfully updated.');
+  console.log('Webdriver successfully updated.');
 }
