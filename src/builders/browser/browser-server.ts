@@ -63,8 +63,8 @@ export async function serveBuildResults(
 
   // Open the Host URL.
   const assets = getAssetsFromMetadata(distPath);
-  const url = createHostUrl(skyuxConfig.host!.url!, getBaseHref(context), {
-    host: skyuxConfig.host!,
+  const url = createHostUrl(skyuxConfig.host.url, getBaseHref(context), {
+    host: skyuxConfig.host,
     externals: skyuxConfig.app?.externals,
     localUrl: options.deployUrl,
     scripts: assets.scripts,

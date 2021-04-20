@@ -41,7 +41,7 @@ export class SkyuxOpenHostUrlPlugin {
         }
 
         const url = createHostUrl(
-          this.config.host!.url!,
+          this.config.host.url,
           this.config.baseHref,
           hostUrlConfig
         );

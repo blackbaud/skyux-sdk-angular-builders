@@ -75,7 +75,7 @@ export function getSkyuxConfig(command?: string): SkyuxConfig {
     }
   });
 
-  const hostUrl = skyuxConfig.host!.url!;
+  const hostUrl = skyuxConfig.host.url;
 
   if (hostUrl.endsWith('/')) {
     throw new Error(

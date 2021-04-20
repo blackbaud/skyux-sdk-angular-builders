@@ -50,7 +50,7 @@ function getDevServerWepbackConfigTransformer(
 
     const openHostUrlPlugin = new SkyuxOpenHostUrlPlugin({
       externals: skyuxConfig.app?.externals,
-      host: skyuxConfig.host!,
+      host: skyuxConfig.host,
       localUrl,
       open: options.skyuxOpen!,
       baseHref
