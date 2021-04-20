@@ -4,6 +4,9 @@ import {
   executeDevServerBuilder
 } from '@angular-devkit/build-angular';
 
+import { from, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+
 import { getAvailablePort } from '../../shared/port-finder';
 import { getSkyuxConfig } from '../../shared/skyux-config-utils';
 
@@ -11,11 +14,11 @@ import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 import { getDevServerTransforms } from './dev-server-transforms';
 import { applySkyuxDevServerOptions } from './dev-server-utils';
 
-async function executeSkyuxDevServerBuilder(
+async function setup(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
-): Promise<DevServerBuilderOutput> {
-  const skyuxConfig = getSkyuxConfig();
+): Promise<void> {
+  applySkyuxDevServerOptions(options, context);
 
   const preferredPort = options.port;
   const port = await getAvailablePort(preferredPort);
@@ -25,14 +28,23 @@ async function executeSkyuxDevServerBuilder(
       `The requested port ${preferredPort} is not available; using ${port}.`
     );
   }
+}
 
-  applySkyuxDevServerOptions(options, context);
+function executeSkyuxDevServerBuilder(
+  options: SkyuxDevServerBuilderOptions,
+  context: BuilderContext
+): Observable<DevServerBuilderOutput> {
+  const skyuxConfig = getSkyuxConfig();
 
-  return executeDevServerBuilder(
-    options,
-    context,
-    getDevServerTransforms(options, context, skyuxConfig)
-  ).toPromise();
+  return from(setup(options, context)).pipe(
+    switchMap(() => {
+      return executeDevServerBuilder(
+        options,
+        context,
+        getDevServerTransforms(options, context, skyuxConfig)
+      );
+    })
+  );
 }
 
 export default createBuilder<

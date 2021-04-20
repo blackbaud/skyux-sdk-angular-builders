@@ -107,9 +107,13 @@ describe('dev-server builder', () => {
     return executDevServerBuilderSpy.calls.mostRecent().args[0];
   }
 
+  function runBuilder() {
+    return mock.reRequire('./dev-server').default.toPromise();
+  }
+
   describe('configuration', () => {
     it('should set defaults', async () => {
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       const actualOptions = getActualOptions();
 
@@ -131,7 +135,7 @@ describe('dev-server builder', () => {
 
     it('should find a different port if default unavailable', async () => {
       mockPort = 4201;
-      await mock.reRequire('./dev-server');
+      await runBuilder();
       const actualOptions = getActualOptions();
       expect(actualOptions.port).toEqual(mockPort);
     });
@@ -151,7 +155,7 @@ describe('dev-server builder', () => {
     }
 
     it('should add `SkyuxOpenHostUrlPlugin` to webpack plugins', async () => {
-      await mock.reRequire('./dev-server');
+      await runBuilder();
       const plugin = getOpenHostUrlPlugin();
       expect(plugin).toBeDefined();
     });
@@ -171,7 +175,7 @@ describe('dev-server builder', () => {
         externals
       };
 
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       const plugin = getOpenHostUrlPlugin();
 
@@ -179,7 +183,7 @@ describe('dev-server builder', () => {
     });
 
     it('should add `SkyuxAppAssetsPlugin` to webpack plugins', async () => {
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       const plugin = actualWebpackConfig.plugins?.find(
         (p) => p instanceof SkyuxAppAssetsPlugin
@@ -193,13 +197,13 @@ describe('dev-server builder', () => {
         plugins: [new MockWebpackPlugin()]
       };
 
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       expect(actualWebpackConfig.plugins?.length).toEqual(3);
     });
 
     it('should add `SkyuxProtractorPlugin` when running e2e', async () => {
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       let plugin = getProtractorPlugin();
 
@@ -209,7 +213,7 @@ describe('dev-server builder', () => {
 
       mockContext.target.configuration = 'e2e';
 
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       plugin = getProtractorPlugin();
 
@@ -219,7 +223,7 @@ describe('dev-server builder', () => {
 
       mockContext.target.configuration = 'e2eProduction';
 
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       plugin = getProtractorPlugin();
 
@@ -231,7 +235,7 @@ describe('dev-server builder', () => {
     it('should pass Host URL to `SkyuxProtractorPlugin`', async () => {
       mockContext.target.configuration = 'e2e';
 
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       const protractorPlugin = getProtractorPlugin();
       const hostUrlPlugin = getOpenHostUrlPlugin();
