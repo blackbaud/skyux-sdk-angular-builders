@@ -1,14 +1,12 @@
-import { RuntimeConfig, SkyuxConfig } from '@skyux/config';
-
 import fs from 'fs-extra';
 import mergeWith from 'lodash.mergewith';
 
-interface PartialSkyAppConfig {
-  runtime: Partial<RuntimeConfig>;
-  skyux: SkyuxConfig;
-}
+import { SkyAppConfig, SkyuxConfig } from './skyux-config';
 
-function merge(original: SkyuxConfig, override: SkyuxConfig): SkyuxConfig {
+function merge(
+  original: Partial<SkyuxConfig>,
+  override: SkyuxConfig
+): SkyuxConfig {
   return mergeWith(original, override, (originalValue, overrideValue) => {
     if (Array.isArray(originalValue)) {
       return overrideValue;
@@ -24,8 +22,8 @@ function merge(original: SkyuxConfig, override: SkyuxConfig): SkyuxConfig {
 export function getSkyAppConfig(
   command: string,
   projectName: string
-): PartialSkyAppConfig {
-  const config: PartialSkyAppConfig = {
+): SkyAppConfig {
+  const config: SkyAppConfig = {
     runtime: {
       app: {
         base: `/${projectName}`,
@@ -54,7 +52,7 @@ export function getSkyuxConfig(command?: string): SkyuxConfig {
     );
   }
 
-  let skyuxConfig: SkyuxConfig = {};
+  let skyuxConfig = merge({}, DEFAULTS);
 
   const hierarchy = [
     {
@@ -76,8 +74,6 @@ export function getSkyuxConfig(command?: string): SkyuxConfig {
       skyuxConfig = merge(skyuxConfig, fs.readJsonSync(file.filePath));
     }
   });
-
-  skyuxConfig = merge(DEFAULTS, skyuxConfig);
 
   const hostUrl = skyuxConfig.host!.url!;
 

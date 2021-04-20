@@ -1,6 +1,5 @@
-import { SkyuxConfigHost } from '@skyux/config';
-
 import { SkyuxHostAsset } from './host-asset';
+import { SkyuxConfigHost } from './skyux-config';
 import { SkyuxConfigAppExternals } from './skyux-config-app-externals';
 
 /**

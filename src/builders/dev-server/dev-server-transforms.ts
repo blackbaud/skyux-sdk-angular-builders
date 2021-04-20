@@ -1,11 +1,11 @@
 import { BuilderContext } from '@angular-devkit/architect';
 import { ExecutionTransformer } from '@angular-devkit/build-angular';
-import { SkyuxConfig } from '@skyux/config';
 
 import { take } from 'rxjs/operators';
 import { Configuration as WebpackConfig } from 'webpack';
 
 import { getBaseHref } from '../../shared/context-utils';
+import { SkyuxConfig } from '../../shared/skyux-config';
 import { ensureBaseHref } from '../../shared/url-utils';
 import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';
 import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';

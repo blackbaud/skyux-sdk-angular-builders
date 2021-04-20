@@ -18,9 +18,9 @@ import {
   addPackageJsonDependency,
   NodeDependencyType
 } from '@schematics/angular/utility/dependencies';
-import { SkyuxConfig } from '@skyux/config';
 
 import { SkyuxDevServerBuilderOptions } from '../../builders/dev-server/dev-server-options';
+import { SkyuxConfig } from '../../shared/skyux-config';
 import {
   addModuleImportToRootModule,
   createHost

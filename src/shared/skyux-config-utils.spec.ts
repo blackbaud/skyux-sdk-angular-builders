@@ -1,7 +1,7 @@
-import { SkyuxConfig } from '@skyux/config';
-
 import mock from 'mock-require';
 import path from 'path';
+
+import { SkyuxConfig } from './skyux-config';
 
 describe('skyux config utils', () => {
   let mockSkyuxConfig: Partial<SkyuxConfig> | undefined;

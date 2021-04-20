@@ -1,12 +1,12 @@
 import * as angularArchitect from '@angular-devkit/architect';
 import * as buildAngular from '@angular-devkit/build-angular';
-import { SkyuxConfig } from '@skyux/config';
 
 import mock from 'mock-require';
 import { homedir } from 'os';
 import { of } from 'rxjs';
 import webpack from 'webpack';
 
+import { SkyuxConfig } from '../../shared/skyux-config';
 import { SkyuxAppAssetsPlugin } from '../../tools/webpack/plugins/app-assets/app-assets.plugin';
 import { SkyuxOpenHostUrlPlugin } from '../../tools/webpack/plugins/open-host-url/open-host-url.plugin';
 import { SkyuxProtractorPlugin } from '../../tools/webpack/plugins/protractor/protractor.plugin';
