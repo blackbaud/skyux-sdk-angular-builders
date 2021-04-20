@@ -17,7 +17,6 @@ export function applySkyuxDevServerOptions(
   context: BuilderContext
 ): void {
   options.host = options.host || 'localhost';
-  options.port = options.port || 4200;
 
   // Enforce HTTPS.
   options.ssl = true;

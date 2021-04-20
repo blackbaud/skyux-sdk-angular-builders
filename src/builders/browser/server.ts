@@ -1,9 +1,9 @@
 import cors from 'cors';
 import express from 'express';
 import https from 'https';
-import portfinder from 'portfinder';
 
 import { readCert } from '../../shared/cert-utils';
+import { getAvailablePort } from '../../shared/port-finder';
 
 import { SkyuxServerConfig } from './server-config';
 
@@ -26,7 +26,7 @@ export class SkyuxServer {
   }
 
   public async start(): Promise<number> {
-    const port = await portfinder.getPortPromise();
+    const port = await getAvailablePort();
 
     console.log(`Serving build results to https://localhost:${port}/`);
 
