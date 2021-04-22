@@ -21,27 +21,27 @@ ${skyxuPolyfillsCommentEnd}
 export async function modifyPolyfills(
   host: workspaces.WorkspaceHost
 ): Promise<void> {
-  const templatePath = 'src/polyfills.ts';
+  const polyfillsPath = 'src/polyfills.ts';
 
-  let polyfillsTs = await host.readFile(templatePath);
+  let polyfillsContent = await host.readFile(polyfillsPath);
 
-  const existingPolyfillsStart = polyfillsTs
+  const polyfillsContentStart = polyfillsContent
     .split(skyuxPolyfillsCommentStart)[0]
     .trim();
 
-  const existingPolyfillsEnd = polyfillsTs
+  const existingPolyfillsEnd = polyfillsContent
     .split(skyxuPolyfillsCommentEnd)[1]
     ?.trim();
 
-  polyfillsTs = `${existingPolyfillsStart}
+  polyfillsContent = `${polyfillsContentStart}
 
 ${skyuxPolyfillsContent}`;
 
   if (existingPolyfillsEnd) {
-    polyfillsTs = `${polyfillsTs}
+    polyfillsContent = `${polyfillsContent}
 ${existingPolyfillsEnd}
 `;
   }
 
-  await host.writeFile(templatePath, polyfillsTs);
+  await host.writeFile(polyfillsPath, polyfillsContent);
 }
