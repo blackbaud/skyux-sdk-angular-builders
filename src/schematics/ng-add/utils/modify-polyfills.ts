@@ -4,7 +4,7 @@ const skyuxPolyfillsCommentStart = `/*******************************************
  * SKY UX POLYFILLS - DO NOT MODIFY THIS SECTION
  */`;
 
-const skyxuPolyfillsCommentEnd = `/*
+const skyuxPolyfillsCommentEnd = `/*
  * END SKY UX POLYFILLS
  **************************************************************************************************/`;
 
@@ -15,7 +15,7 @@ const skyuxPolyfillsContent = `${skyuxPolyfillsCommentStart}
 // https://github.com/bevacqua/dragula/issues/602
 (window as any).global = window;
 
-${skyxuPolyfillsCommentEnd}
+${skyuxPolyfillsCommentEnd}
 `;
 
 export async function modifyPolyfills(
@@ -30,7 +30,7 @@ export async function modifyPolyfills(
     .trim();
 
   const existingPolyfillsEnd = polyfillsContent
-    .split(skyxuPolyfillsCommentEnd)[1]
+    .split(skyuxPolyfillsCommentEnd)[1]
     ?.trim();
 
   polyfillsContent = `${polyfillsContentStart}
