@@ -1,3 +1,11 @@
+# 4.0.0-alpha.35 (2021-04-22)
+
+- Added support for `chromedriver-version-matcher` for the `protractor` builder. [#107](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/107)
+- Added functionality to abort the `protractor` and `karma` builders if no spec files are found. [#107](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/107)
+- Added functionality to allow serving multiple applications at once. [#104](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/104)
+- Updated all builders to provide values for the `SkyAppConfig` provider. [#106](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/106)
+- Added a polyfill to address a bug with the `dragula` package. [#109](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/109)
+
 # 4.0.0-alpha.34 (2021-04-13)
 
 - Updated the `browser` builder to accept the `--skyux-serve` argument which serves the build results on SKY UX Host (for local testing purposes). [#96](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/96)
