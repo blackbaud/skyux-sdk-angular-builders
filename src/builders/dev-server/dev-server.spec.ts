@@ -17,6 +17,8 @@ class MockWebpackPlugin {
   public apply() {}
 }
 
+const DEFAULT_PORT = 4200;
+
 describe('dev-server builder', () => {
   let createBuilderSpy: jasmine.Spy;
   let executDevServerBuilderSpy: jasmine.Spy;
@@ -25,10 +27,12 @@ describe('dev-server builder', () => {
   let actualWebpackConfig: webpack.Configuration;
   let mockContext: any;
   let mockSkyuxConfig: SkyuxConfig;
+  let mockPort: number;
 
   beforeEach(() => {
     defaultOptions = {
-      browserTarget: 'foo:build'
+      browserTarget: 'foo:build',
+      port: DEFAULT_PORT
     };
 
     defaultWebpackConfig = {};
@@ -36,6 +40,9 @@ describe('dev-server builder', () => {
     actualWebpackConfig = {};
 
     mockContext = {
+      logger: {
+        info() {}
+      },
       target: {
         project: 'foo',
         configuration: ''
@@ -75,6 +82,11 @@ describe('dev-server builder', () => {
       fromFileSync: () => 'MOCK_HASH'
     });
 
+    mockPort = DEFAULT_PORT;
+    mock('../../shared/port-finder', {
+      getAvailablePort: () => Promise.resolve(mockPort)
+    });
+
     mockSkyuxConfig = {
       host: {
         url: 'https://foo.blackbaud.com/'
@@ -95,9 +107,13 @@ describe('dev-server builder', () => {
     return executDevServerBuilderSpy.calls.mostRecent().args[0];
   }
 
+  function runBuilder() {
+    return mock.reRequire('./dev-server').default.toPromise();
+  }
+
   describe('configuration', () => {
     it('should set defaults', async () => {
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       const actualOptions = getActualOptions();
 
@@ -116,6 +132,13 @@ describe('dev-server builder', () => {
         sslKey: `${homedir()}/.skyux/certs/skyux-server.key`
       });
     });
+
+    it('should find a different port if default unavailable', async () => {
+      mockPort = 4201;
+      await runBuilder();
+      const actualOptions = getActualOptions();
+      expect(actualOptions.port).toEqual(mockPort);
+    });
   });
 
   describe('webpack config', () => {
@@ -132,7 +155,7 @@ describe('dev-server builder', () => {
     }
 
     it('should add `SkyuxOpenHostUrlPlugin` to webpack plugins', async () => {
-      await mock.reRequire('./dev-server');
+      await runBuilder();
       const plugin = getOpenHostUrlPlugin();
       expect(plugin).toBeDefined();
     });
@@ -152,7 +175,7 @@ describe('dev-server builder', () => {
         externals
       };
 
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       const plugin = getOpenHostUrlPlugin();
 
@@ -160,7 +183,7 @@ describe('dev-server builder', () => {
     });
 
     it('should add `SkyuxAppAssetsPlugin` to webpack plugins', async () => {
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       const plugin = actualWebpackConfig.plugins?.find(
         (p) => p instanceof SkyuxAppAssetsPlugin
@@ -174,13 +197,13 @@ describe('dev-server builder', () => {
         plugins: [new MockWebpackPlugin()]
       };
 
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       expect(actualWebpackConfig.plugins?.length).toEqual(3);
     });
 
     it('should add `SkyuxProtractorPlugin` when running e2e', async () => {
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       let plugin = getProtractorPlugin();
 
@@ -190,7 +213,7 @@ describe('dev-server builder', () => {
 
       mockContext.target.configuration = 'e2e';
 
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       plugin = getProtractorPlugin();
 
@@ -200,7 +223,7 @@ describe('dev-server builder', () => {
 
       mockContext.target.configuration = 'e2eProduction';
 
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       plugin = getProtractorPlugin();
 
@@ -212,7 +235,7 @@ describe('dev-server builder', () => {
     it('should pass Host URL to `SkyuxProtractorPlugin`', async () => {
       mockContext.target.configuration = 'e2e';
 
-      await mock.reRequire('./dev-server');
+      await runBuilder();
 
       const protractorPlugin = getProtractorPlugin();
       const hostUrlPlugin = getOpenHostUrlPlugin();

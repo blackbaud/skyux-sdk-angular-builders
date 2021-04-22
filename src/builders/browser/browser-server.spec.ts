@@ -119,8 +119,8 @@ describe('browser server', () => {
     openSpy = jasmine.createSpy('open');
     mock('open', openSpy);
 
-    mock('portfinder', {
-      getPortPromise: () => Promise.resolve(1111)
+    mock('../../shared/port-finder', {
+      getAvailablePort: () => Promise.resolve(1111)
     });
 
     mock('./browser-transforms', {
