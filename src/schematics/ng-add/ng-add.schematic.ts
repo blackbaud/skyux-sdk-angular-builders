@@ -27,6 +27,7 @@ import {
 } from '../utils/schematics-utils';
 
 import { SkyuxNgAddOptions } from './schema';
+import { modifyPolyfills } from './utils/modify-polyfills';
 
 async function readJson(host: workspaces.WorkspaceHost, filePath: string) {
   const contents = await host.readFile(filePath);
@@ -289,6 +290,7 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await modifyKarmaConfig(host, project.root);
     await modifyProtractorConfig(host, project.root);
     await modifyAppComponentTemplate(host);
+    await modifyPolyfills(host);
     await setupLibraries(host, workspace);
 
     addPackageJsonDependency(tree, {

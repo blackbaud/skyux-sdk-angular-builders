@@ -7,14 +7,19 @@ import path from 'path';
 
 import { createTestApp, generateTestLibrary } from '../testing/scaffold';
 
+import * as modifyPolyfillsModule from './utils/modify-polyfills';
+
 const COLLECTION_PATH = path.resolve(__dirname, '../../../collection.json');
 
 describe('ng-add.schematic', () => {
   let app: UnitTestTree;
   let runner: SchematicTestRunner;
   let workspaceTree: UnitTestTree;
+  let modifyPolyfillsSpy: jasmine.Spy;
 
   beforeEach(async () => {
+    modifyPolyfillsSpy = spyOn(modifyPolyfillsModule, 'modifyPolyfills');
+
     runner = new SchematicTestRunner('schematics', COLLECTION_PATH);
 
     const result = await createTestApp(runner, {
@@ -292,6 +297,19 @@ describe('ng-add.schematic', () => {
     expect(tsConfig.includes('"esModuleInterop": true')).toBe(
       true,
       'Expected `esModuleInterop` to be set to `true`.'
+    );
+  });
+
+  it('should modify polyfills', async () => {
+    await runSchematic(app, {
+      project: 'foobar'
+    });
+
+    expect(modifyPolyfillsSpy).toHaveBeenCalledWith(
+      jasmine.objectContaining({
+        readFile: jasmine.any(Function),
+        writeFile: jasmine.any(Function)
+      })
     );
   });
 
