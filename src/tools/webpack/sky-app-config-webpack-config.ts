@@ -1,20 +1,22 @@
 import path from 'path';
 import webpack from 'webpack';
 
-export function applyStartupConfigWebpackConfig(
+export function applySkyAppConfigWebpackConfig(
   webpackConfig: webpack.Configuration,
-  baseHref: string
+  command: string,
+  projectName: string
 ): void {
   webpackConfig.module!.rules.push({
     enforce: 'pre',
-    test: /(\/|\\)__skyux(\/|\\)startupconfig\.json$/,
+    test: /(\/|\\)__skyux(\/|\\)skyappconfig\.json$/,
     use: {
       loader: path.resolve(
         __dirname,
-        './loaders/startup-config/startup-config.loader'
+        './loaders/sky-app-config/sky-app-config.loader'
       ),
       options: {
-        baseHref
+        command,
+        projectName
       }
     }
   });

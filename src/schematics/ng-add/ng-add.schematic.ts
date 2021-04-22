@@ -252,6 +252,16 @@ function createAppFiles(
   return mergeWith(templateSource, MergeStrategy.Overwrite);
 }
 
+async function setupLibraries(
+  host: workspaces.WorkspaceHost,
+  workspace: workspaces.WorkspaceDefinition
+): Promise<void> {
+  // Modify the karma configs for all libraries.
+  workspace.projects.forEach(async (project) => {
+    await modifyKarmaConfig(host, project.root);
+  });
+}
+
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
   return async (tree: Tree, context: SchematicContext) => {
     const host = createHost(tree);
@@ -281,6 +291,7 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await modifyProtractorConfig(host, project.root);
     await modifyAppComponentTemplate(host);
     await modifyPolyfills(host);
+    await setupLibraries(host, workspace);
 
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,

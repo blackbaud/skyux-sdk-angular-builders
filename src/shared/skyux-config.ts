@@ -48,6 +48,39 @@
 //   }
 // }
 
+// export interface RuntimeConfig {
+//   app: RuntimeConfigApp;
+//   command?: string;  // Dynamically added in "higher up" webpacks
+//   componentsPattern: string;
+//   componentsIgnorePattern: string;
+//   handle404?: boolean;  // Dynamically added in sky-pages-module-generator.js
+//   includeRouteModule: boolean;
+//   pactConfig?: SkyuxPactConfig;
+//   params: SkyAppRuntimeConfigParams;
+//   routes?: Object[]; // Dynamically added in sky-pages-module-generator.js
+//   routesPattern: string;
+//   runtimeAlias: string;
+//   spaPathAlias: string;
+//   skyPagesOutAlias: string;
+//   skyuxPathAlias: string;
+//   srcPath: string;
+//   useTemplateUrl: boolean;
+// }
+
+export interface RuntimeConfigApp {
+  base: string;
+  inject: boolean;
+  name?: string;
+  template: string;
+}
+
+export interface RuntimeConfig {
+  app: RuntimeConfigApp;
+  command?: string;
+  // This should always be set at runtime, but for generating the config to pass to the Webpack loader, it is optional.
+  params?: {};
+}
+
 /**
  * Dynamically injects CSS and JavaScript files into SKY UX Host.
  * You should have a specific use-case for an externals and they must
@@ -118,6 +151,8 @@ export interface SkyuxConfig {
     };
   };
 
+  appSettings?: {};
+
   auth?: boolean;
 
   codeCoverageThreshold?: 'none' | 'standard' | 'strict';
@@ -127,4 +162,9 @@ export interface SkyuxConfig {
   host: SkyuxConfigHost;
 
   omnibar?: {};
+}
+
+export interface SkyAppConfig {
+  runtime: RuntimeConfig;
+  skyux: SkyuxConfig;
 }

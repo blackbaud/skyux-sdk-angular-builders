@@ -3,12 +3,10 @@ import { ExecutionTransformer } from '@angular-devkit/build-angular';
 
 import { Configuration as WebpackConfig } from 'webpack';
 
-import { getBaseHref } from '../../shared/context-utils';
 import { applyAppAssetsWebpackConfig } from '../../tools/webpack/app-assets-webpack-config';
 import { SkyuxHostAssetsFallbackPlugin } from '../../tools/webpack/plugins/host-assets-fallback/host-assets-fallback.plugin';
 import { SkyuxSaveHostMetadataPlugin } from '../../tools/webpack/plugins/save-host-metadata/save-host-metadata.plugin';
-import { applySkyuxConfigWebpackConfig } from '../../tools/webpack/skyux-config-webpack-config';
-import { applyStartupConfigWebpackConfig } from '../../tools/webpack/startup-config-webpack-config';
+import { applySkyAppConfigWebpackConfig } from '../../tools/webpack/sky-app-config-webpack-config';
 
 import { SkyuxBrowserBuilderOptions } from './browser-options';
 
@@ -22,8 +20,6 @@ function getBrowserWepbackConfigTransformer(
   context: BuilderContext
 ): ExecutionTransformer<WebpackConfig> {
   return (webpackConfig) => {
-    const baseHref = getBaseHref(context);
-
     webpackConfig.plugins = webpackConfig.plugins || [];
 
     webpackConfig.plugins.push(
@@ -32,8 +28,11 @@ function getBrowserWepbackConfigTransformer(
     );
 
     applyAppAssetsWebpackConfig(webpackConfig, options.deployUrl!);
-    applySkyuxConfigWebpackConfig(webpackConfig);
-    applyStartupConfigWebpackConfig(webpackConfig, baseHref);
+    applySkyAppConfigWebpackConfig(
+      webpackConfig,
+      'build',
+      context.target!.project!
+    );
 
     return webpackConfig;
   };

@@ -1,7 +1,5 @@
-import {
-  SkyuxConfigAppExternals,
-  SkyuxConfigHost
-} from '../../../../shared/skyux-config';
+import { SkyuxConfigHost } from '../../../../shared/skyux-config';
+import { SkyuxConfigAppExternals } from '../../../../shared/skyux-config-app-externals';
 
 export interface SkyuxOpenHostUrlPluginConfig {
   /**

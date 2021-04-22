@@ -32,6 +32,7 @@ import {
 } from '@blackbaud/skyux-lib-help';
 
 import {
+  SkyAppConfig,
   SkyAppConfigHost,
   SkyAppRuntimeConfigParamsProvider
 } from '@skyux/config';
@@ -54,10 +55,6 @@ import {
   SkyThemeService,
   SkyThemeSettings
 } from '@skyux/theme';
-
-import {
-  SkyuxStartupService
-} from '../startup.service';
 
 // Defined globally by the SKY UX Host service.
 declare const BBAuthClient: any;
@@ -133,7 +130,7 @@ export class ShellComponent implements OnInit, OnDestroy {
     private zone: NgZone,
     private hostConfig: SkyAppConfigHost,
     private runtimeParams: SkyAppRuntimeConfigParamsProvider,
-    private startupSvc: SkyuxStartupService,
+    private config: SkyAppConfig,
     viewport: SkyAppViewportService,
     renderer: Renderer2,
     @Optional() private helpInitService?: HelpInitializationService,
@@ -227,7 +224,7 @@ export class ShellComponent implements OnInit, OnDestroy {
     const baseUrl: string =
       (
         this.hostConfig.host.url +
-        this.startupSvc.config.baseHref.substr(0, this.startupSvc.config.baseHref.length - 1)
+        this.config.runtime.app.base
       ).toLowerCase();
 
     let nav: any;
@@ -281,8 +278,8 @@ export class ShellComponent implements OnInit, OnDestroy {
   }
 
   private initShellComponents(): void {
-    const omnibarConfig = this.startupSvc.config.omnibar;
-    const helpConfig = this.startupSvc.config.help;
+    const omnibarConfig = this.config.skyux.omnibar;
+    const helpConfig = this.config.skyux.help;
 
     const loadOmnibar = (args?: SkyAppOmnibarReadyArgs) => {
       this.setParamsFromQS(omnibarConfig);
@@ -293,7 +290,7 @@ export class ShellComponent implements OnInit, OnDestroy {
         omnibarConfig.enableHelp = true;
       }
 
-      omnibarConfig.allowAnonymous = !this.startupSvc.config.auth;
+      omnibarConfig.allowAnonymous = !this.config.skyux.auth;
 
       this.setOmnibarArgsOverrides(omnibarConfig, args);
 
@@ -365,7 +362,7 @@ export class ShellComponent implements OnInit, OnDestroy {
   }
 
   private getInitialThemeName(): 'default' | 'modern' {
-    const themingConfig = this.startupSvc.config.theming;
+    const themingConfig = this.config.skyux.app?.theming;
 
     if (themingConfig) {
       const svcId = this.runtimeParams.params.get('svcid');
