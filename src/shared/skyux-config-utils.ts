@@ -3,6 +3,12 @@ import mergeWith from 'lodash.mergewith';
 
 import { SkyAppConfig, SkyuxConfig } from './skyux-config';
 
+const DEFAULTS: SkyuxConfig = {
+  host: {
+    url: 'https://host.nxt.blackbaud.com'
+  }
+};
+
 function merge(
   original: Partial<SkyuxConfig>,
   override: SkyuxConfig
@@ -15,9 +21,8 @@ function merge(
 }
 
 /**
- * @name getSkyAppConfig
- * @param {argv} Optional arguments from command line
- * @returns [SkyAppConfig] skyAppConfig
+ * Creates an object containing values from skyuxconfig.json along with configuration options determined at runtime.
+ * @param {command} The name of the CLI command invoking this function.
  */
 export function getSkyAppConfig(
   command: string,
@@ -39,12 +44,10 @@ export function getSkyAppConfig(
   return config;
 }
 
-const DEFAULTS: SkyuxConfig = {
-  host: {
-    url: 'https://host.nxt.blackbaud.com'
-  }
-};
-
+/**
+ * Creates an object containing values from skyuxconfig.json.
+ * @param command The name of the CLI command invoking this function.
+ */
 export function getSkyuxConfig(command?: string): SkyuxConfig {
   if (!fs.existsSync('skyuxconfig.json')) {
     throw new Error(
