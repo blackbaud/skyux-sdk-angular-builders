@@ -366,6 +366,21 @@ describe('ng-add.schematic', () => {
       expect(contents).toContain('DO NOT MODIFY');
     });
 
+    it("should modify a library's karma.conf.js file", async () => {
+      const library = await generateTestLibrary(runner, workspaceTree, {
+        name: 'foolib'
+      });
+
+      await runSchematic(library, {
+        project: 'foobar'
+      });
+
+      const contents = library
+        .read('projects/foolib/karma.conf.js')
+        ?.toString();
+      expect(contents).toContain('DO NOT MODIFY');
+    });
+
     it('should set codeCoverage and codeCoverageExclude', async () => {
       const library = await generateTestLibrary(runner, workspaceTree, {
         name: 'foolib'
