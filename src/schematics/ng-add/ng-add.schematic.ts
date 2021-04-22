@@ -293,6 +293,13 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
 
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
+      name: '@blackbaud-internal/skyux-lib-ui-config-service',
+      version: '^10.1.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
       name: '@blackbaud/help-client',
       version: '^3.0.0',
       overwrite: true
@@ -322,7 +329,14 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
       name: '@skyux/core',
-      version: '^4.4.0',
+      version: '^4.5.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/http',
+      version: '^4.1.0',
       overwrite: true
     });
 
@@ -343,7 +357,7 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
       name: '@skyux/theme',
-      version: '^4.15.3',
+      version: '^4.15.4',
       overwrite: true
     });
 
