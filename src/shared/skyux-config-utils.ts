@@ -1,13 +1,9 @@
 import fs from 'fs-extra';
 import mergeWith from 'lodash.mergewith';
 
-import { SkyAppConfig, SkyuxConfig } from './skyux-config';
+import { SkyuxConfig } from './skyux-config';
 
-const DEFAULTS: SkyuxConfig = {
-  host: {
-    url: 'https://host.nxt.blackbaud.com'
-  }
-};
+const DEFAULTS: SkyuxConfig = {};
 
 function merge(
   original: Partial<SkyuxConfig>,
@@ -18,30 +14,6 @@ function merge(
       return overrideValue;
     }
   });
-}
-
-/**
- * Creates an object containing values from skyuxconfig.json along with configuration options determined at runtime.
- * @param {command} The name of the CLI command invoking this function.
- */
-export function getSkyAppConfig(
-  command: string,
-  projectName: string
-): SkyAppConfig {
-  const config: SkyAppConfig = {
-    runtime: {
-      app: {
-        base: `/${projectName}`,
-        inject: false,
-        name: projectName,
-        template: ''
-      },
-      command
-    },
-    skyux: getSkyuxConfig(command)
-  };
-
-  return config;
 }
 
 /**
@@ -77,14 +49,6 @@ export function getSkyuxConfig(command?: string): SkyuxConfig {
       skyuxConfig = merge(skyuxConfig, fs.readJsonSync(file.filePath));
     }
   });
-
-  const hostUrl = skyuxConfig.host.url;
-
-  if (hostUrl.endsWith('/')) {
-    throw new Error(
-      `[@skyux-sdk/angular-builders] The host URL must not end with a forward slash. You provided: "${hostUrl}"`
-    );
-  }
 
   return skyuxConfig;
 }

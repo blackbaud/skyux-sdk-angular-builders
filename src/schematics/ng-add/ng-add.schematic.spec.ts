@@ -7,19 +7,14 @@ import path from 'path';
 
 import { createTestApp, generateTestLibrary } from '../testing/scaffold';
 
-import * as modifyPolyfillsModule from './utils/modify-polyfills';
-
 const COLLECTION_PATH = path.resolve(__dirname, '../../../collection.json');
 
 describe('ng-add.schematic', () => {
   let app: UnitTestTree;
   let runner: SchematicTestRunner;
   let workspaceTree: UnitTestTree;
-  let modifyPolyfillsSpy: jasmine.Spy;
 
   beforeEach(async () => {
-    modifyPolyfillsSpy = spyOn(modifyPolyfillsModule, 'modifyPolyfills');
-
     runner = new SchematicTestRunner('schematics', COLLECTION_PATH);
 
     const result = await createTestApp(runner, {
@@ -115,15 +110,12 @@ describe('ng-add.schematic', () => {
     );
   });
 
-  it('should overwrite the default build, serve, test, and e2e architects', async () => {
+  it('should overwrite the default serve, test, and e2e architects', async () => {
     await runSchematic(app, {
       project: 'foobar'
     });
 
     const angularJson = getAngularJson(app);
-    expect(angularJson.projects.foobar.architect.build.builder).toEqual(
-      '@skyux-sdk/angular-builders:browser'
-    );
     expect(angularJson.projects.foobar.architect.serve.builder).toEqual(
       '@skyux-sdk/angular-builders:dev-server'
     );
@@ -143,7 +135,7 @@ describe('ng-add.schematic', () => {
     const packageJson = JSON.parse(app.readContent('package.json'));
     expect(packageJson.dependencies).toEqual(
       jasmine.objectContaining({
-        '@skyux/assets': '^4.0.0'
+        '@skyux/theme': '^4.15.3'
       })
     );
     expect(packageJson.devDependencies).toEqual(
@@ -193,18 +185,6 @@ describe('ng-add.schematic', () => {
   });
 
   it('should add theme stylesheets to angular.json', async () => {
-    app.create(
-      'skyuxconfig.json',
-      JSON.stringify({
-        app: {
-          theming: {
-            theme: 'default',
-            supportedThemes: ['default', 'modern']
-          }
-        }
-      })
-    );
-
     await runSchematic(app, {
       project: 'foobar'
     });
@@ -212,70 +192,7 @@ describe('ng-add.schematic', () => {
     const angularJson = getAngularJson(app);
     expect(
       angularJson.projects['foobar'].architect.build.options.styles
-    ).toEqual([
-      '@skyux/theme/css/sky.css',
-      '@skyux/theme/css/themes/modern/styles.css',
-      'src/styles.css'
-    ]);
-  });
-
-  it('should overwrite SkyuxModule if it exists', async () => {
-    app.create('src/app/__skyux/skyux.module.ts', 'foobar');
-    await runSchematic(app, {
-      project: 'foobar'
-    });
-    expect(app.readContent('src/app/__skyux/skyux.module.ts')).not.toEqual(
-      'foobar'
-    );
-  });
-
-  it('should wrap the app component template with the shell component', async () => {
-    app.overwrite(
-      'src/app/app.component.html',
-      `<div>
-  Some text
-
-  <span>Some more text</span>
-
-
-</div>`
-    );
-
-    await runSchematic(app, {
-      project: 'foobar'
-    });
-
-    const appTemplate = app.readContent('src/app/app.component.html');
-
-    expect(appTemplate).toBe(
-      `<!-- SKY UX SHELL SUPPORT - DO NOT REMOVE -->
-<!-- Enables omnibar, help, and other shell components configured in skyuxconfig.json. -->
-<skyux-app-shell>
-  <div>
-    Some text
-
-    <span>Some more text</span>
-
-
-  </div>
-</skyux-app-shell>
-`
-    );
-  });
-
-  it('should not add the shell component to the app component template if it is already present', async () => {
-    app.overwrite(
-      'src/app/app.component.html',
-      '<skyux-app-shell></skyux-app-shell>'
-    );
-
-    await runSchematic(app, {
-      project: 'foobar'
-    });
-
-    const appTemplate = app.readContent('src/app/app.component.html');
-
-    expect(appTemplate).toBe('<skyux-app-shell></skyux-app-shell>');
+    ).toEqual(['@skyux/theme/css/sky.css', 'src/styles.css']);
   });
 
   it('should adjust settings in tsconfig.json', async () => {
@@ -289,27 +206,6 @@ describe('ng-add.schematic', () => {
     expect(tsConfig.includes('"target": "es5"')).toBe(
       true,
       'Expected `target` to be set to "es5".'
-    );
-    expect(tsConfig.includes('"resolveJsonModule": true')).toBe(
-      true,
-      'Expected `resolveJsonModule` to be set to `true`.'
-    );
-    expect(tsConfig.includes('"esModuleInterop": true')).toBe(
-      true,
-      'Expected `esModuleInterop` to be set to `true`.'
-    );
-  });
-
-  it('should modify polyfills', async () => {
-    await runSchematic(app, {
-      project: 'foobar'
-    });
-
-    expect(modifyPolyfillsSpy).toHaveBeenCalledWith(
-      jasmine.objectContaining({
-        readFile: jasmine.any(Function),
-        writeFile: jasmine.any(Function)
-      })
     );
   });
 
@@ -327,35 +223,6 @@ describe('ng-add.schematic', () => {
       ).toBeRejectedWithError(
         'Expected node projects/foobar/architect/serve in angular.json!'
       );
-    });
-  });
-
-  describe('build', () => {
-    it("should throw an error if specified project doesn't include an `architect.build` property", async () => {
-      // Create an incorrectly formatted project config.
-      const angularJson = getAngularJson(app);
-      delete angularJson.projects.foobar.architect.build;
-      writeAngularJson(app, angularJson);
-
-      await expectAsync(
-        runSchematic(app, {
-          project: 'foobar'
-        })
-      ).toBeRejectedWithError(
-        'Expected node projects/foobar/architect/build in angular.json!'
-      );
-    });
-
-    it('should set options for browser builder', async () => {
-      await runSchematic(app, {
-        project: 'foobar'
-      });
-
-      const angularJson = getAngularJson(app);
-      expect(
-        angularJson.projects.foobar.architect.build.configurations.production
-          .outputHashing
-      ).toEqual('bundles');
     });
   });
 
@@ -399,7 +266,7 @@ describe('ng-add.schematic', () => {
       expect(contents).toContain('DO NOT MODIFY');
     });
 
-    it('should set codeCoverage and codeCoverageExclude', async () => {
+    it('should set codeCoverage', async () => {
       const library = await generateTestLibrary(runner, workspaceTree, {
         name: 'foolib'
       });
@@ -411,7 +278,6 @@ describe('ng-add.schematic', () => {
       const angularJson = getAngularJson(library);
       const options = angularJson.projects.foolib.architect.test.options;
       expect(options.codeCoverage).toEqual(true);
-      expect(options.codeCoverageExclude).toEqual(['src/app/__skyux/**/*']);
     });
   });
 
@@ -451,16 +317,14 @@ describe('ng-add.schematic', () => {
         angularJson.projects.foobar.architect.serve.configurations.e2e
       ).toEqual({
         browserTarget: 'foobar:build',
-        open: false,
-        skyuxOpen: false
+        open: false
       });
 
       expect(
         angularJson.projects.foobar.architect.serve.configurations.e2eProduction
       ).toEqual({
         browserTarget: 'foobar:build:production',
-        open: false,
-        skyuxOpen: false
+        open: false
       });
 
       expect(
