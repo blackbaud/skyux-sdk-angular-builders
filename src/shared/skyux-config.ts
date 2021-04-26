@@ -1,5 +1,5 @@
 export interface SkyuxConfig {
-  codeCoverageThreshold?: 'none' | 'standard' | 'strict';
+  codeCoverageThreshold?: 'none' | 'standard' | 'strict'; // <-- Move to angular.json?
   // librarySettings?: {
   //   whitelistedNonPeerDependencies: string[];
   // };
