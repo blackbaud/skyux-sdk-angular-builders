@@ -10,6 +10,9 @@ function merge(
   override: SkyuxConfig
 ): SkyuxConfig {
   return mergeWith(original, override, (originalValue, overrideValue) => {
+    // TODO: This is a feature we want to keep for future SkyuxConfig properties.
+    // Remove the `istanbul ignore` once we have a test case for it.
+    /* istanbul ignore if */
     if (Array.isArray(originalValue)) {
       return overrideValue;
     }
