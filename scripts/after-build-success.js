@@ -18,8 +18,7 @@ function copyFilesToDist() {
     ['CHANGELOG.md'],
     ['package.json'],
     ['builders.json'],
-    ['collection.json'],
-    ['src/schematics/ng-add/files']
+    ['collection.json']
   ];
 
   pathsToCopy.forEach((pathArr) => {
@@ -38,11 +37,6 @@ function copyFilesToDist() {
 
 function mergeBuilderSchemas() {
   const schemaConfigs = [
-    {
-      baseSchemaPath:
-        './node_modules/@angular-devkit/build-angular/src/browser/schema.json',
-      schemaPath: './dist/src/builders/browser/schema.ext.json'
-    },
     {
       baseSchemaPath:
         './node_modules/@angular-devkit/build-angular/src/dev-server/schema.json',
