@@ -13,7 +13,12 @@ function executeSkyuxDevServerBuilder(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
 ): Observable<DevServerBuilderOutput> {
-  applySkyuxDevServerOptions(options);
+  try {
+    applySkyuxDevServerOptions(options);
+  } catch (err) {
+    context.logger.fatal(err.message);
+    process.exit(1);
+  }
 
   return executeDevServerBuilder(options, context);
 }

@@ -9,6 +9,4 @@ export function applySkyuxDevServerOptions(
   options.ssl = true;
   options.sslCert = getCertPath('skyux-server.crt');
   options.sslKey = getCertPath('skyux-server.key');
-
-  options.open = true;
 }
