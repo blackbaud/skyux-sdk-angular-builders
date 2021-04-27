@@ -73,7 +73,7 @@ function getConfig(): ProtractorConfig {
    * @see: https://github.com/blackbaud/skyux-sdk-e2e/blob/master/src/host-browser/host-browser.ts#L32
    */
   config.params = {
-    skyuxHostUrl: config.baseUrl?.replace('http://', 'https://')
+    skyuxHostUrl: config.baseUrl!.replace('http://', 'https://')
   };
 
   // Apply platform config overrides.
