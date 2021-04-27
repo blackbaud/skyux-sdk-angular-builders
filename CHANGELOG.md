@@ -1,3 +1,7 @@
+# 5.0.0-alpha.0 (2021-04-27)
+
+- Removed all features specific to the SKY UX Host platform. [#110](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/110) [#111](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/111)
+
 # 4.0.0-alpha.35 (2021-04-22)
 
 - Added support for `chromedriver-version-matcher` for the `protractor` builder. [#107](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/107)
