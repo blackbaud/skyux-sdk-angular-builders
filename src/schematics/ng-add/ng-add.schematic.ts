@@ -11,7 +11,6 @@ import {
   NodeDependencyType
 } from '@schematics/angular/utility/dependencies';
 
-import { SkyuxDevServerBuilderOptions } from '../../builders/dev-server/dev-server-options';
 import { createHost } from '../utils/schematics-utils';
 
 import { SkyuxNgAddOptions } from './schema';
@@ -51,16 +50,6 @@ async function modifyAngularJson(
 
   if (architectConfig.e2e) {
     architectConfig.e2e.builder = '@skyux-sdk/angular-builders:protractor';
-    architectConfig.e2e.options!.devServerTarget = `${projectName}:serve:e2e`;
-    architectConfig.e2e.configurations!.production!.devServerTarget = `${projectName}:serve:e2eProduction`;
-    architectConfig.serve.configurations!.e2e = {
-      browserTarget: `${projectName}:build`,
-      open: false
-    } as SkyuxDevServerBuilderOptions;
-    architectConfig.serve.configurations!.e2eProduction = {
-      browserTarget: `${projectName}:build:production`,
-      open: false
-    } as SkyuxDevServerBuilderOptions;
   } else {
     throw new SchematicsException(
       `Expected node projects/${projectName}/architect/e2e in angular.json!`
@@ -196,15 +185,8 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
 
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
-      name: '@skyux/core',
+      name: '@skyux/config',
       version: '^4.4.0',
-      overwrite: true
-    });
-
-    addPackageJsonDependency(tree, {
-      type: NodeDependencyType.Default,
-      name: '@skyux/i18n',
-      version: '^4.0.3',
       overwrite: true
     });
 

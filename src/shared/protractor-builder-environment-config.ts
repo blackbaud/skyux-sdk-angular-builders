@@ -8,9 +8,4 @@ export interface SkyuxProtractorBuilderEnvironmentConfig {
    * Options applied to the Angular CLI Protractor builder.
    */
   builderOptions?: SkyuxProtractorBuilderOptions;
-
-  /**
-   * The fully-formed SKY UX Host URL, including query parameters.
-   */
-  skyuxHostUrl?: string;
 }

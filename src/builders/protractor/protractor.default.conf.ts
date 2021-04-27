@@ -69,11 +69,11 @@ function getConfig(): ProtractorConfig {
   };
 
   /**
-   * Save the full SKY UX Host URL so that `@skyux-sdk/e2e` has access to it.
+   * Set the Host URL to the localhost URL so that `@skyux-sdk/e2e` doesn't throw an error.
    * @see: https://github.com/blackbaud/skyux-sdk-e2e/blob/master/src/host-browser/host-browser.ts#L32
    */
   config.params = {
-    skyuxHostUrl: env.skyuxHostUrl // <-- TODO: Remove?
+    skyuxHostUrl: config.baseUrl!.replace('http://', 'https://')
   };
 
   // Apply platform config overrides.

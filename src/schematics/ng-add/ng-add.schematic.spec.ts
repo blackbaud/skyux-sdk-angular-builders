@@ -305,35 +305,5 @@ describe('ng-add.schematic', () => {
       const contents = app.read('e2e/protractor.conf.js')?.toString();
       expect(contents).toContain('DO NOT MODIFY');
     });
-
-    it('should modify settings in angular.json', async () => {
-      await runSchematic(app, {
-        project: 'foobar'
-      });
-
-      const angularJson = getAngularJson(app);
-
-      expect(
-        angularJson.projects.foobar.architect.serve.configurations.e2e
-      ).toEqual({
-        browserTarget: 'foobar:build',
-        open: false
-      });
-
-      expect(
-        angularJson.projects.foobar.architect.serve.configurations.e2eProduction
-      ).toEqual({
-        browserTarget: 'foobar:build:production',
-        open: false
-      });
-
-      expect(
-        angularJson.projects.foobar.architect.e2e.options.devServerTarget
-      ).toEqual('foobar:serve:e2e');
-      expect(
-        angularJson.projects.foobar.architect.e2e.configurations.production
-          .devServerTarget
-      ).toEqual('foobar:serve:e2eProduction');
-    });
   });
 });
