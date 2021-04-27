@@ -1,10 +1,14 @@
-import { BuilderContext, createBuilder } from '@angular-devkit/architect';
+import {
+  BuilderContext,
+  BuilderOutput,
+  createBuilder
+} from '@angular-devkit/architect';
 import {
   DevServerBuilderOutput,
   executeDevServerBuilder
 } from '@angular-devkit/build-angular';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 import { applySkyuxDevServerOptions } from './dev-server-utils';
@@ -12,12 +16,14 @@ import { applySkyuxDevServerOptions } from './dev-server-utils';
 function executeSkyuxDevServerBuilder(
   options: SkyuxDevServerBuilderOptions,
   context: BuilderContext
-): Observable<DevServerBuilderOutput> {
+): Observable<BuilderOutput> {
   try {
     applySkyuxDevServerOptions(options);
   } catch (err) {
     context.logger.fatal(err.message);
-    process.exit(1);
+    return of({
+      success: false
+    });
   }
 
   return executeDevServerBuilder(options, context);
