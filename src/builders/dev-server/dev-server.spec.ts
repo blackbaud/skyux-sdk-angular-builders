@@ -66,10 +66,6 @@ describe('dev-server builder', () => {
     mock.stopAll();
   });
 
-  // function getActualOptions(): SkyuxDevServerBuilderOptions {
-  //   return executDevServerBuilderSpy.calls.mostRecent().args[0];
-  // }
-
   function runBuilder() {
     return mock.reRequire('./dev-server').default.toPromise();
   }
