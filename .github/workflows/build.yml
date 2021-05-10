@@ -84,6 +84,7 @@ jobs:
       run: |
         ng new builders-e2e-lib --create-application=false --strict
     - name: Generate an Angular library
+      working-directory: builders-e2e-lib
       run: |
         ng generate library my-lib
     - name: Build `@skyux-sdk/angular-builders`
