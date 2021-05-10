@@ -1,17 +1,9 @@
-import { OutputHashing } from '@angular-devkit/build-angular';
-import { normalize, workspaces } from '@angular-devkit/core';
+import { workspaces } from '@angular-devkit/core';
 import {
-  apply,
-  applyTemplates,
-  forEach,
-  MergeStrategy,
-  mergeWith,
-  move,
   Rule,
   SchematicContext,
   SchematicsException,
-  Tree,
-  url
+  Tree
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import {
@@ -19,7 +11,6 @@ import {
   NodeDependencyType
 } from '@schematics/angular/utility/dependencies';
 
-import { SkyuxConfig } from '../../shared/skyux-config';
 import { createHost } from '../utils/schematics-utils';
 
 import { SkyuxNgAddOptions } from './schema';
@@ -29,19 +20,8 @@ import { modifyKarmaConfig } from './utils/modify-karma-config';
 import { modifyPolyfills } from './utils/modify-polyfills';
 import { readJson } from './utils/read-json';
 
-async function getThemeStylesheets(
-  host: workspaces.WorkspaceHost
-): Promise<string[]> {
+async function getThemeStylesheets(): Promise<string[]> {
   const themeStylesheets = ['@skyux/theme/css/sky.css'];
-
-  const skyuxConfig: SkyuxConfig = await readJson(host, 'skyuxconfig.json');
-  if (skyuxConfig.app?.theming?.supportedThemes) {
-    for (const theme of skyuxConfig.app.theming.supportedThemes) {
-      if (theme !== 'default') {
-        themeStylesheets.push(`@skyux/theme/css/themes/${theme}/styles.css`);
-      }
-    }
-  }
 
   return themeStylesheets;
 }
@@ -89,7 +69,7 @@ async function modifyAngularJson(
   const angularStylesheets = architectConfig.build.options.styles.filter(
     (stylesheet: string) => !stylesheet.startsWith('@skyux/theme')
   );
-  const themeStylesheets = await getThemeStylesheets(host);
+  const themeStylesheets = await getThemeStylesheets();
   architectConfig.build.options.styles = themeStylesheets.concat(
     angularStylesheets
   );
@@ -155,32 +135,12 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await modifyTsConfig(host);
     await modifyKarmaConfig(host, project.root);
     await modifyProtractorConfig(host, project.root);
-
-    addPackageJsonDependency(tree, {
-      type: NodeDependencyType.Default,
-      name: '@skyux/assets',
-      version: '^4.0.0',
-      overwrite: true
-    });
+    await modifyPolyfills(host);
 
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
       name: '@skyux/config',
       version: '^4.4.0',
-      overwrite: true
-    });
-
-    addPackageJsonDependency(tree, {
-      type: NodeDependencyType.Default,
-      name: '@skyux/core',
-      version: '^4.4.0',
-      overwrite: true
-    });
-
-    addPackageJsonDependency(tree, {
-      type: NodeDependencyType.Default,
-      name: '@skyux/i18n',
-      version: '^4.0.3',
       overwrite: true
     });
 
