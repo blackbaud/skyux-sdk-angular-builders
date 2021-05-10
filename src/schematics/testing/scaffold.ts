@@ -1,11 +1,21 @@
-import { Tree } from '@angular-devkit/schematics';
 import {
   SchematicTestRunner,
   UnitTestTree
 } from '@angular-devkit/schematics/testing';
 
+async function createWorkspace(runner: SchematicTestRunner) {
+  const workspaceTree = await runner
+    .runExternalSchematicAsync('@schematics/angular', 'workspace', {
+      name: 'workspace',
+      version: '11.0.0',
+      newProjectRoot: 'projects'
+    })
+    .toPromise();
+  return workspaceTree;
+}
+
 /**
- * Create a base app used for testing.
+ * Create a test workspace with an application as the default project.
  */
 export async function createTestApp(
   runner: SchematicTestRunner,
@@ -16,13 +26,7 @@ export async function createTestApp(
   appTree: UnitTestTree;
   workspaceTree: UnitTestTree;
 }> {
-  const workspaceTree = await runner
-    .runExternalSchematicAsync('@schematics/angular', 'workspace', {
-      name: 'workspace',
-      version: '11.0.0',
-      newProjectRoot: 'projects'
-    })
-    .toPromise();
+  const workspaceTree = await createWorkspace(runner);
 
   const appTree = await runner
     .runExternalSchematicAsync(
@@ -43,23 +47,33 @@ export async function createTestApp(
 }
 
 /**
- * Create a base library used for testing.
+ * Create a test workspace with a library as the default project.
  */
-export async function generateTestLibrary(
+export async function createTestLibrary(
   runner: SchematicTestRunner,
-  workspaceTree: Tree,
-  libOptions: {
-    name: string;
+  appOptions: {
+    defaultProjectName: string;
   }
-): Promise<UnitTestTree> {
-  return runner
+): Promise<{
+  appTree: UnitTestTree;
+  workspaceTree: UnitTestTree;
+}> {
+  const workspaceTree = await createWorkspace(runner);
+
+  const appTree = await runner
     .runExternalSchematicAsync(
       '@schematics/angular',
       'library',
       {
-        ...libOptions
+        name: appOptions.defaultProjectName,
+        projectRoot: ''
       },
       workspaceTree
     )
     .toPromise();
+
+  return {
+    appTree,
+    workspaceTree
+  };
 }

@@ -1,9 +1,17 @@
-import { workspaces } from '@angular-devkit/core';
+import { OutputHashing } from '@angular-devkit/build-angular';
+import { normalize, workspaces } from '@angular-devkit/core';
 import {
+  apply,
+  applyTemplates,
+  forEach,
+  MergeStrategy,
+  mergeWith,
+  move,
   Rule,
   SchematicContext,
   SchematicsException,
-  Tree
+  Tree,
+  url
 } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import {
@@ -11,17 +19,29 @@ import {
   NodeDependencyType
 } from '@schematics/angular/utility/dependencies';
 
+import { SkyuxConfig } from '../../shared/skyux-config';
 import { createHost } from '../utils/schematics-utils';
 
 import { SkyuxNgAddOptions } from './schema';
+import { addToLibrary } from './utils/add-to-library';
+import { createSkyuxConfigIfNotExists } from './utils/create-skyuxconfig';
+import { modifyKarmaConfig } from './utils/modify-karma-config';
+import { modifyPolyfills } from './utils/modify-polyfills';
+import { readJson } from './utils/read-json';
 
-async function readJson(host: workspaces.WorkspaceHost, filePath: string) {
-  const contents = await host.readFile(filePath);
-  return JSON.parse(contents);
-}
-
-async function getThemeStylesheets(): Promise<string[]> {
+async function getThemeStylesheets(
+  host: workspaces.WorkspaceHost
+): Promise<string[]> {
   const themeStylesheets = ['@skyux/theme/css/sky.css'];
+
+  const skyuxConfig: SkyuxConfig = await readJson(host, 'skyuxconfig.json');
+  if (skyuxConfig.app?.theming?.supportedThemes) {
+    for (const theme of skyuxConfig.app.theming.supportedThemes) {
+      if (theme !== 'default') {
+        themeStylesheets.push(`@skyux/theme/css/themes/${theme}/styles.css`);
+      }
+    }
+  }
 
   return themeStylesheets;
 }
@@ -56,24 +76,20 @@ async function modifyAngularJson(
     );
   }
 
-  // Setup karma builder for all projects.
-  for (const project in angularJson.projects) {
-    const testTarget = angularJson.projects[project].architect.test;
-    if (testTarget) {
-      testTarget.builder = '@skyux-sdk/angular-builders:karma';
-      testTarget.options!.codeCoverage = true;
-    } else {
-      throw new SchematicsException(
-        `Expected node projects/${project}/architect/test in angular.json!`
-      );
-    }
+  if (architectConfig.test) {
+    architectConfig.test.builder = '@skyux-sdk/angular-builders:karma';
+    architectConfig.test.options!.codeCoverage = true;
+  } else {
+    throw new SchematicsException(
+      `Expected node projects/${projectName}/architect/test in angular.json!`
+    );
   }
 
   // Add theme stylesheets.
   const angularStylesheets = architectConfig.build.options.styles.filter(
     (stylesheet: string) => !stylesheet.startsWith('@skyux/theme')
   );
-  const themeStylesheets = await getThemeStylesheets();
+  const themeStylesheets = await getThemeStylesheets(host);
   architectConfig.build.options.styles = themeStylesheets.concat(
     angularStylesheets
   );
@@ -81,21 +97,6 @@ async function modifyAngularJson(
   await host.writeFile(
     'angular.json',
     JSON.stringify(angularJson, undefined, 2) + '\n'
-  );
-}
-
-async function modifyKarmaConfig(
-  host: workspaces.WorkspaceHost,
-  projectRoot: string
-): Promise<void> {
-  await host.writeFile(
-    `${projectRoot}/karma.conf.js`,
-    `// DO NOT MODIFY
-// This file is handled by the '@skyux-sdk/angular-builders' library.
-module.exports = function (config) {
-  config.set({});
-};
-`
   );
 }
 
@@ -128,32 +129,6 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
   );
 }
 
-function createSkyuxConfigIfNotExists(tree: Tree) {
-  if (!tree.exists('skyuxconfig.json')) {
-    tree.create(
-      'skyuxconfig.json',
-      JSON.stringify(
-        {
-          $schema:
-            './node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json'
-        },
-        undefined,
-        2
-      )
-    );
-  }
-}
-
-async function setupLibraries(
-  host: workspaces.WorkspaceHost,
-  workspace: workspaces.WorkspaceDefinition
-): Promise<void> {
-  // Modify the karma configs for all libraries.
-  workspace.projects.forEach(async (project) => {
-    await modifyKarmaConfig(host, project.root);
-  });
-}
-
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
   return async (tree: Tree, context: SchematicContext) => {
     const host = createHost(tree);
@@ -170,10 +145,9 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
       );
     }
 
-    if (project.extensions.projectType !== 'application') {
-      throw new SchematicsException(
-        `You are attempting to add this builder to a library project, but it is designed to be added only to the primary application.`
-      );
+    // Libraries require a different setup.
+    if (project.extensions.projectType === 'library') {
+      return addToLibrary(tree, host, workspace, context, options);
     }
 
     createSkyuxConfigIfNotExists(tree);
@@ -181,12 +155,32 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await modifyTsConfig(host);
     await modifyKarmaConfig(host, project.root);
     await modifyProtractorConfig(host, project.root);
-    await setupLibraries(host, workspace);
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/assets',
+      version: '^4.0.0',
+      overwrite: true
+    });
 
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
       name: '@skyux/config',
       version: '^4.4.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/core',
+      version: '^4.4.0',
+      overwrite: true
+    });
+
+    addPackageJsonDependency(tree, {
+      type: NodeDependencyType.Default,
+      name: '@skyux/i18n',
+      version: '^4.0.3',
       overwrite: true
     });
 
