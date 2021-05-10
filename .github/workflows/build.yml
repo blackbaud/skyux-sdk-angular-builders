@@ -105,4 +105,3 @@ jobs:
         ng lint
         ng build --prod
         ng test --browsers=ChromeHeadless --watch=false --skyux-ci-platform=gh-actions
-        ng e2e --skyux-ci-platform=gh-actions
