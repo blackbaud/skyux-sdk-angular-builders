@@ -201,6 +201,19 @@ describe('ng-add.schematic', () => {
       );
     });
 
+    it('should modify polyfills', async () => {
+      await runSchematic(app, {
+        project: 'foobar'
+      });
+
+      expect(modifyPolyfillsSpy).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          readFile: jasmine.any(Function),
+          writeFile: jasmine.any(Function)
+        })
+      );
+    });
+
     describe('serve', () => {
       it("should throw an error if specified project doesn't include an `architect.serve` property", async () => {
         // Create an incorrectly formatted project config.
@@ -363,15 +376,13 @@ describe('ng-add.schematic', () => {
       const packageJson = JSON.parse(tree.readContent('package.json'));
       expect(packageJson.dependencies).toEqual(
         jasmine.objectContaining({
-          '@skyux/assets': '^4.0.0',
           '@skyux/config': '^4.4.0',
-          '@skyux/core': '^4.4.0',
-          '@skyux/i18n': '^4.0.3',
           '@skyux/theme': '^4.15.3'
         })
       );
       expect(packageJson.devDependencies).toEqual(
         jasmine.objectContaining({
+          '@skyux-sdk/e2e': '^4.0.0',
           '@skyux-sdk/testing': '^4.0.0'
         })
       );
