@@ -20,10 +20,8 @@ jobs:
       run: |
         npm ci
     - name: Verify code is formatted correctly
-      uses: creyD/prettier_action@v3.1
-      with:
-        prettier_options: --write .
-        dry: true
+      run: |
+        npx prettier --check .
     - name: Run code coverage
       run: |
         npm run ci
