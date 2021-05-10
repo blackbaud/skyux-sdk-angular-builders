@@ -1,7 +1,37 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "title": "JSON schema for SKY UX CLI skyuxconfig.json",
+  "title": "JSON schema for skyuxconfig.json",
+  "definitions": {
+    "availableThemes": {
+      "type": "string",
+      "enum": ["default", "modern"]
+    }
+  },
   "properties": {
+    "app": {
+      "description": "Specifies configuration options for the local app when running skyux serve",
+      "type": "object",
+      "properties": {
+        "theming": {
+          "description": "Specifies the theming capabilities of the application.",
+          "type": "object",
+          "properties": {
+            "theme": {
+              "description": "The visual theme to apply to this application.",
+              "type": "string",
+              "default": "default",
+              "$ref": "#/definitions/availableThemes"
+            },
+            "supportedThemes": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/availableThemes"
+              }
+            }
+          }
+        }
+      }
+    },
     "codeCoverageThreshold": {
       "description": "Specifies the minimum required code coverage threshold.",
       "type": "string",
