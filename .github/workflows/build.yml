@@ -83,6 +83,9 @@ jobs:
     - name: Create new Angular CLI workspace
       run: |
         ng new builders-e2e-lib --create-application=false --strict
+    - name: Generate an Angular library
+      run: |
+        ng generate library my-lib
     - name: Build `@skyux-sdk/angular-builders`
       run: |
         node_modules/.bin/tsc -p tsconfig.json
