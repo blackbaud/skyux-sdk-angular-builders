@@ -99,6 +99,8 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
   const banner =
     '/* To learn more about this file see: https://angular.io/config/tsconfig. */\n';
   const tsConfig = JSON.parse(tsConfigContents.replace(banner, ''));
+  tsConfig.compilerOptions.resolveJsonModule = true;
+  tsConfig.compilerOptions.esModuleInterop = true;
 
   // Enforce the ES5 target until we can drop support for IE 11.
   tsConfig.compilerOptions.target = 'es5';
