@@ -14,11 +14,11 @@ import {
 import { createHost } from '../utils/schematics-utils';
 
 import { SkyuxNgAddOptions } from './schema';
-
-async function readJson(host: workspaces.WorkspaceHost, filePath: string) {
-  const contents = await host.readFile(filePath);
-  return JSON.parse(contents);
-}
+import { addToLibrary } from './utils/add-to-library';
+import { createSkyuxConfigIfNotExists } from './utils/create-skyuxconfig';
+import { modifyKarmaConfig } from './utils/modify-karma-config';
+import { modifyPolyfills } from './utils/modify-polyfills';
+import { readJson } from './utils/read-json';
 
 async function getThemeStylesheets(): Promise<string[]> {
   const themeStylesheets = ['@skyux/theme/css/sky.css'];
@@ -56,17 +56,13 @@ async function modifyAngularJson(
     );
   }
 
-  // Setup karma builder for all projects.
-  for (const project in angularJson.projects) {
-    const testTarget = angularJson.projects[project].architect.test;
-    if (testTarget) {
-      testTarget.builder = '@skyux-sdk/angular-builders:karma';
-      testTarget.options!.codeCoverage = true;
-    } else {
-      throw new SchematicsException(
-        `Expected node projects/${project}/architect/test in angular.json!`
-      );
-    }
+  if (architectConfig.test) {
+    architectConfig.test.builder = '@skyux-sdk/angular-builders:karma';
+    architectConfig.test.options!.codeCoverage = true;
+  } else {
+    throw new SchematicsException(
+      `Expected node projects/${projectName}/architect/test in angular.json!`
+    );
   }
 
   // Add theme stylesheets.
@@ -81,21 +77,6 @@ async function modifyAngularJson(
   await host.writeFile(
     'angular.json',
     JSON.stringify(angularJson, undefined, 2) + '\n'
-  );
-}
-
-async function modifyKarmaConfig(
-  host: workspaces.WorkspaceHost,
-  projectRoot: string
-): Promise<void> {
-  await host.writeFile(
-    `${projectRoot}/karma.conf.js`,
-    `// DO NOT MODIFY
-// This file is handled by the '@skyux-sdk/angular-builders' library.
-module.exports = function (config) {
-  config.set({});
-};
-`
   );
 }
 
@@ -118,6 +99,8 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
   const banner =
     '/* To learn more about this file see: https://angular.io/config/tsconfig. */\n';
   const tsConfig = JSON.parse(tsConfigContents.replace(banner, ''));
+  tsConfig.compilerOptions.resolveJsonModule = true;
+  tsConfig.compilerOptions.esModuleInterop = true;
 
   // Enforce the ES5 target until we can drop support for IE 11.
   tsConfig.compilerOptions.target = 'es5';
@@ -126,32 +109,6 @@ async function modifyTsConfig(host: workspaces.WorkspaceHost): Promise<void> {
     'tsconfig.json',
     banner + JSON.stringify(tsConfig, undefined, 2)
   );
-}
-
-function createSkyuxConfigIfNotExists(tree: Tree) {
-  if (!tree.exists('skyuxconfig.json')) {
-    tree.create(
-      'skyuxconfig.json',
-      JSON.stringify(
-        {
-          $schema:
-            './node_modules/@skyux-sdk/angular-builders/skyuxconfig-schema.json'
-        },
-        undefined,
-        2
-      )
-    );
-  }
-}
-
-async function setupLibraries(
-  host: workspaces.WorkspaceHost,
-  workspace: workspaces.WorkspaceDefinition
-): Promise<void> {
-  // Modify the karma configs for all libraries.
-  workspace.projects.forEach(async (project) => {
-    await modifyKarmaConfig(host, project.root);
-  });
 }
 
 export function ngAdd(options: SkyuxNgAddOptions): Rule {
@@ -170,10 +127,9 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
       );
     }
 
-    if (project.extensions.projectType !== 'application') {
-      throw new SchematicsException(
-        `You are attempting to add this builder to a library project, but it is designed to be added only to the primary application.`
-      );
+    // Libraries require a different setup.
+    if (project.extensions.projectType === 'library') {
+      return addToLibrary(tree, host, workspace, context, options);
     }
 
     createSkyuxConfigIfNotExists(tree);
@@ -181,7 +137,7 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await modifyTsConfig(host);
     await modifyKarmaConfig(host, project.root);
     await modifyProtractorConfig(host, project.root);
-    await setupLibraries(host, workspace);
+    await modifyPolyfills(host);
 
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,

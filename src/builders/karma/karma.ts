@@ -5,12 +5,12 @@ import {
 } from '@angular-devkit/architect';
 import { executeKarmaBuilder } from '@angular-devkit/build-angular';
 
-import glob from 'glob';
 import path from 'path';
 import { Observable, of } from 'rxjs';
 
 import { getSkyuxConfig } from '../../shared/skyux-config-utils';
 
+import { getSpecFiles } from './get-spec-files';
 import { SkyuxKarmaConfigAdapter } from './karma-config-adapter';
 import { SkyuxKarmaBuilderOptions } from './karma-options';
 
@@ -18,9 +18,7 @@ function executeSkyuxKarmaBuilder(
   options: SkyuxKarmaBuilderOptions,
   context: BuilderContext
 ): Observable<BuilderOutput> {
-  const specs = glob.sync(path.join(process.cwd(), 'src/**/*.spec.ts'), {
-    nodir: true
-  });
+  const specs = getSpecFiles();
 
   if (specs.length === 0) {
     context.logger.info('No spec files located. Skipping test command.');

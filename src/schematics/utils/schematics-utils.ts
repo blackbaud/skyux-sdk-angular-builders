@@ -11,7 +11,7 @@ export function createHost(tree: Tree): workspaces.WorkspaceHost {
     async readFile(path: string): Promise<string> {
       const data = tree.read(path);
       if (!data) {
-        throw new SchematicsException('File not found.');
+        throw new SchematicsException(`File "${path}" not found.`);
       }
       return virtualFs.fileBufferToString(data);
     },
