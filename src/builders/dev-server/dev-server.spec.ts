@@ -4,12 +4,10 @@ import * as buildAngular from '@angular-devkit/build-angular';
 import mock from 'mock-require';
 import { of } from 'rxjs';
 
-import { SkyuxDevServerBuilderOptions } from './dev-server-options';
-
 describe('dev-server builder', () => {
   let createBuilderSpy: jasmine.Spy;
   let executDevServerBuilderSpy: jasmine.Spy;
-  let defaultOptions: SkyuxDevServerBuilderOptions;
+  let defaultOptions: buildAngular.DevServerBuilderOptions;
   let mockContext: any;
   let loggerSpy: jasmine.Spy;
   let mockDevServerUtils: any;

@@ -48,14 +48,6 @@ async function modifyAngularJson(
     );
   }
 
-  if (architectConfig.e2e) {
-    architectConfig.e2e.builder = '@skyux-sdk/angular-builders:protractor';
-  } else {
-    throw new SchematicsException(
-      `Expected node projects/${projectName}/architect/e2e in angular.json!`
-    );
-  }
-
   if (architectConfig.test) {
     architectConfig.test.builder = '@skyux-sdk/angular-builders:karma';
     architectConfig.test.options!.codeCoverage = true;
@@ -70,26 +62,12 @@ async function modifyAngularJson(
     (stylesheet: string) => !stylesheet.startsWith('@skyux/theme')
   );
   const themeStylesheets = await getThemeStylesheets();
-  architectConfig.build.options.styles = themeStylesheets.concat(
-    angularStylesheets
-  );
+  architectConfig.build.options.styles =
+    themeStylesheets.concat(angularStylesheets);
 
   await host.writeFile(
     'angular.json',
     JSON.stringify(angularJson, undefined, 2) + '\n'
-  );
-}
-
-async function modifyProtractorConfig(
-  host: workspaces.WorkspaceHost,
-  projectRoot: string
-): Promise<void> {
-  await host.writeFile(
-    `${projectRoot}/e2e/protractor.conf.js`,
-    `// DO NOT MODIFY
-// This file is handled by the '@skyux-sdk/angular-builders' library.
-exports.config = {};
-`
   );
 }
 
@@ -136,34 +114,12 @@ export function ngAdd(options: SkyuxNgAddOptions): Rule {
     await modifyAngularJson(host, options);
     await modifyTsConfig(host);
     await modifyKarmaConfig(host, project.root);
-    await modifyProtractorConfig(host, project.root);
     await modifyPolyfills(host);
 
     addPackageJsonDependency(tree, {
       type: NodeDependencyType.Default,
-      name: '@skyux/config',
-      version: '^4.4.0',
-      overwrite: true
-    });
-
-    addPackageJsonDependency(tree, {
-      type: NodeDependencyType.Default,
       name: '@skyux/theme',
-      version: '^4.15.3',
-      overwrite: true
-    });
-
-    addPackageJsonDependency(tree, {
-      type: NodeDependencyType.Dev,
-      name: '@skyux-sdk/e2e',
-      version: '^4.0.0',
-      overwrite: true
-    });
-
-    addPackageJsonDependency(tree, {
-      type: NodeDependencyType.Dev,
-      name: '@skyux-sdk/testing',
-      version: '^4.0.0',
+      version: '^5.0.0-alpha.0',
       overwrite: true
     });
 

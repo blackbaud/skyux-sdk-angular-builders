@@ -7,7 +7,7 @@ async function createWorkspace(runner: SchematicTestRunner) {
   const workspaceTree = await runner
     .runExternalSchematicAsync('@schematics/angular', 'workspace', {
       name: 'workspace',
-      version: '11.0.0',
+      version: '12.0.0',
       newProjectRoot: 'projects'
     })
     .toPromise();
@@ -65,8 +65,7 @@ export async function createTestLibrary(
       '@schematics/angular',
       'library',
       {
-        name: appOptions.defaultProjectName,
-        projectRoot: ''
+        name: appOptions.defaultProjectName
       },
       workspaceTree
     )

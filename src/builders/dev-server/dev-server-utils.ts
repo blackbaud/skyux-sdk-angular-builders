@@ -1,9 +1,9 @@
+import { DevServerBuilderOptions } from '@angular-devkit/build-angular';
+
 import { getCertPath } from '../../shared/cert-utils';
 
-import { SkyuxDevServerBuilderOptions } from './dev-server-options';
-
 export function applySkyuxDevServerOptions(
-  options: SkyuxDevServerBuilderOptions
+  options: DevServerBuilderOptions
 ): void {
   // Enforce HTTPS.
   options.ssl = true;

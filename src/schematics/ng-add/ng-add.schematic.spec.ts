@@ -102,7 +102,7 @@ describe('ng-add.schematic', () => {
       );
     });
 
-    it('should overwrite the default serve, test, and e2e architects', async () => {
+    it('should overwrite the default serve and test architects', async () => {
       await runSchematic(app, {
         project: 'foobar'
       });
@@ -114,9 +114,6 @@ describe('ng-add.schematic', () => {
       expect(angularJson.projects.foobar.architect.test.builder).toEqual(
         '@skyux-sdk/angular-builders:karma'
       );
-      expect(angularJson.projects.foobar.architect.e2e.builder).toEqual(
-        '@skyux-sdk/angular-builders:protractor'
-      );
     });
 
     it('should add packages to package.json', async () => {
@@ -127,12 +124,11 @@ describe('ng-add.schematic', () => {
       const packageJson = JSON.parse(app.readContent('package.json'));
       expect(packageJson.dependencies).toEqual(
         jasmine.objectContaining({
-          '@skyux/theme': '^4.15.3'
+          '@skyux/theme': '^5.0.0-alpha.0'
         })
       );
       expect(packageJson.devDependencies).toEqual(
         jasmine.objectContaining({
-          '@skyux-sdk/e2e': '^4.0.0',
           '@skyux-sdk/testing': '^4.0.0'
         })
       );
@@ -266,32 +262,6 @@ describe('ng-add.schematic', () => {
         expect(options.codeCoverage).toEqual(true);
       });
     });
-
-    describe('e2e', () => {
-      it("should throw an error if specified project doesn't include an `architect.e2e` property", async () => {
-        // Create an incorrectly formatted project config.
-        const angularJson = getAngularJson(app);
-        delete angularJson.projects.foobar.architect.e2e;
-        writeAngularJson(app, angularJson);
-
-        await expectAsync(
-          runSchematic(app, {
-            project: 'foobar'
-          })
-        ).toBeRejectedWithError(
-          'Expected node projects/foobar/architect/e2e in angular.json!'
-        );
-      });
-
-      it("should modify the app's protractor.conf.js file", async () => {
-        await runSchematic(app, {
-          project: 'foobar'
-        });
-
-        const contents = app.read('e2e/protractor.conf.js')?.toString();
-        expect(contents).toContain('DO NOT MODIFY');
-      });
-    });
   });
 
   describe('> Library as default project >', () => {
@@ -376,13 +346,11 @@ describe('ng-add.schematic', () => {
       const packageJson = JSON.parse(tree.readContent('package.json'));
       expect(packageJson.dependencies).toEqual(
         jasmine.objectContaining({
-          '@skyux/config': '^4.4.0',
-          '@skyux/theme': '^4.15.3'
+          '@skyux/theme': '^5.0.0-alpha.0'
         })
       );
       expect(packageJson.devDependencies).toEqual(
         jasmine.objectContaining({
-          '@skyux-sdk/e2e': '^4.0.0',
           '@skyux-sdk/testing': '^4.0.0'
         })
       );

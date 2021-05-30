@@ -4,17 +4,17 @@ import {
   createBuilder
 } from '@angular-devkit/architect';
 import {
+  DevServerBuilderOptions,
   DevServerBuilderOutput,
   executeDevServerBuilder
 } from '@angular-devkit/build-angular';
 
 import { Observable, of } from 'rxjs';
 
-import { SkyuxDevServerBuilderOptions } from './dev-server-options';
 import { applySkyuxDevServerOptions } from './dev-server-utils';
 
 function executeSkyuxDevServerBuilder(
-  options: SkyuxDevServerBuilderOptions,
+  options: DevServerBuilderOptions,
   context: BuilderContext
 ): Observable<BuilderOutput> {
   try {
@@ -29,7 +29,6 @@ function executeSkyuxDevServerBuilder(
   return executeDevServerBuilder(options, context);
 }
 
-export default createBuilder<
-  SkyuxDevServerBuilderOptions,
-  DevServerBuilderOutput
->(executeSkyuxDevServerBuilder);
+export default createBuilder<DevServerBuilderOptions, DevServerBuilderOutput>(
+  executeSkyuxDevServerBuilder
+);

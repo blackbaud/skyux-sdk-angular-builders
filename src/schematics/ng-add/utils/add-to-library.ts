@@ -59,29 +59,8 @@ export async function addToLibrary(
 
   addPackageJsonDependency(tree, {
     type: NodeDependencyType.Default,
-    name: '@skyux/config',
-    version: '^4.4.0',
-    overwrite: true
-  });
-
-  addPackageJsonDependency(tree, {
-    type: NodeDependencyType.Default,
     name: '@skyux/theme',
-    version: '^4.15.3',
-    overwrite: true
-  });
-
-  addPackageJsonDependency(tree, {
-    type: NodeDependencyType.Dev,
-    name: '@skyux-sdk/e2e',
-    version: '^4.0.0',
-    overwrite: true
-  });
-
-  addPackageJsonDependency(tree, {
-    type: NodeDependencyType.Dev,
-    name: '@skyux-sdk/testing',
-    version: '^4.0.0',
+    version: '^5.0.0-alpha.0',
     overwrite: true
   });
 
