@@ -1,7 +1,6 @@
 import glob from 'glob';
 import karma from 'karma';
 import path from 'path';
-import { Config as ProtractorConfig } from 'protractor';
 
 import { SkyuxCIPlatform } from './ci-platform';
 
@@ -11,7 +10,7 @@ import { SkyuxCIPlatform } from './ci-platform';
  * @param platform The CI platform hosting the test server.
  */
 function getCiPlatformConfig(
-  framework: 'karma' | 'protractor',
+  framework: 'karma',
   platform: SkyuxCIPlatform
 ): unknown | undefined {
   // Using glob so we can find `@skyux-sdk/pipeline-settings` regardless of npm install location.
@@ -44,12 +43,4 @@ export function getCiPlatformKarmaConfig(
   return getCiPlatformConfig('karma', platform) as
     | ((conf: karma.Config) => void)
     | undefined;
-}
-
-export function getCiPlatformProtractorConfig(
-  platform: SkyuxCIPlatform
-): ProtractorConfig | undefined {
-  return (getCiPlatformConfig('protractor', platform) as {
-    config?: ProtractorConfig;
-  })?.config;
 }

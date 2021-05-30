@@ -1,5 +1,4 @@
 # Ignore artifacts:
-.github
 .nyc_output
 builders-test-app
 coverage

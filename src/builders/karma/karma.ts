@@ -21,7 +21,9 @@ function executeSkyuxKarmaBuilder(
   const specs = getSpecFiles();
 
   if (specs.length === 0) {
-    context.logger.info('No spec files located. Skipping test command.');
+    context.logger.info(
+      '[skyux] No spec files located. Skipping test command.'
+    );
     return of({
       success: true
     });
@@ -37,6 +39,8 @@ function executeSkyuxKarmaBuilder(
 
   SkyuxKarmaConfigAdapter.builderOptions = options;
   SkyuxKarmaConfigAdapter.skyuxConfig = getSkyuxConfig('test');
+
+  // TODO: Setup SkyAppTestResources similar to internal builder?
 
   return executeKarmaBuilder(options, context);
 }
