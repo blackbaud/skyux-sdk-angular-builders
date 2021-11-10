@@ -1,7 +1,6 @@
 # Ignore artifacts:
-.github
 .nyc_output
-builders-test-app
+builders-test-*
 coverage
 dist
 node_modules

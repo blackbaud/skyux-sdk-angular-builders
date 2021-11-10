@@ -1,8 +1,4 @@
 {
-  "recommendations": [
-    "editorconfig.editorconfig",
-    "ms-vscode.vscode-typescript-tslint-plugin",
-    "esbenp.prettier-vscode"
-  ],
+  "recommendations": ["editorconfig.editorconfig", "esbenp.prettier-vscode"],
   "unwantedRecommendations": []
 }

@@ -9,13 +9,13 @@
 Within the directory of an Angular CLI application, run:
 
 ```
-ng add @skyux-sdk/angular-builders
+ng add @skyux-sdk/angular-builders --project=my-lib
 ```
 
 ## Local setup
 
 - Run `npm start` for local development; changes are transpiled automatically after each file is saved.
-- Change directory to `/builders-test-app` and run:
+- Change directory to `./builders-test-lib` and run:
 
 ```
 npm install
