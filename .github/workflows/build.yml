@@ -37,7 +37,7 @@ jobs:
           node-version: '14.x'
       - name: Install dependencies
         run: |
-          npm i -g @angular/cli@12 @skyux-sdk/cli
+          npm i -g @angular/cli@12
           npm ci
       - name: Create new Angular CLI workspace
         run: |
@@ -56,8 +56,7 @@ jobs:
           ng add ./.schematicsdist --skip-confirmation
           rm -r node_modules/@skyux-sdk/angular-builders
           mv ../dist node_modules/@skyux-sdk/angular-builders
-      - name: Run generate schematics
+      - name: Run ng-packagr builder
         working-directory: builders-e2e-workspace
         run: |
           ng build my-lib
-          ng generate @skyux-sdk/angular-builders:documentation
