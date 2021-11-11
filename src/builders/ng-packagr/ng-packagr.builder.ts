@@ -18,7 +18,7 @@ export async function executeSkyuxNgPackagrBuilder(
     return result;
   }
 
-  await inlineExternalResourcesPaths(context);
+  inlineExternalResourcesPaths(context);
 
   return {
     success: true,

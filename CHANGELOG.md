@@ -1,3 +1,8 @@
+# 5.0.0-beta.0 (2021-11-11)
+
+- Removed the `dev-server`, `karma`, and `protractor` builders. [#114](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/114)
+- Added the `ng-packagr` builder. [#114](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/114)
+
 # 5.0.0-alpha.0 (2021-04-27)
 
 - Removed all features specific to the SKY UX Host platform. [#110](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/110) [#111](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/111)

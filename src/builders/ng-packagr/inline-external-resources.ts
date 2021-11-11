@@ -1,6 +1,7 @@
 import { BuilderContext } from '@angular-devkit/architect';
 
 import fs from 'fs-extra';
+import glob from 'glob';
 import path from 'path';
 
 /**
@@ -17,6 +18,7 @@ function inlineExternalResource(
   // Get every character between 'ngDeclareClassMetadata' and '@class'.
   const classDefinitionRegex = /ngDeclareClassMetadata\(\{(.|\n)+?(?=@class)/g;
 
+  // Get every character between 'ngDeclareComponent' and '@class'.
   const componentDefinitionRegex = /ngDeclareComponent\(\{(.|\n)+?(?=@class)/g;
 
   const selectorRegex = /selector: '([\w|-]+)'/;
@@ -24,27 +26,42 @@ function inlineExternalResource(
   const componentDefinitionMatches = contents.match(componentDefinitionRegex);
 
   contents.match(classDefinitionRegex)?.forEach((classDefinition) => {
-    const templateUrlMatch = classDefinition.match(externalResourceRegex);
+    const externaResourceMatch = classDefinition.match(externalResourceRegex);
 
-    if (templateUrlMatch) {
-      const templateUrl = templateUrlMatch[0];
+    if (externaResourceMatch) {
+      const externalResourcePath = externaResourceMatch[0];
 
       const selectorMatch = classDefinition.match(selectorRegex);
+
+      /*istanbul ignore else*/
       if (selectorMatch) {
         const selector = selectorMatch[1];
-        const componentMatch = componentDefinitionMatches?.find((x) =>
+        const componentMatch = componentDefinitionMatches!.find((x) =>
           x.includes(selector)
         );
+        /*istanbul ignore else*/
         if (componentMatch) {
-          const templateMatch = componentMatch.match(inlineResourceRegex);
-          if (templateMatch) {
-            const template = templateMatch[0];
-            contents = contents.replace(templateUrl, template);
+          const inlineResourceMatch = componentMatch.match(inlineResourceRegex);
+          /*istanbul ignore else*/
+          if (inlineResourceMatch) {
+            const inlineContents = inlineResourceMatch[0];
+            contents = contents.replace(externalResourcePath, inlineContents);
           }
         }
       }
     }
   });
+
+  // Make one final check of the content to make sure the relative paths have been removed.
+  // If paths are found, throw an error so that any structural changes to the bundle files can
+  // be addressed before releasing the consuming library.
+  if (contents.match(externalResourceRegex)) {
+    throw new Error(
+      'Relative file paths pointing to external resources were found in a component definition (e.g. `templateUrl` or `styleUrls`). ' +
+        'The `@skyux-sdk/angular-builders:ng-packagr` builder should have replaced these paths with the file contents inlined (e.g. `template`, `styles`), ' +
+        'but the file structure of the bundle has likely changed. Please report this problem to the author of `@skyux-sdk/angular-builders:ng-packagr`.'
+    );
+  }
 
   return contents;
 }
@@ -65,21 +82,22 @@ function inlineStyleUrls(contents: string): string {
  * Replaces any references to `templateUrl` and `styleUrls` with `template` and `styles`, respectively.
  * Note: this currently only affects the UMD module since that's what StackBlitz imports.
  */
-export async function inlineExternalResourcesPaths(
-  context: BuilderContext
-): Promise<void> {
+export function inlineExternalResourcesPaths(context: BuilderContext): void {
   const projectName = context.target!.project;
-  const bundlePath = path.join(
-    context.workspaceRoot,
-    `dist/${projectName}/bundles/${projectName}.umd.js`
+  const bundlePaths = glob.sync(
+    path.join(context.workspaceRoot, `dist/${projectName}/bundles/*.umd.js`)
   );
 
-  if (fs.existsSync(bundlePath)) {
+  const bundlePath = bundlePaths[0];
+
+  if (bundlePath && fs.existsSync(bundlePath)) {
     let contents = fs.readFileSync(bundlePath).toString();
 
     contents = inlineTemplateUrls(contents);
     contents = inlineStyleUrls(contents);
 
     fs.writeFileSync(bundlePath, contents, { encoding: 'utf-8' });
+  } else {
+    throw new Error(`The UMD bundle was not found. (wanted '${bundlePath}')`);
   }
 }

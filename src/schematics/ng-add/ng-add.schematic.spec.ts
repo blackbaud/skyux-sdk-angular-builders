@@ -1,3 +1,5 @@
+import { workspaces } from '@angular-devkit/core';
+import { SchematicsException } from '@angular-devkit/schematics';
 import {
   SchematicTestRunner,
   UnitTestTree,
@@ -5,7 +7,8 @@ import {
 
 import path from 'path';
 
-import { createTestLibrary } from '../testing/scaffold';
+import { createTestApp, createTestLibrary } from '../testing/scaffold';
+import { getWorkspace } from '../utility/workspace';
 
 const COLLECTION_PATH = path.resolve(__dirname, '../../../collection.json');
 
@@ -30,6 +33,15 @@ describe('ng-add.schematic', () => {
     return runner.runSchematicAsync('ng-add', options, tree).toPromise();
   }
 
+  async function getProjectDefinition(
+    tree: UnitTestTree,
+    projectName: string
+  ): Promise<workspaces.ProjectDefinition | undefined> {
+    const { workspace } = await getWorkspace(tree);
+
+    return workspace.projects.get(projectName);
+  }
+
   it('should run the NodePackageInstallTask', async () => {
     await runSchematic(tree, {
       project: defaultProjectName,
@@ -41,70 +53,31 @@ describe('ng-add.schematic', () => {
     );
   });
 
-  it('should add scripts to package.json', async () => {
-    const updatedTree = await runSchematic(tree, {
-      project: defaultProjectName,
-    });
+  it('should add packages to package.json', async () => {
+    await runSchematic(tree, { project: defaultProjectName });
 
-    const packageJson = JSON.parse(updatedTree.readContent('package.json'));
-
-    expect(packageJson.scripts['skyux:generate-documentation']).toEqual(
-      'ng generate @skyux-sdk/documentation-schematics:documentation'
-    );
+    const packageJson = JSON.parse(tree.readContent('/package.json'));
+    expect(packageJson.devDependencies['ng-packagr']).toEqual('^12.2.5');
   });
 
-  it('should handle missing scripts section in package.json', async () => {
-    // Remove scripts section before schematic is executed.
-    let packageJson = JSON.parse(tree.readContent('package.json'));
-    delete packageJson.scripts;
-    tree.overwrite('package.json', JSON.stringify(packageJson));
+  it('should add the builder', async () => {
+    await runSchematic(tree, { project: defaultProjectName });
 
-    const updatedTree = await runSchematic(tree, {
-      project: defaultProjectName,
-    });
+    const project = await getProjectDefinition(tree, defaultProjectName);
+    const target = project?.targets.get('build');
 
-    packageJson = JSON.parse(updatedTree.readContent('package.json'));
-
-    expect(packageJson.scripts['skyux:generate-documentation']).toEqual(
-      'ng generate @skyux-sdk/documentation-schematics:documentation'
-    );
-
-    expect(packageJson.scripts.postbuild).toEqual(
-      'npm run skyux:generate-documentation'
-    );
+    expect(target?.builder).toBe('@skyux-sdk/angular-builders:ng-packagr');
   });
 
-  it('should add documentation directory to ESLint ignore', async () => {
-    const eslintPath = `projects/${defaultProjectName}/.eslintrc.json`;
+  it('should abort for application projects', async () => {
+    tree = await createTestApp(runner, { defaultProjectName: 'my-app' });
 
-    tree.create(eslintPath, `{"ignorePatterns": []}`);
-
-    const updatedTree = await runSchematic(tree, {
-      project: defaultProjectName,
-    });
-
-    const eslint = updatedTree.read(eslintPath)?.toString();
-    expect(eslint).toEqual(`{
-  "ignorePatterns": [
-    "documentation/**/*"
-  ]
-}`);
-  });
-
-  it('should use `defaultProject` if `project` undefined', async () => {
-    const eslintPath = `projects/${defaultProjectName}/.eslintrc.json`;
-
-    tree.create(eslintPath, `{"ignorePatterns": []}`);
-
-    const updatedTree = await runSchematic(tree, {
-      project: undefined, // <--
-    });
-
-    const eslint = updatedTree.read(eslintPath)?.toString();
-    expect(eslint).toEqual(`{
-  "ignorePatterns": [
-    "documentation/**/*"
-  ]
-}`);
+    await expectAsync(
+      runSchematic(tree, { project: 'my-app' })
+    ).toBeRejectedWith(
+      new SchematicsException(
+        'This schematic may only be added to library projects.'
+      )
+    );
   });
 });

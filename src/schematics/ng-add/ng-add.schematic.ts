@@ -29,7 +29,7 @@ export default function ngAdd(options: Schema): Rule {
 
     const { project, projectName } = await getProject(
       workspace,
-      options.project || (workspace.extensions.defaultProject as string)
+      options.project
     );
 
     if (project.extensions.projectType !== 'library') {
