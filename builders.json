@@ -1,20 +1,10 @@
 {
   "$schema": "./node_modules/@angular-devkit/architect/src/builders-schema.json",
   "builders": {
-    "dev-server": {
-      "implementation": "./src/builders/dev-server/dev-server",
-      "schema": "./src/builders/dev-server/schema.ext.json",
-      "description": "SKY UX builder for `ng serve`"
-    },
-    "karma": {
-      "implementation": "./src/builders/karma/karma",
-      "schema": "./src/builders/karma/schema.ext.json",
-      "description": "SKY UX builder for `ng test`"
-    },
-    "protractor": {
-      "implementation": "./src/builders/protractor/protractor",
-      "schema": "./src/builders/protractor/schema.ext.json",
-      "description": "SKY UX builder for `ng e2e`"
+    "ng-packagr": {
+      "implementation": "./src/builders/ng-packagr/ng-packagr.builder",
+      "schema": "./src/builders/ng-packagr/schema.ext.json",
+      "description": "SKY UX builder for NgPackagr"
     }
   }
 }

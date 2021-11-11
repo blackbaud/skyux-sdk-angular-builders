@@ -1,65 +1,59 @@
-import { Tree } from '@angular-devkit/schematics';
 import {
   SchematicTestRunner,
-  UnitTestTree
+  UnitTestTree,
 } from '@angular-devkit/schematics/testing';
 
 /**
- * Create a base app used for testing.
+ * Creates a new Angular CLI application.
  */
 export async function createTestApp(
   runner: SchematicTestRunner,
   appOptions: {
     defaultProjectName: string;
   }
-): Promise<{
-  appTree: UnitTestTree;
-  workspaceTree: UnitTestTree;
-}> {
-  const workspaceTree = await runner
-    .runExternalSchematicAsync('@schematics/angular', 'workspace', {
-      name: 'workspace',
-      version: '11.0.0',
-      newProjectRoot: 'projects'
+): Promise<UnitTestTree> {
+  return await runner
+    .runExternalSchematicAsync('@schematics/angular', 'ng-new', {
+      directory: '/',
+      legacyBrowsers: true,
+      name: appOptions.defaultProjectName,
+      routing: true,
+      strict: true,
+      style: 'scss',
+      version: '12',
     })
     .toPromise();
-
-  const appTree = await runner
-    .runExternalSchematicAsync(
-      '@schematics/angular',
-      'application',
-      {
-        name: appOptions.defaultProjectName,
-        projectRoot: ''
-      },
-      workspaceTree
-    )
-    .toPromise();
-
-  return {
-    appTree,
-    workspaceTree
-  };
 }
 
 /**
- * Create a base library used for testing.
+ * Create a test workspace with a library as the default project.
  */
-export async function generateTestLibrary(
+export async function createTestLibrary(
   runner: SchematicTestRunner,
-  workspaceTree: Tree,
   libOptions: {
     name: string;
   }
 ): Promise<UnitTestTree> {
-  return runner
+  const workspaceTree = await runner
+    .runExternalSchematicAsync('@schematics/angular', 'ng-new', {
+      directory: '/',
+      name: `${libOptions.name}-workspace`,
+      createApplication: false,
+      strict: true,
+      version: '12',
+    })
+    .toPromise();
+
+  await runner
     .runExternalSchematicAsync(
       '@schematics/angular',
       'library',
       {
-        ...libOptions
+        name: libOptions.name,
       },
       workspaceTree
     )
     .toPromise();
+
+  return workspaceTree;
 }

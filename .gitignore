@@ -1,8 +1,6 @@
-/.nyc_output
-/coverage
-/dist
-/node_modules
-screenshots-baseline-local
-screenshots-diff-local
+coverage
+dist
+node_modules
 .DS_Store
-.skyux-sdk-angular-builders-dist
+.nyc_output
+.schematicsdist
