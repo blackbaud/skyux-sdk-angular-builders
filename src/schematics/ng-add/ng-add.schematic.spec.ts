@@ -57,7 +57,7 @@ describe('ng-add.schematic', () => {
     await runSchematic(tree, { project: defaultProjectName });
 
     const packageJson = JSON.parse(tree.readContent('/package.json'));
-    expect(packageJson.devDependencies['ng-packagr']).toEqual('^12.2.5');
+    expect(packageJson.devDependencies['ng-packagr']).toEqual('12.2.5');
   });
 
   it('should add the builder', async () => {

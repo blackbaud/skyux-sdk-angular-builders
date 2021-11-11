@@ -1,3 +1,5 @@
+# 5.0.0-beta.1 (2021-11-12)
+
 # 5.0.0-beta.0 (2021-11-11)
 
 - Removed the `dev-server`, `karma`, and `protractor` builders. [#114](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/114)

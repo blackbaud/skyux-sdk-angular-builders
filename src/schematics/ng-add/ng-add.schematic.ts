@@ -41,7 +41,7 @@ export default function ngAdd(options: Schema): Rule {
     addPackageJsonDependency(tree, {
       name: 'ng-packagr',
       type: NodeDependencyType.Dev,
-      version: '^12.2.5',
+      version: '12.2.5',
       overwrite: true,
     });
 

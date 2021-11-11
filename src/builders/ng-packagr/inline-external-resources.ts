@@ -15,39 +15,23 @@ function inlineExternalResource(
   externalResourceRegex: RegExp,
   inlineResourceRegex: RegExp
 ) {
-  // Get every character between 'ngDeclareClassMetadata' and '@class'.
-  const classDefinitionRegex = /ngDeclareClassMetadata\(\{(.|\n)+?(?=@class)/g;
-
   // Get every character between 'ngDeclareComponent' and '@class'.
   const componentDefinitionRegex = /ngDeclareComponent\(\{(.|\n)+?(?=@class)/g;
 
-  const selectorRegex = /selector: '([\w|-]+)'/;
-
   const componentDefinitionMatches = contents.match(componentDefinitionRegex);
 
-  contents.match(classDefinitionRegex)?.forEach((classDefinition) => {
-    const externaResourceMatch = classDefinition.match(externalResourceRegex);
-
+  componentDefinitionMatches?.forEach((componentDefinitionMatch) => {
+    const externaResourceMatch = componentDefinitionMatch.match(
+      externalResourceRegex
+    );
     if (externaResourceMatch) {
       const externalResourcePath = externaResourceMatch[0];
-
-      const selectorMatch = classDefinition.match(selectorRegex);
-
+      const inlineResourceMatch =
+        componentDefinitionMatch.match(inlineResourceRegex);
       /*istanbul ignore else*/
-      if (selectorMatch) {
-        const selector = selectorMatch[1];
-        const componentMatch = componentDefinitionMatches!.find((x) =>
-          x.includes(selector)
-        );
-        /*istanbul ignore else*/
-        if (componentMatch) {
-          const inlineResourceMatch = componentMatch.match(inlineResourceRegex);
-          /*istanbul ignore else*/
-          if (inlineResourceMatch) {
-            const inlineContents = inlineResourceMatch[0];
-            contents = contents.replace(externalResourcePath, inlineContents);
-          }
-        }
+      if (inlineResourceMatch) {
+        const inlineContents = inlineResourceMatch[0];
+        contents = contents.replace(externalResourcePath, inlineContents);
       }
     }
   });
@@ -84,20 +68,28 @@ function inlineStyleUrls(contents: string): string {
  */
 export function inlineExternalResourcesPaths(context: BuilderContext): void {
   const projectName = context.target!.project;
-  const bundlePaths = glob.sync(
-    path.join(context.workspaceRoot, `dist/${projectName}/bundles/*.umd.js`)
+  const bundlePattern = path.join(
+    context.workspaceRoot,
+    `dist/${projectName}/bundles/*.umd.js`
   );
+  const bundlePaths = glob.sync(bundlePattern);
 
-  const bundlePath = bundlePaths[0];
+  if (bundlePaths.length > 0) {
+    bundlePaths.forEach((bundlePath) => {
+      context.logger.info(
+        `Inlining external resource paths for file '${bundlePath}'...`
+      );
+      let contents = fs.readFileSync(bundlePath).toString();
 
-  if (bundlePath && fs.existsSync(bundlePath)) {
-    let contents = fs.readFileSync(bundlePath).toString();
+      contents = inlineTemplateUrls(contents);
+      contents = inlineStyleUrls(contents);
 
-    contents = inlineTemplateUrls(contents);
-    contents = inlineStyleUrls(contents);
-
-    fs.writeFileSync(bundlePath, contents, { encoding: 'utf-8' });
+      fs.writeFileSync(bundlePath, contents, { encoding: 'utf-8' });
+    });
+    context.logger.info('Done inlining external resources.');
   } else {
-    throw new Error(`The UMD bundle was not found. (wanted '${bundlePath}')`);
+    throw new Error(
+      `The UMD bundle was not found. (wanted '${bundlePattern}')`
+    );
   }
 }

@@ -1,7 +1,7 @@
 import mock from 'mock-require';
+import path from 'path';
 
 describe('inline-external-resources', () => {
-  let bundleExists: boolean;
   let fsExtraSpyObj: jasmine.SpyObj<any>;
   let globResult: string[];
   let globSpyObj: jasmine.SpyObj<any>;
@@ -138,6 +138,9 @@ describe('inline-external-resources', () => {
 `;
 
     mockContext = {
+      logger: {
+        info() {},
+      },
       target: {
         project: 'my-lib',
       },
@@ -150,8 +153,6 @@ describe('inline-external-resources', () => {
       'writeFileSync',
     ]);
 
-    bundleExists = true;
-    fsExtraSpyObj.existsSync.and.callFake(() => bundleExists);
     fsExtraSpyObj.readFileSync.and.callFake(() =>
       Buffer.from(mockBundleContents)
     );
@@ -330,12 +331,14 @@ describe('inline-external-resources', () => {
   });
 
   it('should throw an error if bundle not found', () => {
-    bundleExists = false;
+    globResult = [];
 
     const { inlineExternalResourcesPaths } = getUtil();
 
     expect(() => inlineExternalResourcesPaths(mockContext)).toThrowError(
-      "The UMD bundle was not found. (wanted 'my-lib.umd.js')"
+      `The UMD bundle was not found. (wanted '${path.join(
+        'MOCK_WORKSPACE_ROOT/dist/my-lib/bundles/*.umd.js'
+      )}')`
     );
   });
 
