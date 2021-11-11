@@ -7,11 +7,13 @@ import { of } from 'rxjs';
 import { SkyuxNgPackagrBuilderOptions } from './schema';
 
 describe('ng-packagr builder', () => {
+  let contextLoggerSpy: jasmine.SpyObj<any>;
   let createBuilderSpy: jasmine.Spy;
   let executeNgPackagrBuilderResult: angularArchitect.BuilderOutput;
   let executeNgPackagrBuilderSpy: jasmine.Spy;
   let inlineExternalResourcesSpyObj: jasmine.SpyObj<any>;
   let defaultOptions: SkyuxNgPackagrBuilderOptions;
+  let mockContext: any;
 
   beforeEach(() => {
     inlineExternalResourcesSpyObj = jasmine.createSpyObj('inline-resources', [
@@ -22,15 +24,18 @@ describe('ng-packagr builder', () => {
       project: 'foo',
     };
 
+    contextLoggerSpy = jasmine.createSpyObj('logger', ['fatal']);
+
+    mockContext = {
+      target: {
+        project: 'foo',
+      },
+      logger: contextLoggerSpy,
+    };
+
     createBuilderSpy = jasmine
       .createSpy('createBuilder')
-      .and.callFake((cb: any) =>
-        cb(defaultOptions, {
-          target: {
-            project: 'foo',
-          },
-        })
-      );
+      .and.callFake((cb: any) => cb(defaultOptions, mockContext));
 
     executeNgPackagrBuilderResult = {
       success: true,
@@ -66,9 +71,10 @@ describe('ng-packagr builder', () => {
   it("should call Angular's ng-packagr builder", async () => {
     await runBuilder();
 
-    expect(executeNgPackagrBuilderSpy).toHaveBeenCalledWith(defaultOptions, {
-      target: { project: 'foo' },
-    });
+    expect(executeNgPackagrBuilderSpy).toHaveBeenCalledWith(
+      defaultOptions,
+      mockContext
+    );
   });
 
   it("should catch errors from Angular's ng-packagr builder", async () => {
@@ -89,6 +95,19 @@ describe('ng-packagr builder', () => {
 
     expect(
       inlineExternalResourcesSpyObj.inlineExternalResourcesPaths
-    ).toHaveBeenCalledWith({ target: { project: 'foo' } });
+    ).toHaveBeenCalledWith(mockContext);
+  });
+
+  it('should handle errors from inlining resources', async () => {
+    inlineExternalResourcesSpyObj.inlineExternalResourcesPaths.and.throwError(
+      'Something bad happened.'
+    );
+
+    const result = await runBuilder();
+
+    expect(result.success).toBe(false);
+    expect(contextLoggerSpy.fatal).toHaveBeenCalledWith(
+      '[SKY UX] Something bad happened.'
+    );
   });
 });
