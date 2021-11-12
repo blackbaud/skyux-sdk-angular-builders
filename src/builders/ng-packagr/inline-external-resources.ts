@@ -24,6 +24,7 @@ function inlineExternalResource(
     const externaResourceMatch = componentDefinitionMatch.match(
       externalResourceRegex
     );
+    /*istanbul ignore else*/
     if (externaResourceMatch) {
       const externalResourcePath = externaResourceMatch[0];
       const inlineResourceMatch =
