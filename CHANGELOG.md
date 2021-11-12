@@ -1,5 +1,8 @@
 # 5.0.0-beta.1 (2021-11-12)
 
+- Fixed the peer dependency version for `ng-packagr`. [#115](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/115)
+- Fixed the `ng-packagr` builder to inline external resources for the UMD bundle generated for testing modules. [#115](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/115)
+
 # 5.0.0-beta.0 (2021-11-11)
 
 - Removed the `dev-server`, `karma`, and `protractor` builders. [#114](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/114)
