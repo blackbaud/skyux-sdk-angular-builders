@@ -18,7 +18,14 @@ export async function executeSkyuxNgPackagrBuilder(
     return result;
   }
 
-  inlineExternalResourcesPaths(context);
+  try {
+    inlineExternalResourcesPaths(context);
+  } catch (err) {
+    context.logger.fatal(`[SKY UX] ${(err as Error).message}`);
+    return {
+      success: false,
+    };
+  }
 
   return {
     success: true,
