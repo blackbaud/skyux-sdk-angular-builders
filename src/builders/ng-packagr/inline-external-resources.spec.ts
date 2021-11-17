@@ -1,15 +1,25 @@
 import mock from 'mock-require';
 import path from 'path';
 
-describe('inline-external-resources', () => {
-  let fsExtraSpyObj: jasmine.SpyObj<any>;
-  let globResult: string[];
-  let globSpyObj: jasmine.SpyObj<any>;
-  let mockBundleContents: string;
-  let mockContext: any;
+[
+  {
+    label: 'Mac',
+    processContents: (contents: string) => contents,
+  },
+  {
+    label: 'Windows',
+    processContents: (contents: string) => contents.replace(/\n/g, `\r\n`),
+  },
+].forEach((scenario) => {
+  describe(`inline-external-resources with ${scenario.label} line endings`, () => {
+    let fsExtraSpyObj: jasmine.SpyObj<any>;
+    let globResult: string[];
+    let globSpyObj: jasmine.SpyObj<any>;
+    let mockBundleContents: string;
+    let mockContext: any;
 
-  beforeEach(() => {
-    mockBundleContents = `(function (global, factory) {
+    beforeEach(() => {
+      mockBundleContents = `(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/forms')) :
   typeof define === 'function' && define.amd ? define('my-lib', ['exports', '@angular/core', '@angular/forms'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global["my-lib"] = {}, global.ng.core, global.ng.forms));
@@ -136,53 +146,54 @@ describe('inline-external-resources', () => {
 }));
 //# sourceMappingURL=my-lib.umd.js.map
 `;
+      mockBundleContents = scenario.processContents(mockBundleContents);
 
-    mockContext = {
-      logger: {
-        info() {},
-      },
-      target: {
-        project: 'my-lib',
-      },
-      workspaceRoot: 'MOCK_WORKSPACE_ROOT',
-    };
+      mockContext = {
+        logger: {
+          info() {},
+        },
+        target: {
+          project: 'my-lib',
+        },
+        workspaceRoot: 'MOCK_WORKSPACE_ROOT',
+      };
 
-    fsExtraSpyObj = jasmine.createSpyObj('fs-extra', [
-      'existsSync',
-      'readFileSync',
-      'writeFileSync',
-    ]);
+      fsExtraSpyObj = jasmine.createSpyObj('fs-extra', [
+        'existsSync',
+        'readFileSync',
+        'writeFileSync',
+      ]);
 
-    fsExtraSpyObj.readFileSync.and.callFake(() =>
-      Buffer.from(mockBundleContents)
-    );
+      fsExtraSpyObj.readFileSync.and.callFake(() =>
+        Buffer.from(mockBundleContents)
+      );
 
-    mock('fs-extra', fsExtraSpyObj);
+      mock('fs-extra', fsExtraSpyObj);
 
-    globSpyObj = jasmine.createSpyObj('glob', ['sync']);
+      globSpyObj = jasmine.createSpyObj('glob', ['sync']);
 
-    globResult = ['my-lib.umd.js'];
-    globSpyObj.sync.and.callFake(() => globResult);
+      globResult = ['my-lib.umd.js'];
+      globSpyObj.sync.and.callFake(() => globResult);
 
-    mock('glob', globSpyObj);
-  });
+      mock('glob', globSpyObj);
+    });
 
-  afterEach(() => {
-    mock.stopAll();
-  });
+    afterEach(() => {
+      mock.stopAll();
+    });
 
-  function getUtil() {
-    return mock.reRequire('./inline-external-resources');
-  }
+    function getUtil() {
+      return mock.reRequire('./inline-external-resources');
+    }
 
-  it('should replace `templateUrl` and `styleUrls`', () => {
-    const { inlineExternalResourcesPaths } = getUtil();
+    it('should replace `templateUrl` and `styleUrls`', () => {
+      const { inlineExternalResourcesPaths } = getUtil();
 
-    inlineExternalResourcesPaths(mockContext);
+      inlineExternalResourcesPaths(mockContext);
 
-    expect(fsExtraSpyObj.writeFileSync).toHaveBeenCalledWith(
-      'my-lib.umd.js',
-      `(function (global, factory) {
+      expect(fsExtraSpyObj.writeFileSync).toHaveBeenCalledWith(
+        'my-lib.umd.js',
+        scenario.processContents(`(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/forms')) :
   typeof define === 'function' && define.amd ? define('my-lib', ['exports', '@angular/core', '@angular/forms'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global["my-lib"] = {}, global.ng.core, global.ng.forms));
@@ -315,49 +326,49 @@ describe('inline-external-resources', () => {
 
 }));
 //# sourceMappingURL=my-lib.umd.js.map
-`,
-      { encoding: 'utf-8' }
-    );
-  });
+`),
+        { encoding: 'utf-8' }
+      );
+    });
 
-  it('should throw an error if `templateUrl` or `styleUrls` are found but not replaced', () => {
-    mockBundleContents += '{templateUrl: ""}';
+    it('should throw an error if `templateUrl` or `styleUrls` are found but not replaced', () => {
+      mockBundleContents += '{templateUrl: ""}';
 
-    const { inlineExternalResourcesPaths } = getUtil();
+      const { inlineExternalResourcesPaths } = getUtil();
 
-    expect(() => inlineExternalResourcesPaths(mockContext)).toThrowError(
-      'Relative file paths pointing to external resources were found in a component definition (e.g. `templateUrl` or `styleUrls`). The `@skyux-sdk/angular-builders:ng-packagr` builder should have replaced these paths with the file contents inlined (e.g. `template`, `styles`), but the file structure of the bundle has likely changed. Please report this problem to the author of `@skyux-sdk/angular-builders:ng-packagr`.'
-    );
-  });
+      expect(() => inlineExternalResourcesPaths(mockContext)).toThrowError(
+        'Relative file paths pointing to external resources were found in a component definition (e.g. `templateUrl` or `styleUrls`). The `@skyux-sdk/angular-builders:ng-packagr` builder should have replaced these paths with the file contents inlined (e.g. `template`, `styles`), but the file structure of the bundle has likely changed. Please report this problem to the author of `@skyux-sdk/angular-builders:ng-packagr`.'
+      );
+    });
 
-  it('should throw an error if bundle not found', () => {
-    globResult = [];
+    it('should throw an error if bundle not found', () => {
+      globResult = [];
 
-    const { inlineExternalResourcesPaths } = getUtil();
+      const { inlineExternalResourcesPaths } = getUtil();
 
-    expect(() => inlineExternalResourcesPaths(mockContext)).toThrowError(
-      `The UMD bundle was not found. (wanted '${path.join(
-        'MOCK_WORKSPACE_ROOT/dist/my-lib/bundles/*.umd.js'
-      )}')`
-    );
-  });
+      expect(() => inlineExternalResourcesPaths(mockContext)).toThrowError(
+        `The UMD bundle was not found. (wanted '${path.join(
+          'MOCK_WORKSPACE_ROOT/dist/my-lib/bundles/*.umd.js'
+        )}')`
+      );
+    });
 
-  it('should handle empty bundle file', () => {
-    mockBundleContents = '';
+    it('should handle empty bundle file', () => {
+      mockBundleContents = '';
 
-    const { inlineExternalResourcesPaths } = getUtil();
+      const { inlineExternalResourcesPaths } = getUtil();
 
-    inlineExternalResourcesPaths(mockContext);
+      inlineExternalResourcesPaths(mockContext);
 
-    expect(fsExtraSpyObj.writeFileSync).toHaveBeenCalledWith(
-      'my-lib.umd.js',
-      '',
-      { encoding: 'utf-8' }
-    );
-  });
+      expect(fsExtraSpyObj.writeFileSync).toHaveBeenCalledWith(
+        'my-lib.umd.js',
+        '',
+        { encoding: 'utf-8' }
+      );
+    });
 
-  it('should handle bundle without components', () => {
-    mockBundleContents = `
+    it('should handle bundle without components', () => {
+      mockBundleContents = `
   var MyLibService = /** @class */ (function () {
       function MyLibService() {
       }
@@ -420,14 +431,15 @@ describe('inline-external-resources', () => {
 //# sourceMappingURL=my-lib.umd.js.map
 `;
 
-    const { inlineExternalResourcesPaths } = getUtil();
+      const { inlineExternalResourcesPaths } = getUtil();
 
-    inlineExternalResourcesPaths(mockContext);
+      inlineExternalResourcesPaths(mockContext);
 
-    expect(fsExtraSpyObj.writeFileSync).toHaveBeenCalledWith(
-      'my-lib.umd.js',
-      mockBundleContents,
-      { encoding: 'utf-8' }
-    );
+      expect(fsExtraSpyObj.writeFileSync).toHaveBeenCalledWith(
+        'my-lib.umd.js',
+        mockBundleContents,
+        { encoding: 'utf-8' }
+      );
+    });
   });
 });
