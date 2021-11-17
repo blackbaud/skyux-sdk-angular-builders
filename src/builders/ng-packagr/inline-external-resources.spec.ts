@@ -1,7 +1,17 @@
 import mock from 'mock-require';
 import path from 'path';
 
-describe('inline-external-resources', () => {
+[
+  {
+    label: 'Mac',
+    processContents: (contents: string) => contents
+  },
+  {
+    label: 'Windows',
+    processContents: (contents: string) => contents.replace(/\n/g, `\r\n`)
+  }
+].forEach((scenario) => {
+describe(`inline-external-resources with ${scenario.label} line endings`, () => {
   let fsExtraSpyObj: jasmine.SpyObj<any>;
   let globResult: string[];
   let globSpyObj: jasmine.SpyObj<any>;
@@ -136,6 +146,7 @@ describe('inline-external-resources', () => {
 }));
 //# sourceMappingURL=my-lib.umd.js.map
 `;
+    mockBundleContents = scenario.processContents(mockBundleContents);
 
     mockContext = {
       logger: {
@@ -182,7 +193,7 @@ describe('inline-external-resources', () => {
 
     expect(fsExtraSpyObj.writeFileSync).toHaveBeenCalledWith(
       'my-lib.umd.js',
-      `(function (global, factory) {
+      scenario.processContents(`(function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('@angular/forms')) :
   typeof define === 'function' && define.amd ? define('my-lib', ['exports', '@angular/core', '@angular/forms'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global["my-lib"] = {}, global.ng.core, global.ng.forms));
@@ -315,7 +326,7 @@ describe('inline-external-resources', () => {
 
 }));
 //# sourceMappingURL=my-lib.umd.js.map
-`,
+`),
       { encoding: 'utf-8' }
     );
   });
@@ -430,4 +441,5 @@ describe('inline-external-resources', () => {
       { encoding: 'utf-8' }
     );
   });
+});
 });
