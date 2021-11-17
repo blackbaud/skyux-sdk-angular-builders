@@ -17,7 +17,7 @@ function inlineExternalResource(
 ) {
   // Get every character between 'ngDeclareComponent' and '@class'.
   const componentDefinitionRegex =
-    /ngDeclareComponent\(\{(.|\r?\n)+?(?=@class)/g;
+    /ngDeclareComponent\(\{(.|\s)+?(?=@class)/g;
 
   const componentDefinitionMatches = contents.match(componentDefinitionRegex);
 
@@ -59,8 +59,8 @@ function inlineTemplateUrls(contents: string): string {
 }
 
 function inlineStyleUrls(contents: string): string {
-  const stylesRegex = /styles:\s+\[(.|\r?\n)*?(?=])\]/;
-  const styleUrlsRegex = /styleUrls:\s+\[(.|\r?\n)*?(?=])\]/;
+  const stylesRegex = /styles:\s+\[(.|\s)*?(?=])\]/;
+  const styleUrlsRegex = /styleUrls:\s+\[(.|\s)*?(?=])\]/;
   return inlineExternalResource(contents, styleUrlsRegex, stylesRegex);
 }
 
