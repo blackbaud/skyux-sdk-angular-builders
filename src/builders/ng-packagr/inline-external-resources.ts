@@ -16,8 +16,7 @@ function inlineExternalResource(
   inlineResourceRegex: RegExp
 ) {
   // Get every character between 'ngDeclareComponent' and '@class'.
-  const componentDefinitionRegex =
-    /ngDeclareComponent\(\{(.|\s)+?(?=@class)/g;
+  const componentDefinitionRegex = /ngDeclareComponent\(\{(.|\s)+?(?=@class)/g;
 
   const componentDefinitionMatches = contents.match(componentDefinitionRegex);
 
