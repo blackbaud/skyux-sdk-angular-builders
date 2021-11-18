@@ -1,3 +1,7 @@
+# 5.0.0-beta.2 (2021-11-18)
+
+- Fixed a build issue for Windows. [#116](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/116)
+
 # 5.0.0-beta.1 (2021-11-12)
 
 - Fixed the peer dependency version for `ng-packagr`. [#115](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/115)
