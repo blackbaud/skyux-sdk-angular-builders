@@ -1,6 +1,6 @@
 # 5.0.0-beta.2 (2021-11-18)
 
-- Fixed an issue when inlining external resources for components with Windows line endings. [#116](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/116)
+- Fixed a build issue for Windows. [#116](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/116)
 
 # 5.0.0-beta.1 (2021-11-12)
 
