@@ -8,7 +8,8 @@ import path from 'path';
   },
   {
     label: 'Windows',
-    processContents: (contents: string) => contents.replace(/\\n/g, `\\r\\n`).replace(/\n/g, `\r\n`),
+    processContents: (contents: string) =>
+      contents.replace(/\\n/g, `\\r\\n`).replace(/\n/g, `\r\n`),
   },
 ].forEach((scenario) => {
   describe(`inline-external-resources with ${scenario.label} line endings`, () => {

@@ -52,8 +52,10 @@ function inlineExternalResource(
 }
 
 function inlineTemplateUrls(contents: string): string {
-  const templateRegex = /template:\s(?<Quote>["'])(?:(?=(\\?))\2.)*?(?<![\\])\k<Quote>/;
-  const templateUrlRegex = /templateUrl:\s(?<Quote>["'])(?:(?=(\\?))\2.)*?\k<Quote>/;
+  const templateRegex =
+    /template:\s(?<Quote>["'])(?:(?=(\\?))\2.)*?(?<![\\])\k<Quote>/;
+  const templateUrlRegex =
+    /templateUrl:\s(?<Quote>["'])(?:(?=(\\?))\2.)*?\k<Quote>/;
   return inlineExternalResource(contents, templateUrlRegex, templateRegex);
 }
 
@@ -87,6 +89,7 @@ export function inlineExternalResourcesPaths(context: BuilderContext): void {
 
       fs.writeFileSync(bundlePath, contents, { encoding: 'utf-8' });
 
+      /*istanbul ignore next*/
       if (fs.existsSync(`${bundlePath}.map`)) {
         fs.removeSync(`${bundlePath}.map`);
       }
