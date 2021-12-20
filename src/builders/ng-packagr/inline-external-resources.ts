@@ -6,7 +6,7 @@ import path from 'path';
 
 /**
  *
- * @param bundlePath The contents of the UMD distribution bundle.
+ * @param contents The contents of the UMD distribution bundle.
  * @param externalResourceRegex The regular expression used to find the external resource string (e.g., 'templateUrl:')
  * @param inlineResourceRegex The regular expression used to find the inlined resource contents (e.g., 'template:')
  */
@@ -21,12 +21,12 @@ function inlineExternalResource(
   const componentDefinitionMatches = contents.match(componentDefinitionRegex);
 
   componentDefinitionMatches?.forEach((componentDefinitionMatch) => {
-    const externaResourceMatch = componentDefinitionMatch.match(
+    const externalResourceMatch = componentDefinitionMatch.match(
       externalResourceRegex
     );
     /*istanbul ignore else*/
-    if (externaResourceMatch) {
-      const externalResourcePath = externaResourceMatch[0];
+    if (externalResourceMatch) {
+      const externalResourcePath = externalResourceMatch[0];
       const inlineResourceMatch =
         componentDefinitionMatch.match(inlineResourceRegex);
       /*istanbul ignore else*/
@@ -52,14 +52,14 @@ function inlineExternalResource(
 }
 
 function inlineTemplateUrls(contents: string): string {
-  const templateRegex = /template:\s(["'])(?:(?=(\\?))\2.)*?\1/;
-  const templateUrlRegex = /templateUrl:\s(["'])(?:(?=(\\?))\2.)*?\1/;
+  const templateRegex = /template:\s(?<Quote>["'])(?:(?=(\\?))\2.)*?(?<![\\])\k<Quote>/;
+  const templateUrlRegex = /templateUrl:\s(?<Quote>["'])(?:(?=(\\?))\2.)*?\k<Quote>/;
   return inlineExternalResource(contents, templateUrlRegex, templateRegex);
 }
 
 function inlineStyleUrls(contents: string): string {
-  const stylesRegex = /styles:\s+\[[\s\S]*?(?=])\]/;
-  const styleUrlsRegex = /styleUrls:\s+\[[\s\S]*?(?=])\]/;
+  const stylesRegex = /styles:\s+\[(?<Quote>["'])[\s\S]*?(?<![\\])\k<Quote>]/;
+  const styleUrlsRegex = /styleUrls:\s+\[[\s\S]*?(?=])]/;
   return inlineExternalResource(contents, styleUrlsRegex, stylesRegex);
 }
 
@@ -86,6 +86,10 @@ export function inlineExternalResourcesPaths(context: BuilderContext): void {
       contents = inlineStyleUrls(contents);
 
       fs.writeFileSync(bundlePath, contents, { encoding: 'utf-8' });
+
+      if (fs.existsSync(`${bundlePath}.map`)) {
+        fs.removeSync(`${bundlePath}.map`);
+      }
     });
     context.logger.info('Done inlining external resources.');
   } else {

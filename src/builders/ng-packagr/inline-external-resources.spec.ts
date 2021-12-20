@@ -8,7 +8,7 @@ import path from 'path';
   },
   {
     label: 'Windows',
-    processContents: (contents: string) => contents.replace(/\n/g, `\r\n`),
+    processContents: (contents: string) => contents.replace(/\\n/g, `\\r\\n`).replace(/\n/g, `\r\n`),
   },
 ].forEach((scenario) => {
   describe(`inline-external-resources with ${scenario.label} line endings`, () => {
@@ -68,7 +68,7 @@ import path from 'path';
       return MyLibComponent;
   }());
   MyLibComponent.ɵfac = i0__namespace.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "12.2.13", ngImport: i0__namespace, type: MyLibComponent, deps: [], target: i0__namespace.ɵɵFactoryTarget.Component });
-  MyLibComponent.ɵcmp = i0__namespace.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "12.2.13", type: MyLibComponent, selector: "lib-my-lib", ngImport: i0__namespace, template: "<p style=\"size:15px;\" [ngModel]=\"model\">\n  my-lib works!\n</p>\n", styles: ["p{color:red}\n"], directives: [{ type: i1__namespace.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { type: i1__namespace.NgModel, selector: "[ngModel]:not([formControlName]):not([formControl])", inputs: ["name", "disabled", "ngModel", "ngModelOptions"], outputs: ["ngModelChange"], exportAs: ["ngModel"] }] });
+  MyLibComponent.ɵcmp = i0__namespace.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "12.2.13", type: MyLibComponent, selector: "lib-my-lib", ngImport: i0__namespace, template: "<p style=\\"size:15px;\\" [ngModel]=\\"model\\">\\n  my-lib works!\\n</p>\\n", styles: ["p{color:red}\\n"], directives: [{ type: i1__namespace.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { type: i1__namespace.NgModel, selector: "[ngModel]:not([formControlName]):not([formControl])", inputs: ["name", "disabled", "ngModel", "ngModelOptions"], outputs: ["ngModelChange"], exportAs: ["ngModel"] }] });
   i0__namespace.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "12.2.13", ngImport: i0__namespace, type: MyLibComponent, decorators: [{
               type: i0.Component,
               args: [{
@@ -86,7 +86,7 @@ import path from 'path';
       return MyLibComponent2;
   }());
   MyLibComponent2.ɵfac = i0__namespace.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "12.2.13", ngImport: i0__namespace, type: MyLibComponent2, deps: [], target: i0__namespace.ɵɵFactoryTarget.Component });
-  MyLibComponent2.ɵcmp = i0__namespace.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "12.2.13", type: MyLibComponent2, selector: "lib-my-lib-2", ngImport: i0__namespace, template: "<p style=\"font-style: oblique;\" [ngModel]=\"model\">\n  my-lib-2 works!\n</p>\n", styles: ["p{color:\"darkmagenta\"}\n", "p{color:\"green\"}\n"], directives: [{ type: i1__namespace.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { type: i1__namespace.NgModel, selector: "[ngModel]:not([formControlName]):not([formControl])", inputs: ["name", "disabled", "ngModel", "ngModelOptions"], outputs: ["ngModelChange"], exportAs: ["ngModel"] }] });
+  MyLibComponent2.ɵcmp = i0__namespace.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "12.2.13", type: MyLibComponent2, selector: "lib-my-lib-2", ngImport: i0__namespace, template: "<p style=\\"font-style: oblique;\\" [ngModel]=\\"model\\">\\n  my-lib-2 works!\\n</p>\\n", styles: ["p{color:\\"darkmagenta\\"}\\n", "p{color:\\"green\\"}\\np[blue]{color:\\"blue\\"}\\n"], directives: [{ type: i1__namespace.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { type: i1__namespace.NgModel, selector: "[ngModel]:not([formControlName]):not([formControl])", inputs: ["name", "disabled", "ngModel", "ngModelOptions"], outputs: ["ngModelChange"], exportAs: ["ngModel"] }] });
   i0__namespace.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "12.2.13", ngImport: i0__namespace, type: MyLibComponent2, decorators: [{
               type: i0.Component,
               args: [{
@@ -242,18 +242,13 @@ import path from 'path';
       return MyLibComponent;
   }());
   MyLibComponent.ɵfac = i0__namespace.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "12.2.13", ngImport: i0__namespace, type: MyLibComponent, deps: [], target: i0__namespace.ɵɵFactoryTarget.Component });
-  MyLibComponent.ɵcmp = i0__namespace.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "12.2.13", type: MyLibComponent, selector: "lib-my-lib", ngImport: i0__namespace, template: "<p style="size:15px;" [ngModel]="model">
-  my-lib works!
-</p>
-", styles: ["p{color:red}
-"], directives: [{ type: i1__namespace.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { type: i1__namespace.NgModel, selector: "[ngModel]:not([formControlName]):not([formControl])", inputs: ["name", "disabled", "ngModel", "ngModelOptions"], outputs: ["ngModelChange"], exportAs: ["ngModel"] }] });
+  MyLibComponent.ɵcmp = i0__namespace.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "12.2.13", type: MyLibComponent, selector: "lib-my-lib", ngImport: i0__namespace, template: "<p style=\\"size:15px;\\" [ngModel]=\\"model\\">\\n  my-lib works!\\n</p>\\n", styles: ["p{color:red}\\n"], directives: [{ type: i1__namespace.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { type: i1__namespace.NgModel, selector: "[ngModel]:not([formControlName]):not([formControl])", inputs: ["name", "disabled", "ngModel", "ngModelOptions"], outputs: ["ngModelChange"], exportAs: ["ngModel"] }] });
   i0__namespace.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "12.2.13", ngImport: i0__namespace, type: MyLibComponent, decorators: [{
               type: i0.Component,
               args: [{
                       selector: 'lib-my-lib',
-                      template: "<p style=",
-                      styles: ["p{color:red}
-"]
+                      template: "<p style=\\"size:15px;\\" [ngModel]=\\"model\\">\\n  my-lib works!\\n</p>\\n",
+                      styles: ["p{color:red}\\n"]
                   }]
           }], ctorParameters: function () { return []; } });
 
@@ -263,20 +258,13 @@ import path from 'path';
       return MyLibComponent2;
   }());
   MyLibComponent2.ɵfac = i0__namespace.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "12.2.13", ngImport: i0__namespace, type: MyLibComponent2, deps: [], target: i0__namespace.ɵɵFactoryTarget.Component });
-  MyLibComponent2.ɵcmp = i0__namespace.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "12.2.13", type: MyLibComponent2, selector: "lib-my-lib-2", ngImport: i0__namespace, template: "<p style="font-style: oblique;" [ngModel]="model">
-  my-lib-2 works!
-</p>
-", styles: ["p{color:"darkmagenta"}
-", "p{color:"green"}
-"], directives: [{ type: i1__namespace.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { type: i1__namespace.NgModel, selector: "[ngModel]:not([formControlName]):not([formControl])", inputs: ["name", "disabled", "ngModel", "ngModelOptions"], outputs: ["ngModelChange"], exportAs: ["ngModel"] }] });
+  MyLibComponent2.ɵcmp = i0__namespace.ɵɵngDeclareComponent({ minVersion: "12.0.0", version: "12.2.13", type: MyLibComponent2, selector: "lib-my-lib-2", ngImport: i0__namespace, template: "<p style=\\"font-style: oblique;\\" [ngModel]=\\"model\\">\\n  my-lib-2 works!\\n</p>\\n", styles: ["p{color:\\"darkmagenta\\"}\\n", "p{color:\\"green\\"}\\np[blue]{color:\\"blue\\"}\\n"], directives: [{ type: i1__namespace.NgControlStatus, selector: "[formControlName],[ngModel],[formControl]" }, { type: i1__namespace.NgModel, selector: "[ngModel]:not([formControlName]):not([formControl])", inputs: ["name", "disabled", "ngModel", "ngModelOptions"], outputs: ["ngModelChange"], exportAs: ["ngModel"] }] });
   i0__namespace.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "12.2.13", ngImport: i0__namespace, type: MyLibComponent2, decorators: [{
               type: i0.Component,
               args: [{
                       selector: 'lib-my-lib-2',
-                      template: "<p style=",
-                      styles: ["p{color:"darkmagenta"}
-", "p{color:"green"}
-"]
+                      template: "<p style=\\"font-style: oblique;\\" [ngModel]=\\"model\\">\\n  my-lib-2 works!\\n</p>\\n",
+                      styles: ["p{color:\\"darkmagenta\\"}\\n", "p{color:\\"green\\"}\\np[blue]{color:\\"blue\\"}\\n"]
                   }]
           }] });
 
