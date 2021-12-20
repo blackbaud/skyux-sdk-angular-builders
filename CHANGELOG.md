@@ -1,3 +1,7 @@
+# 5.0.0-beta.3 (2021-12-20)
+
+- Fixed a bug with inline dependencies in the UMD bundle when the CSS contains square brackets. [#118](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/118)
+
 # 5.0.0-beta.2 (2021-11-18)
 
 - Fixed a build issue for Windows. [#116](https://github.com/blackbaud/skyux-sdk-angular-builders/pull/116)
